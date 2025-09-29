@@ -3,8 +3,9 @@
     <!-- Logo + Judul -->
     <div class="flex items-center space-x-2">
         <img src="{{ asset('images/politala-logo.png') }}" alt="Logo" class="logo-img">
-        <h2 class="text-white font-bold text-lg">OBE System</h2>
+        <h2 class="text-white font-bold text-lg">Sistem OBE Politala</h2>
     </div>
+
 
 
     <!-- Navigation Menu -->
