@@ -113,3 +113,45 @@
     font-size: 1.05em;     
     letter-spacing: 0.5px; 
 }
+
+/* Glass Card Cavitated */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    /* Efek "mendelep" (inset) */
+    box-shadow: 
+        inset 4px 4px 10px rgba(0, 0, 0, 0.4),   /* bayangan dalam gelap */
+        inset -4px -4px 10px rgba(255, 255, 255, 0.2); /* highlight dalam terang */
+}
+
+/* Input Cavitated */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+textarea, 
+select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    color: #fff;
+
+    /* efek inset */
+    box-shadow: 
+        inset 3px 3px 6px rgba(0,0,0,0.6),
+        inset -3px -3px 6px rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.2),
+        0 0 10px rgba(255,255,255,0.2); /* sedikit glow */
+}
