@@ -1,0 +1,89 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController; // Impor controller Auth
+use App\Http\Controllers\Auth\SocialiteController; // Impor controller Socialite
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ManageDataController; // Impor controller ManageData
+// Impor controller lainnya sesuai kebutuhan (Dosen, Akademik, Kaprodi, Wadir)
+
+// Route untuk halaman utama (bisa diarahkan ke login)
+Route::get('/', function () {
+    return redirect('/login');
+});
+
+// Route untuk login manual
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+// Route untuk logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Route untuk Google SSO
+Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+// Route untuk dashboard (setelah login)
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard'); // Middleware 'auth' untuk proteksi
+
+// Kelola Akun Pengguna (Admin)
+Route::get('/admin/manage/users', [AdminController::class, 'manageUsers'])->name('admin.manage.users');
+Route::get('/admin/manage/users/create', [AdminController::class, 'showCreateUserForm'])->name('admin.create.user.form');
+Route::post('/admin/manage/users', [AdminController::class, 'storeUser'])->name('admin.create.user');
+// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+
+// Kelola Data Master (Admin) - Gunakan ManageDataController
+Route::get('/admin/manage/prodi', [ManageDataController::class, 'indexProdi'])->name('admin.manage.prodi');
+Route::get('/admin/manage/prodi/create', [ManageDataController::class, 'showCreateProdiForm'])->name('admin.create.prodi.form');
+Route::post('/admin/manage/prodi', [ManageDataController::class, 'storeProdi'])->name('admin.create.prodi');
+// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+
+Route::get('/admin/manage/angkatan', [ManageDataController::class, 'indexAngkatan'])->name('admin.manage.angkatan');
+Route::get('/admin/manage/angkatan/create', [ManageDataController::class, 'showCreateAngkatanForm'])->name('admin.create.angkatan.form');
+Route::post('/admin/manage/angkatan', [ManageDataController::class, 'storeAngkatan'])->name('admin.create.angkatan');
+// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+
+Route::get('/admin/manage/matkul', [ManageDataController::class, 'indexMatkul'])->name('admin.manage.matkul');
+Route::get('/admin/manage/matkul/create', [ManageDataController::class, 'showCreateMatkulForm'])->name('admin.create.matkul.form');
+Route::post('/admin/manage/matkul', [ManageDataController::class, 'storeMatkul'])->name('admin.create.matkul');
+// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+// Kelola CPL, CPMK, Mapping (Akademik Prodi) - Buat controller baru nanti, misalnya AkademikController
+// Route::get('/akademik/cpl', [AkademikController::class, 'indexCpl'])->name('akademik.cpl');
+// Route::get('/akademik/cpmk', [AkademikController::class, 'indexCpmk'])->name('akademik.cpmk');
+// Route::get('/akademik/mapping', [AkademikController::class, 'indexMapping'])->name('akademik.mapping');
+// ... tambahkan route lainnya sesuai kebutuhan
+
+// Input Nilai, Kelola CPMK (Dosen) - Buat controller baru nanti, misalnya DosenController
+// Route::get('/dosen/cpmk', [DosenController::class, 'indexCpmk'])->name('dosen.cpmk');
+// Route::get('/dosen/input/nilai', [DosenController::class, 'inputNilai'])->name('dosen.input.nilai');
+// ... tambahkan route lainnya sesuai kebutuhan
+
+// Laporan CPL (Kaprodi) - Buat controller baru nanti, misalnya KaprodiController
+// Route::get('/kaprodi/laporan/cpl/matakuliah', [KaprodiController::class, 'laporanCplPerMk'])->name('kaprodi.laporan.cpl.matakuliah');
+// Route::get('/kaprodi/laporan/cpl/angkatan', [KaprodiController::class, 'laporanCplPerAngkatan'])->name('kaprodi.laporan.cpl.angkatan');
+// Route::get('/kaprodi/generate/rumusan', [KaprodiController::class, 'generateRumusan'])->name('kaprodi.generate.rumusan');
+// ... tambahkan route lainnya sesuai kebutuhan
+
+// Laporan Agregat (Wadir I) - Buat controller baru nanti, misalnya WadirController
+// Route::get('/wadir/laporan/cpl/lintasprodi', [WadirController::class, 'laporanCplLintasProdi'])->name('wadir.laporan.cpl.lintasprodi');
+// Route::get('/wadir/generate/laporan', [WadirController::class, 'generateLaporanAkademik'])->name('wadir.generate.laporan');
+// ... tambahkan route lainnya sesuai kebutuhan
+// routes/web.php (lanjutan dari sebelumnya)
+
+// Kelola Data Master (Admin) - Gunakan ManageDataController
+Route::get('/admin/manage/prodi', [ManageDataController::class, 'indexProdi'])->name('admin.manage.prodi');
+Route::get('/admin/manage/prodi/create', [ManageDataController::class, 'showCreateProdiForm'])->name('admin.create.prodi.form');
+Route::post('/admin/manage/prodi', [ManageDataController::class, 'storeProdi'])->name('admin.create.prodi');
+// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+
+// --- TAMBAHKAN BAGIAN INI ---
+Route::get('/admin/manage/mahasiswa', [ManageDataController::class, 'indexMahasiswa'])->name('admin.manage.mahasiswa');
+Route::get('/admin/manage/mahasiswa/create', [ManageDataController::class, 'showCreateMahasiswaForm'])->name('admin.create.mahasiswa.form');
+Route::post('/admin/manage/mahasiswa', [ManageDataController::class, 'storeMahasiswa'])->name('admin.create.mahasiswa');
+// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+// --- /TAMBAHKAN BAGIAN INI ---
+
+// Route::get('/admin/manage/angkatan', [ManageDataController::class, 'indexAngkatan'])->name('admin.manage.angkatan');
+// Route::get('/admin/manage/matkul', [ManageDataController::class, 'indexMatkul'])->name('admin.manage.matkul');
+// ... tambahkan route lainnya sesuai kebutuhan
