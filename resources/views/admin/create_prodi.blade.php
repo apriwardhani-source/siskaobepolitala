@@ -3,7 +3,7 @@
     <div class="min-h-screen bg-gray-100">
         <div class="flex">
             <!-- Sidebar -->
-            @include('layouts.sidebar')
+            @include('layouts.nav')
 
             <!-- Main Content -->
             <main class="flex-1 p-6">

@@ -86,7 +86,7 @@
             padding: 25px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Kurangi shadow untuk tampilan lebih datar */
             border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #333; /* Pastikan teks di dalam card tetap gelap */
+            color: #ffffff; /* Pastikan teks di dalam card tetap gelap */
         }
 
         /* Gaya untuk link di dalam glass-card agar kontras */
