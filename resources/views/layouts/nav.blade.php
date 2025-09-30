@@ -88,21 +88,15 @@
                     </li>
                 @elseif($userRole === 'kaprodi')
                     <li>
-                        <a href="#">
+                        <a href="{{ route(name:'kaprodi.laporan.mk') }}">
                             <i class="fas fa-chart-bar me-1"></i>
                             Laporan MK
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ route(name:'kaprodi.laporan.angkatan') }}">
                             <i class="fas fa-chart-line me-1"></i>
                             Laporan Angkatan
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fas fa-file-alt me-1"></i>
-                            Rumusan MK
                         </a>
                     </li>
                 @elseif($userRole === 'wadir')

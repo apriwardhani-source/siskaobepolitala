@@ -80,22 +80,16 @@
             </a>
         @elseif(Auth::user()->role === 'kaprodi')
             <!-- Card untuk Kaprodi -->
-            <a href="#" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
+            <a href="{{ route('kaprodi.laporan.mk') }}" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
                 <div class="glass-card">
                     <h3>Laporan CPL per MK</h3>
                     <p>Lihat capaian CPL untuk setiap mata kuliah.</p>
                 </div>
             </a>
-            <a href="#" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
+            <a href="{{ route(name:'kaprodi.laporan.angkatan') }}" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
                 <div class="glass-card">
                     <h3>Laporan CPL per Angkatan</h3>
                     <p>Lihat capaian CPL untuk setiap angkatan mahasiswa.</p>
-                </div>
-            </a>
-            <a href="#" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
-                <div class="glass-card">
-                    <h3>Generate Rumusan Akhir MK</h3>
-                    <p>Buat rumusan akhir berdasarkan capaian CPMK dan CPL.</p>
                 </div>
             </a>
         @elseif(Auth::user()->role === 'wadir')

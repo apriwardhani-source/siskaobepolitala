@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageDataController; // Impor controller ManageData
 use App\Http\Controllers\KaprodiController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\Kaprodi\LaporanAngkatanController;
 // Impor controller lainnya sesuai kebutuhan (Dosen, Akademik, Kaprodi, Wadir)
 
 // Route untuk halaman utama (bisa diarahkan ke login)
@@ -103,4 +105,12 @@ Route::middleware(['auth'])->group(function () {
     // Kaprodi dashboard
     Route::get('/kaprodi/dashboard', [KaprodiController::class, 'index'])
         ->name('kaprodi.dashboard');
+});
+
+Route::get('/kaprodi/laporan/mk', [LaporanController::class, 'laporanMK'])->name('kaprodi.laporan.mk');
+Route::get('/kaprodi/laporan/mk/export/{format}', [LaporanController::class, 'exportMK'])->name('kaprodi.laporan.mk.export');
+
+Route::prefix('kaprodi')->name('kaprodi.')->group(function () {
+    Route::get('/laporan/angkatan', [LaporanAngkatanController::class, 'index'])->name('laporan.angkatan');
+    Route::get('/laporan/angkatan/export/{format}', [LaporanAngkatanController::class, 'export'])->name('laporan.angkatan.export');
 });
