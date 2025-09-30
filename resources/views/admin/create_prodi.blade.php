@@ -1,41 +1,42 @@
 <!-- resources/views/admin/create_prodi.blade.php -->
-<x-app-layout>
-    <div class="min-h-screen bg-gray-100">
-        <div class="flex">
-            <!-- Sidebar -->
-            @include('layouts.nav')
+@extends('layouts.app')
 
-            <!-- Main Content -->
-            <main class="flex-1 p-6">
-                <div class="max-w-2xl mx-auto">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Tambah Prodi Baru</h1>
+@section('title', 'Tambah Prodi Baru')
 
-                    <form method="POST" action="{{ route('admin.create.prodi') }}">
-                        @csrf
+@section('content')
+    <div class="glass-card rounded-xl p-6 shadow-lg max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold text-white mb-6">Tambah Prodi Baru</h1>
 
-                        <div class="mb-4">
-                            <label for="kode_prodi" class="block text-sm font-medium text-gray-700">Kode Prodi</label>
-                            <input type="text" name="kode_prodi" id="kode_prodi" value="{{ old('kode_prodi') }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            @error('kode_prodi')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+        <form method="POST" action="{{ route('prodi.store') }}"> <!-- Sekarang route 'prodi.store' akan ditemukan -->
+            @csrf
 
-                        <div class="mb-4">
-                            <label for="nama_prodi" class="block text-sm font-medium text-gray-700">Nama Prodi</label>
-                            <input type="text" name="nama_prodi" id="nama_prodi" value="{{ old('nama_prodi') }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            @error('nama_prodi')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
+            <div class="mb-4">
+                <label for="kode_prodi" class="block text-sm font-medium text-white mb-1">Kode Prodi *</label>
+                <input type="text" name="kode_prodi" id="kode_prodi" value="{{ old('kode_prodi') }}" required
+                       class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent">
+                @error('kode_prodi')
+                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
 
-                        <div class="flex items-center justify-end">
-                            <a href="{{ route('admin.manage.prodi') }}" class="mr-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Batal</a>
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Simpan</button>
-                        </div>
-                    </form>
-                </div>
-            </main>
-        </div>
+            <div class="mb-4">
+                <label for="nama_prodi" class="block text-sm font-medium text-white mb-1">Nama Prodi *</label>
+                <input type="text" name="nama_prodi" id="nama_prodi" value="{{ old('nama_prodi') }}" required
+                       class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent">
+                @error('nama_prodi')
+                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 mt-6">
+                <a href="{{ route('prodi.index') }}" class="glass-button text-white font-medium py-2 px-4 rounded-lg"> <!-- Tombol Batal ke index -->
+                    Batal
+                </a>
+                <button type="submit" class="glass-button text-white font-medium py-2 px-4 rounded-lg">
+                    <i class="fas fa-save me-2"></i>
+                    Simpan Prodi
+                </button>
+            </div>
+        </form>
     </div>
-</x-app-layout>
+@endsection
