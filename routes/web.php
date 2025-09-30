@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\SocialiteController; // Impor controller Socialite
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageDataController; // Impor controller ManageData
+use App\Http\Controllers\KaprodiController;
 // Impor controller lainnya sesuai kebutuhan (Dosen, Akademik, Kaprodi, Wadir)
 
 // Route untuk halaman utama (bisa diarahkan ke login)
@@ -87,3 +88,19 @@ Route::post('/admin/manage/mahasiswa', [ManageDataController::class, 'storeMahas
 // Route::get('/admin/manage/angkatan', [ManageDataController::class, 'indexAngkatan'])->name('admin.manage.angkatan');
 // Route::get('/admin/manage/matkul', [ManageDataController::class, 'indexMatkul'])->name('admin.manage.matkul');
 // ... tambahkan route lainnya sesuai kebutuhan
+
+// route Kaprodi
+// route Kaprodi
+
+
+// Tambahkan di bawah sini
+Route::middleware(['auth'])->group(function () {
+    // Admin dashboard
+    Route::get('/admin/dashboard', function () {
+        return view('dashboard'); // resources/views/dashboard.blade.php
+    })->name('admin.dashboard');
+
+    // Kaprodi dashboard
+    Route::get('/kaprodi/dashboard', [KaprodiController::class, 'index'])
+        ->name('kaprodi.dashboard');
+});

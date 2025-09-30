@@ -81,32 +81,32 @@
                     </li>
                 @elseif($userRole === 'kaprodi')
                     <li>
-                        <a href="{{ route('kaprodi.laporan.cpl.matakuliah') }}">
+                        <a href="#">
                             <i class="fas fa-chart-bar me-1"></i>
                             Laporan MK
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('kaprodi.laporan.cpl.angkatan') }}">
+                        <a href="#">
                             <i class="fas fa-chart-line me-1"></i>
                             Laporan Angkatan
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('kaprodi.generate.rumusan') }}">
+                        <a href="#">
                             <i class="fas fa-file-alt me-1"></i>
                             Rumusan MK
                         </a>
                     </li>
                 @elseif($userRole === 'wadir')
                     <li>
-                        <a href="{{ route('wadir.laporan.cpl.lintasprodi') }}">
+                        <a href="#">
                             <i class="fas fa-chart-pie me-1"></i>
                             Laporan Lintas Prodi
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('wadir.generate.laporan') }}">
+                        <a href="#">
                             <i class="fas fa-file-pdf me-1"></i>
                             Laporan Akademik
                         </a>

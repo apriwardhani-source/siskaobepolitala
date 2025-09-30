@@ -20,5 +20,13 @@ class UserSeeder extends Seeder
             'password' => Hash::make('Wrrdhnii16'), // Ganti dengan password kuat
             'role' => 'admin',
         ]);
+
+        // Kaprodi
+        User::factory()->create([
+            'name' => 'Kaprodi TI',
+            'email' => 'kaprodi@politala.ac.id', // email kaprodi
+            'password' => Hash::make('Kaprodi123'), // password kaprodi
+            'role' => 'kaprodi',
+        ]);
     }
 }
