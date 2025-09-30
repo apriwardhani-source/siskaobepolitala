@@ -1,21 +1,28 @@
 <!-- resources/views/layouts/nav.blade.php -->
-<header class="header-nav">
-    <h2>OBE System</h2>
+<header class="header-nav flex items-center justify-between px-4 py-2">
+    <!-- Logo + Judul -->
+    <div class="flex items-center space-x-2">
+        <img src="{{ asset('images/politala-logo.png') }}" alt="Logo" class="logo-img">
+        <h2 class="text-white font-bold text-lg">OBE System</h2>
+    </div>
+
+
+    <!-- Navigation Menu -->
     <nav>
-        <ul class="nav-menu">
+        <ul class="nav-menu flex space-x-4">
             <!-- Menu Umum (Dashboard) -->
             <li>
                 <a href="{{ route('dashboard') }}">
-                    <i class="fas fa-home me-1"></i> <!-- Gunakan ikon jika diinginkan -->
+                    <i class="fas fa-home me-1"></i>
                     Dashboard
                 </a>
             </li>
 
             <!-- Menu berdasarkan Role -->
-            @if(Auth::check())
+            @if (Auth::check())
                 @php $userRole = Auth::user()->role; @endphp
 
-                @if($userRole === 'admin')
+                @if ($userRole === 'admin')
                     <li>
                         <a href="{{ route('admin.manage.users') }}">
                             <i class="fas fa-users me-1"></i>
@@ -59,7 +66,6 @@
                             Input Nilai
                         </a>
                     </li>
-                    <!-- Tambahkan menu lain untuk Dosen jika diperlukan -->
                 @elseif($userRole === 'akademik')
                     <li>
                         <a href="{{ route('akademik.cpl') }}">

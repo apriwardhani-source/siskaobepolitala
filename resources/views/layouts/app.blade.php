@@ -7,6 +7,7 @@
     <title>{{ config('app.name', 'Laravel App') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> <!-- Opsional: Font Awesome untuk ikon -->
+<link rel="stylesheet" href="{{ asset('css/glass.css') }}">
 
     <style>
         body {
@@ -91,11 +92,11 @@
 
         /* Gaya untuk link di dalam glass-card agar kontras */
         .glass-card a {
-            color: #007bff;
+            color: #ffffff;
         }
 
         .glass-card a:hover {
-            color: #0056b3;
+            color: #d1e7ff;
         }
 
         /* Gaya untuk link kartu dashboard */
