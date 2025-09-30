@@ -48,7 +48,7 @@
                 <h3>Kelola CPMK</h3>
                 <p>Tentukan CPMK untuk mata kuliah yang diampu.</p>
             </div>
-            <a href="{{ route('dosen.input.nilai') }}" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
+            <a href="#" class="glass-card-link"> <!-- Ganti dengan route yang benar nanti -->
                 <div class="glass-card">
                     <h3>Input Nilai Mahasiswa</h3>
                     <p>Masukkan nilai berdasarkan komponen penilaian.</p>

@@ -56,13 +56,13 @@
                     </li>
                 @elseif($userRole === 'dosen')
                     <li>
-                        <a href="{{ route('dosen.cpmk') }}">
+                        <a href="#">
                             <i class="fas fa-tasks me-1"></i>
                             CPMK
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dosen.input.nilai') }}">
+                        <a href="#">
                             <i class="fas fa-edit me-1"></i>
                             Input Nilai
                         </a>

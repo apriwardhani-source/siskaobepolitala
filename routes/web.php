@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageDataController; // Impor controller ManageData
 use App\Http\Controllers\KaprodiController;
+use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\DosenController;
 // Impor controller lainnya sesuai kebutuhan (Dosen, Akademik, Kaprodi, Wadir)
 
 // Route untuk halaman utama (bisa diarahkan ke login)
@@ -99,8 +101,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('dashboard'); // resources/views/dashboard.blade.php
     })->name('admin.dashboard');
-
+    // Route resource untuk Prodi - INI YANG PENTING
+    Route::resource('prodi', \App\Http\Controllers\ProdiController::class);
     // Kaprodi dashboard
     Route::get('/kaprodi/dashboard', [KaprodiController::class, 'index'])
         ->name('kaprodi.dashboard');
+        Route::get('/dosen/dashboard', [DosenController::class, 'index'])
+        ->name('dosen.dashboard');
+        Route::get('/dosen/dashboard', [DosenController::class, 'dashboard'])->name('dosen.dashboard');
 });
