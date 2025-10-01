@@ -9,7 +9,7 @@ use App\Http\Controllers\ManageDataController; // Impor controller ManageData
 use App\Http\Controllers\KaprodiController;
 
 use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\Kaprodi\LaporanAngkatanController;
+use App\Http\Controllers\LaporanAngkatanController;
 
 use App\Http\Controllers\ProdiController;
 
@@ -126,3 +126,11 @@ Route::prefix('kaprodi')->name('kaprodi.')->group(function () {
     Route::get('/laporan/angkatan', [LaporanAngkatanController::class, 'index'])->name('laporan.angkatan');
     Route::get('/laporan/angkatan/export/{format}', [LaporanAngkatanController::class, 'export'])->name('laporan.angkatan.export');
 });
+
+Route::post('/admin/mahasiswa/store', [ManageDataController::class, 'storeMahasiswa'])
+    ->name('mahasiswa.store');
+Route::get('/admin/angkatan/create', [ManageDataController::class, 'showCreateAngkatanForm'])
+     ->name('angkatan.create');
+Route::post('/admin/angkatan/store', [ManageDataController::class, 'storeAngkatan'])
+     ->name('angkatan.store');
+

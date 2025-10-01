@@ -54,6 +54,18 @@
                             Mata Kuliah
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.manage.matkul') }}">
+                            <i class="fas fa-list-ol me-1"></i>
+                            CPL
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.manage.matkul') }}">
+                            <i class="fas fa-tasks me-1"></i>
+                            CPMK
+                        </a>
+                    </li>
                 @elseif($userRole === 'dosen')
                     <li>
                         <a href="#">
