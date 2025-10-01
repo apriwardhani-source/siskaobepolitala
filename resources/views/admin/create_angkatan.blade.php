@@ -1,23 +1,23 @@
 <!-- resources/views/admin/create_angkatan.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Tambah Angkatan Baru')
+@section('title', 'Tambah Kurikulum Baru')
 
 @section('content')
     <div class="glass-card rounded-xl p-6 shadow-lg max-w-2xl mx-auto">
-        <h1 class="text-2xl font-bold text-white mb-6">Tambah Angkatan Baru</h1>
+        <h1 class="text-2xl font-bold text-white mb-6">Tambah Kurikulum Baru</h1>
 
         <form method="POST" action="{{ route('angkatan.store') }}">
             @csrf
 
-            <!-- Tahun Angkatan -->
+            <!-- Tahun Kurikulum -->
             <div class="mb-4">
-                <label for="tahun_angkatan" class="block text-sm font-medium text-white mb-1">Tahun Angkatan *</label>
-                <input type="text" name="tahun_angkatan" id="tahun_angkatan" value="{{ old('tahun_angkatan') }}" required
+                <label for="tahun_kurikulum" class="block text-sm font-medium text-white mb-1">Tahun Kurikulum *</label>
+                <input type="text" name="tahun_kurikulum" id="tahun_kurikulum" value="{{ old('tahun_kurikulum') }}" required
                        class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 text-white 
                               placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
                        placeholder="contoh: 2023">
-                @error('tahun_angkatan')
+                @error('tahun_kurikulum')
                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                 @enderror
             </div>
@@ -48,7 +48,7 @@
                 </a>
                 <button type="submit" class="glass-button text-white font-medium py-2 px-4 rounded-lg">
                     <i class="fas fa-save me-2"></i>
-                    Simpan Angkatan
+                    Simpan Kurikulum
                 </button>
             </div>
         </form>
