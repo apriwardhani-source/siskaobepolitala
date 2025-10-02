@@ -122,7 +122,7 @@
     -webkit-backdrop-filter: blur(20px);
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    text-decoration: none;
+  
 
     /* Full width */
     width: 100%;
@@ -174,12 +174,12 @@ input:focus, textarea:focus, select:focus {
     border-collapse: separate; /* Penting untuk border-radius */
     border-spacing: 0; /* Hilangkan jarak antar sel */
     background: transparent; /* Warna latar belakang transparan */
-    color: white; /* Warna teks default untuk isi tabel */
+    color: rgb(13, 3, 35); /* Warna teks default untuk isi tabel */
 }
 
 /* Gaya Header Tabel (thead) */
 .glass-card thead th {
-    background: rgba(255, 255, 255, 0.2); /* Latar belakang header dengan transparansi */
+    background: rgba(65, 63, 63, 0.279); /* Latar belakang header dengan transparansi */
     padding: 12px 16px; /* Padding untuk header */
     text-align: left; /* Rata kiri teks header */
     font-weight: 600; /* Bold */
@@ -192,12 +192,12 @@ input:focus, textarea:focus, select:focus {
 
 /* Gaya Body Tabel (tbody) */
 .glass-card tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis antar baris */
+    border-bottom: 1px solid rgba(67, 43, 43, 0.1); /* Garis antar baris */
 }
 
 /* Gaya Body Tabel (tbody) - Baris terakhir */
 .glass-card tbody tr:last-child {
-    border-bottom: none; /* Hilangkan garis bawah pada baris terakhir */
+    border-bottom: 1px solid; /* Hilangkan garis bawah pada baris terakhir */
 }
 
 /* Gaya Sel Tabel (td) */
@@ -208,29 +208,29 @@ input:focus, textarea:focus, select:focus {
 
 /* Gaya Hover untuk Baris Tabel */
 .glass-card table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.1); /* Warna latar belakang saat hover */
+    background: rgba(15, 15, 79, 0.1); /* Warna latar belakang saat hover */
 }
 
 /* Gaya Khusus untuk Tabel Bootstrap (jika digunakan) */
 .glass-card .table {
-    color: inherit; /* Warisi warna teks dari glass-card */
+    background: rgba(15, 15, 79, 0.1); /* Warisi warna teks dari glass-card */
 }
 
 .glass-card .table thead th {
     /* Ganti warna header Bootstrap default */
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(83, 68, 68, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+    color: rgb(20, 17, 17);
 }
 
 .glass-card .table tbody + tbody {
-    border-top: 2px solid rgba(255, 255, 255, 0.3); /* Ganti border atas tbody kedua */
+    border-top: 2px solid rgba(255, 0, 0, 0.3); /* Ganti border atas tbody kedua */
 }
 
 /* Gaya untuk tombol/link aksi di dalam sel tabel */
 .glass-card .table .action-buttons a,
 .glass-card .table .action-buttons form button {
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
@@ -244,8 +244,8 @@ input:focus, textarea:focus, select:focus {
 
 .glass-card .table .action-buttons a:hover,
 .glass-card .table .action-buttons form button:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: #d1e7ff;
+    background: rgba(255, 0, 0, 0.25);
+    color: #007bff;
 }
 
 /* Gaya untuk tombol Edit (misalnya menggunakan text-blue-400) */

@@ -79,8 +79,15 @@
 
         /* Gaya untuk glass card di konten utama */
         .glass-card {
+<<<<<<< HEAD
             background: rgba(255, 255, 255, 0.15); /* Warna transparan untuk efek glass */
             backdrop-filter: blur(12px); /* Kurangi blur sedikit */
+=======
+            background: rgba(92, 90, 138, 0.15);
+            /* Warna transparan untuk efek glass */
+            backdrop-filter: blur(12px);
+            /* Kurangi blur sedikit */
+>>>>>>> b3ca68b (menyelesaikan)
             -webkit-backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
