@@ -47,22 +47,20 @@
                     </div>
 
                     <!-- Jenjang (Opsional, bisa ditambahkan jika ada di migrasi/model) -->
-                    <!--
+                  
                     <div>
                         <label for="jenjang" class="block text-sm font-medium text-white mb-1">Jenjang</label>
                         <select name="jenjang" id="jenjang"
                                 class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('jenjang') !border-red-500 @enderror">
                             <option value="" disabled selected>Pilih Jenjang</option>
-                            <option value="Diploma" {{ old('jenjang') === 'Diploma' ? 'selected' : '' }}>Diploma</option>
-                            <option value="S1" {{ old('jenjang') === 'S1' ? 'selected' : '' }}>S1</option>
-                            <option value="S2" {{ old('jenjang') === 'S2' ? 'selected' : '' }}>S2</option>
-                            <option value="S3" {{ old('jenjang') === 'S3' ? 'selected' : '' }}>S3</option>
+                            <option value="Diploma 3" {{ old('jenjang') === 'Diploma 3' ? 'selected' : '' }}>Diploma 3</option>
+                            <option value="Diploma 4" {{ old('jenjang') === 'Diploma 4' ? 'selected' : '' }}>Diploma 4</option>
                         </select>
                         @error('jenjang')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
-                    -->
+                
 
                     <!-- Deskripsi (Opsional, bisa ditambahkan jika ada di migrasi/model) -->
                     <!--

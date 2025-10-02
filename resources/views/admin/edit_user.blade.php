@@ -60,13 +60,7 @@
                 <a href="{{ route('admin.manage.users') }}" class="glass-button text-white font-medium py-2 px-4 rounded-lg">
                     Batal
                 </a>
-                <button type="submit" class="
-                    backdrop-filter backdrop-blur-lg
-                    bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500
-                    text-white font-bold py-2 px-6 rounded-xl
-                    shadow-xl transform transition hover:scale-105 duration-300 ease-in-out
-                    focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-50
-                ">
+                <button type="submit" class="glass-button text-white font-medium px-4 py-2">
                     <i class="fas fa-save me-2"></i>
                     Update User
                 </button>

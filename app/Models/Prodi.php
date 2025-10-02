@@ -14,7 +14,7 @@ class Prodi extends Model
         'kode_prodi',
         'nama_prodi',
         // Tambahkan kolom lain yang kamu miliki di tabel 'prodis' di sini, misalnya:
-        // 'jenjang',
+        'jenjang',
         // 'deskripsi',
     ];
 
