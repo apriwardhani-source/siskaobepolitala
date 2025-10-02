@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
             'email' => 'kaprodi@politala.ac.id',
             'password' => Hash::make('Kaprodi123'),
         ]);
+
         $kaprodi->assignRole('Kaprodi');
 
         // Wadir 1
@@ -38,3 +39,19 @@ class UserSeeder extends Seeder
         $wadir->assignRole('Wadir 1');
     }
 }
+
+
+        // Dosen
+        User::factory()->create([
+            'name' => 'Dosen TI',
+            'email' => 'Dosen@politala.ac.id', // email kaprodi
+            'password' => Hash::make('Dosen123'), // password kaprodi
+            'role' => 'dosen',
+        ]);
+        User::factory()->create([
+            'name' => 'Dosen',
+            'email' => 'Dose@politala.ac.id', // email kaprodi
+            'password' => Hash::make('osen123'), // password kaprodi
+            'role' => 'dosen',
+        ]);
+    
