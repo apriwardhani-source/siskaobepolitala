@@ -14,44 +14,52 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Admin
-        $admin = User::factory()->create([
-            'name' => 'Admin Apri',
-            'email' => 'apri@politala.ac.id',
-            'password' => Hash::make('Wrrdhnii16'),
-        ]);
-        $admin->assignRole('Admin');
+        User::updateOrCreate(
+            ['email' => 'apri@politala.ac.id'],
+            [
+                'name' => 'Admin Apri',
+                'password' => Hash::make('Wrrdhnii16'),
+                'role' => 'admin',
+            ]
+        );
 
         // Kaprodi
-        $kaprodi = User::factory()->create([
-            'name' => 'Kaprodi TI',
-            'email' => 'kaprodi@politala.ac.id',
-            'password' => Hash::make('Kaprodi123'),
-        ]);
-
-        $kaprodi->assignRole('Kaprodi');
+        User::updateOrCreate(
+            ['email' => 'kaprodi@politala.ac.id'],
+            [
+                'name' => 'Kaprodi TI',
+                'password' => Hash::make('Kaprodi123'),
+                'role' => 'kaprodi',
+            ]
+        );
 
         // Wadir 1
-        $wadir = User::factory()->create([
-            'name' => 'Wadir 1',
-            'email' => 'wadir1@politala.ac.id',
-            'password' => Hash::make('Wadir123'),
-        ]);
-        $wadir->assignRole('Wadir 1');
-    }
-}
-
+        User::updateOrCreate(
+            ['email' => 'wadir1@politala.ac.id'],
+            [
+                'name' => 'Wadir 1',
+                'password' => Hash::make('Wadir123'),
+                'role' => 'wadir',
+            ]
+        );
 
         // Dosen
-        User::factory()->create([
-            'name' => 'Dosen TI',
-            'email' => 'Dosen@politala.ac.id', // email kaprodi
-            'password' => Hash::make('Dosen123'), // password kaprodi
-            'role' => 'dosen',
-        ]);
-        User::factory()->create([
-            'name' => 'Dosen',
-            'email' => 'Dose@politala.ac.id', // email kaprodi
-            'password' => Hash::make('osen123'), // password kaprodi
-            'role' => 'dosen',
-        ]);
-    
+        User::updateOrCreate(
+            ['email' => 'dosen@politala.ac.id'],
+            [
+                'name' => 'Dosen TI',
+                'password' => Hash::make('Dosen123'),
+                'role' => 'dosen',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'dose@politala.ac.id'],
+            [
+                'name' => 'Dosen',
+                'password' => Hash::make('osen123'),
+                'role' => 'dosen',
+            ]
+        );
+    }
+}
