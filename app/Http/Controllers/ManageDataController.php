@@ -99,11 +99,16 @@ class ManageDataController extends Controller
 
     // ================= MATA KULIAH =================
     public function indexMatkul()
-    {
-        $this->authorizeAdmin();
-        $matkuls = MataKuliah::with('prodi')->get();
-        return view('admin.manage_matkul', compact('matkuls'));
-    }
+{
+    $this->authorizeAdmin();
+    $matkuls = MataKuliah::with('prodi')->get();
+
+    // Tambahan agar view bisa pakai $matakuliahs
+    $matakuliahs = $matkuls;  
+
+    return view('admin.manage_matkul', compact('matkuls', 'matakuliahs'));
+}
+
 
     public function showCreateMatkulForm()
     {
