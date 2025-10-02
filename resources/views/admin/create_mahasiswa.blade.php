@@ -13,7 +13,7 @@
                     <p class="text-sm text-gray-300 mt-1">Isi formulir di bawah ini untuk menambahkan mahasiswa baru.</p>
                 </div>
                 <div class="mt-4 md:mt-0">
-                    <a href="{{ route('mahasiswa.index') }}" class="glass-button text-white font-medium py-2 px-4 rounded-lg inline-flex items-center">
+                    <a href="{{ route('admin.manage.mahasiswa') }}" class="glass-button text-white font-medium py-2 px-4 rounded-lg inline-flex items-center">
                         <i class="fas fa-arrow-left me-2"></i> Kembali
                     </a>
                 </div>
@@ -79,8 +79,7 @@
             <div class="mb-4">
                 <label for="angkatan_id" class="block text-sm font-medium text-white mb-1">Angkatan *</label>
                 <select name="angkatan_id" id="angkatan_id" required
-                        class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 text-white
-                               focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent">
+                        class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('angkatan_id') !border-red-500 @enderror">
                     <option value="">-- Pilih Angkatan --</option>
                     @foreach($angkatans as $angkatan)
                         <option value="{{ $angkatan->id }}" {{ old('angkatan_id') == $angkatan->id ? 'selected' : '' }}>
@@ -151,17 +150,10 @@
 
                 <!-- Tombol Aksi -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 pt-4 border-t border-white/20">
-                    <a href="{{ route('mahasiswa.index') }}" class="glass-button text-white font-medium py-2 px-6 rounded-lg text-center">
+                    <a href="{{ route('admin.manage.mahasiswa') }}" class="glass-button text-white font-medium py-2 px-6 rounded-lg text-center">
                         <i class="fas fa-times me-2"></i> Batal
                     </a>
-                    <button type="submit" class="
-                        backdrop-filter backdrop-blur-lg
-                        bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500
-                        text-white font-bold py-2 px-6 rounded-xl
-                        shadow-xl transform transition hover:scale-105 duration-300 ease-in-out
-                        focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-50
-                        inline-flex items-center justify-center
-                    ">
+                    <button type="submit" class="glass-button text-white font-medium py-2 px-6 rounded-lg text-center inline-flex items-center justify-center">
                         <i class="fas fa-save me-2"></i> Simpan Mahasiswa
                     </button>
                 </div>
