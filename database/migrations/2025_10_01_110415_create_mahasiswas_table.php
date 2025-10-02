@@ -9,13 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mahasiswas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nim')->unique();
-            $table->string('nama');
-            $table->foreignId('angkatan_id')->constrained()->onDelete('cascade');
-            $table->foreignId('prodi_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-        });
+    $table->id();
+    $table->string('nim')->unique();
+    $table->string('nama');
+    $table->string('tahun_kurikulum'); // simpan tahun kurikulum, bukan id angkatan
+    $table->foreignId('prodi_id')->constrained('prodis')->onDelete('cascade');
+    $table->timestamps();
+});
+
     }
 
     public function down(): void
