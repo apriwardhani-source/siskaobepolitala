@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Tambahkan ini jika kamu menggunakan request AJAX -->
     <title>{{ config('app.name', 'Laravel App') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> <!-- Opsional: Font Awesome untuk ikon -->
-<link rel="stylesheet" href="{{ asset('css/glass.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Hapus spasi di akhir -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> <!-- Hapus spasi di akhir -->
+    <link rel="stylesheet" href="{{ asset('css/glass.css') }}">
 
     <style>
         body {
@@ -17,7 +17,6 @@
             background: url("{{ asset('images/background_login.png') }}") no-repeat center center fixed;
             background-size: cover;
         }
-     
 
         /* Gaya untuk Header/Navbar Glass */
         .header-nav {
@@ -106,6 +105,8 @@
             display: block; /* Pastikan link mengambil seluruh area kartu */
         }
 
+
+
     </style>
 </head>
 <body>
@@ -118,6 +119,6 @@
     </div>
 
     <!-- Bootstrap JS (jika diperlukan untuk komponen JS seperti dropdown) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Hapus spasi di akhir -->
 </body>
 </html>

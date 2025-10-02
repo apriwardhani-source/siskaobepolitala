@@ -42,7 +42,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 Route::get('/admin/manage/users', [AdminController::class, 'manageUsers'])->name('admin.manage.users');
 Route::get('/admin/manage/users/create', [AdminController::class, 'showCreateUserForm'])->name('admin.create.user.form');
 Route::post('/admin/manage/users', [AdminController::class, 'storeUser'])->name('admin.create.user');
-// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
+
+    // Tambahkan route untuk edit dan delete
+    Route::get('/admin/manage/users/{id}/edit', [AdminController::class, 'showEditUserForm'])->name('admin.edit.user.form'); // Menampilkan form edit
+    Route::put('/admin/manage/users/{id}', [AdminController::class, 'updateUser'])->name('admin.update.user'); // Proses update
+    Route::delete('/admin/manage/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.delete.user'); // Proses delete
 
 // Kelola Data Master (Admin) - Gunakan ManageDataController
 Route::get('/admin/manage/prodi', [ManageDataController::class, 'indexProdi'])->name('admin.manage.prodi');

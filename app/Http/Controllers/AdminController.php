@@ -61,11 +61,43 @@ class AdminController extends Controller
         return redirect()->route('admin.manage.users')->with('success', 'User berhasil ditambahkan.');
     }
 
-    // Method untuk menampilkan form edit user (opsional untuk sekarang)
-    // public function showEditUserForm($id) { ... }
+    public function showEditUserForm($id)
+    {
+        $user = User::findOrFail($id); // Ambil user berdasarkan ID
+        // Return ke view edit user, sertakan data user
+        return view('admin.edit_user', compact('user')); // Buat view 'admin.edit_user.blade.php'
+    }
 
-    // Method untuk update user (opsional untuk sekarang)
-    // public function updateUser(Request $request, $id) { ... }
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id, // Unique kecuali untuk user saat ini
+            'role' => 'required|in:admin,dosen,akademik,kaprodi,wadir', // Sesuaikan role dengan kebutuhan SRS
+            // Jangan masukkan password di sini kecuali akan diupdate
+        ]);
+
+        $user->update($request->only(['name', 'email', 'role'])); // Update hanya kolom yang divalidasi
+
+        return redirect()->route('admin.manage.users')->with('success', 'User berhasil diperbarui.');
+    }
+
+    public function deleteUser(Request $request, $id) // Atau gunakan hanya $id
+    {
+        $user = User::findOrFail($id);
+
+        // Jangan hapus user yang sedang login
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.manage.users')->with('error', 'Tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.manage.users')->with('success', 'User berhasil dihapus.');
+    }
+
 
     // Method untuk nonaktifkan/hapus user (opsional untuk sekarang, bisa soft delete)
     // public function deactivateUser($id) { ... }

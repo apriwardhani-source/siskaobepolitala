@@ -21,6 +21,7 @@
     overflow: hidden;
     box-shadow: inset 0 1px 2px rgba(255,255,255,0.3),
                 0 4px 20px rgba(0,0,0,0.3);
+                text-decoration: none;
 }
 
 .glass-button::before {
@@ -70,7 +71,7 @@
 }
 
 .header-nav h2 {
-    margin: 0;         
+    margin: 0;
     padding: 0;
     line-height: 1;     /* biar rata tengah sama logo */
     color: #fff;
@@ -105,13 +106,13 @@
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         inset 0 1px 2px rgba(255,255,255,0.4),
         0 6px 12px rgba(0,0,0,0.4);
 
     /* ✨ efek teks membesar */
-    font-size: 1.05em;     
-    letter-spacing: 0.5px; 
+    font-size: 1.05em;
+    letter-spacing: 0.5px;
 }
 
 /* Glass Card Cavitated */
@@ -121,18 +122,18 @@
     -webkit-backdrop-filter: blur(20px);
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
-
+text-decoration: none;
     /* Efek "mendelep" (inset) */
-    box-shadow: 
+    box-shadow:
         inset 4px 4px 10px rgba(0, 0, 0, 0.4),   /* bayangan dalam gelap */
         inset -4px -4px 10px rgba(255, 255, 255, 0.2); /* highlight dalam terang */
 }
 
 /* Input Cavitated */
-input[type="text"], 
-input[type="email"], 
-input[type="password"], 
-textarea, 
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
 select {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.25);
@@ -141,7 +142,7 @@ select {
     color: #fff;
 
     /* efek inset */
-    box-shadow: 
+    box-shadow:
         inset 3px 3px 6px rgba(0,0,0,0.6),
         inset -3px -3px 6px rgba(255,255,255,0.15);
     transition: all 0.3s ease;
@@ -150,8 +151,194 @@ select {
 input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 
+    box-shadow:
         inset 2px 2px 5px rgba(0,0,0,0.5),
         inset -2px -2px 5px rgba(255,255,255,0.2),
-        0 0 10px rgba(255,255,255,0.2); /* sedikit glow */
+        0 0 10px rgba(255,255,255, 0.2); /* sedikit glow */
+}
+
+/* --- Gaya Baru untuk Tabel Glassmorphism --- */
+/* Gaya Umum Tabel di dalam elemen dengan kelas glass-card */
+.glass-card table {
+    width: 100%;
+    border-collapse: separate; /* Penting untuk border-radius */
+    border-spacing: 0; /* Hilangkan jarak antar sel */
+    background: transparent; /* Warna latar belakang transparan */
+    color: white; /* Warna teks default untuk isi tabel */
+}
+
+/* Gaya Header Tabel (thead) */
+.glass-card thead th {
+    background: rgba(255, 255, 255, 0.2); /* Latar belakang header dengan transparansi */
+    padding: 12px 16px; /* Padding untuk header */
+    text-align: left; /* Rata kiri teks header */
+    font-weight: 600; /* Bold */
+    color: white; /* Warna teks header */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Garis bawah header */
+    /* Rounded corners untuk bagian atas tabel */
+    border-top-left-radius: 12px; /* Atas kiri */
+    border-top-right-radius: 12px; /* Atas kanan */
+}
+
+/* Gaya Body Tabel (tbody) */
+.glass-card tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis antar baris */
+}
+
+/* Gaya Body Tabel (tbody) - Baris terakhir */
+.glass-card tbody tr:last-child {
+    border-bottom: none; /* Hilangkan garis bawah pada baris terakhir */
+}
+
+/* Gaya Sel Tabel (td) */
+.glass-card tbody td {
+    padding: 12px 16px; /* Padding untuk sel data */
+    vertical-align: middle; /* Sejajarkan konten ke tengah vertikal */
+}
+
+/* Gaya Hover untuk Baris Tabel */
+.glass-card table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1); /* Warna latar belakang saat hover */
+}
+
+/* Gaya Khusus untuk Tabel Bootstrap (jika digunakan) */
+.glass-card .table {
+    color: inherit; /* Warisi warna teks dari glass-card */
+}
+
+.glass-card .table thead th {
+    /* Ganti warna header Bootstrap default */
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.glass-card .table tbody + tbody {
+    border-top: 2px solid rgba(255, 255, 255, 0.3); /* Ganti border atas tbody kedua */
+}
+
+/* Gaya untuk tombol/link aksi di dalam sel tabel */
+.glass-card .table .action-buttons a,
+.glass-card .table .action-buttons form button {
+    color: white;
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    /* Efek glassmorphism dasar */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.glass-card .table .action-buttons a:hover,
+.glass-card .table .action-buttons form button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #d1e7ff;
+}
+
+/* Gaya untuk tombol Edit (misalnya menggunakan text-blue-400) */
+.glass-card .table .action-buttons a.text-blue-400,
+.glass-card .table .action-buttons form button.text-blue-400 {
+    background: rgba(59, 130, 246, 0.2); /* Biru transparan */
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.glass-card .table .action-buttons a.text-blue-400:hover,
+.glass-card .table .action-buttons form button.text-blue-400:hover {
+    background: rgba(59, 130, 246, 0.3);
+}
+
+/* Gaya untuk tombol Hapus (menggunakan text-red-400) - Liquid Glass Merah */
+.glass-card .table .action-buttons a.text-red-400,
+.glass-card .table .action-buttons form button.text-red-400 {
+    background: rgba(239, 68, 68, 0.2); /* Warna merah dengan transparansi */
+    border-color: rgba(239, 68, 68, 0.4); /* Border merah dengan transparansi */
+    color: #f87171; /* Warna teks merah muda untuk kontras */
+    /* Efek liquid glass aktif */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.glass-card .table .action-buttons a.text-red-400:hover,
+.glass-card .table .action-buttons form button.text-red-400:hover {
+    background: rgba(239, 68, 68, 0.3); /* Sedikit lebih gelap */
+    color: #fecaca; /* Warna teks saat hover */
+}
+
+/* ==== LIQUID GLASS BUTTON DANGER (MERAH) ==== */
+.glass-button-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+text-decoration: none;
+    background: rgba(255, 0, 0, 0.393); /* merah transparan */
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff; /* merah lembut */
+    transition: all 0.3s ease;
+
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button-danger:hover {
+    background: rgba(255, 0, 0, 0.25);
+    color: #b42b2b;
+    transform: scale(1.05);
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+        0 4px 12px rgba(255, 0, 0, 0.4);
+}
+
+.glass-button-danger:active {
+    transform: scale(0.95);
+    box-shadow:
+        inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(255, 0, 0, 0.2);
+}
+
+/* ==== LIQUID GLASS BUTTON WARNING (KUNING) ==== */
+.glass-button-warning {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+text-decoration: none;
+    background: rgba(255, 193, 7, 0.15); /* kuning transparan */
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #facc15; /* kuning cerah */
+    transition: all 0.3s ease;
+
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button-warning:hover {
+    background: rgba(255, 193, 7, 0.25);
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+        0 4px 12px rgba(255, 193, 7, 0.4);
+}
+
+.glass-button-warning:active {
+    transform: scale(0.95);
+    box-shadow:
+        inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(255, 193, 7, 0.2);
 }
