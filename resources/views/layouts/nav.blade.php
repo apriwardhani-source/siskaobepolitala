@@ -36,12 +36,34 @@
                     <li><a href="{{ route('admin.manage.matkul') }}"
                             class="flex items-center px-2 py-1 hover:text-yellow-400"><i
                                 class="fas fa-book mr-1 text-xs"></i> Mata Kuliah</a></li>
-                    <li><a href="{{ route('admin.manage.matkul') }}"
-                            class="flex items-center px-2 py-1 hover:text-yellow-400"><i
-                                class="fas fa-list-ol mr-1 text-xs"></i> CPL</a></li>
-                    <li><a href="{{ route('admin.manage.matkul') }}"
-                            class="flex items-center px-2 py-1 hover:text-yellow-400"><i
-                                class="fas fa-tasks mr-1 text-xs"></i> CPMK</a></li>
+                    <li class="relative">
+                        <button id="cpl-cpmk-dropdown-btn"
+                            class="w-full text-left block p-2 text-white hover:bg-white/10 rounded flex justify-between items-center">
+                            Manajemen CPL & CPMK
+                            <i class="fas fa-chevron-down transition-transform duration-200"></i>
+                        </button>
+                        <ul id="cpl-cpmk-dropdown" class="ml-4 mt-1 space-y-1 hidden">
+                            <li><a href="{{ route('cpl.index') }}"
+                                    class="block p-2 text-white hover:bg-white/10 rounded text-sm">Kelola CPL</a></li>
+                            <li><a href="{{ route('cpmk.index') }}"
+                                    class="block p-2 text-white hover:bg-white/10 rounded text-sm">Kelola CPMK</a></li>
+                            <li><a href="{{ route('mapping.index') }}"
+                                    class="block p-2 text-white hover:bg-white/10 rounded text-sm">Mapping CPMK →
+                                    CPL</a></li>
+                        </ul>
+                    </li>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const dropdownBtn = document.getElementById('cpl-cpmk-dropdown-btn');
+                            const dropdownMenu = document.getElementById('cpl-cpmk-dropdown');
+                            const chevronIcon = dropdownBtn.querySelector('i');
+
+                            dropdownBtn.addEventListener('click', function() {
+                                dropdownMenu.classList.toggle('hidden');
+                                chevronIcon.classList.toggle('rotate-180');
+                            });
+                        });
+                    </script>
                 @elseif($userRole === 'dosen')
                     <li><a href="#" class="flex items-center px-2 py-1 hover:text-yellow-400"><i
                                 class="fas fa-tasks mr-1 text-xs"></i> CPMK</a></li>

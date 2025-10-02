@@ -8,7 +8,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageDataController; // Impor controller ManageData
 use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\AngkatanController;
-
+use App\Http\Controllers\Admin\CplController;
+use App\Http\Controllers\Admin\CpmkController;
+use App\Http\Controllers\Admin\MappingController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanAngkatanController;
 
@@ -122,7 +124,10 @@ Route::delete('/admin/manage/mahasiswa/{id}', [ManageDataController::class, 'del
 
 // Tambahkan di bawah sini
 Route::middleware(['auth'])->group(function () {
-       
+   // Route resource untuk CPL, CPMK, Mapping (diminta oleh klien untuk Admin)
+    Route::resource('cpl', CplController::class);
+    Route::resource('cpmk', CpmkController::class);
+    Route::resource('mapping', MappingController::class);       
     // Route untuk MENAMPILKAN form tambah user baru
     Route::get('/admin/manage/users/create', [AdminController::class, 'showCreateUserForm'])->name('admin.create.user.form');
     
