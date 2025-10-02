@@ -109,6 +109,12 @@ Route::post('/admin/manage/mahasiswa', [ManageDataController::class, 'storeMahas
 
 // Tambahkan di bawah sini
 Route::middleware(['auth'])->group(function () {
+       
+    // Route untuk MENAMPILKAN form tambah user baru
+    Route::get('/admin/manage/users/create', [AdminController::class, 'showCreateUserForm'])->name('admin.create.user.form');
+    
+    // Route untuk MENYIMPAN data user baru yang dikirim dari form
+    Route::post('/admin/manage/users', [AdminController::class, 'storeUser'])->name('admin.create.user');
     // Admin dashboard
     Route::get('/admin/dashboard', function () {
         return view('dashboard'); // resources/views/dashboard.blade.php
