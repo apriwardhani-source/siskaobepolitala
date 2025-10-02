@@ -5,7 +5,7 @@
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
-<<<<<<< HEAD
+
 
    "require": {
     "php": "^8.2",
@@ -13,7 +13,7 @@
     "laravel/sanctum": "^4.0",
     "laravel/tinker": "^2.8"
 },
-=======
+
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
@@ -28,7 +28,7 @@
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^10.0"
     },
->>>>>>> e7dc06059e47f0f075b2cacd508ee537762bb62c
+
     "autoload": {
         "psr-4": {
             "App\\": "app/",

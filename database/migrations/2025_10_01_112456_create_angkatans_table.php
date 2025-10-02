@@ -9,11 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('angkatans', function (Blueprint $table) {
-            $table->id();
-            $table->string('tahun_angkatan');
-            $table->foreignId('prodi_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-        });
+    $table->id();
+    $table->string('tahun_kurikulum'); // ganti ke tahun_kurikulum
+    $table->foreignId('prodi_id')->constrained()->onDelete('cascade');
+    $table->timestamps();
+});
+
     }
 
     public function down(): void

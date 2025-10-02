@@ -34,21 +34,22 @@
 
             <!-- Angkatan -->
             <div class="mb-4">
-                <label for="angkatan_id" class="block text-sm font-medium text-white mb-1">Angkatan *</label>
-                <select name="angkatan_id" id="angkatan_id" required
-                        class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 text-white
-                               focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent">
-                    <option value="">-- Pilih Angkatan --</option>
-                    @foreach($angkatans as $angkatan)
-                        <option value="{{ $angkatan->id }}" {{ old('angkatan_id') == $angkatan->id ? 'selected' : '' }}>
-                            {{ $angkatan->tahun_angkatan }} - {{ $angkatan->prodi->nama_prodi }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('angkatan_id')
-                    <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                @enderror
-            </div>
+    <label for="tahun_kurikulum" class="block text-sm font-medium text-white mb-1">Tahun Kurikulum *</label>
+    <select name="tahun_kurikulum" id="tahun_kurikulum" required
+            class="w-full bg-white/20 border border-white/30 rounded-lg py-2 px-4 text-white">
+        <option value="">-- Pilih Tahun Kurikulum --</option>
+        @foreach($angkatans as $angkatan)
+            <option value="{{ $angkatan->tahun_kurikulum }}" 
+                    {{ old('tahun_kurikulum') == $angkatan->tahun_kurikulum ? 'selected' : '' }}>
+                {{ $angkatan->tahun_kurikulum }}
+            </option>
+        @endforeach
+    </select>
+    @error('tahun_kurikulum')
+        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+    @enderror
+</div>
+
 
             <!-- Prodi -->
             <div class="mb-4">
