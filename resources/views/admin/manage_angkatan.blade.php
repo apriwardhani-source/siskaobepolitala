@@ -1,4 +1,3 @@
-<!-- resources/views/admin/manage_angkatan.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Kelola Data Kurikulum')
@@ -33,6 +32,9 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                                 Program Studi
                             </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                                Aksi
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white/10 divide-y divide-gray-200">
@@ -44,10 +46,27 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                                     {{ $angkatan->prodi->nama_prodi ?? '-' }}
                                 </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white flex space-x-2">
+                                    <!-- Tombol Edit -->
+                                    <a href="{{ route('angkatan.edit', $angkatan->id) }}" 
+                                       class="glass-button-warning">
+                                        <i class="fas fa-edit me-1"></i> Edit
+                                    </a>
+
+                                    <!-- Tombol Hapus -->
+                                    <form action="{{ route('angkatan.delete', $angkatan->id) }}" method="POST"
+                                          onsubmit="return confirm('Yakin ingin menghapus kurikulum ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="glass-button-danger">
+                                            <i class="fas fa-trash-alt me-1"></i> Hapus
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
+                                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
                                     Tidak ada data kurikulum.
                                 </td>
                             </tr>

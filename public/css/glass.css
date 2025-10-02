@@ -122,12 +122,18 @@
     -webkit-backdrop-filter: blur(20px);
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
-text-decoration: none;
+    text-decoration: none;
+
+    /* Full width */
+    width: 100%;
+    display: block;
+
     /* Efek "mendelep" (inset) */
     box-shadow:
         inset 4px 4px 10px rgba(0, 0, 0, 0.4),   /* bayangan dalam gelap */
         inset -4px -4px 10px rgba(255, 255, 255, 0.2); /* highlight dalam terang */
 }
+
 
 /* Input Cavitated */
 input[type="text"],
@@ -140,6 +146,10 @@ select {
     border-radius: 0.75rem;
     padding: 0.6rem 1rem;
     color: #fff;
+    width: 100%;
+    max-width: 100%;
+}
+
 
     /* efek inset */
     box-shadow:
@@ -342,3 +352,36 @@ text-decoration: none;
         inset 2px 2px 4px rgba(0, 0, 0, 0.4),
         0 2px 6px rgba(255, 193, 7, 0.2);
 }
+/* ==== LIQUID GLASS INPUT ==== */
+.glass-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.5rem;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.1);
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.glass-input:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.1),
+        0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.glass-input.border-red-500 {
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.1),
+        0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+/* Biar konten di tengah */

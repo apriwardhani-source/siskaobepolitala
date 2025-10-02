@@ -39,35 +39,77 @@ class ManageDataController extends Controller
     }
 
     // ================= MAHASISWA =================
-    public function indexMahasiswa()
-    {
-        $this->authorizeAdmin();
-        $mahasiswas = Mahasiswa::with(['angkatan','prodi'])->get(); 
-        return view('admin.manage_mahasiswa', compact('mahasiswas'));
-    }
-
-    public function showCreateMahasiswaForm()
+public function indexMahasiswa()
 {
     $this->authorizeAdmin();
-    $angkatans = Angkatan::with('prodi')->get();
+    $mahasiswas = Mahasiswa::with('prodi')->get(); 
+    return view('admin.manage_mahasiswa', compact('mahasiswas'));
+}
+
+public function showCreateMahasiswaForm()
+{
+    $this->authorizeAdmin();
+    $angkatans = Angkatan::all(); // kalau masih mau dropdown tahun dari tabel angkatan
     $prodis = Prodi::all();
     return view('admin.create_mahasiswa', compact('angkatans','prodis'));
 }
 
-    public function storeMahasiswa(Request $request)
-    {
-        $this->authorizeAdmin();
+public function storeMahasiswa(Request $request)
+{
+    $this->authorizeAdmin();
 
-        $request->validate([
-            'nim' => 'required|string|unique:mahasiswas,nim',
-            'nama' => 'required|string',
-            'angkatan_id' => 'required|exists:angkatans,id',
-            'prodi_id' => 'required|exists:prodis,id',
-        ]);
+    $request->validate([
+        'nim' => 'required|string|unique:mahasiswas,nim',
+        'nama' => 'required|string',
+        'tahun_kurikulum' => 'required|string',
+        'prodi_id' => 'required|exists:prodis,id',
+    ]);
 
-        Mahasiswa::create($request->only(['nim','nama','angkatan_id','prodi_id']));
-        return redirect()->route('admin.manage.mahasiswa')->with('success', 'Mahasiswa berhasil ditambahkan.');
-    }
+    Mahasiswa::create($request->only(['nim','nama','tahun_kurikulum','prodi_id']));
+
+    return redirect()->route('admin.manage.mahasiswa')
+                     ->with('success', 'Mahasiswa berhasil ditambahkan.');
+}
+
+// Form edit mahasiswa
+public function editMahasiswa($id)
+{
+    $this->authorizeAdmin();
+    $mahasiswa = Mahasiswa::findOrFail($id);
+    $angkatans = Angkatan::all();
+    $prodis = Prodi::all();
+    return view('admin.edit_mahasiswa', compact('mahasiswa','angkatans','prodis'));
+}
+
+// Update mahasiswa
+public function updateMahasiswa(Request $request, $id)
+{
+    $this->authorizeAdmin();
+
+    $request->validate([
+        'nim' => 'required|string|unique:mahasiswas,nim,'.$id,
+        'nama' => 'required|string',
+        'tahun_kurikulum' => 'required|string',
+        'prodi_id' => 'required|exists:prodis,id',
+    ]);
+
+    $mahasiswa = Mahasiswa::findOrFail($id);
+    $mahasiswa->update($request->only(['nim','nama','tahun_kurikulum','prodi_id']));
+
+    return redirect()->route('admin.manage.mahasiswa')
+                     ->with('success', 'Mahasiswa berhasil diperbarui.');
+}
+
+// Hapus mahasiswa
+public function deleteMahasiswa($id)
+{
+    $this->authorizeAdmin();
+    $mahasiswa = Mahasiswa::findOrFail($id);
+    $mahasiswa->delete();
+
+    return redirect()->route('admin.manage.mahasiswa')
+                     ->with('success', 'Mahasiswa berhasil dihapus.');
+}
 
     // ================= ANGKATAN =================
     public function indexAngkatan()

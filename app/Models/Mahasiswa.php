@@ -10,11 +10,12 @@ class Mahasiswa extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nim',
-        'nama',
-        'angkatan_id',
-        'prodi_id'
-    ];
+    'nim',
+    'nama',
+    'tahun_kurikulum',
+    'prodi_id'
+];
+
 
     // relasi ke Angkatan
     public function angkatan()

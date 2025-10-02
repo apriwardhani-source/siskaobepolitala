@@ -9,7 +9,7 @@ class Angkatan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tahun_angkatan', 'prodi_id'];
+    protected $fillable = ['tahun_kurikulum', 'prodi_id'];
 
     public function prodi()
     {
