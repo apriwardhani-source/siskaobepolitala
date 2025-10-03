@@ -33,8 +33,8 @@
 
         <!-- Tombol -->
         <div class="flex justify-end space-x-2">
-            <a href="{{ route('admin.manage.angkatan') }}" class="glass-button-warning">Batal</a>
-            <button type="submit" class="glass-button">Update</button>
+            <a href="{{ route('admin.manage.angkatan') }}" class="glass-button-danger">Batal</a>
+            <button type="submit" class="glass-button-warning">Update</button>
         </div>
     </form>
 </div>
