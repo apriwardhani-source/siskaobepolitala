@@ -1,0 +1,121 @@
+<?php
+// app/Http/Controllers/Admin/CplController.php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Cpl;
+use App\Models\Prodi;
+use Illuminate\Http\Request;
+
+class CplController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        // Ambil data CPL dengan relasi prodi, paginasi 10 per halaman
+        $cpls = Cpl::with('prodi')->latest()->paginate(10);
+        
+        // Return ke view index dengan data
+        return view('admin.cpl.index', compact('cpls'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        // Ambil semua data prodi untuk dropdown
+        $prodis = Prodi::all();
+        
+        // Return ke view create dengan data prodi
+        return view('admin.cpl.create', compact('prodis'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'kode_cpl' => 'required|string|max:10|unique:cpls,kode_cpl',
+            'deskripsi' => 'required|string',
+            'threshold' => 'required|numeric|min:0|max:100',
+            'prodi_id' => 'required|exists:prodis,id',
+        ], [
+            // Pesan error kustom
+            'kode_cpl.unique' => 'Kode CPL ini sudah digunakan.',
+            'prodi_id.exists' => 'Program Studi yang dipilih tidak valid.',
+            'threshold.min' => 'Threshold minimal 0%.',
+            'threshold.max' => 'Threshold maksimal 100%.',
+        ]);
+
+        // Simpan data ke database
+        Cpl::create($validatedData);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('cpl.index')->with('success', 'CPL baru berhasil ditambahkan.');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Cpl $cpl)
+    {
+        // Ambil semua data prodi untuk dropdown
+        $prodis = Prodi::all();
+        
+        // Return ke view edit dengan data CPL yang akan diedit dan data prodi
+        return view('admin.cpl.edit', compact('cpl', 'prodis'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Cpl $cpl)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'kode_cpl' => 'required|string|max:10|unique:cpls,kode_cpl,' . $cpl->id,
+            'deskripsi' => 'required|string',
+            'threshold' => 'required|numeric|min:0|max:100',
+            'prodi_id' => 'required|exists:prodis,id',
+        ], [
+            // Pesan error kustom
+            'kode_cpl.unique' => 'Kode CPL ini sudah digunakan.',
+            'prodi_id.exists' => 'Program Studi yang dipilih tidak valid.',
+            'threshold.min' => 'Threshold minimal 0%.',
+            'threshold.max' => 'Threshold maksimal 100%.',
+        ]);
+
+        // Update data di database
+        $cpl->update($validatedData);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('cpl.index')->with('success', 'CPL berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Cpl $cpl)
+    {
+        // Validasi: cek apakah CPL memiliki relasi yang mencegah penghapusan
+        // Misalnya, jika CPL sudah memiliki mapping CPMK, mungkin tidak boleh dihapus.
+        // Untuk sekarang, kita asumsikan bisa dihapus jika tidak ada constraint khusus.
+        // Contoh validasi (opsional):
+        // if ($cpl->mappings()->count() > 0) {
+        //     return redirect()->route('cpl.index')
+        //                      ->with('error', 'Tidak dapat menghapus CPL karena sudah memiliki Mapping CPMK terkait.');
+        // }
+
+        // Hapus data dari database
+        $cpl->delete();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('cpl.index')->with('success', 'CPL berhasil dihapus.');
+    }
+}

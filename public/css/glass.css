@@ -122,7 +122,7 @@
     -webkit-backdrop-filter: blur(20px);
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    text-decoration: none;
+  
 
     /* Full width */
     width: 100%;
@@ -148,10 +148,7 @@ select {
     color: #fff;
     width: 100%;
     max-width: 100%;
-}
 
-
-    /* efek inset */
     box-shadow:
         inset 3px 3px 6px rgba(0,0,0,0.6),
         inset -3px -3px 6px rgba(255,255,255,0.15);
@@ -174,12 +171,12 @@ input:focus, textarea:focus, select:focus {
     border-collapse: separate; /* Penting untuk border-radius */
     border-spacing: 0; /* Hilangkan jarak antar sel */
     background: transparent; /* Warna latar belakang transparan */
-    color: white; /* Warna teks default untuk isi tabel */
+    color: rgb(13, 3, 35); /* Warna teks default untuk isi tabel */
 }
 
 /* Gaya Header Tabel (thead) */
 .glass-card thead th {
-    background: rgba(255, 255, 255, 0.2); /* Latar belakang header dengan transparansi */
+    background: rgba(65, 63, 63, 0.279); /* Latar belakang header dengan transparansi */
     padding: 12px 16px; /* Padding untuk header */
     text-align: left; /* Rata kiri teks header */
     font-weight: 600; /* Bold */
@@ -192,12 +189,12 @@ input:focus, textarea:focus, select:focus {
 
 /* Gaya Body Tabel (tbody) */
 .glass-card tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis antar baris */
+    border-bottom: 1px solid rgba(67, 43, 43, 0.1); /* Garis antar baris */
 }
 
 /* Gaya Body Tabel (tbody) - Baris terakhir */
 .glass-card tbody tr:last-child {
-    border-bottom: none; /* Hilangkan garis bawah pada baris terakhir */
+    border-bottom: 1px solid; /* Hilangkan garis bawah pada baris terakhir */
 }
 
 /* Gaya Sel Tabel (td) */
@@ -208,29 +205,29 @@ input:focus, textarea:focus, select:focus {
 
 /* Gaya Hover untuk Baris Tabel */
 .glass-card table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.1); /* Warna latar belakang saat hover */
+    background: rgba(15, 15, 79, 0.1); /* Warna latar belakang saat hover */
 }
 
 /* Gaya Khusus untuk Tabel Bootstrap (jika digunakan) */
 .glass-card .table {
-    color: inherit; /* Warisi warna teks dari glass-card */
+    background: rgba(15, 15, 79, 0.1); /* Warisi warna teks dari glass-card */
 }
 
 .glass-card .table thead th {
     /* Ganti warna header Bootstrap default */
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(83, 68, 68, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+    color: rgb(20, 17, 17);
 }
 
 .glass-card .table tbody + tbody {
-    border-top: 2px solid rgba(255, 255, 255, 0.3); /* Ganti border atas tbody kedua */
+    border-top: 2px solid rgba(255, 0, 0, 0.3); /* Ganti border atas tbody kedua */
 }
 
 /* Gaya untuk tombol/link aksi di dalam sel tabel */
 .glass-card .table .action-buttons a,
 .glass-card .table .action-buttons form button {
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
@@ -244,8 +241,8 @@ input:focus, textarea:focus, select:focus {
 
 .glass-card .table .action-buttons a:hover,
 .glass-card .table .action-buttons form button:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: #d1e7ff;
+    background: rgba(255, 0, 0, 0.25);
+    color: #007bff;
 }
 
 /* Gaya untuk tombol Edit (misalnya menggunakan text-blue-400) */
@@ -385,3 +382,108 @@ text-decoration: none;
         0 0 0 3px rgba(239, 68, 68, 0.2);
 }
 /* Biar konten di tengah */
+
+/* ==== NAV DROPDOWN (klik, bukan hover) ==== */
+.nav-menu li ul {
+    display: none; /* Default hidden */
+    position: absolute;
+    left: 0;
+    margin-top: 0.5rem;
+    min-width: 12rem;
+    border-radius: 0.5rem;
+    background: rgba(31, 41, 55, 0.8); /* bg-gray-800 transparan */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    z-index: 50;
+}
+
+/* Kalau ada class show → tampil */
+.nav-menu li ul.show {
+    display: block;
+}
+
+/* Item dalam dropdown */
+.nav-menu li ul li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+/* Hover item dropdown */
+.nav-menu li ul li a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.nav-item.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;   /* supaya muncul di bawah */
+  left: 0;     /* mulai dari kiri parent */
+  z-index: 1000;
+  min-width: 180px;
+}
+/* ==== GLASS DROPDOWN STYLE ==== */
+.nav-item {
+  position: relative;
+  margin-right: 20px;
+}
+
+.nav-item button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.nav-item button:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* dropdown */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  margin-top: 8px;
+  display: none;
+  flex-direction: column;
+  background: rgba(5, 2, 64, 0.501);
+  backdrop-filter: blur(12px);
+  border-radius: 15px;
+  padding: 8px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.2s;
+  border-radius: 8px;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.show {
+  display: flex;
+}

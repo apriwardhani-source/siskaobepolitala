@@ -30,27 +30,27 @@
                     <thead>
                         <tr>
                             <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nama
+                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nama
                             </th>
                             <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Email
+                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Email
                             </th>
                             <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Role
+                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Role
                             </th>
                             <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi
+                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi
                             </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($users as $user)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $user->name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $user->email }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white capitalize">{{ $user->role }}
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-white">{{ $user->name }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-white">{{ $user->email }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm text-white capitalize">{{ $user->role }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
                                     <!-- Bungkus tombol dalam div untuk kelas action-buttons (opsional, bisa juga langsung ke button/link) -->
                                     <div class="action-buttons flex space-x-2">
                                         <!-- Tambahkan flex dan space-x untuk jarak -->
@@ -75,7 +75,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
+                                <td colspan="4" class="px-4 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
                                     Tidak ada data user.</td>
                             </tr>
                         @endforelse
