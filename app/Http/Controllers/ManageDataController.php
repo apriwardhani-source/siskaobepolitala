@@ -195,6 +195,40 @@ public function deleteMahasiswa($id)
         return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil ditambahkan.');
     }
 
+    public function editMatkul($id)
+{
+    $this->authorizeAdmin();
+    $matkul = MataKuliah::findOrFail($id);
+    $prodis = Prodi::all();
+    return view('admin.edit_matkul', compact('matkul', 'prodis'));
+}
+
+public function updateMatkul(Request $request, $id)
+{
+    $this->authorizeAdmin();
+
+    $request->validate([
+        'kode_matkul' => 'required|string|unique:mata_kuliahs,kode_matkul,' . $id,
+        'nama_matkul' => 'required|string',
+        'sks' => 'required|integer|min:1|max:6',
+        'prodi_id' => 'required|exists:prodis,id',
+    ]);
+
+    $matkul = MataKuliah::findOrFail($id);
+    $matkul->update($request->only(['kode_matkul','nama_matkul','sks','prodi_id']));
+
+    return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil diperbarui.');
+}
+
+public function deleteMatkul($id)
+{
+    $this->authorizeAdmin();
+    $matkul = MataKuliah::findOrFail($id);
+    $matkul->delete();
+    return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil dihapus.');
+}
+
+
     // ================= HELPER =================
     private function authorizeAdmin()
     {

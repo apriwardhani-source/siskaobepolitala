@@ -6,32 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('matakuliahs', function (Blueprint $table) {
+        Schema::create('mata_kuliahs', function (Blueprint $table) { // ✅ konsisten pakai underscore
             $table->id();
-            $table->string('kode')->unique(); // contoh: IF101
-            $table->string('nama');           // nama mata kuliah
-            $table->unsignedTinyInteger('sks'); // jumlah SKS (biasanya 1–6)
+            $table->string('kode_matkul')->unique();   // contoh: IF101
+            $table->string('nama_matkul');             // nama mata kuliah
+            $table->unsignedTinyInteger('sks');        // jumlah SKS (1–6)
 
-            // relasi ke tabel dosens (pastikan tabel dosens sudah ada)
-            $table->foreignId('dosen_id')
-                  ->nullable()
-                  ->constrained('dosens')
-                  ->nullOnDelete();
+            // relasi ke tabel prodi
+            $table->foreignId('prodi_id')
+                  ->constrained('prodis')
+                  ->cascadeOnDelete();
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('matakuliahs');
+        Schema::dropIfExists('mata_kuliahs');
     }
 };

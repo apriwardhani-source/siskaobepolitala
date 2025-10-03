@@ -160,3 +160,12 @@ Route::get('/admin/angkatan/{id}/edit', [AngkatanController::class, 'edit'])->na
 Route::put('/admin/angkatan/{id}', [AngkatanController::class, 'update'])->name('angkatan.update');
 Route::delete('/admin/angkatan/{id}', [AngkatanController::class, 'destroy'])->name('angkatan.delete');
 
+// ============== MATA KULIAH ==============
+Route::get('/admin/manage/matkul', [ManageDataController::class, 'indexMatkul'])->name('admin.manage.matkul');
+Route::get('/admin/manage/matkul/create', [ManageDataController::class, 'showCreateMatkulForm'])->name('admin.create.matkul.form');
+Route::post('/admin/manage/matkul', [ManageDataController::class, 'storeMatkul'])->name('admin.create.matkul');
+
+Route::get('/admin/manage/matkul/{id}/edit', [ManageDataController::class, 'editMatkul'])->name('admin.edit.matkul');
+Route::put('/admin/manage/matkul/{id}', [ManageDataController::class, 'updateMatkul'])->name('admin.update.matkul');
+Route::delete('/admin/manage/matkul/{id}', [ManageDataController::class, 'deleteMatkul'])->name('admin.delete.matkul');
+

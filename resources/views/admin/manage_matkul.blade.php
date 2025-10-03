@@ -1,30 +1,69 @@
-<!-- resources/views/admin/manage_matkul.blade.php -->
+@extends('layouts.app')
 
-@extends('layouts.app') {{-- kalau kamu pakai layout utama --}}
+@section('title', 'Kelola Mata Kuliah')
 
 @section('content')
-    <div class="container">
-        <h1>Manajemen Mata Kuliah</h1>
+    <div class="glass-card rounded-xl p-6 shadow-lg">
+        <h1 class="text-2xl font-bold text-white mb-6">Kelola Data Mata Kuliah</h1>
 
-        <table border="1" cellpadding="8" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Kode</th>
-                    <th>Nama</th>
-                    <th>SKS</th>
-                    <th>Dosen ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($matakuliahs as $mk)
-                    <tr>
-                        <td>{{ $mk->kode }}</td>
-                        <td>{{ $mk->nama }}</td>
-                        <td>{{ $mk->sks }}</td>
-                        <td>{{ $mk->dosen_id }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        {{-- Alert sukses --}}
+        @if(session('success'))
+            <div class="glass-card rounded-lg p-4 mb-4 text-green-200 border border-green-400">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Tombol Tambah Mata Kuliah --}}
+        <div class="mb-4">
+            <a href="{{ route('admin.create.matkul.form') }}" class="glass-button text-lg">
+                <i class="fas fa-plus-circle me-2"></i>
+                Tambah Mata Kuliah
+            </a>
+        </div>
+
+        {{-- Tabel Data Mata Kuliah --}}
+        <div class="glass-card rounded-lg overflow-hidden shadow-lg">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-white/10">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Kode</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">SKS</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Program Studi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white/10 divide-y divide-gray-200">
+                        @forelse($matakuliahs as $mk)
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-white">{{ $mk->kode_matkul }}</td>
+                                <td class="px-6 py-4 text-sm text-white">{{ $mk->nama_matkul }}</td>
+                                <td class="px-6 py-4 text-sm text-white">{{ $mk->sks }}</td>
+                                <td class="px-6 py-4 text-sm text-white">{{ $mk->prodi->nama_prodi ?? '-' }}</td>
+                                <td class="px-6 py-4 text-sm text-white flex gap-2">
+                                    <a href="{{ route('admin.edit.matkul', $mk->id) }}" 
+                                       class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
+                                    <form action="{{ route('admin.delete.matkul', $mk->id) }}" method="POST" 
+                                          onsubmit="return confirm('Yakin hapus mata kuliah ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="glass-button-danger"><i class="fas fa-trash me-1"></i>
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-sm text-gray-300 text-center">
+                                    Tidak ada data mata kuliah.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 @endsection
