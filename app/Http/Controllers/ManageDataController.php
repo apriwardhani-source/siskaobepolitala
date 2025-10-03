@@ -38,6 +38,38 @@ class ManageDataController extends Controller
         return redirect()->route('admin.manage.prodi')->with('success', 'Prodi berhasil ditambahkan.');
     }
 
+    public function editProdi($id)
+{
+    $this->authorizeAdmin();
+    $prodi = Prodi::findOrFail($id);
+    return view('admin.edit_prodi', compact('prodi'));
+}
+
+public function updateProdi(Request $request, $id)
+{
+    $this->authorizeAdmin();
+
+    $request->validate([
+        'kode_prodi' => 'required|string|unique:prodis,kode_prodi,' . $id,
+        'nama_prodi' => 'required|string',
+        'jenjang' => 'required|string',
+    ]);
+
+    $prodi = Prodi::findOrFail($id);
+    $prodi->update($request->only(['kode_prodi','nama_prodi','jenjang']));
+
+    return redirect()->route('admin.manage.prodi')->with('success', 'Prodi berhasil diperbarui.');
+}
+
+public function deleteProdi($id)
+{
+    $this->authorizeAdmin();
+    $prodi = Prodi::findOrFail($id);
+    $prodi->delete();
+    return redirect()->route('admin.manage.prodi')->with('success', 'Prodi berhasil dihapus.');
+}
+        
+
     // ================= MAHASISWA =================
 public function indexMahasiswa()
 {

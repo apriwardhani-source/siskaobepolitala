@@ -169,3 +169,8 @@ Route::get('/admin/manage/matkul/{id}/edit', [ManageDataController::class, 'edit
 Route::put('/admin/manage/matkul/{id}', [ManageDataController::class, 'updateMatkul'])->name('admin.update.matkul');
 Route::delete('/admin/manage/matkul/{id}', [ManageDataController::class, 'deleteMatkul'])->name('admin.delete.matkul');
 
+// PRODI CRUD
+Route::get('/admin/manage/prodi/{id}/edit', [ManageDataController::class, 'editProdi'])->name('admin.edit.prodi');
+Route::put('/admin/manage/prodi/{id}', [ManageDataController::class, 'updateProdi'])->name('admin.update.prodi');
+Route::delete('/admin/manage/prodi/{id}', [ManageDataController::class, 'deleteProdi'])->name('admin.delete.prodi');
+
