@@ -91,17 +91,25 @@ Route::get('/admin/manage/prodi/create', [ManageDataController::class, 'showCrea
 Route::post('/admin/manage/prodi', [ManageDataController::class, 'storeProdi'])->name('admin.create.prodi');
 // Tambahkan route untuk edit/update/hapus jika diperlukan nanti
 
-// --- TAMBAHKAN BAGIAN INI ---
-Route::get('/admin/manage/mahasiswa', [ManageDataController::class, 'indexMahasiswa'])->name('admin.manage.mahasiswa');
-Route::get('/admin/manage/mahasiswa/create', [ManageDataController::class, 'showCreateMahasiswaForm'])->name('admin.create.mahasiswa.form');
-Route::post('/admin/manage/mahasiswa', [ManageDataController::class, 'storeMahasiswa'])->name('admin.create.mahasiswa');
-// Tambahkan route untuk edit/update/hapus jika diperlukan nanti
-// route edit & update
-Route::get('/admin/manage/mahasiswa/{id}/edit', [ManageDataController::class, 'editMahasiswa'])->name('admin.edit.mahasiswa');
-Route::put('/admin/manage/mahasiswa/{id}', [ManageDataController::class, 'updateMahasiswa'])->name('admin.update.mahasiswa');
+// ================= MAHASISWA =================
+Route::get('/admin/manage/mahasiswa', [ManageDataController::class, 'indexMahasiswa'])
+    ->name('admin.manage.mahasiswa');
 
-// route hapus
-Route::delete('/admin/manage/mahasiswa/{id}', [ManageDataController::class, 'deleteMahasiswa'])->name('admin.delete.mahasiswa');
+Route::get('/admin/manage/mahasiswa/create', [ManageDataController::class, 'showCreateMahasiswaForm'])
+    ->name('admin.create.mahasiswa.form');
+
+Route::post('/admin/manage/mahasiswa', [ManageDataController::class, 'storeMahasiswa'])
+    ->name('admin.create.mahasiswa');
+
+Route::get('/admin/manage/mahasiswa/{id}/edit', [ManageDataController::class, 'editMahasiswa'])
+    ->name('admin.edit.mahasiswa');
+
+Route::put('/admin/manage/mahasiswa/{id}', [ManageDataController::class, 'updateMahasiswa'])
+    ->name('admin.update.mahasiswa');
+
+Route::delete('/admin/manage/mahasiswa/{id}', [ManageDataController::class, 'deleteMahasiswa'])
+    ->name('admin.delete.mahasiswa');
+
 // --- /TAMBAHKAN BAGIAN INI ---
 
 // Route::get('/admin/manage/angkatan', [ManageDataController::class, 'indexAngkatan'])->name('admin.manage.angkatan');
@@ -142,8 +150,7 @@ Route::prefix('kaprodi')->name('kaprodi.')->group(function () {
     Route::get('/laporan/angkatan/export/{format}', [LaporanAngkatanController::class, 'export'])->name('laporan.angkatan.export');
 });
 
-Route::post('/admin/mahasiswa/store', [ManageDataController::class, 'storeMahasiswa'])
-    ->name('mahasiswa.store');
+
 
     // Kelola Angkatan (Admin) - Gunakan AngkatanController
 Route::get('/admin/manage/angkatan', [AngkatanController::class, 'index'])->name('admin.manage.angkatan');

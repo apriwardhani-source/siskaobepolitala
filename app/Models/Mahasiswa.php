@@ -11,9 +11,9 @@ class Mahasiswa extends Model
 
     protected $fillable = [
     'nim',
-    'nama',
+    'nama',           // atau 'nama_mahasiswa' -> sesuaikan dengan migration
     'tahun_kurikulum',
-    'prodi_id'
+    'prodi_id',
 ];
 
 

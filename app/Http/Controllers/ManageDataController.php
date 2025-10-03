@@ -43,33 +43,54 @@ public function indexMahasiswa()
 {
     $this->authorizeAdmin();
     $mahasiswas = Mahasiswa::with('prodi')->get(); 
-    return view('admin.manage_mahasiswa', compact('mahasiswas'));
+
+    $newMahasiswa = null;
+    if (session('new_mahasiswa')) {
+        $newMahasiswa = Mahasiswa::with('prodi')->find(session('new_mahasiswa'));
+    }
+
+    return view('admin.manage_mahasiswa', compact('mahasiswas','newMahasiswa'));
 }
+
 
 public function showCreateMahasiswaForm()
 {
     $this->authorizeAdmin();
-    $angkatans = Angkatan::all(); // kalau masih mau dropdown tahun dari tabel angkatan
+
+    // Ambil tahun_kurikulum dari tabel angkatans (tanpa duplikat)
+    $kurikulums = Angkatan::select('tahun_kurikulum')->distinct()->get();
     $prodis = Prodi::all();
-    return view('admin.create_mahasiswa', compact('angkatans','prodis'));
+
+    return view('admin.create_mahasiswa', compact('kurikulums','prodis'));
 }
+
 
 public function storeMahasiswa(Request $request)
 {
     $this->authorizeAdmin();
 
     $request->validate([
-        'nim' => 'required|string|unique:mahasiswas,nim',
-        'nama' => 'required|string',
+        'nim'             => 'required|string|unique:mahasiswas,nim',
+        'nama'            => 'required|string|max:255', 
         'tahun_kurikulum' => 'required|string',
-        'prodi_id' => 'required|exists:prodis,id',
+        'prodi_id'        => 'required|exists:prodis,id',
     ]);
 
-    Mahasiswa::create($request->only(['nim','nama','tahun_kurikulum','prodi_id']));
+    $mahasiswa = Mahasiswa::create([
+        'nim'             => $request->nim,
+        'nama'            => $request->nama,
+        'tahun_kurikulum' => $request->tahun_kurikulum,
+        'prodi_id'        => $request->prodi_id,
+    ]);
 
     return redirect()->route('admin.manage.mahasiswa')
-                     ->with('success', 'Mahasiswa berhasil ditambahkan.');
+                     ->with('success', 'Mahasiswa berhasil ditambahkan.')
+                     ->with('new_mahasiswa', $mahasiswa->id); // simpan id terbaru
 }
+
+
+
+
 
 // Form edit mahasiswa
 public function editMahasiswa($id)

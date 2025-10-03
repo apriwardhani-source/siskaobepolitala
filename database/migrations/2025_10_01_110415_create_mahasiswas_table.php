@@ -12,10 +12,11 @@ return new class extends Migration
     $table->id();
     $table->string('nim')->unique();
     $table->string('nama');
-    $table->string('tahun_kurikulum'); // simpan tahun kurikulum, bukan id angkatan
+    $table->string('tahun_kurikulum');
     $table->foreignId('prodi_id')->constrained('prodis')->onDelete('cascade');
     $table->timestamps();
 });
+
 
     }
 

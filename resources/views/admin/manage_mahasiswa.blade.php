@@ -33,45 +33,48 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white/10 divide-y divide-gray-200">
-                        @forelse($mahasiswas as $mahasiswa)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $mahasiswa->nim }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $mahasiswa->nama }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                    {{ $mahasiswa->tahun_kurikulum ?? '-' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                    {{ $mahasiswa->prodi->nama_prodi ?? '-' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-    <div class="flex items-center space-x-3">
-        <!-- Tombol Edit -->
-        <a href="{{ route('admin.edit.mahasiswa', $mahasiswa->id) }}" 
-           class="glass-button-warning px-4 py-1">
-           <i class="fas fa-edit me-1"></i> Edit
-        </a>
+    @forelse($mahasiswas as $mahasiswa)
+        @php
+            $isNew = session('new_mahasiswa_id') == $mahasiswa->id;
+        @endphp
+        <tr class="{{ $isNew ? 'bg-green-700/40' : '' }}">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $mahasiswa->nim }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $mahasiswa->nama }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                {{ $mahasiswa->tahun_kurikulum ?? '-' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                {{ $mahasiswa->prodi->nama_prodi ?? '-' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                <div class="flex items-center space-x-3">
+                    <!-- Tombol Edit -->
+                    <a href="{{ route('admin.edit.mahasiswa', $mahasiswa->id) }}" 
+                       class="glass-button-warning px-4 py-1">
+                       <i class="fas fa-edit me-1"></i> Edit
+                    </a>
 
-        <!-- Tombol Hapus -->
-        <form action="{{ route('admin.delete.mahasiswa', $mahasiswa->id) }}" method="POST"
-              onsubmit="return confirm('Yakin ingin menghapus mahasiswa ini?')" class="inline-block">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="glass-button-danger px-4 py-1">
-                <i class="fas fa-trash-alt me-1"></i> Hapus
-            </button>
-        </form>
-    </div>
-</td>
+                    <!-- Tombol Hapus -->
+                    <form action="{{ route('admin.delete.mahasiswa', $mahasiswa->id) }}" method="POST"
+                          onsubmit="return confirm('Yakin ingin menghapus mahasiswa ini?')" class="inline-block">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="glass-button-danger px-4 py-1">
+                            <i class="fas fa-trash-alt me-1"></i> Hapus
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
+                Tidak ada data mahasiswa.
+            </td>
+        </tr>
+    @endforelse
+</tbody>
 
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
-                                    Tidak ada data mahasiswa.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
                 </table>
             </div>
         </div>
