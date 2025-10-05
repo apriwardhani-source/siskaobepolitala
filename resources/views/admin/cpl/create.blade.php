@@ -92,14 +92,7 @@
                     <a href="{{ route('cpl.index') }}" class="glass-button text-white font-medium py-2 px-6 rounded-lg text-center">
                         <i class="fas fa-times me-2"></i> Batal
                     </a>
-                    <button type="submit" class="
-                        backdrop-filter backdrop-blur-lg
-                        bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500
-                        text-white font-bold py-2 px-6 rounded-xl
-                        shadow-xl transform transition hover:scale-105 duration-300 ease-in-out
-                        focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-opacity-50
-                        inline-flex items-center justify-center
-                    ">
+                    <button type="submit" class="glass-button text-white font-medium py-2 px-6 rounded-lg text-center">
                         <i class="fas fa-save me-2"></i> Simpan CPL
                     </button>
                 </div>

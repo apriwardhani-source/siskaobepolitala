@@ -9,11 +9,11 @@ class Angkatan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tahun_kurikulum', 'prodi_id'];
+    protected $fillable = ['tahun_kurikulum', 'matkul_id'];
 
-    public function prodi()
+    public function matkul()
     {
-        return $this->belongsTo(Prodi::class);
+        return $this->belongsTo(MataKuliah::class, 'matkul_id');
     }
 
     public function mahasiswas()
