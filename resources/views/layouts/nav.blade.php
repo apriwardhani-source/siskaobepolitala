@@ -32,7 +32,7 @@
                                 class="fas fa-graduation-cap mr-1 text-xs"></i> Mhs</a></li>
                     <li><a href="{{ route('admin.manage.angkatan') }}"
                             class="flex items-center px-2 py-1 hover:text-yellow-400"><i
-                                class="fas fa-calendar-alt mr-1 text-xs"></i> Angkatan</a></li>
+                                class="fas fa-calendar-alt mr-1 text-xs"></i> Kurikulum</a></li>
                     <li><a href="{{ route('admin.manage.matkul') }}"
                             class="flex items-center px-2 py-1 hover:text-yellow-400"><i
                                 class="fas fa-book mr-1 text-xs"></i> Mata Kuliah</a></li>
