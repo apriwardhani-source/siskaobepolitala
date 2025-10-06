@@ -45,12 +45,12 @@ class CpmkController extends Controller
         $validatedData = $request->validate([
             'kode_cpmk' => 'required|string|max:10|unique:cpmks,kode_cpmk', // Validasi kode_cpmk unik di tabel cpmks kolom kode_cpmk
             'deskripsi' => 'required|string',
-            'mata_kuliah_id' => 'required|exists:mata_kuliahs,id', // Validasi mata_kuliah_id ada di tabel mata_kuliahs
+          // Validasi mata_kuliah_id ada di tabel mata_kuliahs
             // 'bobot' => 'nullable|integer|min:0|max:100', // Validasi bobot jika ada
         ], [
             // Pesan error kustom (opsional)
             'kode_cpmk.unique' => 'Kode CPMK ini sudah digunakan.',
-            'mata_kuliah_id.exists' => 'Mata Kuliah yang dipilih tidak valid.',
+   
             // 'bobot.min' => 'Bobot minimal 0%.', // Pesan error bobot jika ada
             // 'bobot.max' => 'Bobot maksimal 100%.', // Pesan error bobot jika ada
         ]);

@@ -284,7 +284,7 @@ input:focus, textarea:focus, select:focus {
     font-weight: 600;
     cursor: pointer;
 text-decoration: none;
-    background: rgba(255, 0, 0, 0.393); /* merah transparan */
+    background: rgb(255, 0, 0); /* merah transparan */
     border: 1px solid rgba(255, 0, 0, 0.3);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
