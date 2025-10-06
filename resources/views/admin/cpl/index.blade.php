@@ -47,9 +47,6 @@
                                     class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                                     Threshold (%)</th>
                                 <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                    Program Studi</th>
-                                <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi
                                 </th>
                             </tr>

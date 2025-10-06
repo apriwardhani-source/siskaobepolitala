@@ -44,11 +44,9 @@ class CplController extends Controller
             'kode_cpl' => 'required|string|max:10|unique:cpls,kode_cpl',
             'deskripsi' => 'required|string',
             'threshold' => 'required|numeric|min:0|max:100',
-            'prodi_id' => 'required|exists:prodis,id',
         ], [
             // Pesan error kustom
             'kode_cpl.unique' => 'Kode CPL ini sudah digunakan.',
-            'prodi_id.exists' => 'Program Studi yang dipilih tidak valid.',
             'threshold.min' => 'Threshold minimal 0%.',
             'threshold.max' => 'Threshold maksimal 100%.',
         ]);
@@ -82,11 +80,9 @@ class CplController extends Controller
             'kode_cpl' => 'required|string|max:10|unique:cpls,kode_cpl,' . $cpl->id,
             'deskripsi' => 'required|string',
             'threshold' => 'required|numeric|min:0|max:100',
-            'prodi_id' => 'required|exists:prodis,id',
         ], [
             // Pesan error kustom
             'kode_cpl.unique' => 'Kode CPL ini sudah digunakan.',
-            'prodi_id.exists' => 'Program Studi yang dipilih tidak valid.',
             'threshold.min' => 'Threshold minimal 0%.',
             'threshold.max' => 'Threshold maksimal 100%.',
         ]);
