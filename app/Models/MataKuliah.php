@@ -22,4 +22,11 @@ class MataKuliah extends Model
     {
         return $this->belongsTo(Prodi::class);
     }
+
+    public function mappings()
+{
+    return $this->belongsToMany(Mapping::class, 'mapping_mata_kuliahs', 'mata_kuliah_id', 'mapping_id')
+                ->withTimestamps();
+}
+
 }
