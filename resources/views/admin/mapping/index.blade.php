@@ -15,8 +15,8 @@
             </div>
             <div class="mt-4 md:mt-0">
                 <a href="{{ route('mapping.create') }}"
-                    class="glass-button text-white font-medium py-2 px-4 rounded-lg inline-flex items-center">
-                    <i class="fas fa-plus-circle me-2"></i> Tambah Mapping Baru
+                    class="glass-button text-lg">
+                <i class="fas fa-plus-circle me-2"></i></i> Tambah Mapping Baru
                 </a>
             </div>
         </div>

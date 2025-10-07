@@ -11,8 +11,8 @@
                 <p class="text-sm text-gray-300 mt-1">Daftar semua CPMK yang tersedia.</p>
             </div>
             <div class="mt-4 md:mt-0">
-                <a href="{{ route('cpmk.create') }}" class="glass-button text-white font-medium py-2 px-4 rounded-lg inline-flex items-center">
-                    <i class="fas fa-plus-circle me-2"></i> Tambah CPMK Baru
+                <a href="{{ route('cpmk.create') }}" class="glass-button text-lg">
+                <i class="fas fa-plus-circle me-2"></i></i> Tambah CPMK Baru
                 </a>
             </div>
         </div>

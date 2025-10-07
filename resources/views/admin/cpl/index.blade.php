@@ -13,9 +13,8 @@
                 </div>
                 <div class="mt-4 md:mt-0">
                     <a href="{{ route('cpl.create') }}"
-                       class="glass-button text-white font-medium py-2 px-4 rounded-lg inline-flex items-center"
-                       style="background-color: rgba(22,163,74,.6);">
-                        <i class="fas fa-plus-circle me-2"></i> Tambah CPL Baru
+                       class="glass-button text-lg">
+                <i class="fas fa-plus-circle me-2"></i> Tambah CPL Baru
                     </a>
                 </div>
             </div>
