@@ -12,17 +12,5 @@ class Cpmk extends Model
     protected $fillable = [
         'kode_cpmk',
         'deskripsi',
-        'mata_kuliah_id',
     ];
-
-    // Relasi
-    public function mataKuliah()
-    {
-        return $this->belongsTo(MataKuliah::class);
-    }
-
-    public function mappings()
-    {
-        return $this->hasMany(Mapping::class);
-    }
 }

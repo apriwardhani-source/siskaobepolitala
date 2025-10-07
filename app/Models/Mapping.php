@@ -29,4 +29,12 @@ class Mapping extends Model
     {
         return $this->belongsTo(Cpmk::class);
     }
+
+    public function mataKuliahs()
+{
+    return $this->belongsToMany(MataKuliah::class, 'mapping_mata_kuliahs', 'mapping_id', 'mata_kuliah_id')
+                ->withTimestamps();
+}
+
+
 }
