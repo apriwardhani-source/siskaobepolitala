@@ -51,17 +51,6 @@
                     </div>
                     <!-- (kolom kanan dibiarkan kosong agar grid tetap rapi di md+) -->
                     <div class="hidden md:block"></div>
-
-                    <!-- Threshold -->
-                    <div>
-                        <label for="threshold" class="block text-sm font-medium text-white mb-1">Threshold (%) <span class="text-red-400">*</span></label>
-                        <input type="number" name="threshold" id="threshold" value="{{ old('threshold', 70.00) }}" required min="0" max="100" step="0.01"
-                               placeholder="Contoh: 70.00"
-                               class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('threshold') !border-red-500 @enderror">
-                        @error('threshold')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
                     
                     <!-- Deskripsi -->
                     <div class="md:col-span-2">
