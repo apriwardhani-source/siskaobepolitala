@@ -1,7 +1,7 @@
 <!-- resources/views/admin/cpmk/create.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Tambah CPMK Baru')
+@section('title', 'Tambah CPMK')
 
 @section('content')
     <div class="max-w-4xl mx-auto"> <!-- Batasi lebar maksimum untuk tampilan lebih baik -->
@@ -9,7 +9,7 @@
         <div class="glass-card rounded-xl p-6 shadow-lg max-w-2xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 pb-4 border-b border-white/20">
                 <div>
-                    <h1 class="text-2xl font-bold text-white">Tambah CPMK Baru</h1>
+                    <r class="text-2xl font-bold text-white">Tambah CPMK </h1>
                     <p class="text-sm text-gray-300 mt-1">Isi formulir di bawah ini untuk menambahkan CPMK baru.</p>
                 </div>
                 <div class="mt-4 md:mt-0">
@@ -43,23 +43,6 @@
                                placeholder="Contoh: CPMK1, CPMK_TI_MK01"
                                class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('kode_cpmk') !border-red-500 @enderror">
                         @error('kode_cpmk')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Mata Kuliah -->
-                    <div>
-                        <label for="mata_kuliah_id" class="block text-sm font-medium text-white mb-1">Mata Kuliah <span class="text-red-400">*</span></label>
-                        <select name="mata_kuliah_id" id="mata_kuliah_id" required
-                                class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('mata_kuliah_id') !border-red-500 @enderror">
-                            <option value="" disabled selected>-- Pilih Mata Kuliah --</option>
-                            @foreach($mataKuliahs as $mk)
-                                <option value="{{ $mk->id }}" {{ old('mata_kuliah_id') == $mk->id ? 'selected' : '' }}>
-                                    {{ $mk->kode_mk }} - {{ $mk->nama_mk }} ({{ $mk->prodi->kode_prodi }})
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('mata_kuliah_id')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
