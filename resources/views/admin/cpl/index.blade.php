@@ -55,9 +55,24 @@
 
                         <thead class="bg-white/10">
                             <tr>
+<<<<<<< HEAD
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode CPL</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Deskripsi</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
+=======
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode
+                                    CPL</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                                    Deskripsi</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                                    Threshold (%)</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi
+                                </th>
+>>>>>>> 349879a2ffcb181c7fc6f136869fccf3cce385be
                             </tr>
                         </thead>
 
