@@ -13,7 +13,6 @@ class Cpl extends Model
         'kode_cpl',
         'deskripsi',
         'threshold',
-        'prodi_id',
     ];
 
     protected $casts = [

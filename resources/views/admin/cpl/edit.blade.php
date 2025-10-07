@@ -48,34 +48,6 @@
                         @enderror
                     </div>
 
-                    <!-- Threshold -->
-                    <div>
-                        <label for="threshold" class="block text-sm font-medium text-white mb-1">Threshold (%) <span class="text-red-400">*</span></label>
-                        <input type="number" name="threshold" id="threshold" value="{{ old('threshold', $cpl->threshold) }}" required min="0" max="100" step="0.01"
-                               placeholder="Contoh: 70.00"
-                               class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('threshold') !border-red-500 @enderror">
-                        @error('threshold')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Prodi -->
-                    <div class="md:col-span-2">
-                        <label for="prodi_id" class="block text-sm font-medium text-white mb-1">Program Studi <span class="text-red-400">*</span></label>
-                        <select name="prodi_id" id="prodi_id" required
-                                class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('prodi_id') !border-red-500 @enderror">
-                            <option value="" disabled>-- Pilih Program Studi --</option>
-                            @foreach($prodis as $prodi)
-                                <option value="{{ $prodi->id }}" {{ old('prodi_id', $cpl->prodi_id) == $prodi->id ? 'selected' : '' }}>
-                                    {{ $prodi->kode_prodi }} - {{ $prodi->nama_prodi }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('prodi_id')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Deskripsi -->
                     <div class="md:col-span-2">
                         <label for="deskripsi" class="block text-sm font-medium text-white mb-1">Deskripsi CPL <span class="text-red-400">*</span></label>

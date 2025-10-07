@@ -17,7 +17,12 @@ class CplController extends Controller
     {
         // Ambil data CPL dengan relasi prodi, paginasi 10 per halaman
         $cpls = Cpl::with('prodi')->latest()->paginate(10);
-        
+
+        // ⬇️ TAMBAHKAN: urutkan item di halaman saat ini secara ASC (mis. berdasarkan kode_cpl)
+        $cpls->setCollection(
+            $cpls->getCollection()->sortBy('kode_cpl')->values()
+        );
+
         // Return ke view index dengan data
         return view('admin.cpl.index', compact('cpls'));
     }
@@ -29,7 +34,7 @@ class CplController extends Controller
     {
         // Ambil semua data prodi untuk dropdown
         $prodis = Prodi::all();
-        
+
         // Return ke view create dengan data prodi
         return view('admin.cpl.create', compact('prodis'));
     }
@@ -37,21 +42,19 @@ class CplController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // ... (kode lain di atasnya tetap)
     public function store(Request $request)
     {
         // Validasi input
         $validatedData = $request->validate([
             'kode_cpl' => 'required|string|max:10|unique:cpls,kode_cpl',
             'deskripsi' => 'required|string',
-            'threshold' => 'required|numeric|min:0|max:100',
-            'prodi_id' => 'required|exists:prodis,id',
         ], [
-            // Pesan error kustom
             'kode_cpl.unique' => 'Kode CPL ini sudah digunakan.',
-            'prodi_id.exists' => 'Program Studi yang dipilih tidak valid.',
-            'threshold.min' => 'Threshold minimal 0%.',
-            'threshold.max' => 'Threshold maksimal 100%.',
         ]);
+
+        // ⬇️ TAMBAHKAN BARIS INI DI SINI
+        $validatedData['prodi_id'] = auth()->user()->prodi_id ?? 1;
 
         // Simpan data ke database
         Cpl::create($validatedData);
@@ -60,6 +63,7 @@ class CplController extends Controller
         return redirect()->route('cpl.index')->with('success', 'CPL baru berhasil ditambahkan.');
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -67,7 +71,7 @@ class CplController extends Controller
     {
         // Ambil semua data prodi untuk dropdown
         $prodis = Prodi::all();
-        
+
         // Return ke view edit dengan data CPL yang akan diedit dan data prodi
         return view('admin.cpl.edit', compact('cpl', 'prodis'));
     }
@@ -81,14 +85,9 @@ class CplController extends Controller
         $validatedData = $request->validate([
             'kode_cpl' => 'required|string|max:10|unique:cpls,kode_cpl,' . $cpl->id,
             'deskripsi' => 'required|string',
-            'threshold' => 'required|numeric|min:0|max:100',
-            'prodi_id' => 'required|exists:prodis,id',
         ], [
             // Pesan error kustom
             'kode_cpl.unique' => 'Kode CPL ini sudah digunakan.',
-            'prodi_id.exists' => 'Program Studi yang dipilih tidak valid.',
-            'threshold.min' => 'Threshold minimal 0%.',
-            'threshold.max' => 'Threshold maksimal 100%.',
         ]);
 
         // Update data di database
