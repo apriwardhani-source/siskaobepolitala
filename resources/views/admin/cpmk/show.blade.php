@@ -25,19 +25,9 @@
                     <p class="text-white">{{ $cpmk->kode_cpmk }}</p>
                 </div>
 
-                <div>
-                    <p class="text-sm font-medium text-white mb-1">Mata Kuliah:</p>
-                    <p class="text-white">{{ $cpmk->mataKuliah->nama_matkul ?? '-' }}</p>
-                </div>
-
                 <div class="md:col-span-2">
                     <p class="text-sm font-medium text-white mb-1">Deskripsi:</p>
                     <p class="text-white">{{ $cpmk->deskripsi }}</p>
-                </div>
-
-                <div>
-                    <p class="text-sm font-medium text-white mb-1">Program Studi:</p>
-                    <p class="text-white">{{ $cpmk->mataKuliah->prodi->nama_prodi ?? '-' }}</p>
                 </div>
 
                 <div>

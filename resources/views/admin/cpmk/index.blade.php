@@ -15,7 +15,7 @@
                 <div class="mt-4 md:mt-0">
                     <a href="{{ route('cpmk.create') }}"
                         class="glass-button text-white font-medium py-2 px-4 rounded-lg inline-flex items-center">
-                        <i class="fas fa-plus-circle me-2"></i> Tambah CPMK Baru
+                        <i class="fas fa-plus-circle me-2"></i> Tambah CPMK 
                     </a>
                 </div>
             </div>
@@ -45,12 +45,6 @@
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                                     Deskripsi</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Mata
-                                    Kuliah</th>
-                                <th scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                                    Program Studi</th>
                                 <th scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi
                                 </th>

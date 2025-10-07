@@ -48,23 +48,6 @@
                         @enderror
                     </div>
 
-                    <!-- Mata Kuliah -->
-                    <div>
-                        <label for="mata_kuliah_id" class="block text-sm font-medium text-white mb-1">Mata Kuliah <span class="text-red-400">*</span></label>
-                        <select name="mata_kuliah_id" id="mata_kuliah_id" required
-                                class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent @error('mata_kuliah_id') !border-red-500 @enderror">
-                            <option value="" disabled>-- Pilih Mata Kuliah --</option>
-                            @foreach($mataKuliahs as $mk)
-                                <option value="{{ $mk->id }}" {{ old('mata_kuliah_id', $cpmk->mata_kuliah_id) == $mk->id ? 'selected' : '' }}>
-                                    {{ $mk->kode_mk }} - {{ $mk->nama_mk }} ({{ $mk->prodi->kode_prodi }})
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('mata_kuliah_id')
-                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Deskripsi -->
                     <div class="md:col-span-2">
                         <label for="deskripsi" class="block text-sm font-medium text-white mb-1">Deskripsi CPMK <span class="text-red-400">*</span></label>
