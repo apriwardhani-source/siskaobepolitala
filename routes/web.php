@@ -179,3 +179,10 @@ Route::get('/admin/manage/prodi/{id}/edit', [ManageDataController::class, 'editP
 Route::put('/admin/manage/prodi/{id}', [ManageDataController::class, 'updateProdi'])->name('admin.update.prodi');
 Route::delete('/admin/manage/prodi/{id}', [ManageDataController::class, 'deleteProdi'])->name('admin.delete.prodi');
 
+
+
+//mapping//
+Route::resource('mapping', App\Http\Controllers\Admin\MappingController::class);
+// Route tambahan khusus edit/update berdasarkan CPL
+Route::get('/mapping/edit-cpl/{id}', [MappingController::class, 'edit'])->name('mapping.edit.cpl');
+Route::put('/mapping/update-cpl/{id}', [MappingController::class, 'update'])->name('mapping.update.cpl');

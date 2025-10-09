@@ -9,32 +9,18 @@ class Mapping extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'cpl_id',
-        'cpmk_id',
-        'bobot',
-    ];
+    protected $fillable = ['cpl_id', 'cpmk_id'];
 
-    protected $casts = [
-        'bobot' => 'decimal:2',
-    ];
-
-    // Relasi
-    public function cpl()
-    {
-        return $this->belongsTo(Cpl::class);
-    }
-
-    public function cpmk()
-    {
-        return $this->belongsTo(Cpmk::class);
-    }
+    public function cpl() { return $this->belongsTo(Cpl::class); }
+    public function cpmk() { return $this->belongsTo(Cpmk::class); }
 
     public function mataKuliahs()
-{
-    return $this->belongsToMany(MataKuliah::class, 'mapping_mata_kuliahs', 'mapping_id', 'mata_kuliah_id')
-                ->withTimestamps();
-}
-
-
+    {
+        return $this->belongsToMany(
+            MataKuliah::class,
+            'mapping_mata_kuliahs',
+            'mapping_id',
+            'mata_kuliah_id'
+        )->withTimestamps();
+    }
 }

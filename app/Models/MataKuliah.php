@@ -15,18 +15,11 @@ class MataKuliah extends Model
         'kode_matkul',
         'nama_matkul',
         'sks',
-        'prodi_id',
     ];
 
-    public function prodi()
-    {
-        return $this->belongsTo(Prodi::class);
-    }
-
     public function mappings()
-{
-    return $this->belongsToMany(Mapping::class, 'mapping_mata_kuliahs', 'mata_kuliah_id', 'mapping_id')
-                ->withTimestamps();
-}
-
+    {
+        return $this->belongsToMany(Mapping::class, 'mapping_mata_kuliahs', 'mata_kuliah_id', 'mapping_id')
+                    ->withTimestamps();
+    }
 }

@@ -12,7 +12,7 @@
             </div>
             <div class="mt-4 md:mt-0">
                 <a href="{{ route('cpmk.create') }}" class="glass-button text-lg">
-                <i class="fas fa-plus-circle me-2"></i></i> Tambah CPMK Baru
+                    <i class="fas fa-plus-circle me-2"></i> Tambah CPMK Baru
                 </a>
             </div>
         </div>
@@ -29,7 +29,9 @@
                     <thead class="bg-white/10">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode CPMK</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Deskripsi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">MK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode MK</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
@@ -38,6 +40,12 @@
                             <tr>
                                 <td class="px-6 py-4 text-sm text-white">{{ $cpmk->kode_cpmk }}</td>
                                 <td class="px-6 py-4 text-sm text-white">{{ Str::limit($cpmk->deskripsi, 100) }}</td>
+                                <td class="px-6 py-4 text-sm text-white">
+                                    {{ $cpmk->mataKuliahs->pluck('nama_matkul')->implode('; ') ?: '-' }}
+                                </td>
+                                <td class="px-6 py-4 text-sm text-white">
+                                    {{ $cpmk->mataKuliahs->pluck('kode_matkul')->implode('; ') ?: '-' }}
+                                </td>
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <div class="flex space-x-2">
                                         <a href="{{ route('cpmk.edit', $cpmk->id) }}" class="glass-button-warning">
@@ -55,14 +63,13 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="px-6 py-4 text-center text-gray-300">
-                                    Tidak ada data CPMK.
-                                </td>
+                                <td colspan="5" class="px-6 py-4 text-center text-gray-300">Tidak ada data CPMK.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
             @if ($cpmks->hasPages())
                 <div class="px-6 py-3 bg-white/5 border-t border-white/10">
                     {{ $cpmks->links() }}
