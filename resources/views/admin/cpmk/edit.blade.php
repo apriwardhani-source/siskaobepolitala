@@ -34,20 +34,7 @@
                               class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400">{{ old('deskripsi', $cpmk->deskripsi) }}</textarea>
                 </div>
 
-                <!-- Pilihan Mata Kuliah -->
-                <div>
-                    <label class="block text-sm font-medium text-white mb-2">Pilih Mata Kuliah Terkait <span class="text-red-400">*</span></label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        @foreach($matkuls as $matkul)
-                            <label class="flex items-center space-x-2 bg-white/10 p-2 rounded-lg">
-                                <input type="checkbox" name="mata_kuliahs[]" value="{{ $matkul->id }}"
-                                       {{ in_array($matkul->id, $selected) ? 'checked' : '' }}
-                                       class="rounded text-blue-500 focus:ring-blue-400">
-                                <span class="text-white text-sm">{{ $matkul->kode_matkul }} - {{ $matkul->nama_matkul }}</span>
-                            </label>
-                        @endforeach
-                    </div>
-                </div>
+                
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-white/20">
