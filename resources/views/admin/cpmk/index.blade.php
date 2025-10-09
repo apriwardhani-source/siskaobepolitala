@@ -28,29 +28,29 @@
                 <table class="min-w-full text-white border border-white/30 border-collapse">
                     <thead class="bg-white/10 border-b border-white/30">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CPL</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode CPMK</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Deskripsi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">CPL</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Kode CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Deskripsi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white/5">
                         @forelse($cpmks as $cpmk)
-                            <tr>
+                            <tr class="hover:bg-white/5">
                                 {{-- Kolom CPL --}}
-                                <td class="px-6 py-4 text-sm text-white">
+                                <td class="px-6 py-4 text-sm border border-white/20">
                                     {{ $cpmk->cpl->kode_cpl ?? '-' }}
                                 </td>
                                 {{-- Kolom Kode CPMK --}}
-                                <td class="px-6 py-4 text-sm text-white">
+                                <td class="px-6 py-4 text-sm border border-white/20">
                                     {{ $cpmk->kode_cpmk }}
                                 </td>
                                 {{-- Kolom Deskripsi --}}
-                                <td class="px-6 py-4 text-sm text-white">
+                                <td class="px-6 py-4 text-sm border border-white/20">
                                     {{ Str::limit($cpmk->deskripsi, 100) }}
                                 </td>
                                 {{-- Kolom Aksi --}}
-                                <td class="px-6 py-4 text-sm font-medium">
+                                <td class="px-6 py-4 text-sm font-medium border border-white/20">
                                     <div class="flex space-x-2">
                                         <a href="{{ route('cpmk.edit', $cpmk->id) }}" class="glass-button-warning">
                                             <i class="fas fa-edit me-1"></i> Edit
@@ -67,7 +67,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-center text-gray-300">Tidak ada data CPMK.</td>
+                                <td colspan="4" class="px-6 py-4 text-center text-gray-300 border border-white/20">Tidak ada data CPMK.</td>
                             </tr>
                         @endforelse
                     </tbody>

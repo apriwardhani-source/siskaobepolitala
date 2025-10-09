@@ -22,31 +22,31 @@
 
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-white/10">
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">NIM</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nama</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kurikulum</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Prodi</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">NIM</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Nama</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Kurikulum</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Prodi</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white/10 divide-y divide-gray-200">
+                    <tbody class="bg-white/5">
     @forelse($mahasiswas as $mahasiswa)
         @php
             $isNew = session('new_mahasiswa_id') == $mahasiswa->id;
         @endphp
-        <tr class="{{ $isNew ? 'bg-green-700/40' : '' }}">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $mahasiswa->nim }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $mahasiswa->nama }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+        <tr class="{{ $isNew ? 'bg-green-700/40' : '' }} hover:bg-white/5">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">{{ $mahasiswa->nim }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">{{ $mahasiswa->nama }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">
                 {{ $mahasiswa->tahun_kurikulum ?? '-' }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">
                 {{ $mahasiswa->prodi->nama_prodi ?? '-' }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">
                 <div class="flex items-center space-x-3">
                     <!-- Tombol Edit -->
                     <a href="{{ route('admin.edit.mahasiswa', $mahasiswa->id) }}" 
@@ -68,7 +68,7 @@
         </tr>
     @empty
         <tr>
-            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
+            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center border border-white/20">
                 Tidak ada data mahasiswa.
             </td>
         </tr>

@@ -24,22 +24,22 @@
         {{-- Tabel Data Mata Kuliah --}}
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-white/10">
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Kode</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">SKS</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Kode</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Nama</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">SKS</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white/10 divide-y divide-gray-200">
+                    <tbody class="bg-white/5">
                         @forelse($matakuliahs as $mk)
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->kode_matkul }}</td>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->nama_matkul }}</td>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->sks }}</td>
-                                <td class="px-6 py-4 text-sm text-white flex gap-2">
+                            <tr class="hover:bg-white/5">
+                                <td class="px-6 py-4 text-sm border border-white/20">{{ $mk->kode_matkul }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20">{{ $mk->nama_matkul }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20">{{ $mk->sks }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20 flex gap-2">
                                     <a href="{{ route('admin.edit.matkul', $mk->id) }}" 
                                        class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
                                     <form action="{{ route('admin.delete.matkul', $mk->id) }}" method="POST" 
@@ -54,7 +54,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-sm text-gray-300 text-center">
+                                <td colspan="4" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">
                                     Tidak ada data mata kuliah.
                                 </td>
                             </tr>
