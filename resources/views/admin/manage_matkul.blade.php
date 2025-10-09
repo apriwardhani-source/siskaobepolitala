@@ -30,7 +30,6 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Kode</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">SKS</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Program Studi</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
                         </tr>
                     </thead>
@@ -40,7 +39,6 @@
                                 <td class="px-6 py-4 text-sm text-white">{{ $mk->kode_matkul }}</td>
                                 <td class="px-6 py-4 text-sm text-white">{{ $mk->nama_matkul }}</td>
                                 <td class="px-6 py-4 text-sm text-white">{{ $mk->sks }}</td>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->prodi->nama_prodi ?? '-' }}</td>
                                 <td class="px-6 py-4 text-sm text-white flex gap-2">
                                     <a href="{{ route('admin.edit.matkul', $mk->id) }}" 
                                        class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
@@ -48,15 +46,15 @@
                                           onsubmit="return confirm('Yakin hapus mata kuliah ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="glass-button-danger"><i class="fas fa-trash me-1"></i>
-                                            Hapus
+                                        <button type="submit" class="glass-button-danger">
+                                            <i class="fas fa-trash me-1"></i> Hapus
                                         </button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-4 text-sm text-gray-300 text-center">
+                                <td colspan="4" class="px-6 py-4 text-sm text-gray-300 text-center">
                                     Tidak ada data mata kuliah.
                                 </td>
                             </tr>

@@ -193,46 +193,38 @@ public function deleteMahasiswa($id)
     }
 
     // ================= MATA KULIAH =================
-    public function indexMatkul()
+public function indexMatkul()
 {
     $this->authorizeAdmin();
-    $matkuls = MataKuliah::with('prodi')->get();
-
-    // Tambahan agar view bisa pakai $matakuliahs
-    $matakuliahs = $matkuls;  
-
-    return view('admin.manage_matkul', compact('matkuls', 'matakuliahs'));
+    $matakuliahs = MataKuliah::all();
+    return view('admin.manage_matkul', compact('matakuliahs'));
 }
 
+public function showCreateMatkulForm()
+{
+    $this->authorizeAdmin();
+    return view('admin.create_matkul');
+}
 
-    public function showCreateMatkulForm()
-    {
-        $this->authorizeAdmin();
-        $prodis = Prodi::all();
-        return view('admin.create_matkul', compact('prodis'));
-    }
+public function storeMatkul(Request $request)
+{
+    $this->authorizeAdmin();
 
-    public function storeMatkul(Request $request)
-    {
-        $this->authorizeAdmin();
+    $request->validate([
+        'kode_matkul' => 'required|string|unique:mata_kuliahs,kode_matkul',
+        'nama_matkul' => 'required|string',
+        'sks' => 'required|integer|min:1|max:6',
+    ]);
 
-        $request->validate([
-            'kode_matkul' => 'required|string|unique:mata_kuliahs,kode_matkul',
-            'nama_matkul' => 'required|string',
-            'sks' => 'required|integer|min:1|max:6',
-            'prodi_id' => 'required|exists:prodis,id',
-        ]);
+    MataKuliah::create($request->only(['kode_matkul','nama_matkul','sks']));
+    return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil ditambahkan.');
+}
 
-        MataKuliah::create($request->only(['kode_matkul','nama_matkul','sks','prodi_id']));
-        return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil ditambahkan.');
-    }
-
-    public function editMatkul($id)
+public function editMatkul($id)
 {
     $this->authorizeAdmin();
     $matkul = MataKuliah::findOrFail($id);
-    $prodis = Prodi::all();
-    return view('admin.edit_matkul', compact('matkul', 'prodis'));
+    return view('admin.edit_matkul', compact('matkul'));
 }
 
 public function updateMatkul(Request $request, $id)
@@ -243,11 +235,10 @@ public function updateMatkul(Request $request, $id)
         'kode_matkul' => 'required|string|unique:mata_kuliahs,kode_matkul,' . $id,
         'nama_matkul' => 'required|string',
         'sks' => 'required|integer|min:1|max:6',
-        'prodi_id' => 'required|exists:prodis,id',
     ]);
 
     $matkul = MataKuliah::findOrFail($id);
-    $matkul->update($request->only(['kode_matkul','nama_matkul','sks','prodi_id']));
+    $matkul->update($request->only(['kode_matkul','nama_matkul','sks']));
 
     return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil diperbarui.');
 }

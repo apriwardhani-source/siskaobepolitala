@@ -19,14 +19,24 @@ class Cpl extends Model
         'threshold' => 'decimal:2',
     ];
 
-    // Relasi
+    // Relasi ke Prodi
     public function prodi()
     {
         return $this->belongsTo(Prodi::class);
     }
 
+    // Relasi ke CPMK (many-to-many)
+    public function cpmks()
+{
+    return $this->hasMany(Cpmk::class, 'cpl_id');
+}
+
+
+
+    // Relasi ke Mapping jika ada
     public function mappings()
     {
         return $this->hasMany(Mapping::class);
     }
+    
 }
