@@ -12,6 +12,10 @@ return new class extends Migration {
             $table->foreignId('cpl_id')->constrained('cpls')->onDelete('cascade');
             $table->foreignId('cpmk_id')->constrained('cpmks')->onDelete('cascade');
             $table->timestamps();
+        Schema::table('cpmk', function (Blueprint $table) {
+    $table->foreignId('cpl_id')->constrained('cpl')->onDelete('cascade');
+});
+
         });
     }
 
