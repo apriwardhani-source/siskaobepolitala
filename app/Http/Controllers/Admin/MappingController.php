@@ -14,34 +14,36 @@ class MappingController extends Controller
     /** INDEX */
     public function index()
 {
-    // Ambil semua CPL + CPMK + MK terkait (jika ada)
-    $cpls = \App\Models\Cpl::with([
-        'cpmks.mataKuliahs',              // ambil semua CPMK beserta MK-nya
-        'cpmks.mappings.mataKuliahs'      // ambil MK yang lewat mapping
-    ])->get();
+    // Ambil semua data mapping dengan relasi CPL, CPMK, dan Mata Kuliah
+    $mappings = \App\Models\Mapping::with(['cpl', 'cpmk', 'mataKuliahs'])->get();
 
-    // Bentuk array gabungan seperti sebelumnya
-    $grouped = $cpls->map(function ($cpl) {
-        // ambil semua CPMK dari CPL ini
-        $allCpmks = $cpl->cpmks;
+    // Susun data tergrup per Mata Kuliah agar sesuai dengan struktur view ($grouped)
+    $grouped = [];
+    foreach ($mappings as $mapping) {
+        foreach ($mapping->mataKuliahs as $mk) {
+            $key = $mk->id;
+            if (!isset($grouped[$key])) {
+                $grouped[$key] = [
+                    'mk' => $mk,
+                    'rows' => [],
+                ];
+            }
 
-        // kumpulkan semua MK dari CPMK dan dari mapping
-        $allMataKuliahs = collect();
-        foreach ($allCpmks as $cpmk) {
-            $allMataKuliahs = $allMataKuliahs
-                ->merge($cpmk->mataKuliahs)
-                ->merge(optional($cpmk->mappings)->flatMap->mataKuliahs ?? []);
+            $grouped[$key]['rows'][] = [
+                'cpl' => optional($mapping->cpl)->kode_cpl ?? '-',
+                'cpmk' => optional($mapping->cpmk)->kode_cpmk ?? '-',
+                // Jika kolom bobot tersedia pada mapping, gunakan nilainya; default 100 bila null/tdk ada
+                'total' => property_exists($mapping, 'bobot') && !is_null($mapping->bobot) ? $mapping->bobot : 100,
+            ];
         }
+    }
 
-        return [
-            'cpl' => $cpl,
-            'cpmks' => $allCpmks->unique('id'),
-            'mataKuliahs' => $allMataKuliahs->unique('id'),
-        ];
-    });
+    // Ubah ke array berindeks untuk memudahkan @forelse
+    $grouped = array_values($grouped);
 
     return view('admin.mapping.index', compact('grouped'));
 }
+
 
     /** CREATE */
     public function create()

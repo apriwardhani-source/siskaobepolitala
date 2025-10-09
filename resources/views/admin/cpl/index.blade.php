@@ -25,22 +25,22 @@
         @endif
 
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-300 text-sm">
-                <thead class="bg-white/10">
+            <table class="min-w-full text-sm text-white border border-white/30 border-collapse">
+                <thead class="bg-white/10 border-b border-white/30">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">No</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Kode CPL</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Deskripsi CPL</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">Aksi</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">No</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Kode CPL</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Deskripsi CPL</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white/10 divide-y divide-gray-200">
+                <tbody class="bg-white/5">
                     @forelse($cpls as $index => $cpl)
-                        <tr>
-                            <td class="px-4 py-3 text-white align-top">{{ $index + 1 }}</td>
-                            <td class="px-4 py-3 text-white align-top font-semibold">{{ $cpl->kode_cpl }}</td>
-                            <td class="px-4 py-3 text-white align-top">{!! nl2br(e($cpl->deskripsi)) !!}</td>
-                            <td class="px-4 py-3 text-white align-top">
+                        <tr class="hover:bg-white/5">
+                            <td class="px-4 py-3 align-top border border-white/20">{{ $index + 1 }}</td>
+                            <td class="px-4 py-3 align-top font-semibold border border-white/20">{{ $cpl->kode_cpl }}</td>
+                            <td class="px-4 py-3 align-top border border-white/20">{!! nl2br(e($cpl->deskripsi)) !!}</td>
+                            <td class="px-4 py-3 align-top border border-white/20">
                                 <div class="flex flex-wrap gap-2">
                                     <a href="{{ route('cpl.edit', $cpl->id) }}" class="glass-button-warning">
                                         <i class="fas fa-edit me-1"></i> Edit
@@ -57,7 +57,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-4 text-center text-gray-300">
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-300 border border-white/20">
                                 <i class="fas fa-info-circle me-1"></i> Belum ada data CPL.
                             </td>
                         </tr>
