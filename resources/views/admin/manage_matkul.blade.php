@@ -27,34 +27,32 @@
                 <table class="min-w-full text-white border border-white/30 border-collapse">
                     <thead class="bg-white/10 border-b border-white/30">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Kode</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Nama</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">SKS</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">MK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Nama MK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">CPL</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Uraian CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">SUB-CPMK</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white/5">
                         @forelse($matakuliahs as $mk)
+                            @php
+                                $cpmk = $mk->cpmks->first();
+                                $cpl = optional($cpmk?->cpl)->kode_cpl ?? '-';
+                                $subList = $cpmk ? $cpmk->subCpmks->pluck('uraian')->implode("\n") : '';
+                            @endphp
                             <tr class="hover:bg-white/5">
-                                <td class="px-6 py-4 text-sm border border-white/20">{{ $mk->kode_matkul }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20">{{ $mk->nama_matkul }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20">{{ $mk->sks }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20 flex gap-2">
-                                    <a href="{{ route('admin.edit.matkul', $mk->id) }}" 
-                                       class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
-                                    <form action="{{ route('admin.delete.matkul', $mk->id) }}" method="POST" 
-                                          onsubmit="return confirm('Yakin hapus mata kuliah ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="glass-button-danger">
-                                            <i class="fas fa-trash me-1"></i> Hapus
-                                        </button>
-                                    </form>
-                                </td>
+                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->kode_matkul }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->nama_matkul }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpl }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->kode_cpmk ?? '-' }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->deskripsi ?? '-' }}</td>
+                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{!! nl2br(e($subList ?: '-')) !!}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">
+                                <td colspan="6" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">
                                     Tidak ada data mata kuliah.
                                 </td>
                             </tr>

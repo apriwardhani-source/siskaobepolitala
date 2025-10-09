@@ -65,14 +65,20 @@ class MappingController extends Controller
         'cpl_id' => 'required|exists:cpls,id',
         'cpmk_ids' => 'required|array|min:1',
         'cpmk_ids.*' => 'exists:cpmks,id',
+        'bobot' => 'array',
+        'bobot.*' => 'nullable|numeric|min:0|max:100',
     ]);
 
     foreach ($validated['cpmk_ids'] as $cpmk_id) {
+        $bobot = $request->input("bobot.$cpmk_id");
         // 1️⃣ Buat mapping antara CPL dan CPMK
         $mapping = Mapping::firstOrCreate([
             'cpl_id' => $validated['cpl_id'],
             'cpmk_id' => $cpmk_id,
         ]);
+        if (!is_null($bobot)) {
+            $mapping->update(['bobot' => $bobot]);
+        }
 
         // 2️⃣ Ambil semua MK yang sudah terhubung ke CPMK ini
         $cpmk = \App\Models\Cpmk::with('mataKuliahs')->find($cpmk_id);
@@ -124,6 +130,8 @@ public function update(Request $request, $id)
     $validated = $request->validate([
         'cpmk_ids' => 'required|array|min:1',
         'cpmk_ids.*' => 'exists:cpmks,id',
+        'bobot' => 'array',
+        'bobot.*' => 'nullable|numeric|min:0|max:100',
     ]);
 
     // Ambil CPL yang dimaksud
@@ -138,9 +146,11 @@ public function update(Request $request, $id)
 
     // 2️⃣ Buat mapping baru dari CPMK yang dipilih
     foreach ($validated['cpmk_ids'] as $cpmk_id) {
+        $bobot = $request->input("bobot.$cpmk_id");
         $mapping = \App\Models\Mapping::create([
             'cpl_id' => $cpl->id,
             'cpmk_id' => $cpmk_id,
+            'bobot' => $bobot,
         ]);
 
         // Ambil MK dari CPMK

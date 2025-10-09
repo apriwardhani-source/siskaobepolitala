@@ -33,4 +33,9 @@ public function mappings()
     return $this->hasMany(Mapping::class, 'cpmk_id');
 }
 
+public function subCpmks()
+{
+    return $this->hasMany(SubCpmk::class);
+}
+
 }

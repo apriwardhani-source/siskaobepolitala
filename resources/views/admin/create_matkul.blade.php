@@ -19,6 +19,18 @@
             </div>
         </div>
 
+        @if ($errors->any())
+            <div class="glass-card rounded-lg p-4 mb-4 text-red-200 border border-red-400">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Terjadi kesalahan pada input. Mohon periksa kembali:
+                <ul class="mb-0 mt-2 list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Form -->
         <form method="POST" action="{{ route('admin.create.matkul') }}" class="space-y-6">
             @csrf
@@ -43,6 +55,31 @@
                     <input type="number" name="sks" id="sks" value="{{ old('sks') }}" required min="1" max="6"
                            placeholder="Contoh: 3"
                            class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400">
+                </div>
+            </div>
+
+            <!-- Relasi tunggal: pilih CPL (yang sudah punya CPMK), tambah Uraian, SUB-CPMK, dan Bobot -->
+            <div class="mt-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">Pilih CPL (yang sudah memiliki CPMK)</label>
+                    <select name="cpl_id" class="glass-input w-full py-2 px-3 select-cpl" required>
+                        <option value="">-- Pilih CPL --</option>
+                        @foreach($cpls as $cpl)
+                            <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">Uraian CPMK</label>
+                    <textarea name="uraian_cpmk" rows="3" class="glass-input w-full py-2 px-3" placeholder="Uraian CPMK" required>{{ old('uraian_cpmk') }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">SUB-CPMK (satu poin per baris)</label>
+                    <textarea name="sub_cpmk" rows="3" class="glass-input w-full py-2 px-3" placeholder="Contoh:\n- Mahasiswa mampu ...\n- Mahasiswa mampu ...">{{ old('sub_cpmk') }}</textarea>
+                </div>
+                <div class="md:w-48">
+                    <label class="block text-sm font-medium text-white mb-1">Bobot (opsional)</label>
+                    <input type="number" name="bobot" class="glass-input w-full py-2 px-3" min="0" max="100" step="1" placeholder="0-100" value="{{ old('bobot') }}">
                 </div>
             </div>
 
