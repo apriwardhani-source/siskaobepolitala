@@ -10,8 +10,10 @@ class CplController extends Controller
 {
     public function index()
     {
-        $cpls = Cpl::latest()->get();
-        return view('admin.cpl.index', compact('cpls'));
+        // Urut ASC berdasar kode_cpl
+    $cpls = Cpl::orderBy('kode_cpl', 'asc')->get();
+
+    return view('admin.cpl.index', compact('cpls'));
     }
 
     public function create()
