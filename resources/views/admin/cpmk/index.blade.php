@@ -25,8 +25,8 @@
 
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-white/10">
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CPL</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode CPMK</th>
@@ -34,7 +34,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white/10 divide-y divide-gray-200">
+                    <tbody class="bg-white/5">
                         @forelse($cpmks as $cpmk)
                             <tr>
                                 {{-- Kolom CPL --}}
