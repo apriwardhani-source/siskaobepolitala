@@ -28,24 +28,28 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-white/10">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CPL</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode CPMK</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">CPMK</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">MK</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode MK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Deskripsi</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white/10 divide-y divide-gray-200">
                         @forelse($cpmks as $cpmk)
                             <tr>
-                                <td class="px-6 py-4 text-sm text-white">{{ $cpmk->kode_cpmk }}</td>
-                                <td class="px-6 py-4 text-sm text-white">{{ Str::limit($cpmk->deskripsi, 100) }}</td>
+                                {{-- Kolom CPL --}}
                                 <td class="px-6 py-4 text-sm text-white">
-                                    {{ $cpmk->mataKuliahs->pluck('nama_matkul')->implode('; ') ?: '-' }}
+                                    {{ $cpmk->cpl->kode_cpl ?? '-' }}
                                 </td>
+                                {{-- Kolom Kode CPMK --}}
                                 <td class="px-6 py-4 text-sm text-white">
-                                    {{ $cpmk->mataKuliahs->pluck('kode_matkul')->implode('; ') ?: '-' }}
+                                    {{ $cpmk->kode_cpmk }}
                                 </td>
+                                {{-- Kolom Deskripsi --}}
+                                <td class="px-6 py-4 text-sm text-white">
+                                    {{ Str::limit($cpmk->deskripsi, 100) }}
+                                </td>
+                                {{-- Kolom Aksi --}}
                                 <td class="px-6 py-4 text-sm font-medium">
                                     <div class="flex space-x-2">
                                         <a href="{{ route('cpmk.edit', $cpmk->id) }}" class="glass-button-warning">
@@ -63,7 +67,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-4 text-center text-gray-300">Tidak ada data CPMK.</td>
+                                <td colspan="4" class="px-6 py-4 text-center text-gray-300">Tidak ada data CPMK.</td>
                             </tr>
                         @endforelse
                     </tbody>

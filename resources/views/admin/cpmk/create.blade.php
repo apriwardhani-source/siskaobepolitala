@@ -11,7 +11,7 @@
             <div>
                 <h1 class="text-2xl font-bold text-white">Tambah CPMK Baru</h1>
                 <p class="text-sm text-gray-300 mt-1">
-                    Isi formulir di bawah ini untuk menambahkan CPMK baru beserta Mata Kuliah yang terkait.
+                    Isi formulir di bawah ini untuk menambahkan CPMK baru yang terhubung dengan CPL terkait.
                 </p>
             </div>
             <div class="mt-4 md:mt-0">
@@ -41,15 +41,30 @@
 
             <div class="grid grid-cols-1 gap-6">
 
-                <!-- Kode CPMK -->
+                <!-- Pilih CPL -->
                 <div>
+                    <label for="cpl_id" class="block text-sm font-medium text-white mb-1">
+                        Pilih CPL <span class="text-red-400">*</span>
+                    </label>
+                    <select name="cpl_id" id="cpl_id" required
+                            class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white text-gray-800">
+                        <option value="" disabled selected>-- Pilih CPL Terkait --</option>
+                        @foreach ($cpls as $cpl)
+                            <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }} - {{ $cpl->deskripsi }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Kode CPMK -->
+                <div class="mt-4">
                     <label for="kode_cpmk" class="block text-sm font-medium text-white mb-1">
                         Kode CPMK <span class="text-red-400">*</span>
                     </label>
                     <input type="text" name="kode_cpmk" id="kode_cpmk"
-                           value="{{ old('kode_cpmk') }}" required
+                           value="{{ old('kode_cpmk') }}"
+                           required
                            placeholder="Contoh: CPMK011"
-                           class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent">
+                           class="w-full glass-input py-3 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white/80 shadow-inner border border-gray-200">
                 </div>
 
                 <!-- Deskripsi -->
@@ -60,29 +75,6 @@
                     <textarea name="deskripsi" id="deskripsi" rows="4" required
                               placeholder="Deskripsikan CPMK secara lengkap..."
                               class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent">{{ old('deskripsi') }}</textarea>
-                </div>
-
-                <!-- Pilihan Mata Kuliah -->
-                <div>
-                    <label class="block text-sm font-medium text-white mb-2">
-                        Pilih Mata Kuliah Terkait <span class="text-red-400">*</span>
-                    </label>
-
-                    @if ($matkuls->isEmpty())
-                        <p class="text-gray-300 text-sm italic">Belum ada data mata kuliah.</p>
-                    @else
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            @foreach($matkuls as $matkul)
-                                <label class="flex items-start space-x-2 bg-white/10 p-2 rounded-lg">
-                                    <input type="checkbox" name="mata_kuliahs[]" value="{{ $matkul->id }}"
-                                           class="mt-1 rounded text-blue-500 focus:ring-blue-400">
-                                    <span class="text-white text-sm leading-tight">
-                                        <strong>{{ $matkul->kode_matkul }}</strong> - {{ $matkul->nama_matkul }}
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-                    @endif
                 </div>
             </div>
 

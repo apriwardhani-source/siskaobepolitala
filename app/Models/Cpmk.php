@@ -10,14 +10,16 @@ class Cpmk extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kode_cpmk',
-        'deskripsi',
-        'cpl_id',
-    ];
+    'cpl_id',
+    'kode_cpmk',
+    'deskripsi',
+];
+
 
     public function cpl()
     {
         return $this->belongsTo(Cpl::class, 'cpl_id');
+        return $this->belongsTo(Cpl::class);
     }
 
     public function mataKuliahs()
