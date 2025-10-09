@@ -74,15 +74,32 @@
                     <textarea name="uraian_cpmk" rows="3" class="glass-input w-full py-2 px-3" placeholder="Uraian CPMK" required>{{ old('uraian_cpmk') }}</textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-white mb-1">SUB-CPMK (satu poin per baris)</label>
-                    <textarea name="sub_cpmk" rows="3" class="glass-input w-full py-2 px-3" placeholder="Contoh:\n- Mahasiswa mampu ...\n- Mahasiswa mampu ...">{{ old('sub_cpmk') }}</textarea>
+                    <label class="block text-sm font-medium text-white mb-1">SUB-CPMK</label>
+                    <div id="subList" class="space-y-2">
+                        <div class="flex gap-2 sub-item">
+                            <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" placeholder="Masukkan SUB-CPMK">
+                            <button type="button" class="glass-button-warning px-3" onclick="addSubCpmk()">Tambah</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 mt-1">Gunakan tombol “Tambah” untuk menambah baris SUB‑CPMK.</p>
                 </div>
                 <div class="md:w-48">
                     <label class="block text-sm font-medium text-white mb-1">Bobot (opsional)</label>
                     <input type="number" name="bobot" class="glass-input w-full py-2 px-3" min="0" max="100" step="1" placeholder="0-100" value="{{ old('bobot') }}">
                 </div>
             </div>
-
+<script>
+function addSubCpmk() {
+    const list = document.getElementById('subList');
+    const row = document.createElement('div');
+    row.className = 'flex gap-2 sub-item';
+    row.innerHTML = `
+        <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" placeholder="Masukkan SUB-CPMK">
+        <button type="button" class="glass-button-danger px-3" onclick="this.parentElement.remove()">Hapus</button>
+    `;
+    list.appendChild(row);
+}
+</script>
             <div class="flex justify-end gap-3 pt-4 border-t border-white/20">
                 <a href="{{ route('admin.manage.matkul') }}" class="glass-button">
                     <i class="fas fa-times me-2"></i> Batal

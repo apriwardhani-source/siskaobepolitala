@@ -243,7 +243,9 @@ public function deleteMahasiswa($id)
         'sks' => 'required|integer|min:1|max:6',
         'cpl_id' => 'required|exists:cpls,id',
         'uraian_cpmk' => 'required|string',
-        'sub_cpmk' => 'nullable|string',
+        // SUB-CPMK bisa berupa array (sub_cpmk[]) atau string (textarea lama)
+        'sub_cpmk' => 'nullable',
+        'sub_cpmk.*' => 'nullable|string',
         'bobot' => 'nullable|numeric|min:0|max:100',
     ]);
 
@@ -260,17 +262,30 @@ public function deleteMahasiswa($id)
         'cpl_id' => $request->input('cpl_id'),
     ]);
 
-    // SUB-CPMK: satu baris per poin
-    $subs = $request->input('sub_cpmk', '');
-    if (!empty($subs)) {
-        $lines = preg_split("/\r?\n/", $subs);
-        foreach ($lines as $line) {
-            $trim = trim($line);
+    // SUB-CPMK: dukung format array (sub_cpmk[]) maupun textarea (dipisah newline)
+    $subsInput = $request->input('sub_cpmk');
+    if (is_array($subsInput)) {
+        foreach ($subsInput as $line) {
+            $trim = trim((string) $line);
             if ($trim !== '') {
                 \App\Models\SubCpmk::create([
                     'cpmk_id' => $cpmk->id,
                     'uraian' => $trim,
                 ]);
+            }
+        }
+    } else {
+        $subs = $subsInput ?? '';
+        if (!empty($subs)) {
+            $lines = preg_split("/\r?\n/", $subs);
+            foreach ($lines as $line) {
+                $trim = trim($line);
+                if ($trim !== '') {
+                    \App\Models\SubCpmk::create([
+                        'cpmk_id' => $cpmk->id,
+                        'uraian' => $trim,
+                    ]);
+                }
             }
         }
     }

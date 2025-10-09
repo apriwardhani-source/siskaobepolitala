@@ -37,19 +37,44 @@
                     </thead>
                     <tbody class="bg-white/5">
                         @forelse($matakuliahs as $mk)
-                            @php
-                                $cpmk = $mk->cpmks->first();
-                                $cpl = optional($cpmk?->cpl)->kode_cpl ?? '-';
-                                $subList = $cpmk ? $cpmk->subCpmks->pluck('uraian')->implode("\n") : '';
-                            @endphp
-                            <tr class="hover:bg-white/5">
-                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->kode_matkul }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->nama_matkul }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpl }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->kode_cpmk ?? '-' }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->deskripsi ?? '-' }}</td>
-                                <td class="px-6 py-4 text-sm border border-white/20 align-top">{!! nl2br(e($subList ?: '-')) !!}</td>
-                            </tr>
+                            @php $rows = $mk->cpmks; $count = max(1, $rows->count()); @endphp
+                            @if ($rows->isEmpty())
+                                <tr class="hover:bg-white/5">
+                                    <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->kode_matkul }}</td>
+                                    <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->nama_matkul }}</td>
+                                    <td colspan="4" class="px-6 py-4 text-sm border border-white/20 text-gray-300">Belum ada CPMK/SUB‑CPMK untuk MK ini.</td>
+                                </tr>
+                            @else
+                                @foreach ($rows as $index => $cpmk)
+                                    <tr class="hover:bg-white/5">
+                                        @if ($index === 0)
+                                            <td class="px-6 py-4 text-sm border border-white/20 align-top" rowspan="{{ $count }}">{{ $mk->kode_matkul }}</td>
+                                            <td class="px-6 py-4 text-sm border border-white/20 align-top" rowspan="{{ $count }}">{{ $mk->nama_matkul }}</td>
+                                        @endif
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ optional($cpmk->cpl)->kode_cpl ?? '-' }}</td>
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->kode_cpmk }}</td>
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->deskripsi }}</td>
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">
+                                            @php $subs = $cpmk->subCpmks; @endphp
+                                            @if ($subs->count() === 0)
+                                                -
+                                            @elseif ($subs->count() === 1)
+                                                {{ $subs->first()->uraian }}
+                                            @else
+                                                <table class="w-full text-white border border-white/30 border-collapse">
+                                                    <tbody>
+                                                    @foreach ($subs as $sub)
+                                                        <tr>
+                                                            <td class="px-2 py-1 border border-white/20 align-top text-xs">{{ $sub->uraian }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         @empty
                             <tr>
                                 <td colspan="6" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">

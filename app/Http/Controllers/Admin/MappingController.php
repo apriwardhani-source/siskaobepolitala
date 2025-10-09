@@ -32,8 +32,8 @@ class MappingController extends Controller
             $grouped[$key]['rows'][] = [
                 'cpl' => optional($mapping->cpl)->kode_cpl ?? '-',
                 'cpmk' => optional($mapping->cpmk)->kode_cpmk ?? '-',
-                // Jika kolom bobot tersedia pada mapping, gunakan nilainya; default 100 bila null/tdk ada
-                'total' => property_exists($mapping, 'bobot') && !is_null($mapping->bobot) ? $mapping->bobot : 100,
+                // Tampilkan bobot sebenarnya; jika null tampilkan '-'
+                'total' => is_null($mapping->bobot) ? '-' : $mapping->bobot,
             ];
         }
     }
