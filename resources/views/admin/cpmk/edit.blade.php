@@ -23,6 +23,19 @@
 
             <div class="grid grid-cols-1 gap-6">
                 <div>
+                    <label for="cpl_id" class="block text-sm font-medium text-white mb-1">CPL Terkait</label>
+                    <select name="cpl_id" id="cpl_id" required
+                            class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400">
+                        <option value="">Pilih CPL...</option>
+                        @foreach($cpls as $cpl)
+                            <option value="{{ $cpl->id }}" {{ old('cpl_id', $cpmk->cpl_id) == $cpl->id ? 'selected' : '' }}>
+                                {{ $cpl->kode_cpl }} - {{ $cpl->deskripsi }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label for="kode_cpmk" class="block text-sm font-medium text-white mb-1">Kode CPMK</label>
                     <input type="text" name="kode_cpmk" id="kode_cpmk" value="{{ old('kode_cpmk', $cpmk->kode_cpmk) }}" required
                            class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400">

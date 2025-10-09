@@ -10,32 +10,34 @@ class Cpmk extends Model
     use HasFactory;
 
     protected $fillable = [
-    'cpl_id',
-    'kode_cpmk',
-    'deskripsi',
-];
+        'cpl_id',
+        'kode_cpmk',
+        'deskripsi',
+    ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     public function cpl()
     {
-        return $this->belongsTo(Cpl::class, 'cpl_id');
         return $this->belongsTo(Cpl::class);
     }
 
     public function mataKuliahs()
-{
-    return $this->belongsToMany(MataKuliah::class, 'cpmk_mata_kuliah')
-        ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(MataKuliah::class, 'cpmk_mata_kuliah')
+            ->withTimestamps();
+    }
 
-public function mappings()
-{
-    return $this->hasMany(Mapping::class, 'cpmk_id');
-}
+    public function mappings()
+    {
+        return $this->hasMany(Mapping::class, 'cpmk_id');
+    }
 
-public function subCpmks()
-{
-    return $this->hasMany(SubCpmk::class);
-}
-
+    public function subCpmks()
+    {
+        return $this->hasMany(SubCpmk::class);
+    }
 }

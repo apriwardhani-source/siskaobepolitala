@@ -13,10 +13,13 @@ class Cpl extends Model
         'kode_cpl',
         'deskripsi',
         'threshold',
+        'prodi_id',
     ];
 
     protected $casts = [
         'threshold' => 'decimal:2',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     // Relasi ke Prodi
@@ -25,18 +28,15 @@ class Cpl extends Model
         return $this->belongsTo(Prodi::class);
     }
 
-    // Relasi ke CPMK (many-to-many)
+    // Relasi ke CPMK (one-to-many)
     public function cpmks()
-{
-    return $this->hasMany(Cpmk::class, 'cpl_id');
-}
+    {
+        return $this->hasMany(Cpmk::class, 'cpl_id');
+    }
 
-
-
-    // Relasi ke Mapping jika ada
+    // Relasi ke Mapping
     public function mappings()
     {
         return $this->hasMany(Mapping::class);
     }
-    
 }

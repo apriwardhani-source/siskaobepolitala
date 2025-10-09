@@ -31,6 +31,7 @@
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">No</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Kode CPL</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Deskripsi CPL</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Jumlah CPMK</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border border-white/30">Aksi</th>
                     </tr>
                 </thead>
@@ -40,12 +41,16 @@
                             <td class="px-4 py-3 align-top border border-white/20">{{ $index + 1 }}</td>
                             <td class="px-4 py-3 align-top font-semibold border border-white/20">{{ $cpl->kode_cpl }}</td>
                             <td class="px-4 py-3 align-top border border-white/20">{!! nl2br(e($cpl->deskripsi)) !!}</td>
+                            <td class="px-4 py-3 align-top border border-white/20">{{ $cpl->cpmks->count() }}</td>
                             <td class="px-4 py-3 align-top border border-white/20">
                                 <div class="flex flex-wrap gap-2">
+                                    <a href="{{ route('cpl.show', $cpl->id) }}" class="glass-button-warning">
+                                        <i class="fas fa-eye me-1"></i> Detail
+                                    </a>
                                     <a href="{{ route('cpl.edit', $cpl->id) }}" class="glass-button-warning">
                                         <i class="fas fa-edit me-1"></i> Edit
                                     </a>
-                                    <form action="{{ route('cpl.destroy', $cpl->id) }}" method="POST" onsubmit="return confirm('Hapus CPL ini?')">
+                                    <form action="{{ route('cpl.destroy', $cpl->id) }}" method="POST" onsubmit="return confirm('Hapus CPL ini? Semua CPMK terkait juga akan dihapus.')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="glass-button-danger">
@@ -57,7 +62,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-4 text-center text-gray-300 border border-white/20">
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-300 border border-white/20">
                                 <i class="fas fa-info-circle me-1"></i> Belum ada data CPL.
                             </td>
                         </tr>

@@ -32,6 +32,12 @@ class CplController extends Controller
         return redirect()->route('cpl.index')->with('success', 'CPL baru berhasil ditambahkan.');
     }
 
+    public function show(Cpl $cpl)
+    {
+        $cpl->load('cpmks.mataKuliahs');
+        return view('admin.cpl.show', compact('cpl'));
+    }
+
     public function edit(Cpl $cpl)
     {
         return view('admin.cpl.edit', compact('cpl'));
