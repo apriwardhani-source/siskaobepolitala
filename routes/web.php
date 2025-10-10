@@ -61,6 +61,7 @@ Route::post('/admin/manage/prodi', [ManageDataController::class, 'storeProdi'])-
 // Tambahkan route untuk edit/update/hapus jika diperlukan nanti
 
 Route::get('/admin/manage/matkul', [ManageDataController::class, 'indexMatkul'])->name('admin.manage.matkul');
+Route::get('/admin/manage/matkul-mapping', [ManageDataController::class, 'matkulMapping'])->name('admin.manage.matkul.mapping');
 Route::get('/admin/manage/matkul/create', [ManageDataController::class, 'showCreateMatkulForm'])->name('admin.create.matkul.form');
 Route::post('/admin/manage/matkul', [ManageDataController::class, 'storeMatkul'])->name('admin.create.matkul');
 // Tambahkan route untuk edit/update/hapus jika diperlukan nanti

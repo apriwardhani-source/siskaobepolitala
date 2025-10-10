@@ -13,9 +13,7 @@
                     Daftar hubungan MK dengan CPL & CPMK dalam format bertingkat.
                 </p>
             </div>
-            <a href="{{ route('mapping.create') }}" class="glass-button text-lg">
-                <i class="fas fa-plus-circle me-2"></i> Tambah Mapping Baru
-            </a>
+            
         </div>
 
         <!-- Notifikasi -->

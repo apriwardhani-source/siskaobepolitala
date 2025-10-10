@@ -24,37 +24,60 @@
         {{-- Tabel Data Mata Kuliah --}}
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-white/10">
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Kode</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">SKS</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">MK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Nama MK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">CPL</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Uraian CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">SUB-CPMK</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white/10 divide-y divide-gray-200">
+                    <tbody class="bg-white/5">
                         @forelse($matakuliahs as $mk)
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->kode_matkul }}</td>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->nama_matkul }}</td>
-                                <td class="px-6 py-4 text-sm text-white">{{ $mk->sks }}</td>
-                                <td class="px-6 py-4 text-sm text-white flex gap-2">
-                                    <a href="{{ route('admin.edit.matkul', $mk->id) }}" 
-                                       class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
-                                    <form action="{{ route('admin.delete.matkul', $mk->id) }}" method="POST" 
-                                          onsubmit="return confirm('Yakin hapus mata kuliah ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="glass-button-danger">
-                                            <i class="fas fa-trash me-1"></i> Hapus
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
+                            @php $rows = $mk->cpmks; $count = max(1, $rows->count()); @endphp
+                            @if ($rows->isEmpty())
+                                <tr class="hover:bg-white/5">
+                                    <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->kode_matkul }}</td>
+                                    <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->nama_matkul }}</td>
+                                    <td colspan="4" class="px-6 py-4 text-sm border border-white/20 text-gray-300">Belum ada CPMK/SUB‑CPMK untuk MK ini.</td>
+                                </tr>
+                            @else
+                                @foreach ($rows as $index => $cpmk)
+                                    <tr class="hover:bg-white/5">
+                                        @if ($index === 0)
+                                            <td class="px-6 py-4 text-sm border border-white/20 align-top" rowspan="{{ $count }}">{{ $mk->kode_matkul }}</td>
+                                            <td class="px-6 py-4 text-sm border border-white/20 align-top" rowspan="{{ $count }}">{{ $mk->nama_matkul }}</td>
+                                        @endif
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ optional($cpmk->cpl)->kode_cpl ?? '-' }}</td>
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->kode_cpmk }}</td>
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->deskripsi }}</td>
+                                        <td class="px-6 py-4 text-sm border border-white/20 align-top">
+                                            @php $subs = $cpmk->subCpmks; @endphp
+                                            @if ($subs->count() === 0)
+                                                -
+                                            @elseif ($subs->count() === 1)
+                                                {{ $subs->first()->uraian }}
+                                            @else
+                                                <table class="w-full text-white border border-white/30 border-collapse">
+                                                    <tbody>
+                                                    @foreach ($subs as $sub)
+                                                        <tr>
+                                                            <td class="px-2 py-1 border border-white/20 align-top text-xs">{{ $sub->uraian }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-4 text-sm text-gray-300 text-center">
+                                <td colspan="6" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">
                                     Tidak ada data mata kuliah.
                                 </td>
                             </tr>

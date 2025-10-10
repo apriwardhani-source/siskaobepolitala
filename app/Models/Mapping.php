@@ -9,7 +9,7 @@ class Mapping extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['cpl_id', 'cpmk_id'];
+    protected $fillable = ['cpl_id', 'cpmk_id', 'bobot'];
 
     public function cpl() { return $this->belongsTo(Cpl::class); }
     public function cpmk() { return $this->belongsTo(Cpmk::class); }

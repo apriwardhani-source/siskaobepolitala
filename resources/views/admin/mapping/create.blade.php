@@ -33,15 +33,22 @@
 
             <!-- Pilih CPMK -->
             <div>
-                <label class="block text-sm font-medium text-white mb-1">Pilih CPMK (bisa banyak)</label>
-                <div class="bg-white/5 border border-white/10 rounded-lg p-3 max-h-64 overflow-y-auto text-white">
+                <label class="block text-sm font-medium text-white mb-1">Pilih CPMK (bisa banyak) dan Bobot (opsional)</label>
+                <div class="bg-white/5 border border-white/10 rounded-lg p-3 max-h-72 overflow-y-auto text-white">
                     @forelse ($cpmks as $cpmk)
-                        <label class="flex items-start mb-2 space-x-2">
-                            <input type="checkbox" name="cpmk_ids[]" value="{{ $cpmk->id }}" class="accent-blue-500 mt-1">
-                            <div>
-                                <strong>{{ $cpmk->kode_cpmk }}</strong> - {{ Str::limit($cpmk->deskripsi, 100) }}
+                        <div class="flex items-center justify-between mb-2 gap-3">
+                            <label class="flex items-start space-x-2 flex-1">
+                                <input type="checkbox" name="cpmk_ids[]" value="{{ $cpmk->id }}" class="accent-blue-500 mt-1">
+                                <div>
+                                    <strong>{{ $cpmk->kode_cpmk }}</strong> - {{ Str::limit($cpmk->deskripsi, 100) }}
+                                </div>
+                            </label>
+                            <div class="w-28">
+                                <input type="number" name="bobot[{{ $cpmk->id }}]" min="0" max="100" step="1"
+                                       class="glass-input w-full py-1 px-2 rounded-lg text-gray-900 bg-white"
+                                       placeholder="Bobot" />
                             </div>
-                        </label>
+                        </div>
                     @empty
                         <p class="text-gray-400 italic">Belum ada CPMK tersedia untuk digabungkan.</p>
                     @endforelse

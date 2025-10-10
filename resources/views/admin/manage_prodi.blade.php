@@ -22,22 +22,22 @@
 
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-white/10">
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
     <tr>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Kode Prodi</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nama Prodi</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Jenjang</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi</th>
+        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Kode Prodi</th>
+        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Nama Prodi</th>
+        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Jenjang</th>
+        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Aksi</th>
     </tr>
 </thead>
-<tbody class="bg-white/10 divide-y divide-gray-200">
+<tbody class="bg-white/5">
     @forelse($prodis as $prodi)
-        <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $prodi->kode_prodi }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $prodi->nama_prodi }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">{{ $prodi->jenjang }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white flex gap-2">
+        <tr class="hover:bg-white/5">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">{{ $prodi->kode_prodi }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">{{ $prodi->nama_prodi }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">{{ $prodi->jenjang }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20 flex gap-2">
                 <a href="{{ route('admin.edit.prodi', $prodi->id) }}" class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
                 <form action="{{ route('admin.delete.prodi', $prodi->id) }}" method="POST" onsubmit="return confirm('Yakin hapus prodi ini?')">
                     @csrf
@@ -48,7 +48,7 @@
         </tr>
     @empty
         <tr>
-            <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">Tidak ada data prodi.</td>
+            <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center border border-white/20">Tidak ada data prodi.</td>
         </tr>
     @endforelse
 </tbody>

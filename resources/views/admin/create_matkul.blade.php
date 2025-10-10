@@ -19,6 +19,18 @@
             </div>
         </div>
 
+        @if ($errors->any())
+            <div class="glass-card rounded-lg p-4 mb-4 text-red-200 border border-red-400">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Terjadi kesalahan pada input. Mohon periksa kembali:
+                <ul class="mb-0 mt-2 list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Form -->
         <form method="POST" action="{{ route('admin.create.matkul') }}" class="space-y-6">
             @csrf
@@ -46,6 +58,48 @@
                 </div>
             </div>
 
+            <!-- Relasi tunggal: pilih CPL (yang sudah punya CPMK), tambah Uraian, SUB-CPMK, dan Bobot -->
+            <div class="mt-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">Pilih CPL (yang sudah memiliki CPMK)</label>
+                    <select name="cpl_id" class="glass-input w-full py-2 px-3 select-cpl" required>
+                        <option value="">-- Pilih CPL --</option>
+                        @foreach($cpls as $cpl)
+                            <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">Uraian CPMK</label>
+                    <textarea name="uraian_cpmk" rows="3" class="glass-input w-full py-2 px-3" placeholder="Uraian CPMK" required>{{ old('uraian_cpmk') }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">SUB-CPMK</label>
+                    <div id="subList" class="space-y-2">
+                        <div class="flex gap-2 sub-item">
+                            <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" placeholder="Masukkan SUB-CPMK">
+                            <button type="button" class="glass-button-warning px-3" onclick="addSubCpmk()">Tambah</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-300 mt-1">Gunakan tombol “Tambah” untuk menambah baris SUB‑CPMK.</p>
+                </div>
+                <div class="md:w-48">
+                    <label class="block text-sm font-medium text-white mb-1">Bobot (opsional)</label>
+                    <input type="number" name="bobot" class="glass-input w-full py-2 px-3" min="0" max="100" step="1" placeholder="0-100" value="{{ old('bobot') }}">
+                </div>
+            </div>
+<script>
+function addSubCpmk() {
+    const list = document.getElementById('subList');
+    const row = document.createElement('div');
+    row.className = 'flex gap-2 sub-item';
+    row.innerHTML = `
+        <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" placeholder="Masukkan SUB-CPMK">
+        <button type="button" class="glass-button-danger px-3" onclick="this.parentElement.remove()">Hapus</button>
+    `;
+    list.appendChild(row);
+}
+</script>
             <div class="flex justify-end gap-3 pt-4 border-t border-white/20">
                 <a href="{{ route('admin.manage.matkul') }}" class="glass-button">
                     <i class="fas fa-times me-2"></i> Batal

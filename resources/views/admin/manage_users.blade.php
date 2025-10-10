@@ -25,32 +25,24 @@
         <!-- Gunakan glass-card untuk tabel -->
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <!-- Struktur table yang benar dengan kelas Tailwind -->
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead>
+                <!-- Struktur table dengan grid border -->
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
                         <tr>
-                            <th scope="col"
-                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nama
-                            </th>
-                            <th scope="col"
-                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Email
-                            </th>
-                            <th scope="col"
-                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Role
-                            </th>
-                            <th scope="col"
-                                class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Aksi
-                            </th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Nama</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Email</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Role</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider border border-white/30">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
+                    <tbody class="bg-white/5">
                         @forelse($users as $user)
-                            <tr>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-white">{{ $user->name }}</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-white">{{ $user->email }}</td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm text-white capitalize">{{ $user->role }}
+                            <tr class="hover:bg-white/5">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm border border-white/20">{{ $user->name }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm border border-white/20">{{ $user->email }}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm border border-white/20 capitalize">{{ $user->role }}
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium border border-white/20">
                                     <!-- Bungkus tombol dalam div untuk kelas action-buttons (opsional, bisa juga langsung ke button/link) -->
                                     <div class="action-buttons flex space-x-2">
                                         <!-- Tambahkan flex dan space-x untuk jarak -->
@@ -75,7 +67,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-4 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
+                                <td colspan="4" class="px-4 py-4 whitespace-nowrap text-sm text-gray-300 text-center border border-white/20">
                                     Tidak ada data user.</td>
                             </tr>
                         @endforelse

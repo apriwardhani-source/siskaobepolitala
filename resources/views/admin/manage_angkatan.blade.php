@@ -23,8 +23,8 @@
         <!-- Tabel Data Kurikulum -->
         <div class="glass-card rounded-lg overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-white/10">
+                <table class="min-w-full text-white border border-white/30 border-collapse">
+                    <thead class="bg-white/10 border-b border-white/30">
     <tr>
         <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
             Tahun Kurikulum
@@ -37,16 +37,16 @@
         </th>
     </tr>
 </thead>
-<tbody class="bg-white/10 divide-y divide-gray-200">
+<tbody class="bg-white/5">
     @forelse($angkatans as $angkatan)
-        <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+        <tr class="hover:bg-white/5">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">
                 {{ $angkatan->tahun_kurikulum }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20">
                 {{ $angkatan->matkul->nama_matkul ?? '-' }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white flex space-x-2">
+            <td class="px-6 py-4 whitespace-nowrap text-sm border border-white/20 flex space-x-2">
                 <a href="{{ route('angkatan.edit', $angkatan->id) }}" class="glass-button-warning">
                     <i class="fas fa-edit me-1"></i> Edit
                 </a>
@@ -62,7 +62,7 @@
         </tr>
     @empty
         <tr>
-            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center">
+            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-center border border-white/20">
                 Tidak ada data kurikulum.
             </td>
         </tr>
