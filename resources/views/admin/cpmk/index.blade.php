@@ -79,10 +79,10 @@
                                         </td>
 
                                         {{-- Kolom Deskripsi CPMK (bukan deskripsi CPL) --}}
-                                        <td class="px-6 py-4 text-sm text-white align-top">
-                                            {{ Str::limit($cpmk->deskripsi, 100) }}
-                                            {{-- Kalau mau full dengan line break: {!! nl2br(e($cpmk->deskripsi)) !!} --}}
-                                        </td>
+                                        <td class="px-6 py-4 text-sm text-white align-top whitespace-normal break-words">
+    {!! nl2br(e($cpmk->deskripsi)) !!}
+</td>
+
 
                                         {{-- Kolom Aksi --}}
                                         <td class="px-6 py-4 text-sm font-medium align-top">

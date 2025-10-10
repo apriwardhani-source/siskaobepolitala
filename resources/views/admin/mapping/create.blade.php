@@ -40,7 +40,7 @@
                             <label class="flex items-start space-x-2 flex-1">
                                 <input type="checkbox" name="cpmk_ids[]" value="{{ $cpmk->id }}" class="accent-blue-500 mt-1">
                                 <div>
-                                    <strong>{{ $cpmk->kode_cpmk }}</strong> - {{ Str::limit($cpmk->deskripsi, 100) }}
+                                    <strong>{{ $cpmk->kode_cpmk }}</strong> - {!! nl2br(e($cpmk->deskripsi)) !!}
                                 </div>
                             </label>
                             <div class="w-28">
