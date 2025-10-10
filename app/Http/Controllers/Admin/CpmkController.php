@@ -12,6 +12,9 @@ class CpmkController extends Controller
 {
     public function index()
     {
+        //urutan terlama ke terbaru
+        $cpmks = Cpmk::with('cpl')->oldest()->paginate(10);
+    return view('admin.cpmk.index', compact('cpmks'));
         // Tidak perlu memanggil relasi Mata Kuliah
         $cpmks = Cpmk::with('cpl')->latest()->paginate(10);
         return view('admin.cpmk.index', compact('cpmks'));
