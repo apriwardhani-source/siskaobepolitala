@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CPL;
 use App\Models\Cpmk;
+use App\Models\SubCpmk;
 use Illuminate\Http\Request;
 
 class CpmkController extends Controller
@@ -49,18 +50,34 @@ class CpmkController extends Controller
     public function update(Request $request, Cpmk $cpmk)
 {
     $validated = $request->validate([
-        'cpl_id' => 'required|exists:cpls,id',
-        'kode_cpmk' => 'required|string|max:10|unique:cpmks,kode_cpmk,' . $cpmk->id,
-        'deskripsi' => 'required|string',
+        'cpl_id'        => 'required|exists:cpls,id',
+        'kode_cpmk'     => 'required|string|max:10|unique:cpmks,kode_cpmk,' . $cpmk->id,
+        'deskripsi'     => 'required|string',
+        'sub_cpmk'      => 'nullable',
+        'sub_cpmk.*'    => 'nullable|string',
     ]);
 
     $cpmk->update([
-        'cpl_id' => $validated['cpl_id'],
+        'cpl_id'    => $validated['cpl_id'],
         'kode_cpmk' => $validated['kode_cpmk'],
         'deskripsi' => $validated['deskripsi'],
     ]);
 
-    return redirect()->route('cpmk.index')->with('success', 'Data CPMK berhasil diperbarui.');
+    // Update SUB-CPMK: hapus dan buat ulang sesuai input array
+    if ($request->has('sub_cpmk')) {
+        $cpmk->subCpmks()->delete();
+        foreach ((array) $request->input('sub_cpmk') as $line) {
+            $text = trim((string) $line);
+            if ($text !== '') {
+                SubCpmk::create([
+                    'cpmk_id' => $cpmk->id,
+                    'uraian'  => $text,
+                ]);
+            }
+        }
+    }
+
+    return redirect()->route('cpmk.index')->with('success', 'Data CPMK beserta SUB-CPMK berhasil diperbarui.');
 }
 
 

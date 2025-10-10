@@ -29,12 +29,42 @@
                 </div>
 
                 <div>
+                    <label for="cpl_id" class="block text-sm font-medium text-white mb-1">CPL Terkait</label>
+                    <select name="cpl_id" id="cpl_id" class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400" required>
+                        @foreach($cpls as $cpl)
+                            <option value="{{ $cpl->id }}" {{ (old('cpl_id', $cpmk->cpl_id) == $cpl->id) ? 'selected' : '' }}>
+                                {{ $cpl->kode_cpl }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label for="deskripsi" class="block text-sm font-medium text-white mb-1">Deskripsi CPMK</label>
                     <textarea name="deskripsi" id="deskripsi" rows="4" required
                               class="w-full glass-input py-2 px-4 rounded-lg focus:ring-2 focus:ring-blue-400">{{ old('deskripsi', $cpmk->deskripsi) }}</textarea>
                 </div>
 
-                
+                <!-- SUB-CPMK Dinamis -->
+                <div>
+                    <label class="block text-sm font-medium text-white mb-1">SUB-CPMK</label>
+                    <div id="subList" class="space-y-2">
+                        @forelse($cpmk->subCpmks as $sub)
+                            <div class="flex gap-2 sub-item">
+                                <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" value="{{ $sub->uraian }}">
+                                <button type="button" class="glass-button-danger px-3" onclick="this.parentElement.remove()">Hapus</button>
+                            </div>
+                        @empty
+                            <div class="flex gap-2 sub-item">
+                                <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" placeholder="Masukkan SUB-CPMK">
+                                <button type="button" class="glass-button-danger px-3" onclick="this.parentElement.remove()">Hapus</button>
+                            </div>
+                        @endforelse
+                    </div>
+                    <div class="mt-2">
+                        <button type="button" class="glass-button-warning px-4" onclick="addSubCpmk()">+ Tambah SUB-CPMK</button>
+                    </div>
+                </div>
             </div>
 
             <div class="flex justify-end gap-3 pt-4 border-t border-white/20">
@@ -49,3 +79,16 @@
     </div>
 </div>
 @endsection
+
+<script>
+function addSubCpmk() {
+    const list = document.getElementById('subList');
+    const row = document.createElement('div');
+    row.className = 'flex gap-2 sub-item';
+    row.innerHTML = `
+        <input type="text" name="sub_cpmk[]" class="glass-input flex-1 py-2 px-3" placeholder="Masukkan SUB-CPMK">
+        <button type="button" class="glass-button-danger px-3" onclick="this.parentElement.remove()">Hapus</button>
+    `;
+    list.appendChild(row);
+}
+</script>
