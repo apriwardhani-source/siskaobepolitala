@@ -8,12 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::rename('matakuliahs', 'mata_kuliahs');
+        Schema::create('visis', function (Blueprint $table) {
+            $table->id();
+            $table->text('visi');
+            $table->timestamps();
+        });
     }
 
     public function down(): void
     {
-        Schema::rename('mata_kuliahs', 'matakuliahs');
+        Schema::dropIfExists('visis');
     }
 };
-

@@ -6,18 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('mapping_mata_kuliahs', function (Blueprint $table) {
+        Schema::create('visi_misi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mapping_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('mata_kuliah_id')->constrained()->cascadeOnDelete();
+            $table->text('visi');
+            $table->text('misi');
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('mapping_mata_kuliahs');
+        Schema::dropIfExists('visi_misi');
     }
 };
