@@ -2,31 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MataKuliah extends Model
 {
     use HasFactory;
-
     protected $table = 'mata_kuliahs';
+    protected $primaryKey = 'kode_mk';
+    public $incrementing = false;
+    public $timestamps = true;
 
     protected $fillable = [
-        'kode_matkul',
-        'nama_matkul',
-        'sks',
+        'kode_mk',
+        'nama_mk',
+        'jenis_mk',
+        'sks_mk',
+        'semester_mk',
+        'kompetensi_mk'
     ];
 
-    public function mappings()
+    public function bahankajians()
     {
-        return $this->belongsToMany(Mapping::class, 'mapping_mata_kuliahs', 'mata_kuliah_id', 'mapping_id')
-                    ->withTimestamps();
+        return $this->belongsToMany(BahanKajian::class, 'mk_bk', 'kode_mk', 'kode_bk');
     }
 
-    // Relasi ke CPMK melalui pivot cpmk_mata_kuliah
-    public function cpmks()
+    public function capaianprofilLulusans()
     {
-        return $this->belongsToMany(Cpmk::class, 'cpmk_mata_kuliah', 'mata_kuliah_id', 'cpmk_id')
-                    ->withTimestamps();
+        return $this->belongsToMany(CapaianProfilLulusan::class, 'cpl_mk', 'kode_mk', 'kode_cpl');
     }
+
+    public function cplMkBks()
+    {
+        return $this->hasMany(CplMkBk::class, 'kode_mk', 'kode_mk');
+    }
+
 }
