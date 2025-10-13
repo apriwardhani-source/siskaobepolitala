@@ -229,13 +229,79 @@ public function deleteMahasiswa($id)
     public function showCreateMatkulForm()
     {
         $this->authorizeAdmin();
-        $cpls = \App\Models\Cpl::has('cpmks')->get();
+        $cpls = \App\Models\Cpl::with('cpmks')->get();
         return view('admin.create_matkul', compact('cpls'));
     }
 
     public function storeMatkul(Request $request)
     {
         $this->authorizeAdmin();
+
+        // NEW: Jika memilih pasangan CPL→CPMK secara spesifik (cpmk_ids[]), gunakan alur ini
+        if ($request->has('cpmk_ids')) {
+            $request->validate([
+                'kode_matkul' => 'required|string|unique:mata_kuliahs,kode_matkul',
+                'nama_matkul' => 'required|string',
+                'sks'        => 'required|integer|min:1|max:6',
+                'cpmk_ids'   => 'required|array|min:1',
+                'cpmk_ids.*' => 'exists:cpmks,id',
+                'bobot'      => 'nullable|numeric|min:0|max:100',
+                // Tambahan: validasi input SUB-CPMK (opsional)
+                'sub_cpmk'   => 'nullable',
+                'sub_cpmk.*' => 'nullable|string',
+            ]);
+
+            $mk = MataKuliah::create($request->only(['kode_matkul','nama_matkul','sks']));
+
+            foreach ($request->input('cpmk_ids', []) as $cpmkId) {
+                $cpmk = \App\Models\Cpmk::with('cpl')->findOrFail($cpmkId);
+
+                // Perbarui uraian CPMK dari input create bila tersedia
+                if ($request->filled('uraian_cpmk')) {
+                    $cpmk->update(['deskripsi' => $request->input('uraian_cpmk')]);
+                }
+
+                // Kaitkan MK ↔ CPMK
+                $mk->cpmks()->syncWithoutDetaching([$cpmk->id]);
+
+                // Buat/Update Mapping CPL×CPMK (+ bobot) lalu kaitkan ke MK
+                $mapping = \App\Models\Mapping::updateOrCreate(
+                    ['cpl_id' => $cpmk->cpl_id, 'cpmk_id' => $cpmk->id],
+                    ['bobot'  => $request->input('bobot')]
+                );
+                $mapping->mataKuliahs()->syncWithoutDetaching([$mk->id]);
+
+                // Tambahan: simpan SUB-CPMK jika diisi (array atau textarea)
+                $subsInput = $request->input('sub_cpmk');
+                if (is_array($subsInput)) {
+                    foreach ($subsInput as $line) {
+                        $trim = trim((string) $line);
+                        if ($trim !== '') {
+                            \App\Models\SubCpmk::create([
+                                'cpmk_id' => $cpmk->id,
+                                'uraian'  => $trim,
+                            ]);
+                        }
+                    }
+                } else {
+                    $subs = $subsInput ?? '';
+                    if (!empty($subs)) {
+                        $lines = preg_split("/\r?\n/", $subs);
+                        foreach ($lines as $line) {
+                            $trim = trim($line);
+                            if ($trim !== '') {
+                                \App\Models\SubCpmk::create([
+                                    'cpmk_id' => $cpmk->id,
+                                    'uraian'  => $trim,
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return redirect()->route('admin.manage.matkul')->with('success', 'Mata Kuliah berhasil ditambahkan.');
+        }
 
     $request->validate([
         'kode_matkul' => 'required|string|unique:mata_kuliahs,kode_matkul',

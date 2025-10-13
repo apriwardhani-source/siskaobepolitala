@@ -34,7 +34,7 @@
                             <input type="checkbox" name="cpmk_ids[]" value="{{ $cpmk->id }}"
                                    class="accent-blue-500 mt-1"
                                    {{ in_array($cpmk->id, $selectedCpmks) ? 'checked' : '' }}>
-                            <span><strong>{{ $cpmk->kode_cpmk }}</strong> – {{ Str::limit($cpmk->deskripsi, 100) }}</span>
+                            <span><strong>{{ $cpmk->kode_cpmk }}</strong> – {!! nl2br(e($cpmk->deskripsi)) !!}</span>
                         </label>
                     @endforeach
                 </div>

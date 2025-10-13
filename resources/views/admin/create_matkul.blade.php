@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Tambah Mata Kuliah Baru')
 
@@ -58,16 +58,23 @@
                 </div>
             </div>
 
-            <!-- Relasi tunggal: pilih CPL (yang sudah punya CPMK), tambah Uraian, SUB-CPMK, dan Bobot -->
-            <div class="mt-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-white mb-1">Pilih CPL (yang sudah memiliki CPMK)</label>
-                    <select name="cpl_id" class="glass-input w-full py-2 px-3 select-cpl" required>
-                        <option value="">-- Pilih CPL --</option>
+        
+                    <!-- Daftar CPMK per CPL (muncul saat CPL dicentang) -->
+                    <div class="mt-2">
                         @foreach($cpls as $cpl)
-                            <option value="{{ $cpl->id }}">{{ $cpl->kode_cpl }}</option>
+                            @if(!$cpl->cpmks->isEmpty())
+                                <div id="cpl-{{ $cpl->id }}" class="hidden cpmk-list bg-white/5 border border-white/10 rounded p-2 mb-2">
+                                    @foreach($cpl->cpmks as $cm)
+                                        <label class="flex items-center gap-2 text-sm text-white">
+                                            <input type="checkbox" name="cpmk_ids[]" value="{{ $cm->id }}" class="accent-blue-500">
+                                            <span>{{ $cpl->kode_cpl }} → {{ $cm->kode_cpmk }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            @endif
                         @endforeach
-                    </select>
+                    </div>
+                    <p class="text-xs text-gray-300 mt-1">Setiap CPL yang dicentang akan dibuatkan satu CPMK (misal: CPL1 â†’ CPMK1) dan dihubungkan ke MK ini.</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-white mb-1">Uraian CPMK</label>
@@ -81,7 +88,7 @@
                             <button type="button" class="glass-button-warning px-3" onclick="addSubCpmk()">Tambah</button>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-300 mt-1">Gunakan tombol “Tambah” untuk menambah baris SUB‑CPMK.</p>
+                    <p class="text-xs text-gray-300 mt-1">Gunakan tombol â€œTambahâ€ untuk menambah baris SUBâ€‘CPMK.</p>
                 </div>
                 <div class="md:w-48">
                     <label class="block text-sm font-medium text-white mb-1">Bobot (opsional)</label>
@@ -99,6 +106,25 @@ function addSubCpmk() {
     `;
     list.appendChild(row);
 }
+
+// Toggle tampilkan daftar CPMK saat CPL dicentang
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input[name="cpl_ids[]"]').forEach(function(cb){
+        const cplId = cb.value;
+        const box = document.getElementById('cpl-' + cplId);
+        const toggle = () => {
+            if (!box) return;
+            if (cb.checked) {
+                box.classList.remove('hidden');
+            } else {
+                box.classList.add('hidden');
+                box.querySelectorAll('input[type=checkbox]').forEach(ch => ch.checked = false);
+            }
+        };
+        cb.addEventListener('change', toggle);
+        toggle();
+    });
+});
 </script>
             <div class="flex justify-end gap-3 pt-4 border-t border-white/20">
                 <a href="{{ route('admin.manage.matkul') }}" class="glass-button">
@@ -112,3 +138,5 @@ function addSubCpmk() {
     </div>
 </div>
 @endsection
+
+

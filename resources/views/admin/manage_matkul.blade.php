@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Kelola Mata Kuliah')
 
@@ -33,6 +33,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">CPMK</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Uraian CPMK</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">SUB-CPMK</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase border border-white/30">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white/5">
@@ -42,7 +43,17 @@
                                 <tr class="hover:bg-white/5">
                                     <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->kode_matkul }}</td>
                                     <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $mk->nama_matkul }}</td>
-                                    <td colspan="4" class="px-6 py-4 text-sm border border-white/20 text-gray-300">Belum ada CPMK/SUB‑CPMK untuk MK ini.</td>
+                                    <td colspan="4" class="px-6 py-4 text-sm border border-white/20 text-gray-300">Belum ada CPMK/SUBâ€‘CPMK untuk MK ini.</td>
+                                    <td class="px-6 py-4 text-sm border border-white/20 align-top">
+                                        <div class="flex gap-2">
+                                            <a href="{{ route('admin.edit.matkul', $mk->id) }}" class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
+                                            <form action="{{ route('admin.delete.matkul', $mk->id) }}" method="POST" onsubmit="return confirm('Yakin hapus mata kuliah ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="glass-button-danger"><i class="fas fa-trash me-1"></i> Hapus</button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                             @else
                                 @foreach ($rows as $index => $cpmk)
@@ -56,28 +67,34 @@
                                         <td class="px-6 py-4 text-sm border border-white/20 align-top">{{ $cpmk->deskripsi }}</td>
                                         <td class="px-6 py-4 text-sm border border-white/20 align-top">
                                             @php $subs = $cpmk->subCpmks; @endphp
-                                            @if ($subs->count() === 0)
+                                            @if ($subs->isEmpty())
                                                 -
-                                            @elseif ($subs->count() === 1)
-                                                {{ $subs->first()->uraian }}
                                             @else
-                                                <table class="w-full text-white border border-white/30 border-collapse">
-                                                    <tbody>
+                                                <ul class="list-disc list-inside space-y-1 text-xs">
                                                     @foreach ($subs as $sub)
-                                                        <tr>
-                                                            <td class="px-2 py-1 border border-white/20 align-top text-xs">{{ $sub->uraian }}</td>
-                                                        </tr>
+                                                        <li>{{ $sub->uraian }}</li>
                                                     @endforeach
-                                                    </tbody>
-                                                </table>
+                                                </ul>
                                             @endif
                                         </td>
+                                        @if ($index === 0)
+                                            <td class="px-6 py-4 text-sm border border-white/20 align-top" rowspan="{{ $count }}">
+                                                <div class="flex gap-2">
+                                                    <a href="{{ route('admin.edit.matkul', $mk->id) }}" class="glass-button-warning"><i class="fas fa-edit me-1"></i>Edit</a>
+                                                    <form action="{{ route('admin.delete.matkul', $mk->id) }}" method="POST" onsubmit="return confirm('Yakin hapus mata kuliah ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="glass-button-danger"><i class="fas fa-trash me-1"></i> Hapus</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @endif
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">
+                                <td colspan="7" class="px-6 py-4 text-sm text-gray-300 text-center border border-white/20">
                                     Tidak ada data mata kuliah.
                                 </td>
                             </tr>
@@ -88,3 +105,4 @@
         </div>
     </div>
 @endsection
+
