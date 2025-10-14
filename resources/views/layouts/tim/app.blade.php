@@ -21,8 +21,7 @@
             transition: max-height 0.3s ease-in-out;
         }
         .mobile-menu.active {
-            max-height: 700px;
-            overflow-y: auto;
+            max-height: 500px;
         }
     </style>
     
@@ -54,7 +53,7 @@
     <div class="px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
         <div class="flex items-center space-x-4">
-            <span class="font-bold text-xl uppercase">Politala OBE - Admin</span>
+            <span class="font-bold text-xl uppercase">Politala OBE - Tim</span>
         </div>
         
         <!-- Mobile Menu Button -->
@@ -88,7 +87,7 @@
     <!-- Menu Bar (Desktop) -->
     <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
         <!-- Dashboard -->
-        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route('tim.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
             <i class="bi bi-house-door mr-2"></i>Beranda
         </a>
         
@@ -98,10 +97,10 @@
                 Pengaturan Program <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48">
-                <a href="{{ route('admin.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-calendar mr-2"></i>Visi Misi
                 </a>
-                <a href="{{ route('admin.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-calendar mr-2"></i>Tahun
                 </a>
             </div>
@@ -113,7 +112,7 @@
                 Capaian Pembelajaran <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.capaianpembelajaranlulusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-check2-square mr-2"></i>1. CPL Prodi
                 </a>
             </div>
@@ -125,10 +124,10 @@
                 Kurikulum <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-book mr-2"></i>2. Susunan MK
+                <a href="{{ route('tim.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-book mr-2"></i>2. Mata Kuliah
                 </a>
-                <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
                 </a>
             </div>
@@ -140,11 +139,8 @@
                 Lanjutan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.matakuliah.organisasimk') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.matakuliah.organisasimk') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-columns mr-2"></i>4. Organisasi MK
-                </a>
-                <a href="{{ route('admin.pemenuhancpl.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-percent mr-2"></i>5. Pemenuhan CPL
                 </a>
             </div>
         </div>
@@ -155,50 +151,32 @@
                 Laporan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64 max-h-96 overflow-y-auto">
-                <a href="{{ route('admin.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.pemenuhancpl.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-percent mr-2"></i>5. Pemenuhan CPL
+                </a>
+                <a href="{{ route('tim.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-list-check mr-2"></i>6. CPMK
                 </a>
-                <a href="{{ route('admin.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-node-plus mr-2"></i>7. Pemetaan CPL-CPMK-MK
+                <a href="{{ route('tim.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-node-plus mr-2"></i>7. CPL - CPMK - MK
                 </a>
-                <a href="{{ route('admin.pemetaancplcpmkmk.pemenuhancplcpmkmk') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.pemetaancplcpmkmk.pemenuhancplcpmkmk') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-pie-chart mr-2"></i>8. Pemenuhan CPL-CPMK-MK
                 </a>
-                <a href="{{ route('admin.pemetaancplcpmkmk.pemetaanmkcpmkcpl') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-graph-up mr-2"></i>9. Pemenuhan CPL-MK-CPMK
+                <a href="{{ route('tim.pemetaancplcpmkmk.pemetaanmkcplcpmk') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-graph-up mr-2"></i>9. CPL - MK - CPMK
                 </a>
-                <a href="{{ route('admin.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-list-ol mr-2"></i>10. Sub CPMK
+                <a href="{{ route('tim.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-list-ol mr-2"></i>10. SUB CPMK
                 </a>
-                <a href="{{ route('admin.pemetaanmkcpmksubcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-diagram-2 mr-2"></i>11. Pemenuhan MK-CPMK-SubCPMK
+                <a href="{{ route('tim.pemetaanmkcpmksubcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-diagram-2 mr-2"></i>11. MK - CPMK - SubCPMK
                 </a>
-                <a href="{{ route('admin.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-speedometer2 mr-2"></i>12. Bobot
                 </a>
-                <a href="{{ route('admin.notes.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route('tim.notes.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-sticky mr-2"></i>13. Catatan
-                </a>
-            </div>
-        </div>
-        
-        <!-- Management -->
-        <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
-                Manajemen <i class="bi bi-chevron-down ml-1"></i>
-            </button>
-            <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-people mr-2"></i>Pengguna
-                </a>
-                <a href="{{ route('admin.pendingusers.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-person-check mr-2"></i>Persetujuan Pengguna
-                </a>
-                <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-mortarboard mr-2"></i>Program Studi
-                </a>
-                <a href="{{ route('admin.jurusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-building mr-2"></i>Jurusan
                 </a>
             </div>
         </div>
@@ -207,43 +185,29 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu md:hidden bg-gray-800">
         <div class="px-6 py-2 space-y-2">
-            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('tim.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-house-door mr-2"></i>Beranda
             </a>
             <div class="border-t border-gray-700"></div>
             <p class="text-gray-400 text-xs px-4 py-1">PENGATURAN PROGRAM</p>
-            <a href="{{ route('admin.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('tim.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-calendar mr-2"></i>Visi Misi
             </a>
-            <a href="{{ route('admin.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('tim.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-calendar mr-2"></i>Tahun
             </a>
             <div class="border-t border-gray-700"></div>
             <p class="text-gray-400 text-xs px-4 py-1">CAPAIAN PEMBELAJARAN</p>
-            <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('tim.capaianpembelajaranlulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-check2-square mr-2"></i>1. CPL Prodi
             </a>
             <div class="border-t border-gray-700"></div>
             <p class="text-gray-400 text-xs px-4 py-1">KURIKULUM</p>
-            <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-book mr-2"></i>2. Susunan MK
+            <a href="{{ route('tim.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-book mr-2"></i>2. Mata Kuliah
             </a>
-            <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('tim.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
-            </a>
-            <div class="border-t border-gray-700"></div>
-            <p class="text-gray-400 text-xs px-4 py-1">MANAJEMEN</p>
-            <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-people mr-2"></i>Pengguna
-            </a>
-            <a href="{{ route('admin.pendingusers.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-person-check mr-2"></i>Persetujuan Pengguna
-            </a>
-            <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-mortarboard mr-2"></i>Program Studi
-            </a>
-            <a href="{{ route('admin.jurusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-building mr-2"></i>Jurusan
             </a>
             <form action="{{ route('logout') }}" method="POST" class="mt-4">
                 @csrf
