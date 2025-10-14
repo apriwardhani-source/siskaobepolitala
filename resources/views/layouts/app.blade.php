@@ -114,7 +114,7 @@
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
                 <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-check2-square mr-2"></i>1. CPL Prodi
+                    <i class="bi bi-check2-square mr-2"></i>CPL Prodi
                 </a>
             </div>
         </div>
@@ -126,10 +126,10 @@
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
                 <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-book mr-2"></i>2. Susunan MK
+                    <i class="bi bi-book mr-2"></i>Susunan MK
                 </a>
                 <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
+                    <i class="bi bi-bar-chart mr-2"></i>CPL - MK
                 </a>
             </div>
         </div>
@@ -141,10 +141,10 @@
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
                 <a href="{{ route('admin.matakuliah.organisasimk') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-columns mr-2"></i>4. Organisasi MK
+                    <i class="bi bi-columns mr-2"></i>matakuliah
                 </a>
                 <a href="{{ route('admin.pemenuhancpl.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-percent mr-2"></i>5. Pemenuhan CPL
+                    <i class="bi bi-percent mr-2"></i>Pemenuhan CPL
                 </a>
             </div>
         </div>
@@ -197,9 +197,6 @@
                 <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-mortarboard mr-2"></i>Program Studi
                 </a>
-                <a href="{{ route('admin.jurusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-building mr-2"></i>Jurusan
-                </a>
             </div>
         </div>
     </div>
@@ -241,9 +238,6 @@
             </a>
             <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-mortarboard mr-2"></i>Program Studi
-            </a>
-            <a href="{{ route('admin.jurusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-building mr-2"></i>Jurusan
             </a>
             <form action="{{ route('logout') }}" method="POST" class="mt-4">
                 @csrf

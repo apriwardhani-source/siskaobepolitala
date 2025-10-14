@@ -11,7 +11,7 @@ class HomepageController extends Controller
 {
     public function homepage()
 {
-    $prodis = Prodi::with('jurusan')->get();
+    $prodis = Prodi::all();
 
     $tim_users = User::where('role', 'tim')->get();
 

@@ -125,10 +125,10 @@
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
                 <a href="{{ route('tim.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-book mr-2"></i>2. Mata Kuliah
+                    <i class="bi bi-book mr-2"></i>Mata Kuliah
                 </a>
                 <a href="{{ route('tim.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
+                    <i class="bi bi-bar-chart mr-2"></i>CPL - MK
                 </a>
             </div>
         </div>
@@ -140,7 +140,7 @@
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
                 <a href="{{ route('tim.matakuliah.organisasimk') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-columns mr-2"></i>4. Organisasi MK
+                    <i class="bi bi-columns mr-2"></i>Organisasi MK
                 </a>
             </div>
         </div>

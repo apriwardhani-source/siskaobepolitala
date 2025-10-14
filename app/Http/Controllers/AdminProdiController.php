@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Prodi;
-use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\ProfilLulusan;
@@ -14,21 +13,19 @@ class AdminProdiController extends Controller
 {
     public function index()
     {
-        $prodis = Prodi::with('jurusan')->get();
+        $prodis = Prodi::all();
         return view('admin.prodi.index', compact('prodis'));
     }
 
     public function create()
     {
-        $jurusans = Jurusan::all();
-        return view('admin.prodi.create', compact('jurusans'));
+        return view('admin.prodi.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'kode_prodi' => 'required|string|max:10|unique:prodis,kode_prodi',
-            'id_jurusan' => 'required|exists:jurusans,id_jurusan',
             'nama_prodi' => 'required|string|max:100',
             'nama_kaprodi' => 'required|string|max:100',
             'jenjang_pendidikan' => ['required', Rule::in(['D3', 'D4'])],
@@ -40,15 +37,13 @@ class AdminProdiController extends Controller
 
     public function edit(Prodi $prodi)
     {
-        $jurusans = Jurusan::all();
-        return view('admin.prodi.edit', compact('prodi', 'jurusans'));
+        return view('admin.prodi.edit', compact('prodi'));
     }
 
     public function update(Request $request, Prodi $prodi)
     {
         $request->validate([
             'kode_prodi' => ['required', 'string', 'max:10', Rule::unique('prodis', 'kode_prodi')->ignore($prodi->kode_prodi, 'kode_prodi')],
-            'id_jurusan' => 'required|exists:jurusans,id_jurusan',
             'nama_prodi' => 'required|string|max:100',
             'nama_kaprodi' => 'required|string|max:100',
             'jenjang_pendidikan' => ['required', Rule::in(['D3', 'D4'])],

@@ -13,12 +13,6 @@
             </div>
 
             <div>
-                <label class="block text-lg font-semibold text-gray-700">Nama Jurusan</label>
-                <input type="text" value="{{ $prodi->jurusan->nama_jurusan }}" readonly
-                    class="w-full p-3 border border-black rounded-lg focus:outline-none bg-gray-50">
-            </div>
-
-            <div>
                 <label class="block text-lg font-semibold text-gray-700">Nama Prodi</label>
                 <input type="text" value="{{ $prodi->nama_prodi }}" readonly
                     class="w-full p-3 border border-black rounded-lg focus:outline-none bg-gray-50">

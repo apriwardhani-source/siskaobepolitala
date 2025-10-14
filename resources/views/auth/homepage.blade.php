@@ -255,17 +255,17 @@
 
         <!-- Slide 3 -->
         <div class="text-center md:text-left">
-          <h6 class="text-xl md:text-2xl font-semibold text-white">PROFIL JURUSAN</h6>
+          <h6 class="text-xl md:text-2xl font-semibold text-white">PROFIL PROGRAM STUDI</h6>
           <h2 class="text-3xl md:text-4xl font-bold text-white mt-2">
             Program Studi Unggulan <em class="text-sky-500">Siap</em> Meningkatkan Mutu Pendidikan
           </h2>
           <p class="text-base md:text-lg text-blue-100 mb-6 mt-3">
-            Kenali lebih jauh jurusan dan program studi di Politala yang mendukung sistem pembelajaran OBE.
+            Kenali lebih jauh program studi di Politala yang mendukung sistem pembelajaran OBE.
           </p>
           <div class="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4 ml-2 mb-3">
             <a href="#prodi"
               class="bg-blue-600 text-white font-semibold py-2 px-8 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-110">
-              Lihat Jurusan
+              Lihat Program Studi
             </a>
             <a href="https://wa.me/05113305052"
               class="bg-green-600 text-white font-semibold py-2 px-8 rounded-full shadow-lg hover:bg-green-700 transition duration-300 transform hover:scale-110">
@@ -304,7 +304,7 @@
           </h1>
           <p class="text-justify text-base text-gray-700 leading-relaxed mb-6">
             Politeknik Negeri Lhokseumawe (POLITALA) merupakan perguruan tinggi vokasi di Aceh
-            yang berfokus pada pendidikan terapan. Kampus ini memiliki berbagai jurusan dan program studi unggulan yang
+            yang berfokus pada pendidikan terapan. Kampus ini memiliki berbagai program studi unggulan yang
             mendukung perkembangan teknologi dan industri di Indonesia. POLITALA berperan aktif dalam mendukung
             pertumbuhan sektor
             industri, teknologi, dan pembangunan daerah melalui pendidikan berbasis praktik, inovasi, serta kerja sama
@@ -369,38 +369,7 @@
         <h1 class="text-3xl text-center font-bold text-indigo-800 mb-2">Program Studi</h1>
         <p class="text-lg text-center text-gray-600 mb-8">Temukan program studi yang sesuai dengan minat Anda</p>
 
-        <!-- Navigation Tabs -->
-        <div class="flex flex-wrap justify-center mb-8 gap-2" id="program-tabs-container">
-          <button class="program-tab px-6 py-3 rounded-lg font-medium shadow-md transition duration-75 ease-in-out bg-blue-600 text-white hover:bg-blue-200"
-                  data-jurusan="semua">
-            Semua Program
-          </button>
-          @foreach ($prodis->pluck('jurusan.nama_jurusan')->unique() as $namaJurusan)
-            <button class="program-tab px-6 py-3 rounded-lg font-medium shadow-md transition duration-75 ease-in-out bg-gray-100 hover:bg-blue-200"
-                    data-jurusan="{{ $namaJurusan }}">
-              {{ $namaJurusan }}
-            </button>
-          @endforeach
-        </div>
-        <script>
-          document.addEventListener("DOMContentLoaded", function () {
-            const buttons = document.querySelectorAll(".program-tab");
-        
-            buttons.forEach(button => {
-              button.addEventListener("click", function () {
-                // Hapus class aktif dari semua tombol
-                buttons.forEach(btn => {
-                  btn.classList.remove("bg-blue-600", "text-white");
-                  btn.classList.add("bg-gray-100");
-                });
-        
-                // Tambahkan class aktif ke tombol yang diklik
-                this.classList.remove("bg-gray-100");
-                this.classList.add("bg-blue-600", "text-white");
-              });
-            });
-          });
-        </script>
+
 
 
         <!-- Swiper Card Slider -->
@@ -408,8 +377,7 @@
           <div class="swiper-wrapper ">
             @foreach ($prodis as $prodi)
             <div class="swiper-slide">
-              <div class="program-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border border-gray-100"
-                  data-jurusan="{{ $prodi->jurusan->nama_jurusan }}">
+              <div class="program-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border border-gray-100">
 
                 <!-- Header -->
                 <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
@@ -502,25 +470,6 @@
             1024: { slidesPerView: 3 },
             1280: { slidesPerView: 4 },
           }
-        });
-
-        const tabs = document.querySelectorAll('.program-tab');
-        const slides = document.querySelectorAll('.swiper-slide');
-
-        tabs.forEach(tab => {
-          tab.addEventListener('click', () => {
-            const jurusan = tab.dataset.jurusan;
-
-            slides.forEach(slide => {
-              const cardJurusan = slide.querySelector('.program-card').dataset.jurusan;
-              slide.style.display = (jurusan === 'semua' || jurusan === cardJurusan) ? 'block' : 'none';
-            });
-
-            swiper.update();
-
-            tabs.forEach(t => t.classList.remove('bg-blue-600', 'text-white'));
-            tab.classList.add('bg-blue-600', 'text-white');
-          });
         });
       });
     </script>

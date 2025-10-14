@@ -24,19 +24,6 @@
 
                 <div class="max-w-2xl mx-auto space-y-4 pt-6">
                     <div>
-                        <label for="id_jurusan" class="block text-lg font-semibold mb-2">Jurusan</label>
-                        <select name="id_jurusan" id="id_jurusan" class="w-full p-3 border border-black rounded-lg"
-                            required>
-                            @foreach ($jurusans as $jurusan)
-                                <option value="{{ $jurusan->id_jurusan }}"
-                                    {{ $prodi->id_jurusan == $jurusan->id_jurusan ? 'selected' : '' }}>
-                                    {{ $jurusan->nama_jurusan }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
                         <label for="kode_prodi" class="block text-lg font-semibold mb-2">Kode Prodi</label>
                         <input type="text" name="kode_prodi" id="kode_prodi" value="{{ old('kode_prodi', $prodi->kode_prodi) }}"
                             class="w-full p-3 border border-black rounded-lg" required>

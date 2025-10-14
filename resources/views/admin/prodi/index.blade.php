@@ -58,7 +58,6 @@
                         <thead class="bg-green-800 text-white">
                             <tr>
                                 <th class="px-6 py-3 text-center font-medium border">No</th>
-                                <th class="px-6 py-3 text-center font-medium border">Jurusan</th>
                                 <th class="px-6 py-3 text-center font-medium border">Kode Prodi</th>
                                 <th class="px-6 py-3 text-center font-medium border">Nama Prodi</th>
                                 <th class="px-6 py-3 text-center font-medium border">Nama Kaprodi</th>
@@ -70,8 +69,6 @@
                             @foreach ($prodis as $index => $prodi)
                                 <tr class="{{ $index % 2 == 0 ? 'bg-gray-50' : 'bg-white' }} hover:bg-gray-100">
                                     <td class="px-6 py-4 text-center text-sm border">{{ $index + 1 }}</td>
-                                    <td class="px-6 py-4 text-center text-sm border">
-                                        {{ $prodi->jurusan?->nama_jurusan ?? '-' }}</td>
                                     <td class="px-6 py-4 text-center text-sm border">{{ $prodi->kode_prodi }}</td>
                                     <td class="px-6 py-4 text-center text-sm border">{{ $prodi->nama_prodi }}</td>
                                     <td class="px-6 py-4 text-center text-sm border">{{ $prodi->nama_kaprodi }}</td>

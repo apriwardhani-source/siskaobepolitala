@@ -22,17 +22,6 @@
 
                 <div class="max-w-2xl mx-auto space-y-4 pt-6">
                     <div>
-                        <label for="id_jurusan" class="block text-lg font-semibold mb-2">Jurusan</label>
-                        <select name="id_jurusan" id="id_jurusan" required
-                            class="w-full p-3 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-[#fbfffd]">
-                            <option value="" selected disabled>Pilih Jurusan</option>
-                            @foreach ($jurusans as $jurusan)
-                                <option value="{{ $jurusan->id_jurusan }}">{{ $jurusan->nama_jurusan }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
                         <label for="kode_prodi" class="block text-lg font-semibold mb-2">Kode Prodi</label>
                         <input type="text" name="kode_prodi" id="kode_prodi" required
                             class="w-full p-3 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-[#fbfffd]">

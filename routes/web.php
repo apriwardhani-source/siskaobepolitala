@@ -3,7 +3,7 @@
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\JurusanController;
+
 use App\Http\Controllers\AdminProdiController;
 use App\Http\Controllers\AdminProfilLulusanController;
 use App\Http\Controllers\AdminCapaianProfilLulusanController;
@@ -19,7 +19,7 @@ use App\Http\Controllers\AdminPemetaanCplMkBkController;
 use App\Http\Controllers\Wadir1UserController;
 use App\Http\Controllers\Wadir1DashboardController;
 use App\Http\Controllers\SignUpController;
-use App\Http\Controllers\Wadir1JurusanController;
+
 use App\Http\Controllers\KaprodiDashboardController;
 use App\Http\Controllers\AdminSubCpmkController;
 use App\Http\Controllers\KaprodiProfilLulusanController;
@@ -125,14 +125,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
-
-        Route::get('/jurusan', [JurusanController::class, 'index'])->name('jurusan.index');
-        Route::get('/jurusan/create', [JurusanController::class, 'create'])->name('jurusan.create');
-        Route::post('/jurusan', [JurusanController::class, 'store'])->name('jurusan.store');
-        Route::get('/jurusan/{jurusan}/edit', [JurusanController::class, 'edit'])->name('jurusan.edit');
-        Route::put('/jurusan/{jurusan}', [JurusanController::class, 'update'])->name('jurusan.update');
-        Route::get('/jurusan/{jurusan}/detail', [JurusanController::class, 'detail'])->name('jurusan.detail');
-        Route::delete('/jurusan/{jurusan}', [JurusanController::class, 'destroy'])->name('jurusan.destroy');
 
         Route::get('/prodi', [AdminProdiController::class, 'index'])->name('prodi.index');
         Route::get('/prodi/create', [AdminProdiController::class, 'create'])->name('prodi.create');
@@ -247,8 +239,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', [Wadir1UserController::class, 'index'])->name('users.index');
         Route::get('/users/{id}/detail', [Wadir1UserController::class, 'detail'])->name('users.detail');
         Route::get('/dashboard', [Wadir1DashboardController::class, 'dashboard'])->name('dashboard');
-        Route::get('/jurusan', [Wadir1JurusanController::class, 'index'])->name('jurusan.index');
-        Route::get('/jurusan/{jurusan}/detail', [Wadir1JurusanController::class, 'detail'])->name('jurusan.detail');
         Route::get('/prodi', [Wadir1ProdiController::class, 'index'])->name('prodi.index');
         Route::get('/prodi/{prodi}/detail', [Wadir1ProdiController::class, 'detail'])->name('prodi.detail');
         Route::get('/capaianpembelajaranlulusan', [Wadir1CapaianPembelajaranLulusanController::class, 'index'])->name('capaianpembelajaranlulusan.index');

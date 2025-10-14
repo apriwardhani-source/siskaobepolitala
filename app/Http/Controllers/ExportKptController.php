@@ -15,9 +15,8 @@ class ExportKptController extends Controller
         $idTahun = $request->id_tahun;
 
         $prodi = DB::table('prodis')
-            ->join('jurusans', 'prodis.id_jurusan', '=', 'jurusans.id_jurusan')
             ->where('prodis.kode_prodi', $kodeProdi)
-            ->select('prodis.*', 'jurusans.nama_jurusan')
+            ->select('prodis.*')
             ->first();
 
         $tahun = DB::table('tahun')->where('id_tahun', $idTahun)->first();
