@@ -1,25 +1,50 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+<!-- resources/views/auth/forgot-password.blade.php -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lupa Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen flex items-center justify-center bg-gradient-to-r  from-blue-300 to-gray-100">
+
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-center text-gray-700">Reset Password</h2>
+        <p class="text-gray-500 text-center mb-4 mt-2">Masukkan email Anda untuk reset password</p>
+
+        @if(session('success'))
+            <div class="bg-green-500 text-white p-3 rounded mb-4 text-center">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="bg-red-500 text-white p-3 rounded mb-4 text-center">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('forgot-password.post') }}" method="POST">
+            @csrf
+            <div>
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3094c6] px-3 py-2 mt-1 mb-2 bg-gray-100" required placeholder="Masukkan email">
+            </div>
+
+            <button type="submit" class="w-full bg-[#3094c6] text-white py-2 rounded-lg hover:bg-[rgb(29,99,134)] transition-all mt-4">
+                Kirim Link Reset
+            </button>
+        </form>
+
+        <p class="text-center text-gray-500 mt-4">
+            <a href="{{ route('login') }}" class="text-[#3094c6] hover:underline">Kembali ke Login</a>
+        </p>
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</body>
+</html>
