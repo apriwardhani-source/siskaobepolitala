@@ -16,7 +16,6 @@ class Prodi extends Model {
     'penyelenggaraan_prodi',
     'nomor_sk',
     'tanggal_sk',
-    'peringkat_akreditasi',
     'nomor_sk_banpt',
     'jenjang_pendidikan',
     'gelar_lulusan',

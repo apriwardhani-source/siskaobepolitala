@@ -15,7 +15,9 @@ class CapaianProfilLulusan extends Model
     protected $fillable = [
         'kode_cpl',
         'deskripsi_cpl',
-        'status_cpl'
+        'status_cpl',
+        'kode_prodi',
+        'id_tahun'
     ];
     public function profilLulusans()
     {
