@@ -11,7 +11,7 @@ class TimVisiMisiController extends Controller
     {
         $visis = DB::table('visis')->first();
 
-        $misis = DB::table('misis')->where('visi_id', $visis->id)->get();
+        $misis = $visis ? DB::table('misis')->where('visi_id', $visis->id)->get() : collect();
 
         $prodis = DB::table('prodis')->get();
 
