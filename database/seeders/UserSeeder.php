@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -13,53 +14,56 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin
-        User::updateOrCreate(
-            ['email' => 'apri@politala.ac.id'],
+        DB::table('users')->insert([
             [
-                'name' => 'Admin Apri',
-                'password' => Hash::make('Wrrdhnii16'),
+                'name' => 'Admin',
+                'nip' => null,
+                'nohp' => null,
+                'email' => 'admin@gmail.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('123456'),
                 'role' => 'admin',
-            ]
-        );
-
-        // Kaprodi
-        User::updateOrCreate(
-            ['email' => 'kaprodi@politala.ac.id'],
-            [
-                'name' => 'Kaprodi TI',
-                'password' => Hash::make('Kaprodi123'),
-                'role' => 'kaprodi',
-            ]
-        );
-
-        // Wadir 1
-        User::updateOrCreate(
-            ['email' => 'wadir1@politala.ac.id'],
-            [
-                'name' => 'Wadir 1',
-                'password' => Hash::make('Wadir123'),
-                'role' => 'wadir',
-            ]
-        );
-
-        // Dosen
-        User::updateOrCreate(
-            ['email' => 'dosen@politala.ac.id'],
-            [
-                'name' => 'Dosen TI',
-                'password' => Hash::make('Dosen123'),
-                'role' => 'dosen',
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'dose@politala.ac.id'],
-            [
-                'name' => 'Dosen',
-                'password' => Hash::make('osen123'),
-                'role' => 'dosen',
-            ]
-        );
+                'kode_prodi' => null,
+                'status' => 'approved',
+                'remember_token' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // [
+            //     'name'=>'wadir1',
+            //     'email'=>'wadir1@gmail.com',
+            //     'password'=> bcrypt('123456'),
+            //     'kode_prodi' => null,
+            //     'role'=> 'wadir1',
+            // ],
+            // [
+            //     'name'=>'Kaprodi TI',
+            //     'email'=>'kaproditi@gmail.com',
+            //     'password'=> bcrypt('123456'),
+            //     'kode_prodi' => 'C0303',
+            //     'role'=> 'kaprodi',
+            // ],
+            // [
+            //     'name'=>'Tim TI',
+            //     'email'=>'timti@gmail.com',
+            //     'password'=> bcrypt('123456'),
+            //     'kode_prodi'=>'C0303',
+            //     'role'=> 'tim',
+            // ],
+            // [
+            //     'name'=> 'Kaprodi TL',
+            //     'email'=> 'kaproditl@gmail.com',
+            //     'password'=> bcrypt('123456'),
+            //     'kode_prodi' => 'F0105',
+            //     'role' => 'kaprodi',
+            // ],
+            // [
+            //     'name'=> 'Tim TL',
+            //     'email'=> 'timtl@gmail.com',
+            //     'password'=> bcrypt('123456'),
+            //     'kode_prodi' => 'F0105',
+            //     'role' => 'tim',
+            // ],
+        ]);
     }
 }
