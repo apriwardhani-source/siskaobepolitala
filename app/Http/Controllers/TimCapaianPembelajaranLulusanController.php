@@ -19,79 +19,50 @@ class TimCapaianPembelajaranLulusanController extends Controller
         }
 
         $kodeProdi = $user->kode_prodi;
-        $id_tahun = $request->get('id_tahun');
 
-        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-
-        $query = DB::table('capaian_profil_lulusans')
-            ->leftJoin('cpl_pl', 'capaian_profil_lulusans.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->leftJoin('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
+        $capaianpembelajaranlulusans = DB::table('capaian_profil_lulusans')
+            ->leftJoin('prodis', 'capaian_profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
             ->select(
                 'capaian_profil_lulusans.id_cpl',
                 'capaian_profil_lulusans.deskripsi_cpl',
                 'capaian_profil_lulusans.kode_cpl',
-                'capaian_profil_lulusans.status_cpl',
                 'prodis.nama_prodi'
             )
-            ->where('profil_lulusans.kode_prodi', $kodeProdi)
-            ->groupBy(
-                'capaian_profil_lulusans.id_cpl',
-                'capaian_profil_lulusans.deskripsi_cpl',
-                'capaian_profil_lulusans.kode_cpl',
-                'capaian_profil_lulusans.status_cpl',
-                'prodis.nama_prodi'
-            )
-            ->orderBy('capaian_profil_lulusans.kode_cpl', 'asc');
+            ->where('capaian_profil_lulusans.kode_prodi', $kodeProdi)
+            ->orderBy('capaian_profil_lulusans.kode_cpl', 'asc')
+            ->get();
 
-        if ($id_tahun) {
-            $query->where('profil_lulusans.id_tahun', $id_tahun);
-        }
-
-        $capaianpembelajaranlulusans = $query->get();
-
-        return view("tim.capaianpembelajaranlulusan.index", compact("capaianpembelajaranlulusans", "id_tahun", "tahun_tersedia"));
+        return view("tim.capaianpembelajaranlulusan.index", compact("capaianpembelajaranlulusans"));
     }
 
     public function create()
-{
-    $user = Auth::user();
-    if (!$user || !$user->kode_prodi) {
-        abort(403);
+    {
+        $user = Auth::user();
+        if (!$user || !$user->kode_prodi) {
+            abort(403);
+        }
+
+        $kodeProdi = $user->kode_prodi;
+        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+        return view('tim.capaianpembelajaranlulusan.create', compact('tahun_tersedia'));
     }
-
-    $kodeProdi = $user->kode_prodi;
-    $profilLulusans = ProfilLulusan::where('kode_prodi', $kodeProdi)->get();
-
-    // 🔧 Tambahan penting:
-    $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-
-    return view('tim.capaianpembelajaranlulusan.create', compact('profilLulusans', 'tahun_tersedia'));
-}
 
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        
         $request->validate([
             'kode_cpl' => 'required',
             'deskripsi_cpl' => 'required',
-            'id_pl' => 'required|array',
         ]);
 
         $cpl = CapaianProfilLulusan::create([
             'kode_cpl' => $request->kode_cpl,
             'deskripsi_cpl' => $request->deskripsi_cpl,
-            'status_cpl' => $request->status_cpl ?? 'active',
+            'kode_prodi' => $user->kode_prodi,
         ]);
-
-        if ($request->has('id_pl')) {
-            foreach ($request->id_pl as $id_pl) {
-                DB::table('cpl_pl')->insert([
-                    'id_cpl' => $cpl->id_cpl,
-                    'id_pl' => $id_pl,
-                ]);
-            }
-        }
 
         return redirect()->route('tim.capaianpembelajaranlulusan.index')->with('sukses', 'Capaian Pembelajaran Lulusan berhasil ditambahkan.');
     }
@@ -103,11 +74,12 @@ class TimCapaianPembelajaranLulusanController extends Controller
             abort(403);
         }
 
-        $kodeProdi = $user->kode_prodi;
-        $profilLulusans = ProfilLulusan::where('kode_prodi', $kodeProdi)->get();
-        $selectedProfilLulusans = DB::table('cpl_pl')->where('id_cpl', $id_cpl->id_cpl)->pluck('id_pl')->toArray();
+        // Check access: hanya bisa edit CPL dari prodi sendiri
+        if ($id_cpl->kode_prodi !== $user->kode_prodi) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit CPL ini.');
+        }
 
-        return view('tim.capaianpembelajaranlulusan.edit', compact('id_cpl', 'profilLulusans', 'selectedProfilLulusans'));
+        return view('tim.capaianpembelajaranlulusan.edit', compact('id_cpl'));
     }
 
     public function update(Request $request, CapaianProfilLulusan $id_cpl)
@@ -142,23 +114,12 @@ class TimCapaianPembelajaranLulusanController extends Controller
     {
         $kodeProdi = Auth::user()->kode_prodi;
 
-        $selectedProfilLulusans = DB::table('cpl_pl')
-            ->where('id_cpl', $id_cpl->id_cpl)
-            ->pluck('id_pl')
-            ->toArray();
-
-        $capaianpembelajaranlulusan = DB::table('capaian_profil_lulusans as cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('cpl.id_cpl', $id_cpl->id_cpl)
-            ->where('pl.kode_prodi', $kodeProdi)
-            ->first();
-        if (!$capaianpembelajaranlulusan) {
-            abort(403, 'akses ditolak');
+        // Check access: hanya bisa lihat CPL dari prodi sendiri
+        if ($id_cpl->kode_prodi !== $kodeProdi) {
+            abort(403, 'Akses ditolak');
         }
-        $profilLulusans = ProfilLulusan::whereIn('id_pl', $selectedProfilLulusans)->get();
 
-        return view('tim.capaianpembelajaranlulusan.detail', compact('id_cpl', 'selectedProfilLulusans', 'profilLulusans'));
+        return view('tim.capaianpembelajaranlulusan.detail', compact('id_cpl'));
     }
 
     public function destroy(CapaianProfilLulusan $id_cpl)

@@ -30,29 +30,11 @@
         @endif
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-           
-            <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                <div class="flex space-x-2">
-                    <a href="{{ route('tim.capaianpembelajaranlulusan.create') }}"
-                        class="bg-green-600 hover:bg-green-800 text-white font-bold px-4 py-2 rounded-md inline-flex items-center">
-                        Tambah
-                    </a>
-                </div>
-    
-                <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                    <select id="tahun" name="id_tahun"
-                        class="w-full md:w-64 border border-black px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                        onchange="updateFilter()">
-                        <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                        @if (isset($tahun_tersedia))
-                            @foreach ($tahun_tersedia as $thn)
-                                <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                    {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
+            <div class="flex space-x-2">
+                <a href="{{ route('tim.capaianpembelajaranlulusan.create') }}"
+                    class="bg-green-600 hover:bg-green-800 text-white font-bold px-4 py-2 rounded-md inline-flex items-center">
+                    Tambah
+                </a>
             </div>
           
             <!-- Search -->
@@ -66,30 +48,7 @@
                         class="px-3 py-2 w-full focus:outline-none bg-transparent" />
                 </div>
             </div>
-            
         </div>
-
-        @if ($id_tahun)
-            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                <div class="flex flex-wrap gap-2 items-center">
-                    <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                    @if ($id_tahun)
-                        @php
-                            $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                        @endphp
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Tahun:
-                            {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                        </span>
-                    @endif
-                    <a href="{{ route('tim.capaianpembelajaranlulusan.index') }}"
-                        class="text-xs text-blue-600 hover:text-blue-800 underline">
-                        Reset filter
-                    </a>
-                </div>
-            </div>
-        @endif
 
         <div class="bg-white rounded-lg shadow overflow-hidden">
             @if ($capaianpembelajaranlulusans->isEmpty())
@@ -105,8 +64,6 @@
                                 <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Kode CPL</th>
                                 <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Deskripsi CPL
                                 </th>
-                                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Status CPL
-                                </th>
                                 <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
@@ -117,8 +74,6 @@
                                     <td class="px-4 py-4 text-center text-sm">{{ $capaianpembelajaranlulusan->kode_cpl }}</td>
                                     <td class="px-4 py-4 text-sm whitespace-pre-line">
                                         {{ $capaianpembelajaranlulusan->deskripsi_cpl }}</td>
-                                    <td class="px-4 py-4 text-center text-sm">{{ $capaianpembelajaranlulusan->status_cpl }}
-                                    </td>
                                     <td class="px-4 py-4">
                                         <div class="flex justify-center space-x-2">
                                             <a href="{{ route('tim.capaianpembelajaranlulusan.detail', $capaianpembelajaranlulusan->id_cpl) }}"
@@ -164,18 +119,4 @@
             @endif
         </div>
     </div>
-    <script>
-        function updateFilter() {
-            const tahunSelect = document.getElementById('tahun');
-            const idTahun = tahunSelect.value;
-
-            let url = "{{ route('tim.capaianpembelajaranlulusan.index') }}";
-
-            if (idTahun) {
-                url += '?id_tahun=' + encodeURIComponent(idTahun);
-            }
-
-            window.location.href = url;
-        }
-    </script>
 @endsection

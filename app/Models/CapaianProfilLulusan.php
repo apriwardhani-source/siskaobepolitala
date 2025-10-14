@@ -19,9 +19,14 @@ class CapaianProfilLulusan extends Model
         'kode_prodi',
         'id_tahun'
     ];
-    public function profilLulusans()
+    public function prodi()
     {
-        return $this->belongsToMany(ProfilLulusan::class, 'cpl_pl', 'id_cpl', 'id_pl');
+        return $this->belongsTo(Prodi::class, 'kode_prodi', 'kode_prodi');
+    }
+
+    public function tahun()
+    {
+        return $this->belongsTo(Tahun::class, 'id_tahun', 'id_tahun');
     }
 
     public function bahankajians()

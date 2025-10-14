@@ -12,11 +12,7 @@
 
         <label for="deskripsi_cpl" class="block text-xl font-semibold mb-1">Deskripsi CPL</label>
         <textarea type="text" name="deskripsi_cpl" id="deskripsi_cpl" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">{{ $id_cpl->deskripsi_cpl }}</textarea>
-
-        <label for="status_cpl" class="block text-xl font-semibold mb-1">Status CPL</label>
-        <input type="text" name="status_cpl" id="status_cpl" value="{{ $id_cpl->status_cpl }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-10 bg-gray-100">
+            class="w-full p-3 border border-black rounded-lg mb-10 bg-gray-100">{{ $id_cpl->deskripsi_cpl }}</textarea>
         <br>
 
         <a href="{{ route('tim.capaianpembelajaranlulusan.index') }}"
