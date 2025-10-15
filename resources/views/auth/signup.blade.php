@@ -85,6 +85,7 @@
               <option value="">-- Pilih Peran --</option>
               <option value="kaprodi" {{ old('role') == 'kaprodi' ? 'selected' : '' }}>Kaprodi</option>
               <option value="tim" {{ old('role') == 'tim' ? 'selected' : '' }}>Admin Prodi</option>
+              <option value="dosen" {{ old('role') == 'dosen' ? 'selected' : '' }}>Dosen</option>
             </select>
           </div>
 

@@ -394,4 +394,11 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/subcpmk/{id}', [TimSubCpmkController::class, 'destroy'])->name('subcpmk.destroy');
         Route::get('/visimisi', [TimVisiMisiController::class, 'index'])->name('visimisi.index');
     });
+
+    // Grup Route Dosen
+    Route::prefix('dosen')->name('dosen.')->middleware(['auth.dosen'])->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\DosenController::class, 'dashboard'])->name('dashboard');
+        Route::get('/penilaian', [\App\Http\Controllers\DosenController::class, 'penilaian'])->name('penilaian.index');
+        Route::post('/penilaian/store', [\App\Http\Controllers\DosenController::class, 'storeNilai'])->name('penilaian.store');
+    });
 });

@@ -61,4 +61,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
     }
+
+    // Relasi untuk Dosen - Mata Kuliah yang diampu
+    public function mataKuliahDiajar()
+    {
+        return $this->belongsToMany(MataKuliah::class, 'dosen_mata_kuliah', 'user_id', 'kode_mk')
+                    ->withPivot('id_tahun')
+                    ->withTimestamps();
+    }
 }

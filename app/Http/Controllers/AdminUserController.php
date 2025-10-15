@@ -28,11 +28,11 @@ class AdminUserController extends Controller {
             'nohp' => 'required|unique:users,nohp|min:6|max:15',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role' => 'required|in:admin,wadir1,tim,kaprodi',
+            'role' => 'required|in:admin,wadir1,tim,kaprodi,dosen',
             'status' => 'required|in:approved,pending'
         ]);
 
-        if (in_array($request->role, ['kaprodi', 'tim']) && !$request->kode_prodi) {
+        if (in_array($request->role, ['kaprodi', 'tim', 'dosen']) && !$request->kode_prodi) {
             return back()->withErrors(['kode_prodi' => 'Prodi wajib dipilih untuk role ini.'])->withInput();
         }
     
@@ -60,7 +60,7 @@ class AdminUserController extends Controller {
             'nohp' => ['required', 'min:6', 'max:15', Rule::unique('users', 'nohp')->ignore($user->id)],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => 'nullable|min:6',
-            'role' => 'required|in:admin,wadir1,tim,kaprodi',
+            'role' => 'required|in:admin,wadir1,tim,kaprodi,dosen',
             'status' => 'required|in:approved,pending'
         ]);
 
@@ -77,7 +77,7 @@ class AdminUserController extends Controller {
             $data['password'] = Hash::make($request->password);
         }
 
-        if (in_array($request->role, ['kaprodi', 'tim'])) {
+        if (in_array($request->role, ['kaprodi', 'tim', 'dosen'])) {
             if (!$request->kode_prodi) {
                 return back()->withErrors(['kode_prodi' => 'Prodi wajib dipilih untuk role ini.'])->withInput();
             }

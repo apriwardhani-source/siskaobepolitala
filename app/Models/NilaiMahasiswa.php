@@ -19,7 +19,9 @@ class NilaiMahasiswa extends Model
         'id_cpl',
         'id_cpmk',
         'nilai',
-        'id_tahun'
+        'nilai_akhir',
+        'id_tahun',
+        'user_id'
     ];
 
     public function mahasiswa()
@@ -50,5 +52,10 @@ class NilaiMahasiswa extends Model
     public function tahun()
     {
         return $this->belongsTo(Tahun::class, 'id_tahun', 'id_tahun');
+    }
+
+    public function dosen()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

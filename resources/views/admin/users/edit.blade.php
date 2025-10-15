@@ -59,8 +59,9 @@
                                 class="w-full p-3 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-[#fbfffd]">
                                 <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="wadir1" {{ $user->role === 'wadir1' ? 'selected' : '' }}>Wadir 1</option>
-                                <option value="tim" {{ $user->role === 'tim' ? 'selected' : '' }}>Tim</option>
+                                <option value="tim" {{ $user->role === 'tim' ? 'selected' : '' }}>Admin Prodi</option>
                                 <option value="kaprodi" {{ $user->role === 'kaprodi' ? 'selected' : '' }}>Kaprodi</option>
+                                <option value="dosen" {{ $user->role === 'dosen' ? 'selected' : '' }}>Dosen</option>
                             </select>
                         </div>
 

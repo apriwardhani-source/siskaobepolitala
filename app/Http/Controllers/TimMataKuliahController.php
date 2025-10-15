@@ -73,7 +73,19 @@ class TimMataKuliahController extends Controller
             ->orderBy('cpl.kode_cpl', 'asc')
             ->get();
 
-        return view("tim.matakuliah.create", compact("capaianProfilLulusans"));
+        // Get daftar dosen untuk prodi ini
+        $dosens = DB::table('users')
+            ->where('role', 'dosen')
+            ->where('kode_prodi', $kodeProdi)
+            ->where('status', 'approved')
+            ->select('id', 'name', 'nip')
+            ->orderBy('name')
+            ->get();
+
+        // Get tahun kurikulum
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+        return view("tim.matakuliah.create", compact("capaianProfilLulusans", "dosens", "tahuns"));
     }
 
     public function store(Request $request)
@@ -92,6 +104,9 @@ class TimMataKuliahController extends Controller
             'kompetensi_mk' => 'required|string|in:pendukung,utama',
             'id_cpls' => 'required|array|min:1',
             'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl',
+            'dosen_ids' => 'nullable|array',
+            'dosen_ids.*' => 'exists:users,id',
+            'id_tahun' => 'required|exists:tahun,id_tahun',
         ]);
 
         $mk = MataKuliah::create(array_merge(
@@ -105,6 +120,19 @@ class TimMataKuliahController extends Controller
                 DB::table('cpl_mk')->insert([
                     'kode_mk' => $mk->kode_mk,
                     'id_cpl' => $id_cpl
+                ]);
+            }
+        }
+
+        // Simpan relasi Dosen-MK
+        if ($request->has('dosen_ids') && is_array($request->dosen_ids) && count($request->dosen_ids) > 0) {
+            foreach ($request->dosen_ids as $dosen_id) {
+                DB::table('dosen_mata_kuliah')->insert([
+                    'user_id' => $dosen_id,
+                    'kode_mk' => $mk->kode_mk,
+                    'id_tahun' => $request->id_tahun,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
         }
@@ -133,7 +161,30 @@ class TimMataKuliahController extends Controller
             ->pluck('id_cpl')
             ->toArray();
 
-        return view('tim.matakuliah.edit', compact('matakuliah', 'capaianprofillulusans', 'selectedCplIds'));
+        // Get daftar dosen untuk prodi ini
+        $dosens = DB::table('users')
+            ->where('role', 'dosen')
+            ->where('kode_prodi', $kodeProdi)
+            ->where('status', 'approved')
+            ->select('id', 'name', 'nip')
+            ->orderBy('name')
+            ->get();
+
+        // Get dosen yang sudah ter-assign ke MK ini
+        $selectedDosens = DB::table('dosen_mata_kuliah')
+            ->where('kode_mk', $matakuliah->kode_mk)
+            ->pluck('user_id')
+            ->toArray();
+
+        // Get tahun kurikulum
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+        // Get tahun yang sedang digunakan (ambil dari relasi dosen pertama jika ada)
+        $currentTahun = DB::table('dosen_mata_kuliah')
+            ->where('kode_mk', $matakuliah->kode_mk)
+            ->value('id_tahun');
+
+        return view('tim.matakuliah.edit', compact('matakuliah', 'capaianprofillulusans', 'selectedCplIds', 'dosens', 'selectedDosens', 'tahuns', 'currentTahun'));
     }
 
     public function update(Request $request, MataKuliah $matakuliah)
@@ -151,6 +202,9 @@ class TimMataKuliahController extends Controller
             'kompetensi_mk' => 'required|string|in:pendukung,utama',
             'id_cpls' => 'required|array|min:1',
             'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl',
+            'dosen_ids' => 'nullable|array',
+            'dosen_ids.*' => 'exists:users,id',
+            'id_tahun' => 'required|exists:tahun,id_tahun',
         ]);
 
         $old_kode_mk = $matakuliah->kode_mk;
@@ -169,6 +223,22 @@ class TimMataKuliahController extends Controller
                 DB::table('cpl_mk')->insert([
                     'kode_mk' => $new_kode_mk,
                     'id_cpl' => $id_cpl
+                ]);
+            }
+        }
+
+        // Hapus relasi Dosen-MK yang lama
+        DB::table('dosen_mata_kuliah')->where('kode_mk', $old_kode_mk)->delete();
+
+        // Simpan relasi Dosen-MK yang baru
+        if ($request->has('dosen_ids') && is_array($request->dosen_ids) && count($request->dosen_ids) > 0) {
+            foreach ($request->dosen_ids as $dosen_id) {
+                DB::table('dosen_mata_kuliah')->insert([
+                    'user_id' => $dosen_id,
+                    'kode_mk' => $new_kode_mk,
+                    'id_tahun' => $request->id_tahun,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
         }

@@ -37,4 +37,12 @@ class MataKuliah extends Model
         return $this->hasMany(CplMkBk::class, 'kode_mk', 'kode_mk');
     }
 
+    // Relasi dengan Dosen (pengampu)
+    public function dosen()
+    {
+        return $this->belongsToMany(User::class, 'dosen_mata_kuliah', 'kode_mk', 'user_id')
+                    ->withPivot('id_tahun')
+                    ->withTimestamps();
+    }
+
 }

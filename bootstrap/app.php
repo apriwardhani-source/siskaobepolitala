@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.wadir1' => \App\Http\Middleware\Wadir1Middleware::class,
             'auth.kaprodi' => \App\Http\Middleware\KaprodiMiddleware::class,
             'auth.tim' => \App\Http\Middleware\TimMiddleware::class,
+            'auth.dosen' => \App\Http\Middleware\AuthDosen::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

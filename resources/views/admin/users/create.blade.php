@@ -56,8 +56,9 @@
                                 <option value="" disabled selected>Pilih Role</option>
                                 <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="wadir1" {{ old('role') == 'wadir1' ? 'selected' : '' }}>Wadir 1</option>
-                                <option value="tim" {{ old('role') == 'tim' ? 'selected' : '' }}>Tim</option>
+                                <option value="tim" {{ old('role') == 'tim' ? 'selected' : '' }}>Admin Prodi</option>
                                 <option value="kaprodi" {{ old('role') == 'kaprodi' ? 'selected' : '' }}>Kaprodi</option>
+                                <option value="dosen" {{ old('role') == 'dosen' ? 'selected' : '' }}>Dosen</option>
                             </select>
                         </div>
 

@@ -63,6 +63,37 @@
                 <option value="utama" {{ $matakuliah->kompetensi_mk == 'utama' ? 'selected' : '' }}>utama</option>
             </select>
 
+            <!-- Tahun Kurikulum -->
+            <label for="id_tahun" class="text-xl font-semibold">Tahun Kurikulum</label>
+            <select name="id_tahun" id="id_tahun" class="border border-black p-3 w-full mt-1 mb-3 rounded-lg" required>
+                <option value="" disabled>Pilih Tahun Kurikulum</option>
+                @foreach($tahuns as $tahun)
+                    <option value="{{ $tahun->id_tahun }}" {{ $currentTahun == $tahun->id_tahun ? 'selected' : '' }}>
+                        {{ $tahun->tahun }}
+                    </option>
+                @endforeach
+            </select>
+
+            <!-- Dosen Pengampu -->
+            <label class="text-xl font-semibold mb-2">Dosen Pengampu:</label>
+            <div class="border border-black p-4 w-full rounded-lg mt-1 mb-3 max-h-60 overflow-y-auto">
+                @if($dosens->count() > 0)
+                    @foreach($dosens as $dosen)
+                        <div class="mb-2">
+                            <label class="flex items-start">
+                                <input type="checkbox" name="dosen_ids[]" value="{{ $dosen->id }}" 
+                                    {{ in_array($dosen->id, $selectedDosens) ? 'checked' : '' }}
+                                    class="mt-1 mr-2">
+                                <span class="text-sm">{{ $dosen->name }} ({{ $dosen->nip }})</span>
+                            </label>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-gray-500 italic">Belum ada dosen terdaftar untuk prodi ini.</p>
+                @endif
+            </div>
+            <p class="italic text-gray-500 mb-3">*Opsional: Pilih dosen yang mengampu mata kuliah ini.</p>
+
             <button type="submit"
                 class="mt-3 bg-blue-600 hover:bg-blue-800 px-5 py-2 rounded-lg text-white font-semibold">Simpan</button>
             <a href="{{ route('tim.matakuliah.index') }}"

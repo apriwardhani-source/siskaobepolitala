@@ -82,6 +82,8 @@ class LoginController extends Controller
                     return redirect()->route('tim.dashboard')->with('login_success', $message);
                 case 'kaprodi':
                     return redirect()->route('kaprodi.dashboard')->with('login_success', $message);
+                case 'dosen':
+                    return redirect()->route('dosen.dashboard')->with('login_success', $message);
                 default:
                     Auth::logout();
                     return redirect()->route('login')->with('error', 'Role tidak dikenali. Hubungi admin.');
