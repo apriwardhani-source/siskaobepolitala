@@ -180,7 +180,6 @@
                                 <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama Mata Kuliah</th>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-20">SKS</th>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Semester</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Jenis MK</th>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-40">Aksi</th>
                             </tr>
                         </thead>
@@ -203,12 +202,6 @@
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700">
                                     {{ $mk->semester_mk }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                                 {{ $mk->jenis_mk === 'Wajib' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
-                                        {{ $mk->jenis_mk }}
-                                    </span>
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <div class="flex justify-center space-x-2">
