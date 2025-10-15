@@ -19,17 +19,17 @@
             @csrf
 
             {{-- CPL Terkait --}}
-            <label for="id_cpls" class="text-xl font-semibold">CPL Terkait</label>
-            <select id="id_cpls" name="id_cpls[]" size="3"
+            <label for="id_cpl" class="text-xl font-semibold">CPL Terkait</label>
+            <select id="id_cpl" name="id_cpl"
                 class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
-                multiple required>
+                required>
+                <option value="">-- Pilih CPL --</option>
                 @foreach ($cpls as $cpl)
                     <option value="{{ $cpl->id_cpl }}">
                         {{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}
                     </option>
                 @endforeach
             </select>
-            <p class="italic text-red-700 mb-3">*Tekan Ctrl dan klik untuk memilih lebih dari satu CPL</p>
 
             {{-- MK Terkait (Dinamis) --}}
             <div id="mkContainer" class="mt-3">
@@ -61,12 +61,12 @@
     @push('scripts')
         <script>
             const mkList = document.getElementById('mkList');
-            const cplSelect = document.getElementById('id_cpls');
+            const cplSelect = document.getElementById('id_cpl');
 
             cplSelect.addEventListener('change', function() {
-                const selectedCPLs = Array.from(this.selectedOptions).map(opt => opt.value);
+                const selectedCPL = this.value;
 
-                if (selectedCPLs.length === 0) {
+                if (!selectedCPL) {
                     mkList.innerHTML = '<div class="text-gray-500 italic">Pilih CPL terlebih dahulu</div>';
                     return;
                 }
@@ -95,7 +95,7 @@
                         },
                         credentials: 'same-origin',
                         body: JSON.stringify({
-                            id_cpls: selectedCPLs
+                            id_cpls: [selectedCPL]
                         })
                     })
                     .then(response => {

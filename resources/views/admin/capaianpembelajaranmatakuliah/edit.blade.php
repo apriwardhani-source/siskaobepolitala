@@ -9,18 +9,18 @@
             @csrf
             @method('PUT')
 
-            <label for="id_cpls" class="text-xl font-semibold mb-2">CPL Terkait</label>
-            <select id="id_cpls" name="id_cpls[]" size="4"
+            <label for="id_cpl" class="text-xl font-semibold mb-2">CPL Terkait</label>
+            <select id="id_cpl" name="id_cpl"
                 class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
-                multiple required>
+                required>
+                <option value="">-- Pilih CPL --</option>
                 @foreach ($capaianProfilLulusans as $cpl)
                     <option value="{{ $cpl->id_cpl }}"
-                        {{ in_array($cpl->id_cpl, old('id_cpls', $selectedCplIds)) ? 'selected' : '' }}>
+                        {{ in_array($cpl->id_cpl, old('id_cpl') ? [old('id_cpl')] : $selectedCplIds) ? 'selected' : '' }}>
                         {{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}
                     </option>
                 @endforeach
             </select>
-            <p class="italic text-red-700 mb-2">*Tekan tombol Ctrl dan klik untuk memilih lebih dari satu item.</p>
 
             <div id="mkContainer" class="mt-3 mb-4">
                 <label class="text-xl font-semibold">MK Terkait (Pilih yang akan dikaitkan dengan CPMK):</label>
@@ -88,15 +88,15 @@
     @push('scripts')
         <script>
             const mkList = document.getElementById('mkList');
-            const cplSelect = document.getElementById('id_cpls');
+            const cplSelect = document.getElementById('id_cpl');
 
             // Simpan data MK yang sudah dipilih sebelumnya
             const originalSelectedMKs = @json($selectedMKCodes ?? []);
 
             cplSelect.addEventListener('change', function() {
-                const selectedCPLs = Array.from(this.selectedOptions).map(opt => opt.value);
+                const selectedCPL = this.value;
 
-                if (selectedCPLs.length === 0) {
+                if (!selectedCPL) {
                     mkList.innerHTML = '<div class="text-gray-500 italic">Pilih CPL terlebih dahulu</div>';
                     return;
                 }
@@ -111,7 +111,7 @@
                             'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
                         body: JSON.stringify({
-                            id_cpls: selectedCPLs
+                            id_cpls: [selectedCPL]
                         })
                     })
                     .then(response => response.json())

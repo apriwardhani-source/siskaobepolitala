@@ -16,7 +16,6 @@ class ProdiSeeder extends Seeder
         Prodi::insert([
             [
                 'kode_prodi' => 'C0303',
-                'id_jurusan' => 1,
                 'nama_prodi' => 'Teknik Informatika',
                 'visi_prodi' => 'Menjadi Program Studi Teknik Informatika yang unggul dalam bidang teknologi informasi dan komunikasi.',
                 'nama_kaprodi' => 'Dr. Ir. Joko Prasetyo',
@@ -37,7 +36,6 @@ class ProdiSeeder extends Seeder
             ],
             [
                 'kode_prodi' => 'F0105',
-                'id_jurusan' => 2,
                 'nama_prodi' => 'Teknik Listrik',
                 'visi_prodi' => 'Menjadi Program Studi Teknik Listrik yang berkomitmen pada pengembangan teknologi kelistrikan yang berkelanjutan.',
                 'nama_kaprodi' => 'Dr. Ir. Siti Aminah',
@@ -58,7 +56,6 @@ class ProdiSeeder extends Seeder
             ],
             [
                 'kode_prodi' => 'C0505',
-                'id_jurusan' => 3,
                 'nama_prodi' => 'Sistem Informasi Kota Cerdas',
                 'visi_prodi' => 'Menjadi Program Studi Sistem Informasi yang berfokus pada pengembangan solusi teknologi untuk kota cerdas.',
                 'nama_kaprodi' => 'Dr. Ir. Budi Santoso',

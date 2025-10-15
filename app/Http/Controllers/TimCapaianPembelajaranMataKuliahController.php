@@ -90,8 +90,7 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $request->validate([
             'kode_cpmk' => 'required|string',
             'deskripsi_cpmk' => 'required|string',
-            'id_cpls' => 'required|array|min:1',
-            'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl',
+            'id_cpl' => 'required|exists:capaian_profil_lulusans,id_cpl',
             'selected_mks' => 'required|array|min:1',
             'selected_mks.*' => 'exists:mata_kuliahs,kode_mk',
         ]);
@@ -101,12 +100,10 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
             'deskripsi_cpmk' => $request->deskripsi_cpmk,
         ]);
 
-        foreach ($request->id_cpls as $id_cpl) {
-            DB::table('cpl_cpmk')->insert([
-                'id_cpmk' => $cpmk->id_cpmk,
-                'id_cpl' => $id_cpl,
-            ]);
-        }
+        DB::table('cpl_cpmk')->insert([
+            'id_cpmk' => $cpmk->id_cpmk,
+            'id_cpl' => $request->id_cpl,
+        ]);
 
         foreach ($request->selected_mks as $kode_mk) {
             DB::table('cpmk_mk')->insert([
@@ -151,8 +148,7 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $request->validate([
             'kode_cpmk' => 'required|string',
             'deskripsi_cpmk' => 'required|string',
-            'id_cpls' => 'required|array|min:1',
-            'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl',
+            'id_cpl' => 'required|exists:capaian_profil_lulusans,id_cpl',
             'selected_mks' => 'required|array|min:1',
             'selected_mks.*' => 'exists:mata_kuliahs,kode_mk',
         ]);
@@ -164,12 +160,10 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         ]);
 
         DB::table('cpl_cpmk')->where('id_cpmk', $id_cpmk)->delete();
-        foreach ($request->id_cpls as $id_cpl) {
-            DB::table('cpl_cpmk')->insert([
-                'id_cpmk' => $id_cpmk,
-                'id_cpl' => $id_cpl,
-            ]);
-        }
+        DB::table('cpl_cpmk')->insert([
+            'id_cpmk' => $id_cpmk,
+            'id_cpl' => $request->id_cpl,
+        ]);
 
         DB::table('cpmk_mk')->where('id_cpmk', $id_cpmk)->delete();
         foreach ($request->selected_mks as $kode_mk) {

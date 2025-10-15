@@ -74,19 +74,17 @@ class AdminCapaianPembelajaranMataKuliahController extends Controller
         $request->validate([
             'kode_cpmk' => 'required|string|max:10',
             'deskripsi_cpmk' => 'required|string|max:255',
-            'id_cpls' => 'required|array',
+            'id_cpl' => 'required',
             'selected_mks' => 'required|array', // Validasi MK yang dipilih
         ]);
 
         $cpmk = CapaianPembelajaranMataKuliah::create($request->only(['kode_cpmk', 'deskripsi_cpmk']));
 
-        // Insert ke tabel cpl_cpmk berdasarkan CPL yang dipilih
-        foreach ($request->id_cpls as $id_cpl) {
-            DB::table('cpl_cpmk')->insert([
-                'id_cpmk' => $cpmk->id_cpmk,
-                'id_cpl' => $id_cpl,
-            ]);
-        }
+        // Insert ke tabel cpl_cpmk untuk CPL yang dipilih
+        DB::table('cpl_cpmk')->insert([
+            'id_cpmk' => $cpmk->id_cpmk,
+            'id_cpl' => $request->id_cpl,
+        ]);
 
         // Insert ke tabel cpmk_mk berdasarkan MK yang dipilih user
         foreach ($request->selected_mks as $kode_mk) {
@@ -150,7 +148,7 @@ class AdminCapaianPembelajaranMataKuliahController extends Controller
         $request->validate([
             'kode_cpmk' => 'required|string|max:10',
             'deskripsi_cpmk' => 'required|string|max:255',
-            'id_cpls' => 'required|array',
+            'id_cpl' => 'required',
             'selected_mks' => 'required|array', // Validasi MK yang dipilih
         ]);
 
@@ -163,13 +161,11 @@ class AdminCapaianPembelajaranMataKuliahController extends Controller
         DB::table('cpl_cpmk')->where('id_cpmk', $cpmk->id_cpmk)->delete();
         DB::table('cpmk_mk')->where('id_cpmk', $cpmk->id_cpmk)->delete();
 
-        // Insert relasi CPL-CPMK berdasarkan CPL yang dipilih
-        foreach ($request->id_cpls as $id_cpl) {
-            DB::table('cpl_cpmk')->insert([
-                'id_cpmk' => $cpmk->id_cpmk,
-                'id_cpl' => $id_cpl,
-            ]);
-        }
+        // Insert relasi CPL-CPMK untuk CPL yang dipilih
+        DB::table('cpl_cpmk')->insert([
+            'id_cpmk' => $cpmk->id_cpmk,
+            'id_cpl' => $request->id_cpl,
+        ]);
 
         // Insert relasi CPMK-MK berdasarkan MK yang dipilih user
         foreach ($request->selected_mks as $kode_mk) {

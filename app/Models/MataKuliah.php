@@ -45,4 +45,10 @@ class MataKuliah extends Model
                     ->withTimestamps();
     }
 
+    // Relasi dengan Prodi
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'kode_prodi', 'kode_prodi');
+    }
+
 }

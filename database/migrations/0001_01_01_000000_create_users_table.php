@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'wadir1', 'kaprodi', 'tim', 'kajur']);
+            $table->enum('role', ['admin', 'wadir1', 'kaprodi', 'tim', 'dosen']);
             $table->string('kode_prodi')->nullable();
             $table->unsignedBigInteger('id_jurusan')->nullable();
             $table->enum('status', ['pending', 'approved'])->default('approved');
