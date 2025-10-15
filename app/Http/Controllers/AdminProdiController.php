@@ -60,26 +60,15 @@ class AdminProdiController extends Controller
 
     public function destroy($kode_prodi)
     {
-        $plIds = DB::table('profil_lulusans')
-            ->where('kode_prodi', $kode_prodi)
-            ->pluck('id_pl');
+        // Hapus Profil Lulusan yang terkait dengan prodi ini
+        ProfilLulusan::where('kode_prodi', $kode_prodi)->delete();
 
-        $cplIds = DB::table('cpl_pl')
-            ->whereIn('id_pl', $plIds)
-            ->pluck('id_cpl')
-            ->unique();
+        // Hapus Capaian Profil Lulusan (CPL) yang terkait dengan prodi ini
+        // (struktur baru: CPL langsung punya kode_prodi, tidak perlu pivot cpl_pl)
+        CapaianProfilLulusan::where('kode_prodi', $kode_prodi)->delete();
 
-        DB::table('cpl_pl')->whereIn('id_pl', $plIds)->delete();
-        ProfilLulusan::whereIn('id_pl', $plIds)->delete();
-
-        foreach ($cplIds as $id_cpl) {
-            $stillHasRelation = DB::table('cpl_pl')->where('id_cpl', $id_cpl)->exists();
-            if (!$stillHasRelation) {
-                CapaianProfilLulusan::where('id_cpl', $id_cpl)->delete();
-            }
-        }
-
-        DB::table('prodis')->where('kode_prodi', $kode_prodi)->delete();
+        // Hapus Prodi
+        Prodi::where('kode_prodi', $kode_prodi)->delete();
 
         return redirect()->route('admin.prodi.index')->with('sukses', 'Prodi berhasil dihapus beserta data terkait.');
     }

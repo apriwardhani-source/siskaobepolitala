@@ -119,6 +119,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+        Route::post('/users/import', [AdminUserController::class, 'importDosen'])->name('users.import');
+        Route::get('/users/download-template', [AdminUserController::class, 'downloadTemplate'])->name('users.downloadTemplate');
         Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('users.update');
         Route::get('/users/{id}/detail', [AdminUserController::class, 'details'])->name('users.detail');
