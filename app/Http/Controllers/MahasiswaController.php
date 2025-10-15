@@ -22,12 +22,12 @@ class MahasiswaController extends Controller
         $query = Mahasiswa::query();
         
         if ($tahun_kurikulum) {
-            $query->where('id_tahun_angkatan', $tahun_kurikulum);  // Mapping input ke kolom database
+            $query->where('id_tahun_kurikulum', $tahun_kurikulum);
         }
         
         $query->where('kode_prodi', $kode_prodi);
         
-        $mahasiswas = $query->with(['prodi', 'tahunAngkatan'])->get();
+        $mahasiswas = $query->with(['prodi', 'tahunKurikulum'])->get();
         $tahun_angkatans = Tahun::all();
         // Hanya prodi user yang tampil di dropdown
         $prodis = collect([Prodi::where('kode_prodi', $kode_prodi)->first()]);
@@ -51,17 +51,17 @@ class MahasiswaController extends Controller
         $request->validate([
             'nim' => 'required|unique:mahasiswas,nim',
             'nama_mahasiswa' => 'required',
-            'id_tahun_kurikulum' => 'required',  // Terima input dengan nama tahun_kurikulum
+            'id_tahun_kurikulum' => 'required',
+            'status' => 'required|in:aktif,lulus,cuti,keluar',
         ]);
 
-        // Pastikan hanya bisa menambahkan mahasiswa untuk prodi user sendiri
-        // Konversi input tahun_kurikulum ke tahun_angkatan untuk menyimpan ke kolom database
-        $request->merge([
+        Mahasiswa::create([
+            'nim' => $request->nim,
+            'nama_mahasiswa' => $request->nama_mahasiswa,
             'kode_prodi' => $user->kode_prodi,
-            'id_tahun_angkatan' => $request->id_tahun_kurikulum  // Mapping input ke kolom yang benar
+            'id_tahun_kurikulum' => $request->id_tahun_kurikulum,
+            'status' => $request->status,
         ]);
-
-        Mahasiswa::create($request->all());
 
         return redirect()->route('tim.mahasiswa.index')->with('success', 'Mahasiswa berhasil ditambahkan');
     }
@@ -85,21 +85,20 @@ class MahasiswaController extends Controller
         $request->validate([
             'nim' => 'required|unique:mahasiswas,nim,' . $id,
             'nama_mahasiswa' => 'required',
-            'id_tahun_kurikulum' => 'required',  // Terima input dengan nama tahun_kurikulum
+            'id_tahun_kurikulum' => 'required',
+            'status' => 'required|in:aktif,lulus,cuti,keluar',
         ]);
 
         $mahasiswa = Mahasiswa::where('id', $id)
                     ->where('kode_prodi', $user->kode_prodi)
                     ->firstOrFail();
-                    
-        // Pastikan hanya bisa update mahasiswa untuk prodi user sendiri
-        // Konversi input tahun_kurikulum ke tahun_angkatan untuk menyimpan ke kolom database
-        $request->merge([
-            'kode_prodi' => $user->kode_prodi,
-            'id_tahun_angkatan' => $request->id_tahun_kurikulum  // Mapping input ke kolom yang benar
-        ]);
         
-        $mahasiswa->update($request->all());
+        $mahasiswa->update([
+            'nim' => $request->nim,
+            'nama_mahasiswa' => $request->nama_mahasiswa,
+            'id_tahun_kurikulum' => $request->id_tahun_kurikulum,
+            'status' => $request->status,
+        ]);
 
         return redirect()->route('tim.mahasiswa.index')->with('success', 'Mahasiswa berhasil diperbarui');
     }

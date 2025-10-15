@@ -24,10 +24,8 @@ class TimBobotController extends Controller
 
         $query = DB::table('bobots')
             ->join('capaian_profil_lulusans as cpl', 'bobots.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'bobots.id_bobot',
                 'bobots.id_cpl',
@@ -35,12 +33,12 @@ class TimBobotController extends Controller
                 'bobots.bobot',
                 'cpl.kode_cpl',
                 'cpl.deskripsi_cpl',
-                'pl.id_tahun',
+                'cpl.id_tahun',
                 'prodis.nama_prodi'
             );
 
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $bobots = $query->orderBy('bobots.id_cpl')->get();
@@ -57,25 +55,37 @@ class TimBobotController extends Controller
 
         $kodeProdi = $user->kode_prodi;
 
-        $cpls = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+        $capaianProfilLulusans = DB::table('capaian_profil_lulusans as cpl')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
             ->distinct()
             ->get();
 
-        return view('tim.bobot.create', compact('cpls'));
+        return view('tim.bobot.create', compact('capaianProfilLulusans'));
     }
 
     public function getmkbycpl(Request $request)
     {
-        $id_cpl = $request->id_cpl;
+        // Support both single id_cpl and array id_cpls
+        $id_cpls = $request->id_cpls ?? [$request->id_cpl];
+        
+        if (empty($id_cpls) || !is_array($id_cpls)) {
+            return response()->json([]);
+        }
 
+        $id_cpl = $id_cpls[0]; // Get first CPL for bobot (bobot is per CPL)
+
+        // Get MK yang terkait dengan CPL dan belum punya bobot
         $mks = DB::table('cpl_mk')
             ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
+            ->leftJoin('bobots', function($join) use ($id_cpl) {
+                $join->on('mk.kode_mk', '=', 'bobots.kode_mk')
+                     ->where('bobots.id_cpl', '=', $id_cpl);
+            })
             ->where('cpl_mk.id_cpl', $id_cpl)
+            ->whereNull('bobots.id_bobot') // Only MK that don't have bobot yet
             ->select('mk.kode_mk', 'mk.nama_mk')
+            ->distinct()
             ->get();
 
         return response()->json($mks);
@@ -85,15 +95,21 @@ class TimBobotController extends Controller
     {
         $request->validate([
             'id_cpl' => 'required',
-            'bobots' => 'required|array',
-            'bobots.*' => 'required|numeric|min:0|max:100',
+            'bobot' => 'required|array',
+            'bobot.*' => 'required|numeric|min:0|max:100',
         ]);
 
-        foreach ($request->bobots as $kode_mk => $bobot) {
+        // Validate total bobot must be 100
+        $totalBobot = array_sum($request->bobot);
+        if ($totalBobot != 100) {
+            return back()->withErrors(['bobot' => "Total bobot harus 100%. Saat ini: {$totalBobot}%"])->withInput();
+        }
+
+        foreach ($request->bobot as $kode_mk => $bobotValue) {
             Bobot::create([
                 'id_cpl' => $request->id_cpl,
                 'kode_mk' => $kode_mk,
-                'bobot' => $bobot,
+                'bobot' => $bobotValue,
             ]);
         }
 
@@ -109,22 +125,21 @@ class TimBobotController extends Controller
 
         $kodeProdi = $user->kode_prodi;
         $bobot = Bobot::findOrFail($id_bobot);
+        $id_cpl = $bobot->id_cpl;
 
-        $cpls = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
-            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
-            ->distinct()
-            ->get();
-
-        $mks = DB::table('cpl_mk')
+        $mataKuliahs = DB::table('cpl_mk')
             ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('cpl_mk.id_cpl', $bobot->id_cpl)
+            ->where('cpl_mk.id_cpl', $id_cpl)
             ->select('mk.kode_mk', 'mk.nama_mk')
             ->get();
 
-        return view('tim.bobot.edit', compact('bobot', 'cpls', 'mks'));
+        // Get existing bobots for this CPL
+        $existingBobots = DB::table('bobots')
+            ->where('id_cpl', $id_cpl)
+            ->pluck('bobot', 'kode_mk')
+            ->toArray();
+
+        return view('tim.bobot.edit', compact('id_cpl', 'mataKuliahs', 'existingBobots'));
     }
 
     public function update(Request $request, string $id_bobot)
@@ -154,10 +169,8 @@ class TimBobotController extends Controller
 
         $mk_terkait = DB::table('cpl_mk')
             ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
-            ->join('cpl_pl', 'cpl_mk.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->join('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->where('mata_kuliahs.kode_prodi', $kodeProdi)
             ->where('cpl_mk.id_cpl', $id_cpl)
             ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
             ->get();

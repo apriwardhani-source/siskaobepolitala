@@ -16,7 +16,7 @@ class Mahasiswa extends Model
         'nim',
         'nama_mahasiswa',
         'kode_prodi',
-        'id_tahun_angkatan',
+        'id_tahun_kurikulum',
         'status'
     ];
 
@@ -25,9 +25,9 @@ class Mahasiswa extends Model
         return $this->belongsTo(Prodi::class, 'kode_prodi', 'kode_prodi');
     }
 
-    public function tahunAngkatan()
+    public function tahunKurikulum()
     {
-        return $this->belongsTo(Tahun::class, 'id_tahun_angkatan', 'id_tahun');
+        return $this->belongsTo(Tahun::class, 'id_tahun_kurikulum', 'id_tahun');
     }
 
     public function nilai()

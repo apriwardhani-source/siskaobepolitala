@@ -16,10 +16,10 @@ class MataKuliah extends Model
     protected $fillable = [
         'kode_mk',
         'nama_mk',
-        'jenis_mk',
         'sks_mk',
         'semester_mk',
-        'kompetensi_mk'
+        'kompetensi_mk',
+        'kode_prodi'
     ];
 
     public function bahankajians()

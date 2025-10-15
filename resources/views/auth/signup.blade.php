@@ -84,7 +84,7 @@
             <select name="role" class="w-full border border-gray-300 py-2 px-3 rounded focus:outline-none focus:ring-2 focus:ring-[#3094c6] " required>
               <option value="">-- Pilih Peran --</option>
               <option value="kaprodi" {{ old('role') == 'kaprodi' ? 'selected' : '' }}>Kaprodi</option>
-              <option value="tim" {{ old('role') == 'tim' ? 'selected' : '' }}>Tim</option>
+              <option value="tim" {{ old('role') == 'tim' ? 'selected' : '' }}>Admin Prodi</option>
             </select>
           </div>
 

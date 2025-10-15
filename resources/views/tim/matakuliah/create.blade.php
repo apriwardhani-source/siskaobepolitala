@@ -41,11 +41,6 @@
                 <input type="text" name="nama_mk" id="nama_mk" class="mt-1 w-full p-3 border border-black rounded-lg ">
             </div>
             <div class="mt-3">
-                <label for="jenis_mk" class="text-xl font-semibold">Jenis MataKuliah</label>
-                <input type="text" name="jenis_mk" id="jenis_mk"
-                    class="mt-1 w-full p-3 border border-black rounded-lg ">
-            </div>
-            <div class="mt-3">
                 <label for="sks_mk" class="text-xl font-semibold">SKS MataKuliah</label>
                 <input type="number" name="sks_mk" id="sks_mk" class="mt-1 w-full p-3 border border-black rounded-lg ">
             </div>

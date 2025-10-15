@@ -348,6 +348,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/organisasimk', [TimMataKuliahController::class, 'organisasi_mk'])->name('matakuliah.organisasimk');
         Route::get('/pemetaancplmkbk', [TimPemetaanCplMkBkController::class, 'index'])->name('pemetaancplmkbk.index');
         Route::get('/export/excel', [TimExportController::class, 'export'])->name('export.excel');
+        Route::get('/mahasiswa', [\App\Http\Controllers\MahasiswaController::class, 'index'])->name('mahasiswa.index');
+        Route::get('/mahasiswa/create', [\App\Http\Controllers\MahasiswaController::class, 'create'])->name('mahasiswa.create');
+        Route::post('/mahasiswa', [\App\Http\Controllers\MahasiswaController::class, 'store'])->name('mahasiswa.store');
+        Route::get('/mahasiswa/{id}/edit', [\App\Http\Controllers\MahasiswaController::class, 'edit'])->name('mahasiswa.edit');
+        Route::put('/mahasiswa/{id}', [\App\Http\Controllers\MahasiswaController::class, 'update'])->name('mahasiswa.update');
+        Route::delete('/mahasiswa/{id}', [\App\Http\Controllers\MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
         Route::get('/capaianpembelajaranmatakuliah', [TimCapaianPembelajaranMatakuliahController::class, 'index'])->name('capaianpembelajaranmatakuliah.index');
         Route::get('/capaianpembelajaranmatakuliah/create', [TimCapaianPembelajaranMataKuliahController::class, 'create'])->name('capaianpembelajaranmatakuliah.create');
         Route::post('/capaianpembelajaranmatakuliah', [TimCapaianPembelajaranMataKuliahController::class, 'store'])->name('capaianpembelajaranmatakuliah.store');

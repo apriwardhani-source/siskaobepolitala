@@ -145,38 +145,29 @@
             </div>
         </div>
         
-        <!-- Reports & Analysis -->
+        <!-- Pemetaan -->
         <div class="relative dropdown">
             <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
-                Laporan <i class="bi bi-chevron-down ml-1"></i>
+                Pemetaan <i class="bi bi-chevron-down ml-1"></i>
             </button>
-            <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64 max-h-96 overflow-y-auto">
-                <a href="{{ route('kaprodi.pemenuhancpl.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-percent mr-2"></i>5. Pemenuhan CPL
-                </a>
+            <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
                 <a href="{{ route('kaprodi.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-list-check mr-2"></i>6. CPMK
+                    <i class="bi bi-bookmark mr-2"></i>CPMK
                 </a>
                 <a href="{{ route('kaprodi.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-node-plus mr-2"></i>7. CPL - CPMK - MK
-                </a>
-                <a href="{{ route('kaprodi.pemetaancplcpmkmk.pemenuhancplcpmkmk') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-pie-chart mr-2"></i>8. Pemenuhan CPL-CPMK-MK
+                    <i class="bi bi-diagram-3 mr-2"></i>Pemetaan CPL-CPMK-MK
                 </a>
                 <a href="{{ route('kaprodi.pemetaancplcpmkmk.pemetaanmkcplcpmk') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-graph-up mr-2"></i>9. CPL - MK - CPMK
+                    <i class="bi bi-graph-up mr-2"></i>Pemetaan MK-CPL-CPMK
                 </a>
                 <a href="{{ route('kaprodi.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-list-ol mr-2"></i>10. SUB CPMK
+                    <i class="bi bi-bookmark-check mr-2"></i>Sub CPMK
                 </a>
                 <a href="{{ route('kaprodi.pemetaanmkcpmksubcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-diagram-2 mr-2"></i>11. MK - CPMK - SubCPMK
+                    <i class="bi bi-diagram-2 mr-2"></i>Pemetaan MK-CPMK-SubCPMK
                 </a>
                 <a href="{{ route('kaprodi.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-speedometer2 mr-2"></i>12. Bobot
-                </a>
-                <a href="{{ route('kaprodi.notes.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-sticky mr-2"></i>13. Catatan
+                    <i class="bi bi-speedometer2 mr-2"></i>Bobot CPL-MK
                 </a>
             </div>
         </div>

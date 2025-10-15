@@ -81,38 +81,38 @@
                     Data belum dibuat untuk prodi ini.
                 </div>
             @else
-                <table class="w-full border border-gray-300 shadow-md rounded-lg overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-300 shadow-md">
                     <thead class="bg-green-800 text-white border-b">
                         <tr>
-                            <th class="py-2 px-3 text-center w-3 font-bold uppercase truncate">No</th>
-                            <th class="py-2 px-3 text-center font-bold uppercase">Kode MK</th>
-                            <th class="py-2 px-3 text-center font-bold uppercase">Nama MK</th>
-                            <th class="py-2 px-3 text-center font-bold uppercase">Jenis MK</th>
-                            <th class="py-2 px-3text-center font-bold uppercase">Sks MK</th>
+                            <th class="py-2 px-3 text-center w-16 font-bold uppercase">No</th>
+                            <th class="py-2 px-3 text-center font-bold uppercase whitespace-nowrap">Kode MK</th>
+                            <th class="py-2 px-3 text-center font-bold uppercase min-w-[200px]">Nama MK</th>
+                            <th class="py-2 px-3 text-center font-bold uppercase whitespace-nowrap">SKS</th>
                             @for ($i = 1; $i <= 8; $i++)
-                                <th class="py-2 px-3">Smstr {{ $i }}</th>
+                                <th class="py-2 px-3 text-center whitespace-nowrap">Smt {{ $i }}</th>
                             @endfor
-                            <th class="py-2 px-3 text-center font-bold uppercase">kompetensi MK</th>
-                            <th class="py-2 px-3 text-center font-bold uppercase">Aksi</th>
+                            <th class="py-2 px-3 text-center font-bold uppercase whitespace-nowrap">Kompetensi</th>
+                            <th class="py-2 px-3 text-center font-bold uppercase whitespace-nowrap min-w-[150px] sticky right-0 bg-green-800">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($mata_kuliahs as $index => $mata_kuliah)
                             <tr class="{{ $index % 2 == 0 ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 border-b">
-                                <td class="py-2 px-3 text-center">{{ $index + 1 }}</td>
-                                <td class="py-2 px-3 text-center">{{ $mata_kuliah->kode_mk }}</td>
-                                <td class="py-2 px-3 text-center">{{ $mata_kuliah->nama_mk }}</td>
-                                <td class="py-2 px-3 text-center">{{ $mata_kuliah->jenis_mk }}</td>
-                                <td class="py-2 px-3 text-center">{{ $mata_kuliah->sks_mk }}</td>
+                                <td class="py-2 px-3 text-center whitespace-nowrap">{{ $index + 1 }}</td>
+                                <td class="py-2 px-3 text-center whitespace-nowrap">{{ $mata_kuliah->kode_mk }}</td>
+                                <td class="py-2 px-3">{{ $mata_kuliah->nama_mk }}</td>
+                                <td class="py-2 px-3 text-center whitespace-nowrap">{{ $mata_kuliah->sks_mk }}</td>
                                 @for ($i = 1; $i <= 8; $i++)
-                                    <td class="py-2 px-4 items-center text-center">
+                                    <td class="py-2 px-3 items-center text-center whitespace-nowrap">
                                         @if ($mata_kuliah->semester_mk == $i)
                                             ✔️
                                         @endif
                                     </td>
                                 @endfor
-                                <td class="py-2 px-3 text-center">{{ $mata_kuliah->kompetensi_mk }}</td>
-                                <td class="py-2 px-3 flex justify-center items-center space-x-2">
+                                <td class="py-2 px-3 text-center whitespace-nowrap">{{ $mata_kuliah->kompetensi_mk }}</td>
+                                <td class="py-2 px-3 sticky right-0 {{ $index % 2 == 0 ? 'bg-gray-100' : 'bg-white' }}">
+                                    <div class="flex justify-center items-center space-x-2">
                                     <a href="{{ route('tim.matakuliah.detail', $mata_kuliah->kode_mk) }}"
                                         class="bg-gray-600 hover:bg-gray-700 text-white p-2 rounded-md inline-flex items-center justify-center"
                                         title="Detail">
@@ -144,11 +144,13 @@
                                             </svg>
                                         </button>
                                     </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                </div>
             @endif
         </div>
     </div>

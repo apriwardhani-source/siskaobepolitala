@@ -109,7 +109,7 @@
                                     <td class="px-4 py-4 text-center text-sm">{{ $mhs->nim }}</td>
                                     <td class="px-4 py-4 text-sm text-justify">{{ $mhs->nama_mahasiswa }}</td>
                                     <td class="px-4 py-4 text-sm text-center">{{ $mhs->prodi ? $mhs->prodi->nama_prodi : '-' }}</td>
-                                    <td class="px-4 py-4 text-sm text-center">{{ $mhs->tahunAngkatan ? $mhs->tahunAngkatan->tahun : '-' }}</td>
+                                    <td class="px-4 py-4 text-sm text-center">{{ $mhs->tahunKurikulum ? $mhs->tahunKurikulum->tahun : '-' }}</td>
                                     <td class="px-4 py-4 text-sm text-center">
                                         @if($mhs->status == 'aktif')
                                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Aktif</span>

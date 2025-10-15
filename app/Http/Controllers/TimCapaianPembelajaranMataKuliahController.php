@@ -26,16 +26,14 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
     $query = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
         ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
         ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-        ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-        ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-        ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-        ->where('prodis.kode_prodi', $kodeProdi)
+        ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+        ->where('cpl.kode_prodi', $kodeProdi)
         ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
         ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
         ->orderBy('cpmk.kode_cpmk', 'asc');
 
     if ($id_tahun) {
-        $query->where('pl.id_tahun', $id_tahun);
+        $query->where('cpl.id_tahun', $id_tahun);
     }
 
     // ✅ ubah variabel jadi cpmks
@@ -55,19 +53,13 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $kodeProdi = $user->kode_prodi;
 
         $cpls = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
             ->distinct()
             ->get();
 
         $mks = DB::table('mata_kuliahs as mk')
-            ->join('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
-            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('mk.kode_prodi', $kodeProdi)
             ->select('mk.kode_mk', 'mk.nama_mk')
             ->distinct()
             ->get();
@@ -77,12 +69,17 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
 
     public function getMKByCPL(Request $request)
     {
-        $id_cpl = $request->id_cpl;
+        $id_cpls = $request->id_cpls;
+
+        if (empty($id_cpls) || !is_array($id_cpls)) {
+            return response()->json([]);
+        }
 
         $mks = DB::table('cpl_mk')
             ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('cpl_mk.id_cpl', $id_cpl)
+            ->whereIn('cpl_mk.id_cpl', $id_cpls)
             ->select('mk.kode_mk', 'mk.nama_mk')
+            ->distinct()
             ->get();
 
         return response()->json($mks);
@@ -93,8 +90,10 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $request->validate([
             'kode_cpmk' => 'required|string',
             'deskripsi_cpmk' => 'required|string',
-            'id_cpl' => 'required|array',
-            'kode_mk' => 'required|array',
+            'id_cpls' => 'required|array|min:1',
+            'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl',
+            'selected_mks' => 'required|array|min:1',
+            'selected_mks.*' => 'exists:mata_kuliahs,kode_mk',
         ]);
 
         $cpmk = CapaianPembelajaranMataKuliah::create([
@@ -102,14 +101,14 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
             'deskripsi_cpmk' => $request->deskripsi_cpmk,
         ]);
 
-        foreach ($request->id_cpl as $id_cpl) {
+        foreach ($request->id_cpls as $id_cpl) {
             DB::table('cpl_cpmk')->insert([
                 'id_cpmk' => $cpmk->id_cpmk,
                 'id_cpl' => $id_cpl,
             ]);
         }
 
-        foreach ($request->kode_mk as $kode_mk) {
+        foreach ($request->selected_mks as $kode_mk) {
             DB::table('cpmk_mk')->insert([
                 'id_cpmk' => $cpmk->id_cpmk,
                 'kode_mk' => $kode_mk,
@@ -130,27 +129,21 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $cpmk = CapaianPembelajaranMataKuliah::findOrFail($id_cpmk);
 
         $cpls = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
             ->distinct()
             ->get();
 
         $mks = DB::table('mata_kuliahs as mk')
-            ->join('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
-            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('mk.kode_prodi', $kodeProdi)
             ->select('mk.kode_mk', 'mk.nama_mk')
             ->distinct()
             ->get();
 
-        $selectedCPLs = DB::table('cpl_cpmk')->where('id_cpmk', $id_cpmk)->pluck('id_cpl')->toArray();
+        $selectedCpls = DB::table('cpl_cpmk')->where('id_cpmk', $id_cpmk)->pluck('id_cpl')->toArray();
         $selectedMKs = DB::table('cpmk_mk')->where('id_cpmk', $id_cpmk)->pluck('kode_mk')->toArray();
 
-        return view('tim.capaianpembelajaranmatakuliah.edit', compact('cpmk', 'cpls', 'mks', 'selectedCPLs', 'selectedMKs'));
+        return view('tim.capaianpembelajaranmatakuliah.edit', compact('cpmk', 'cpls', 'mks', 'selectedCpls', 'selectedMKs'));
     }
 
     public function update(Request $request, $id_cpmk)
@@ -158,8 +151,10 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $request->validate([
             'kode_cpmk' => 'required|string',
             'deskripsi_cpmk' => 'required|string',
-            'id_cpl' => 'required|array',
-            'kode_mk' => 'required|array',
+            'id_cpls' => 'required|array|min:1',
+            'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl',
+            'selected_mks' => 'required|array|min:1',
+            'selected_mks.*' => 'exists:mata_kuliahs,kode_mk',
         ]);
 
         $cpmk = CapaianPembelajaranMataKuliah::findOrFail($id_cpmk);
@@ -169,7 +164,7 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         ]);
 
         DB::table('cpl_cpmk')->where('id_cpmk', $id_cpmk)->delete();
-        foreach ($request->id_cpl as $id_cpl) {
+        foreach ($request->id_cpls as $id_cpl) {
             DB::table('cpl_cpmk')->insert([
                 'id_cpmk' => $id_cpmk,
                 'id_cpl' => $id_cpl,
@@ -177,7 +172,7 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         }
 
         DB::table('cpmk_mk')->where('id_cpmk', $id_cpmk)->delete();
-        foreach ($request->kode_mk as $kode_mk) {
+        foreach ($request->selected_mks as $kode_mk) {
             DB::table('cpmk_mk')->insert([
                 'id_cpmk' => $id_cpmk,
                 'kode_mk' => $kode_mk,
@@ -193,11 +188,8 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
 
         $akses = DB::table('cpl_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
             ->where('cpl_cpmk.id_cpmk', $id_cpmk)
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->exists();
 
         if (!$akses) {

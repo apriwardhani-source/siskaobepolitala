@@ -26,15 +26,13 @@ class TimSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sc.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
             ->select('sc.*', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'cpmk.kode_cpmk')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->orderBy('sc.sub_cpmk');
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $subcpmks = $query->get();
@@ -58,10 +56,8 @@ class TimSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpmk_mk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
             ->where('cpmk_mk.id_cpmk', $id_cpmk)
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('mk.kode_mk', 'mk.nama_mk')
             ->distinct()
             ->orderBy('mk.kode_mk')
@@ -77,10 +73,8 @@ class TimSubCpmkController extends Controller
         $cpmks = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
             ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->distinct()
             ->orderBy('cpmk.kode_cpmk')
             ->get();
@@ -128,10 +122,8 @@ class TimSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sc.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
             ->where('sc.id_sub_cpmk', $id_sub_cpmk->id_sub_cpmk)
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->exists();
 
         if (!$akses) {
@@ -141,9 +133,7 @@ class TimSubCpmkController extends Controller
         $cpmks = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
             ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk')
             ->distinct()
             ->get();
@@ -184,11 +174,9 @@ class TimSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('mata_kuliahs as mk', 'sub.kode_mk', '=', 'mk.kode_mk') // <-- ambil dari sub_cpmk langsung
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('mata_kuliahs as mk', 'sub.kode_mk', '=', 'mk.kode_mk')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
@@ -221,9 +209,7 @@ class TimSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sc.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->where('sc.id_sub_cpmk', $id)
             ->select(
                 'sc.id_sub_cpmk',
@@ -250,10 +236,8 @@ class TimSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sc.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
             ->where('sc.id_sub_cpmk', $id)
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->exists();
 
         if (!$akses) {
