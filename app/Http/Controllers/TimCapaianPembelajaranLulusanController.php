@@ -54,17 +54,21 @@ class TimCapaianPembelajaranLulusanController extends Controller
     }
 
     public function create()
-    {
-        $user = Auth::user();
-        if (!$user || !$user->kode_prodi) {
-            abort(403);
-        }
-
-        $kodeProdi = $user->kode_prodi;
-        $profilLulusans = ProfilLulusan::where('kode_prodi', $kodeProdi)->get();
-
-        return view('tim.capaianpembelajaranlulusan.create', compact('profilLulusans'));
+{
+    $user = Auth::user();
+    if (!$user || !$user->kode_prodi) {
+        abort(403);
     }
+
+    $kodeProdi = $user->kode_prodi;
+    $profilLulusans = ProfilLulusan::where('kode_prodi', $kodeProdi)->get();
+
+    // 🔧 Tambahan penting:
+    $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+    return view('tim.capaianpembelajaranlulusan.create', compact('profilLulusans', 'tahun_tersedia'));
+}
+
 
     public function store(Request $request)
     {

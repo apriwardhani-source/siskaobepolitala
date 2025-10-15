@@ -12,36 +12,38 @@ use App\Models\CapaianProfilLulusan;
 class TimCapaianPembelajaranMataKuliahController extends Controller
 {
     public function index()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        if (!$user || !$user->kode_prodi) {
-            abort(403);
-        }
-
-        $kodeProdi = $user->kode_prodi;
-        $id_tahun = request()->get('id_tahun');
-        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-
-        $query = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
-            ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
-            ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
-            ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
-            ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
-            ->orderBy('cpmk.kode_cpmk', 'asc');
-
-        if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
-        }
-
-        $capaianpembelajaranmatakuliahs = $query->get();
-
-        return view("tim.capaianpembelajaranmatakuliah.index", compact("capaianpembelajaranmatakuliahs", "id_tahun", "tahun_tersedia"));
+    if (!$user || !$user->kode_prodi) {
+        abort(403);
     }
+
+    $kodeProdi = $user->kode_prodi;
+    $id_tahun = request()->get('id_tahun');
+    $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+    $query = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
+        ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+        ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+        ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
+        ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
+        ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+        ->where('prodis.kode_prodi', $kodeProdi)
+        ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
+        ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
+        ->orderBy('cpmk.kode_cpmk', 'asc');
+
+    if ($id_tahun) {
+        $query->where('pl.id_tahun', $id_tahun);
+    }
+
+    // ✅ ubah variabel jadi cpmks
+    $cpmks = $query->get();
+
+    return view("tim.capaianpembelajaranmatakuliah.index", compact("cpmks", "id_tahun", "tahun_tersedia"));
+}
+
 
     public function create()
     {
