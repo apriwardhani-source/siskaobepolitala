@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CapaianProfilLulusan;
 use App\Models\BahanKajian;
+use App\Imports\MataKuliahImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TimMataKuliahController extends Controller
 {
@@ -84,6 +86,11 @@ class TimMataKuliahController extends Controller
 
         // Get tahun kurikulum
         $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+        // TEMPORARY: Test plain form tanpa Alpine
+        if (request()->has('test')) {
+            return view("tim.matakuliah.test-create", compact("capaianProfilLulusans"));
+        }
 
         return view("tim.matakuliah.create", compact("capaianProfilLulusans", "dosens", "tahuns"));
     }
@@ -360,5 +367,72 @@ class TimMataKuliahController extends Controller
         });
 
         return view('tim.matakuliah.organisasimk', compact('organisasiMK', 'kodeProdi', 'id_tahun', 'tahun_tersedia'));
+    }
+
+    public function importMataKuliah(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        try {
+            Excel::import(new MataKuliahImport(), $request->file('file'));
+
+            return redirect()->route('tim.matakuliah.index')
+                ->with('success', 'Data mata kuliah berhasil diimport!');
+                
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            
+            return redirect()->route('tim.matakuliah.index')
+                ->with('error', 'Gagal import: ' . implode(' | ', array_slice($errorMessages, 0, 3)));
+                
+        } catch (\Exception $e) {
+            return redirect()->route('tim.matakuliah.index')
+                ->with('error', 'Gagal import data: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadTemplateMataKuliah()
+    {
+        $filename = 'template_import_matakuliah.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $columns = ['kode_mk', 'nama_mk', 'sks_mk', 'semester_mk', 'kompetensi_mk', 'jenis_mk', 'kode_cpl'];
+        $sampleData = [
+            ['MK001', 'Pemrograman Web', '3', '3', 'utama', 'Wajib', 'CPL01,CPL02'],
+            ['MK002', 'Basis Data', '4', '4', 'utama', 'Wajib', 'CPL03'],
+            ['MK003', 'PKL (Praktik Kerja Lapangan)', '20', '7', 'utama', 'Wajib', 'CPL01'],
+        ];
+
+        $callback = function() use ($columns, $sampleData) {
+            $file = fopen('php://output', 'w');
+            
+            // UTF-8 BOM untuk Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header
+            fputcsv($file, $columns);
+            
+            // Sample data
+            foreach ($sampleData as $row) {
+                fputcsv($file, $row);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

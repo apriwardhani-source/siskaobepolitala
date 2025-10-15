@@ -75,17 +75,12 @@ class AdminMataKuliahController extends Controller
     {
         $capaianProfilLulusans = CapaianProfilLulusan::orderBy('kode_cpl', 'asc')->get();
 
-        $bahanKajians = DB::table('bahan_kajians')
-            ->join('cpl_bk', 'bahan_kajians.id_bk', '=', 'cpl_bk.id_bk')
-            ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
-            ->select('kode_bk', 'bahan_kajians.id_bk', 'bahan_kajians.nama_bk', 'bahan_kajians.deskripsi_bk', 'prodis.nama_prodi', 'tahun.tahun')
-            ->orderBy('bahan_kajians.kode_bk', 'asc')
-            ->distinct()
-            ->get();
+        // TEMPORARY: Test plain form
+        if (request()->has('test')) {
+            return view("admin.matakuliah.test-create",  compact("capaianProfilLulusans"));
+        }
 
-        return view("admin.matakuliah.create",  compact("capaianProfilLulusans", "bahanKajians"));
+        return view("admin.matakuliah.create",  compact("capaianProfilLulusans"));
     }
 
     public function store(Request $request)
@@ -97,28 +92,20 @@ class AdminMataKuliahController extends Controller
             'sks_mk' => 'required|integer',
             'semester_mk' => 'required|integer|in:1,2,3,4,5,6,7,8',
             'kompetensi_mk' => 'required|string|in:pendukung,utama',
+            'id_cpls' => 'required|array|min:1',
+            'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl'
         ]);
+
         $mk = MataKuliah::create($request->only(['kode_mk', 'nama_mk', 'jenis_mk', 'sks_mk', 'semester_mk', 'kompetensi_mk']));
 
-        $cpls = DB::table('cpl_bk')
-            ->whereIn('id_bk', $request->id_bks)
-            ->select('id_cpl')
-            ->distinct()
-            ->pluck('id_cpl');
-
-        foreach ($cpls as $id_cpl) {
+        // Insert CPL yang dipilih ke tabel cpl_mk
+        foreach ($request->id_cpls as $id_cpl) {
             DB::table('cpl_mk')->insert([
                 'kode_mk' => $mk->kode_mk,
                 'id_cpl' => $id_cpl
             ]);
         }
 
-        foreach ($request->id_bks as $id_bk) {
-            DB::table('bk_mk')->insert([
-                'kode_mk' => $mk->kode_mk,
-                'id_bk' => $id_bk
-            ]);
-        }
         return redirect()->route('admin.matakuliah.index')->with('success', 'Mata kuliah berhasil ditambahkan!');
     }
 

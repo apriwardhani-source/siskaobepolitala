@@ -25,13 +25,13 @@
                         <label class="flex items-start">
                             <input type="checkbox" name="id_cpls[]" value="{{ $cpl->id_cpl }}" 
                                 {{ in_array($cpl->id_cpl, $selectedCplIds ?? []) ? 'checked' : '' }}
-                                class="mt-1 mr-2" required>
+                                class="mt-1 mr-2">
                             <span class="text-sm">{{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}</span>
                         </label>
                     </div>
                 @endforeach
             </div>
-            <p class="italic text-red-700 mb-3">*Pilih minimal satu CPL.</p>
+            <p class="italic text-red-700 mb-3">*Pilih minimal 1 CPL (validasi di server).</p>
 
             <label for="kode_mk" class="text-xl font-semibold">Kode MK</label>
             <input type="text" name="kode_mk" id="kode_mk" value="{{ old('kode_mk', $matakuliah->kode_mk) }}"

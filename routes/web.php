@@ -343,6 +343,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pemetaanbkmk', [TimPemetaanBkMkController::class, 'index'])->name('pemetaanbkmk.index');
         Route::get('/matakuliah/create', [TimMataKuliahController::class, 'create'])->name('matakuliah.create');
         Route::post('/matakuliah', [TimMataKuliahController::class, 'store'])->name('matakuliah.store');
+        Route::post('/matakuliah/import', [TimMataKuliahController::class, 'importMataKuliah'])->name('matakuliah.import');
+        Route::get('/matakuliah/download-template', [TimMataKuliahController::class, 'downloadTemplateMataKuliah'])->name('matakuliah.download-template');
         Route::get('/matakuliah/{matakuliah}/edit', [TimMataKuliahController::class, 'edit'])->name('matakuliah.edit');
         Route::put('/matakuliah/{matakuliah}', [TimMataKuliahController::class, 'update'])->name('matakuliah.update');
         Route::get('/matakuliah/{matakuliah}/detail', [TimMataKuliahController::class, 'detail'])->name('matakuliah.detail');

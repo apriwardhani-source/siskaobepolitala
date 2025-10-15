@@ -28,11 +28,29 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div id="alertError" class="bg-red-500 text-white px-4 py-2 rounded-md mb-4 text-center relative">
+                <span class="font-bold">{{ session('error') }}</span>
+                <button onclick="document.getElementById('alertError').style.display='none'"
+                    class="absolute top-1 right-3 text-white font-bold text-lg">
+                    &times;
+                </button>
+            </div>
+        @endif
+
         <div class="flex justify-between mb-4">
             <div class="space-x-2">
-                <a href="{{ route('tim.matakuliah.create') }}"
+                <a href="{{ route('tim.matakuliah.download-template') }}"
                     class="bg-green-600 inline-flex text-white font-bold px-4 py-2 rounded-md hover:bg-green-800">
-                    Tambah
+                    <i class="bi bi-download mr-2"></i> Template
+                </a>
+                <button onclick="document.getElementById('importModal').classList.remove('hidden')"
+                    class="bg-purple-600 inline-flex text-white font-bold px-4 py-2 rounded-md hover:bg-purple-800">
+                    <i class="bi bi-file-earmark-arrow-up mr-2"></i> Import
+                </button>
+                <a href="{{ route('tim.matakuliah.create') }}"
+                    class="bg-blue-600 inline-flex text-white font-bold px-4 py-2 rounded-md hover:bg-blue-800">
+                    <i class="bi bi-plus-circle mr-2"></i> Tambah
                 </a>
             </div>
             <select id="tahun" name="id_tahun"
@@ -168,4 +186,46 @@
             window.location.href = url;
         }
     </script>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Import Mata Kuliah</h3>
+                <button onclick="document.getElementById('importModal').classList.add('hidden')"
+                    class="text-gray-500 hover:text-gray-700">
+                    <i class="bi bi-x-lg text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
+                <p class="text-sm text-blue-800">
+                    <strong>Format file:</strong> Excel (.xlsx, .xls) atau CSV<br>
+                    <strong>Kolom:</strong> kode_mk, nama_mk, sks_mk, semester_mk, kompetensi_mk, jenis_mk, kode_cpl<br>
+                    <strong>Kode CPL:</strong> Pisahkan dengan koma jika lebih dari 1 (contoh: CPL01,CPL02)
+                </p>
+            </div>
+
+            <form action="{{ route('tim.matakuliah.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Pilih File Excel:</label>
+                    <input type="file" name="file" accept=".xlsx,.xls,.csv" required
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+
+                <div class="flex justify-end space-x-2">
+                    <button type="button" 
+                        onclick="document.getElementById('importModal').classList.add('hidden')"
+                        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-800">
+                        Upload & Import
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection

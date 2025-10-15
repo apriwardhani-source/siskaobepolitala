@@ -24,13 +24,13 @@
                     <div class="mb-2">
                         <label class="flex items-start">
                             <input type="checkbox" name="id_cpls[]" value="{{ $cpl->id_cpl }}" 
-                                class="mt-1 mr-2" required>
+                                class="mt-1 mr-2">
                             <span class="text-sm">{{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}</span>
                         </label>
                     </div>
                 @endforeach
             </div>
-            <p class="italic text-red-700 mb-3">*Pilih minimal satu CPL.</p>
+            <p class="italic text-red-700 mb-3">*Pilih minimal 1 CPL (validasi di server).</p>
 
             <div class="mt-3">
                 <label for="kode_mk" class="text-xl font-semibold">Kode Mata Kuliah</label>
@@ -70,7 +70,7 @@
             <!-- Tahun Kurikulum -->
             <div class="mt-3">
                 <label for="id_tahun" class="text-xl font-semibold">Tahun Kurikulum</label>
-                <select name="id_tahun" id="id_tahun" class="mt-1 w-full p-3 border border-black rounded-lg" required>
+                <select name="id_tahun" id="id_tahun" class="mt-1 w-full p-3 border border-black rounded-lg">
                     <option value="" selected disabled>Pilih Tahun Kurikulum</option>
                     @foreach($tahuns as $tahun)
                         <option value="{{ $tahun->id_tahun }}">{{ $tahun->tahun }}</option>

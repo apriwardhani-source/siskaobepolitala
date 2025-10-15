@@ -80,7 +80,7 @@
                 </a>
                 <a href="{{ route('admin.users.index', ['role' => 'tim']) }}" 
                    class="px-4 py-2 text-sm font-medium {{ $role == 'tim' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600 hover:text-gray-800' }}">
-                    Tim
+                    Admin Prodi
                     <span class="ml-1 px-2 py-0.5 text-xs rounded-full {{ $role == 'tim' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600' }}">
                         {{ $roleCounts['tim'] }}
                     </span>
