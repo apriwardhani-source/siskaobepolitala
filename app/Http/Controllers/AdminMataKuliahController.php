@@ -27,17 +27,18 @@ class AdminMataKuliahController extends Controller
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
+                'mk.jenis_mk',
                 'mk.sks_mk',
                 'mk.semester_mk',
                 'mk.kompetensi_mk',
                 'prodis.nama_prodi',
-                'tahun.tahun',
+                'tahun.tahun'
             )
             ->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
             ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
             ->leftJoin('prodis', 'mk.kode_prodi', '=', 'prodis.kode_prodi')
-            ->groupBy('mk.kode_mk', 'mk.nama_mk', 'mk.sks_mk', 'mk.semester_mk', 'mk.kompetensi_mk', 'prodis.nama_prodi', 'tahun.tahun');
+            ->groupBy('mk.kode_mk', 'mk.nama_mk', 'mk.jenis_mk', 'mk.sks_mk', 'mk.semester_mk', 'mk.kompetensi_mk', 'prodis.nama_prodi', 'tahun.tahun');
 
         if ($kode_prodi) {
             $query->where('mk.kode_prodi', $kode_prodi);
@@ -56,31 +57,24 @@ class AdminMataKuliahController extends Controller
         return view("admin.matakuliah.index", compact("mata_kuliahs", 'kode_prodi', 'prodis', 'id_tahun', 'tahun_tersedia', 'dataKosong'));
     }
 
-    public function getCplByBk(Request $request)
-    {
-        $id_bks = $request->id_bks ?? [];
-
-        $cpls = DB::table('cpl_bk')
-            ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-            ->whereIn('cpl_bk.id_bk', $id_bks)
-            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
-            ->distinct()
-            ->orderBy('cpl.kode_cpl')
-            ->get();
-
-        return response()->json($cpls);
-    }
+    // Method ini sudah tidak dipakai karena BK (Bahan Kajian) sudah dihapus
+    // CPL sekarang dipilih langsung saat create/edit Mata Kuliah
 
     public function create()
     {
         $capaianProfilLulusans = CapaianProfilLulusan::orderBy('kode_cpl', 'asc')->get();
+        $prodis = DB::table('prodis')->orderBy('nama_prodi')->get();
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        
+        // Get daftar dosen
+        $dosens = DB::table('users')
+            ->where('role', 'dosen')
+            ->where('status', 'approved')
+            ->select('id', 'name', 'nip', 'kode_prodi')
+            ->orderBy('name')
+            ->get();
 
-        // TEMPORARY: Test plain form
-        if (request()->has('test')) {
-            return view("admin.matakuliah.test-create",  compact("capaianProfilLulusans"));
-        }
-
-        return view("admin.matakuliah.create",  compact("capaianProfilLulusans"));
+        return view("admin.matakuliah.create", compact("capaianProfilLulusans", "prodis", "tahuns", "dosens"));
     }
 
     public function store(Request $request)
@@ -89,21 +83,24 @@ class AdminMataKuliahController extends Controller
             'kode_mk' => 'required|string|max:20|unique:mata_kuliahs,kode_mk',
             'nama_mk' => 'required|string|max:100',
             'jenis_mk' => 'required|string|max:100',
-            'sks_mk' => 'required|integer',
+            'sks_mk' => 'required|integer|min:1|max:24',
             'semester_mk' => 'required|integer|in:1,2,3,4,5,6,7,8',
             'kompetensi_mk' => 'required|string|in:pendukung,utama',
-            'id_cpls' => 'required|array|min:1',
+            'kode_prodi' => 'required|exists:prodis,kode_prodi',
+            'id_cpls' => 'array',
             'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl'
         ]);
 
-        $mk = MataKuliah::create($request->only(['kode_mk', 'nama_mk', 'jenis_mk', 'sks_mk', 'semester_mk', 'kompetensi_mk']));
+        $mk = MataKuliah::create($request->only(['kode_mk', 'nama_mk', 'jenis_mk', 'sks_mk', 'semester_mk', 'kompetensi_mk', 'kode_prodi']));
 
-        // Insert CPL yang dipilih ke tabel cpl_mk
-        foreach ($request->id_cpls as $id_cpl) {
-            DB::table('cpl_mk')->insert([
-                'kode_mk' => $mk->kode_mk,
-                'id_cpl' => $id_cpl
-            ]);
+        // Insert CPL yang dipilih ke tabel cpl_mk (jika ada)
+        if ($request->has('id_cpls') && is_array($request->id_cpls)) {
+            foreach ($request->id_cpls as $id_cpl) {
+                DB::table('cpl_mk')->insert([
+                    'kode_mk' => $mk->kode_mk,
+                    'id_cpl' => $id_cpl
+                ]);
+            }
         }
 
         return redirect()->route('admin.matakuliah.index')->with('success', 'Mata kuliah berhasil ditambahkan!');
@@ -112,18 +109,23 @@ class AdminMataKuliahController extends Controller
     public function edit(MataKuliah $matakuliah)
     {
         $capaianProfilLulusans = CapaianProfilLulusan::orderBy('kode_cpl', 'asc')->get();
-        $bahanKajians = DB::table('bahan_kajians')->get();
+        $prodis = DB::table('prodis')->orderBy('nama_prodi')->get();
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        
         $selectedCpls = DB::table('cpl_mk')
-            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
             ->where('cpl_mk.kode_mk', $matakuliah->kode_mk)
-            ->select('cpl.kode_cpl', 'cpl.deskripsi_cpl')
-            ->get();
-        $selectedBahanKajian = DB::table('bk_mk')
-            ->where('kode_mk', $matakuliah->kode_mk)
-            ->pluck('id_bk')
+            ->pluck('id_cpl')
             ->toArray();
+        
+        // Get daftar dosen
+        $dosens = DB::table('users')
+            ->where('role', 'dosen')
+            ->where('status', 'approved')
+            ->select('id', 'name', 'nip', 'kode_prodi')
+            ->orderBy('name')
+            ->get();
 
-        return view('admin.matakuliah.edit', compact('matakuliah', 'capaianProfilLulusans', 'bahanKajians', 'selectedCpls', 'selectedBahanKajian'));
+        return view('admin.matakuliah.edit', compact('matakuliah', 'capaianProfilLulusans', 'prodis', 'tahuns', 'selectedCpls', 'dosens'));
     }
 
     public function update(Request $request, MataKuliah $matakuliah)
@@ -137,13 +139,14 @@ class AdminMataKuliahController extends Controller
             ],
             'nama_mk' => 'required|string|max:100',
             'jenis_mk' => 'required|string|max:100',
-            'sks_mk' => 'required|integer',
+            'sks_mk' => 'required|integer|min:1|max:24',
             'semester_mk' => 'required|integer|in:1,2,3,4,5,6,7,8',
             'kompetensi_mk' => 'required|string|in:pendukung,utama',
-            'id_bks' => 'required|array',
+            'kode_prodi' => 'required|exists:prodis,kode_prodi',
+            'id_cpls' => 'array',
+            'id_cpls.*' => 'exists:capaian_profil_lulusans,id_cpl'
         ]);
 
-        // Simpan kode_mk lama sebelum update untuk referensi
         $old_kode_mk = $matakuliah->kode_mk;
 
         // Update data dasar mata kuliah
@@ -153,34 +156,22 @@ class AdminMataKuliahController extends Controller
             'jenis_mk',
             'sks_mk',
             'semester_mk',
-            'kompetensi_mk'
+            'kompetensi_mk',
+            'kode_prodi'
         ]));
 
         $new_kode_mk = $matakuliah->kode_mk;
 
-        // Hapus dan isi ulang cpl_mk berdasarkan CPL dari BK yang dipilih
+        // Hapus dan isi ulang cpl_mk
         DB::table('cpl_mk')->where('kode_mk', $old_kode_mk)->delete();
 
-        $cpls = DB::table('cpl_bk')
-            ->whereIn('id_bk', $request->id_bks)
-            ->pluck('id_cpl')
-            ->unique();
-
-        foreach ($cpls as $id_cpl) {
-            DB::table('cpl_mk')->insert([
-                'kode_mk' => $new_kode_mk,
-                'id_cpl' => $id_cpl
-            ]);
-        }
-
-        // Hapus dan isi ulang bk_mk
-        DB::table('bk_mk')->where('kode_mk', $old_kode_mk)->delete();
-
-        foreach ($request->id_bks as $id_bk) {
-            DB::table('bk_mk')->insert([
-                'kode_mk' => $new_kode_mk,
-                'id_bk' => $id_bk
-            ]);
+        if ($request->has('id_cpls') && is_array($request->id_cpls)) {
+            foreach ($request->id_cpls as $id_cpl) {
+                DB::table('cpl_mk')->insert([
+                    'kode_mk' => $new_kode_mk,
+                    'id_cpl' => $id_cpl
+                ]);
+            }
         }
 
         // Update kode_mk di cpmk_mk jika kode MK berubah
@@ -190,35 +181,7 @@ class AdminMataKuliahController extends Controller
             ]);
         }
 
-        // Ambil semua CPMK yang terkait dengan MK ini
-        $relatedCpmks = DB::table('cpmk_mk')
-            ->where('kode_mk', $new_kode_mk)
-            ->pluck('id_cpmk')
-            ->unique();
-
-        Log::info('Final related CPMKs from cpmk_mk only:', $relatedCpmks->toArray());
-
-        // Hapus relasi cpl_cpmk HANYA untuk CPMK dari MK ini
-        DB::table('cpl_cpmk')->whereIn('id_cpmk', $relatedCpmks)->delete();
-        Log::info('Deleted cpl_cpmk rows:', ['count' => count($relatedCpmks)]);
-
-        // Insert ulang relasi cpl_cpmk untuk CPMK dari MK ini ke CPL dari BK terpilih
-        $insertedData = [];
-        foreach ($relatedCpmks as $id_cpmk) {
-            foreach ($cpls as $id_cpl) {
-                $insertedData[] = [
-                    'id_cpmk' => $id_cpmk,
-                    'id_cpl' => $id_cpl,
-                ];
-            }
-        }
-
-        if (!empty($insertedData)) {
-            DB::table('cpl_cpmk')->insert($insertedData);
-            Log::info('Inserted cpl_cpmk data:', $insertedData);
-        }
-
-        return redirect()->route('admin.matakuliah.index')->with('success', 'Matakuliah berhasil diperbarui.');
+        return redirect()->route('admin.matakuliah.index')->with('success', 'Mata Kuliah berhasil diperbarui.');
     }
 
     public function detail(MataKuliah $matakuliah)
@@ -230,13 +193,11 @@ class AdminMataKuliahController extends Controller
 
         $capaianprofillulusans = CapaianProfilLulusan::whereIn('id_cpl', $selectedCplIds)->get();
 
-        $selectedBksIds = DB::table('bk_mk')
-            ->where('kode_mk', $matakuliah->kode_mk)
-            ->pluck('id_bk')
-            ->toArray();
-        $bahanKajians = BahanKajian::whereIn('id_bk', $selectedBksIds)->get();
-
-        return view('admin.matakuliah.detail', ['matakuliah' => $matakuliah, 'selectedCplIds' => $selectedCplIds, 'selectedBksIds' => $selectedBksIds, 'capaianprofillulusans' => $capaianprofillulusans,  'bahanKajians' => $bahanKajians]);
+        return view('admin.matakuliah.detail', [
+            'matakuliah' => $matakuliah, 
+            'selectedCplIds' => $selectedCplIds, 
+            'capaianprofillulusans' => $capaianprofillulusans
+        ]);
     }
 
     public function destroy(MataKuliah $matakuliah)

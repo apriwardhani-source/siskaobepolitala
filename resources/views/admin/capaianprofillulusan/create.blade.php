@@ -19,27 +19,34 @@
         <form action="{{ route('admin.capaianprofillulusan.store') }}" method="POST">
             @csrf
 
-            <label for="id_pls" class="text-xl font-semibold mb-2">PL Terkait</label>
-            <select id="id_pls" name="id_pls"
+            <label for="kode_prodi" class="text-xl font-semibold mb-2">Program Studi</label>
+            <select id="kode_prodi" name="kode_prodi"
                 class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
                 required>
-                <option value="" disabled selected>Pilih PL</option>
-                @foreach ($profilLulusans as $pl)
-                    <option value="{{ $pl->id_pl }}"
-                        title="{{ $pl->tahun }}: {{ $pl->nama_prodi }}: {{ $pl->kode_pl }}: {{ $pl->deskripsi_pl }}">
-                        {{ $pl->tahun }}: {{ $pl->nama_prodi }}: {{ $pl->kode_pl }}: {{ $pl->deskripsi_pl }}
-                    </option>
+                <option value="" disabled selected>Pilih Program Studi</option>
+                @foreach ($prodis as $prodi)
+                    <option value="{{ $prodi->kode_prodi }}">{{ $prodi->nama_prodi }}</option>
+                @endforeach
+            </select>
+
+            <label for="id_tahun" class="text-xl font-semibold mb-2">Tahun Kurikulum</label>
+            <select id="id_tahun" name="id_tahun"
+                class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
+                required>
+                <option value="" disabled selected>Pilih Tahun Kurikulum</option>
+                @foreach ($tahuns as $tahun)
+                    <option value="{{ $tahun->id_tahun }}">{{ $tahun->tahun }}</option>
                 @endforeach
             </select>
 
             <label for="kode_cpl" class="text-xl font-semibold">Kode CPL</label>
             <input type="text" id="kode_cpl" name="kode_cpl" class="border border-black p-3 w-full rounded-lg mt-1 mb-3"
-                required></input>
+                placeholder="Contoh: CPL-01" required>
             <br>
 
             <label for="deskripsi_cpl" class="text-xl font-semibold">Deskripsi CPL</label>
-            <textarea id="deskripsi_cpl" type="text" name="deskripsi_cpl"
-                class="border border-black p-3 w-full rounded-lg mt-1 mb-3" required></textarea>
+            <textarea id="deskripsi_cpl" name="deskripsi_cpl"
+                class="border border-black p-3 w-full rounded-lg mt-1 mb-3" rows="4" required></textarea>
             <br>
 
             <label for="status_cpl" class="text-xl font-semibold">Status CPL</label>

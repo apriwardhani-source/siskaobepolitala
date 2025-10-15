@@ -23,21 +23,19 @@ class AdminPemetaanCplCpmkMkController extends Controller
 
         $prodi = $prodis->where('kode_prodi', $kode_prodi)->first();
 
-        // Query untuk mendapatkan tahun yang tersedia untuk prodi yang dipilih
-        $tahun_tersedia = DB::table('profil_lulusans as pl')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->where('pl.kode_prodi', $kode_prodi)
+        // Query tahun berdasarkan CPL (struktur baru)
+        $tahun_tersedia = DB::table('capaian_profil_lulusans as cpl')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->where('cpl.kode_prodi', $kode_prodi)
             ->select('tahun.id_tahun', 'tahun.nama_kurikulum', 'tahun.tahun')
             ->distinct()
             ->orderBy('tahun.tahun', 'desc')
             ->get();
 
-        // Ambil data CPL dan CPMK dari database
+        // Query CPL-CPMK-MK (struktur baru)
         $query = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
             ->leftJoin('cpl_cpmk', 'cpl.id_cpl', '=', 'cpl_cpmk.id_cpl')
             ->leftJoin('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpl_cpmk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->leftJoin('cpmk_mk', 'cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
@@ -52,11 +50,10 @@ class AdminPemetaanCplCpmkMkController extends Controller
                 'mk.nama_mk',
                 'tahun.tahun'
             )
-            ->where('prodis.kode_prodi', $kode_prodi);
+            ->where('cpl.kode_prodi', $kode_prodi);
 
-        // Filter berdasarkan tahun jika dipilih
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $data = $query->orderBy('cpl.kode_cpl', 'asc')
@@ -93,24 +90,21 @@ class AdminPemetaanCplCpmkMkController extends Controller
 
         $prodi = $prodis->where('kode_prodi', $kode_prodi)->first();
 
-        // Query untuk mendapatkan tahun yang tersedia untuk prodi yang dipilih
-        $tahun_tersedia = DB::table('profil_lulusans as pl')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->where('pl.kode_prodi', $kode_prodi)
+        // Query tahun berdasarkan CPL
+        $tahun_tersedia = DB::table('capaian_profil_lulusans as cpl')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->where('cpl.kode_prodi', $kode_prodi)
             ->select('tahun.id_tahun', 'tahun.nama_kurikulum', 'tahun.tahun')
             ->distinct()
             ->orderBy('tahun.tahun', 'desc')
             ->get();
 
-        // Ambil semua CPL untuk prodi ini dengan filter tahun
+        // Ambil semua CPL (struktur baru)
         $semuaCplQuery = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kode_prodi);
+            ->where('cpl.kode_prodi', $kode_prodi);
 
-        // Filter berdasarkan tahun jika dipilih
         if ($id_tahun) {
-            $semuaCplQuery->where('pl.id_tahun', $id_tahun);
+            $semuaCplQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $semuaCpl = $semuaCplQuery
@@ -118,12 +112,10 @@ class AdminPemetaanCplCpmkMkController extends Controller
             ->orderBy('cpl.kode_cpl', 'asc')
             ->get();
 
-        // Query gabungan CPL - CPMK - MK dengan filter tahun
+        // Query CPL-CPMK-MK dengan semester
         $dataQuery = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
             ->leftJoin('cpl_cpmk as cpl_cpmk', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
             ->leftJoin('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpl_cpmk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->leftJoin('cpmk_mk', 'cpl_cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
@@ -138,24 +130,23 @@ class AdminPemetaanCplCpmkMkController extends Controller
                 'mk.semester_mk',
                 'tahun.tahun'
             )
-            ->where('prodis.kode_prodi', $kode_prodi);
+            ->where('cpl.kode_prodi', $kode_prodi);
 
-        // Filter berdasarkan tahun jika dipilih
         if ($id_tahun) {
-            $dataQuery->where('pl.id_tahun', $id_tahun);
+            $dataQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $data = $dataQuery->orderBy('cpl.kode_cpl')->get();
 
         $matrix = [];
 
-        // Masukkan semua CPL ke matrix meskipun belum ada data CPMK/MK
+        // Masukkan semua CPL ke matrix
         foreach ($semuaCpl as $cpl) {
             $matrix[$cpl->kode_cpl]['deskripsi'] = $cpl->deskripsi_cpl;
             $matrix[$cpl->kode_cpl]['cpmk'] = [];
         }
 
-        // Tambahkan data CPMK dan MK jika ada
+        // Tambahkan data CPMK dan MK
         foreach ($data as $row) {
             $kode_cpl = $row->kode_cpl;
             $kode_cpmk = $row->kode_cpmk;
@@ -181,7 +172,6 @@ class AdminPemetaanCplCpmkMkController extends Controller
         $kode_prodi = $request->get('kode_prodi');
         $id_tahun = $request->get('id_tahun');
 
-        // Jika tidak ada prodi yang dipilih
         if (empty($kode_prodi)) {
             $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
             return view('admin.pemetaancplcpmkmk.pemetaanmkcplcpmk', [
@@ -203,17 +193,14 @@ class AdminPemetaanCplCpmkMkController extends Controller
             ->orderBy('tahun', 'desc')
             ->get();
 
-        // Get all CPL for the selected prodi dengan filter tahun
+        // Get all CPL (struktur baru)
         $semuaCplQuery = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->where('pl.kode_prodi', $kode_prodi);
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->where('cpl.kode_prodi', $kode_prodi);
 
-        // Filter berdasarkan tahun jika dipilih
         if ($id_tahun) {
-            $semuaCplQuery->where('pl.id_tahun', $id_tahun);
+            $semuaCplQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $semuaCpl = $semuaCplQuery
@@ -221,19 +208,16 @@ class AdminPemetaanCplCpmkMkController extends Controller
             ->orderBy('cpl.kode_cpl', 'asc')
             ->get();
 
-        // Get ALL mata kuliah for the prodi through CPL relationships dengan filter tahun
+        // Get ALL mata kuliah melalui CPL
         $semuaMkQuery = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
             ->join('cpl_mk', 'cpl.id_cpl', '=', 'cpl_mk.id_cpl')
             ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('prodis.kode_prodi', $kode_prodi);
+            ->where('cpl.kode_prodi', $kode_prodi);
 
-        // Filter berdasarkan tahun jika dipilih
         if ($id_tahun) {
-            $semuaMkQuery->where('pl.id_tahun', $id_tahun);
+            $semuaMkQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $semuaMk = $semuaMkQuery
@@ -242,21 +226,18 @@ class AdminPemetaanCplCpmkMkController extends Controller
             ->orderBy('mk.kode_mk')
             ->get();
 
-        // Get relationships between CPL, CPMK, and MK dengan filter tahun
+        // Get relationships
         $relasiQuery = DB::table('cpl_cpmk')
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpl_cpmk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
             ->join('cpmk_mk', 'cpl_cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
             ->join('mata_kuliahs as mk', 'cpmk_mk.kode_mk', '=', 'mk.kode_mk')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->where('pl.kode_prodi', $kode_prodi);
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->where('cpl.kode_prodi', $kode_prodi);
 
-        // Filter berdasarkan tahun jika dipilih
         if ($id_tahun) {
-            $relasiQuery->where('pl.id_tahun', $id_tahun);
+            $relasiQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $relasi = $relasiQuery
@@ -272,13 +253,12 @@ class AdminPemetaanCplCpmkMkController extends Controller
             )
             ->get();
 
-        // Initialize the matrix structure for ALL mata kuliah
+        // Initialize matrix
         $matrix = [];
 
         foreach ($semuaMk as $mk) {
             $matrix[$mk->kode_mk]['nama'] = $mk->nama_mk;
 
-            // Initialize CPL structure for each mata kuliah
             foreach ($semuaCpl as $cpl) {
                 $matrix[$mk->kode_mk]['cpl'][$cpl->kode_cpl] = [
                     'cpmks' => [],
@@ -287,16 +267,13 @@ class AdminPemetaanCplCpmkMkController extends Controller
             }
         }
 
-        // Populate the matrix with relationship data (only for MK that have relationships)
+        // Populate matrix
         foreach ($relasi as $row) {
-            // Safety check - ensure the course exists in matrix
             if (isset($matrix[$row->kode_mk])) {
-                // Add CPMK to the appropriate CPL if not already exists
                 if (!in_array($row->kode_cpmk, $matrix[$row->kode_mk]['cpl'][$row->kode_cpl]['cpmks'])) {
                     $matrix[$row->kode_mk]['cpl'][$row->kode_cpl]['cpmks'][] = $row->kode_cpmk;
                 }
 
-                // Add CPMK details
                 $matrix[$row->kode_mk]['cpl'][$row->kode_cpl]['cpmk_details'][$row->kode_cpmk] = [
                     'nama_prodi' => $row->nama_prodi,
                     'deskripsi_cpmk' => $row->deskripsi_cpmk,

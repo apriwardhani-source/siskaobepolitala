@@ -16,40 +16,51 @@
         @endif
 
         <form action="{{ route('admin.capaianprofillulusan.update', $capaianprofillulusan->id_cpl) }}" method="POST">
-
             @csrf
             @method('PUT')
 
-            <label for="id_pls" class="text-2xl font-semibold mb-2">PL Terkait:</label>
-            <select id="id_pls" name="id_pls"
+            <label for="kode_prodi" class="text-2xl font-semibold mb-2">Program Studi:</label>
+            <select id="kode_prodi" name="kode_prodi"
                 class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
                 required>
-                @foreach ($profilLulusans as $pl)
-                    <option value="{{ $pl->id_pl }}" @if (in_array($pl->id_pl, old('id_pls', $selectedProfilLulusans ?? []))) selected @endif
-                        title="{{ $pl->tahun }}: {{ $pl->kode_pl }}: {{ $pl->deskripsi_pl }}">
-                        {{ $pl->tahun }}: {{ $pl->nama_prodi }}: {{ $pl->kode_pl }}: {{ $pl->deskripsi_pl }}
+                <option value="" disabled>Pilih Program Studi</option>
+                @foreach ($prodis as $prodi)
+                    <option value="{{ $prodi->kode_prodi }}" 
+                        {{ old('kode_prodi', $capaianprofillulusan->kode_prodi) == $prodi->kode_prodi ? 'selected' : '' }}>
+                        {{ $prodi->nama_prodi }}
+                    </option>
+                @endforeach
+            </select>
+
+            <label for="id_tahun" class="text-2xl font-semibold mb-2">Tahun Kurikulum:</label>
+            <select id="id_tahun" name="id_tahun"
+                class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
+                required>
+                <option value="" disabled>Pilih Tahun Kurikulum</option>
+                @foreach ($tahuns as $tahun)
+                    <option value="{{ $tahun->id_tahun }}" 
+                        {{ old('id_tahun', $capaianprofillulusan->id_tahun) == $tahun->id_tahun ? 'selected' : '' }}>
+                        {{ $tahun->tahun }}
                     </option>
                 @endforeach
             </select>
 
             <label class="text-2xl" for="kode_cpl">Kode Capaian Profil Lulusan:</label>
             <input type="text" name="kode_cpl" id="kode_cpl" class="border border-black w-full rounded-lg p-3 mt-1 mb-3"
-                value="{{ old('kode_cpl', $capaianprofillulusan->kode_cpl) }}" required>
+                value="{{ old('kode_cpl', $capaianprofillulusan->kode_cpl) }}" placeholder="Contoh: CPL-01" required>
             <br>
 
             <label class="text-2xl" for="deskripsi_cpl">Deskripsi Capaian Profil Lulusan:</label>
-            <textarea type="text" name="deskripsi_cpl" id="deskripsi_cpl" class="border border-black w-full rounded-lg p-3 mb-3"
+            <textarea name="deskripsi_cpl" id="deskripsi_cpl" class="border border-black w-full rounded-lg p-3 mb-3" rows="4"
                 required>{{ old('deskripsi_cpl', $capaianprofillulusan->deskripsi_cpl) }}</textarea>
             <br>
 
             <label class="text-2xl" for="status_cpl">Status CPL:</label>
             <select name="status_cpl" id="status_cpl" class="border border-black p-3 mt-1 w-full rounded-lg mb-3" required>
                 <option value="Kompetensi Utama Bidang"
-                    {{ $capaianprofillulusan->status_cpl == 'Kompetensi Utama Bidang' ? 'selected' : '' }}>Kompetensi Utama
-                    Bidang</option>
+                    {{ $capaianprofillulusan->status_cpl == 'Kompetensi Utama Bidang' ? 'selected' : '' }}>Kompetensi Utama Bidang</option>
                 <option value="Kompetensi Tambahan"
-                    {{ $capaianprofillulusan->status_cpl == 'Kompetensi Tambahan' ? 'selected' : '' }}>Kompetensi Tambahan
-                </option>
+                    {{ $capaianprofillulusan->status_cpl == 'Kompetensi Tambahan' ? 'selected' : '' }}>Kompetensi Tambahan</option>
             </select>
             <br>
             

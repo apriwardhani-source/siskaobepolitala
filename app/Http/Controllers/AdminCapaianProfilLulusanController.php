@@ -71,57 +71,43 @@ class AdminCapaianProfilLulusanController extends Controller
     public function edit($id_cpl)
     {
         $capaianprofillulusan = CapaianProfilLulusan::findOrFail($id_cpl);
-
-        $profilLulusans = DB::table('profil_lulusans')
-            ->join('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'profil_lulusans.id_tahun', '=', 'tahun.id_tahun')
-            ->select('profil_lulusans.id_pl', 'profil_lulusans.kode_pl', 'profil_lulusans.deskripsi_pl', 'prodis.nama_prodi', 'tahun.tahun')
-            ->orderBy('prodis.nama_prodi')
-            ->get();
-            
-        $selectedProfilLulusans = DB::table('cpl_pl')
-            ->where('id_cpl', $id_cpl)
-            ->pluck('id_pl')
-            ->toArray();
-        return view('admin.capaianprofillulusan.edit', compact('capaianprofillulusan', 'profilLulusans', 'selectedProfilLulusans'));
+        $prodis = DB::table('prodis')->orderBy('nama_prodi')->get();
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        
+        return view('admin.capaianprofillulusan.edit', compact('capaianprofillulusan', 'prodis', 'tahuns'));
     }
 
     public function update(Request $request, $id_cpl)
     {
-        request()->validate([
-            'kode_cpl' => 'required|string|max:10',
+        $request->validate([
+            'kode_cpl' => [
+                'required',
+                'string',
+                'max:10',
+                Rule::unique('capaian_profil_lulusans', 'kode_cpl')->ignore($id_cpl, 'id_cpl'),
+            ],
             'deskripsi_cpl' => 'required',
-            'status_cpl' => 'required|in:Kompetensi Utama Bidang,Kompetensi Tambahan'
+            'status_cpl' => 'required|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
+            'kode_prodi' => 'required|exists:prodis,kode_prodi',
+            'id_tahun' => 'required|exists:tahun,id_tahun'
         ]);
 
         $capaianprofillulusan = CapaianProfilLulusan::findOrFail($id_cpl);
+        $capaianprofillulusan->update($request->only(['kode_cpl', 'deskripsi_cpl', 'status_cpl', 'kode_prodi', 'id_tahun']));
 
-        $capaianprofillulusan->update($request->all());
-
-        DB::table('cpl_pl')->where('id_cpl', $id_cpl)->delete();
-
-        DB::table('cpl_pl')->insert([
-            'id_cpl' => $capaianprofillulusan->id_cpl,
-            'id_pl' => $request->id_pls
-        ]);
-
-        return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil lulusan berhasil diperbaharui.');
+        return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil Lulusan berhasil diperbarui.');
     }
 
-    public function detail(CapaianProfilLulusan $id_cpl)
+    public function detail($id_cpl)
     {
-        $selectedPlIds = DB::table('cpl_pl')
-            ->where('id_cpl', $id_cpl->id_cpl)
-            ->pluck('id_pl')
-            ->toArray();
+        $capaianprofillulusan = DB::table('capaian_profil_lulusans as cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->where('cpl.id_cpl', $id_cpl)
+            ->select('cpl.*', 'prodis.nama_prodi', 'tahun.tahun')
+            ->first();
 
-        $profilLulusans = ProfilLulusan::whereIn('id_pl', $selectedPlIds)->get();
-
-        return view('admin.capaianprofillulusan.detail', [
-            'id_cpl' => $id_cpl,
-            'selectedProfilLulusans' => $selectedPlIds,
-            'profilLulusans' => $profilLulusans
-        ]);
+        return view('admin.capaianprofillulusan.detail', compact('capaianprofillulusan'));
     }
 
     public function destroy(CapaianProfilLulusan $id_cpl)
@@ -140,22 +126,21 @@ class AdminCapaianProfilLulusanController extends Controller
             return view("admin.pemenuhancpl.index", compact("prodis", "kode_prodi", "id_tahun", "tahun_tersedia"));
         }
 
+        // Query struktur baru: CPL langsung punya kode_prodi dan id_tahun
         $query = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl as cplpl', 'cpl.id_cpl', '=', 'cplpl.id_cpl')
-            ->join('profil_lulusans as pl', 'cplpl.id_pl', '=', 'pl.id_pl')
-            ->Join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->join('prodis as ps', 'pl.kode_prodi', '=', 'ps.kode_prodi')
+            ->join('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->join('prodis as ps', 'cpl.kode_prodi', '=', 'ps.kode_prodi')
             ->leftJoin('cpl_mk as cmk', 'cpl.id_cpl', '=', 'cmk.id_cpl')
             ->leftJoin('mata_kuliahs as mk', 'cmk.kode_mk', '=', 'mk.kode_mk')
             ->select('cpl.id_cpl', 'cpl.kode_cpl', 'mk.semester_mk', 'mk.kode_mk', 'mk.nama_mk', 'ps.kode_prodi', 'tahun.tahun', 'ps.nama_prodi')
             ->distinct();
 
         if ($kode_prodi) {
-            $query->where('ps.kode_prodi', $kode_prodi);
+            $query->where('cpl.kode_prodi', $kode_prodi);
         }
 
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $data = $query
