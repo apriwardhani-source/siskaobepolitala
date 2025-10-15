@@ -45,12 +45,12 @@
 
 /* === MODERN BUTTONS === */
 .btn-gradient-primary {
-    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    background: linear-gradient(to right, #1e3c72, #2a5298);
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
     font-weight: 600;
-    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 4px 6px rgba(30, 60, 114, 0.3);
     transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
@@ -59,8 +59,8 @@
 }
 
 .btn-gradient-primary:hover {
-    background: linear-gradient(to right, #1d4ed8, #1e40af);
-    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4);
+    background: linear-gradient(to right, #152d5a, #1e3c72);
+    box-shadow: 0 6px 12px rgba(30, 60, 114, 0.4);
     transform: translateY(-2px);
 }
 
@@ -120,7 +120,7 @@
 }
 
 .card-header-gradient {
-    background: linear-gradient(to right, #374151, #1f2937);
+    background: linear-gradient(to right, #1e3c72, #2a5298);
     padding: 1rem 1.5rem;
     color: white;
     font-weight: 600;
@@ -140,7 +140,7 @@
     transform: scale(1.05);
 }
 
-.card-stats.blue { border-left-color: #3b82f6; }
+.card-stats.blue { border-left-color: #1e3c72; }
 .card-stats.green { border-left-color: #10b981; }
 .card-stats.amber { border-left-color: #f59e0b; }
 .card-stats.red { border-left-color: #ef4444; }
@@ -192,7 +192,7 @@
     line-height: 1;
 }
 
-.badge-blue { background-color: #dbeafe; color: #1e40af; }
+.badge-blue { background-color: #e0e7f1; color: #1e3c72; }
 .badge-green { background-color: #d1fae5; color: #065f46; }
 .badge-amber { background-color: #fef3c7; color: #92400e; }
 .badge-red { background-color: #fee2e2; color: #991b1b; }
@@ -207,7 +207,7 @@
 }
 
 .table-modern thead {
-    background: linear-gradient(to right, #374151, #1f2937);
+    background: linear-gradient(to right, #1e3c72, #2a5298);
 }
 
 .table-modern thead th {
@@ -218,7 +218,7 @@
     color: #f3f4f6;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-right: 1px solid #4b5563;
+    border-right: 1px solid #2a5298;
 }
 
 .table-modern thead th:last-child {
@@ -234,7 +234,7 @@
 }
 
 .table-modern tbody tr:hover {
-    background-color: #dbeafe !important;
+    background-color: #e0e7f1 !important;
 }
 
 .table-modern tbody td {
@@ -256,9 +256,8 @@
 
 .input-modern:focus {
     outline: none;
-    border-color: #3b82f6;
-    ring: 2px;
-    ring-color: rgba(59, 130, 246, 0.5);
+    border-color: #1e3c72;
+    box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
 }
 
 .select-modern {
@@ -273,15 +272,14 @@
 
 .select-modern:focus {
     outline: none;
-    border-color: #3b82f6;
-    ring: 2px;
-    ring-color: rgba(59, 130, 246, 0.5);
+    border-color: #1e3c72;
+    box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
 }
 
 /* === MODERN FILTERS === */
 .filter-info {
-    background: linear-gradient(to right, #eff6ff, #dbeafe);
-    border: 1px solid #bfdbfe;
+    background: linear-gradient(to right, #e8eef5, #e0e7f1);
+    border: 1px solid #c5d3e8;
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
     margin-top: 1rem;
@@ -294,8 +292,8 @@
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
-    background-color: #dbeafe;
-    color: #1e40af;
+    background-color: #e0e7f1;
+    color: #1e3c72;
 }
 
 /* === ICON CONTAINERS === */
@@ -310,7 +308,7 @@
 }
 
 .icon-gradient.blue {
-    background: linear-gradient(to bottom right, #60a5fa, #3b82f6);
+    background: linear-gradient(to bottom right, #2a5298, #1e3c72);
 }
 
 .icon-gradient.green {
@@ -357,7 +355,7 @@
 /* === LOADING SPINNER === */
 .spinner {
     border: 3px solid #f3f4f6;
-    border-top: 3px solid #3b82f6;
+    border-top: 3px solid #1e3c72;
     border-radius: 50%;
     width: 2rem;
     height: 2rem;
@@ -418,8 +416,8 @@
 
 /* === CHECKBOX CUSTOM === */
 input[type="checkbox"]:checked {
-    background-color: #10b981;
-    border-color: #10b981;
+    background-color: #1e3c72;
+    border-color: #1e3c72;
 }
 
 input[type="checkbox"]:checked::before {
@@ -506,7 +504,7 @@ input[type="checkbox"]:checked::before {
 
 /* === UTILITY CLASSES === */
 .text-gradient {
-    background: linear-gradient(to right, #3b82f6, #8b5cf6);
+    background: linear-gradient(to right, #1e3c72, #2a5298);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
