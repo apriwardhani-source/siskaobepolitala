@@ -17,33 +17,27 @@ class AdminCapaianProfilLulusanController extends Controller
         $prodis = DB::table('prodis')->get();
 
         if (!$kode_prodi) {
-            // Ambil tahun-tahun yang tersedia dari tabel tahun
             $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
             return view("admin.capaianprofillulusan.index", compact("prodis", "kode_prodi", "id_tahun", "tahun_tersedia"));
         }
 
-        $query = DB::table('capaian_profil_lulusans')
-            ->leftJoin('cpl_pl', 'capaian_profil_lulusans.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->leftJoin('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->select('capaian_profil_lulusans.id_cpl', 'capaian_profil_lulusans.deskripsi_cpl', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.status_cpl', 'prodis.nama_prodi')
-            ->groupBy('capaian_profil_lulusans.id_cpl', 'capaian_profil_lulusans.deskripsi_cpl', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.status_cpl', 'prodis.nama_prodi')
-            ->orderBy('kode_cpl', 'asc');
+        // Query dengan struktur baru: CPL langsung punya kode_prodi dan id_tahun
+        $query = DB::table('capaian_profil_lulusans as cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl', 'cpl.status_cpl', 'prodis.nama_prodi', 'tahun.tahun')
+            ->orderBy('cpl.kode_cpl', 'asc');
 
         if ($kode_prodi) {
-            $query->where('prodis.kode_prodi', $kode_prodi);
+            $query->where('cpl.kode_prodi', $kode_prodi);
         }
 
-        // Filter berdasarkan tahun jika ada
         if ($id_tahun) {
-            $query->where('profil_lulusans.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $capaianprofillulusans = $query->get();
-
-        // Ambil tahun-tahun yang tersedia dari tabel tahun
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-
         $dataKosong = $capaianprofillulusans->isEmpty() && $kode_prodi;
 
         return view("admin.capaianprofillulusan.index", compact("capaianprofillulusans", "prodis", "kode_prodi", "id_tahun", "tahun_tersedia", "dataKosong"));
@@ -51,32 +45,26 @@ class AdminCapaianProfilLulusanController extends Controller
 
     public function create()
     {
-        $profilLulusans = DB::table('profil_lulusans')
-            ->join('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->join('tahun', 'profil_lulusans.id_tahun', '=', 'tahun.id_tahun')
-            ->select('profil_lulusans.id_pl', 'profil_lulusans.kode_pl', 'profil_lulusans.deskripsi_pl', 'prodis.nama_prodi', 'tahun.tahun')
-            ->orderBy('prodis.nama_prodi')
-            ->get();
-        return view("admin.capaianprofillulusan.create", compact('profilLulusans'));
+        // Struktur baru: Tidak perlu PL lagi, langsung pilih prodi dan tahun
+        $prodis = DB::table('prodis')->orderBy('nama_prodi')->get();
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        return view("admin.capaianprofillulusan.create", compact('prodis', 'tahuns'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'kode_cpl' => 'required|string|max:10',
+            'kode_cpl' => 'required|string|max:10|unique:capaian_profil_lulusans,kode_cpl',
             'deskripsi_cpl' => 'required',
             'status_cpl' => 'required|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
-            'id_pls' => 'required|string'
+            'kode_prodi' => 'required|exists:prodis,kode_prodi',
+            'id_tahun' => 'required|exists:tahun,id_tahun'
         ]);
 
-        $cpl = CapaianProfilLulusan::create($request->only(['kode_cpl', 'deskripsi_cpl', 'status_cpl']));
+        // Struktur baru: CPL langsung simpan dengan kode_prodi dan id_tahun
+        CapaianProfilLulusan::create($request->only(['kode_cpl', 'deskripsi_cpl', 'status_cpl', 'kode_prodi', 'id_tahun']));
 
-        DB::table('cpl_pl')->insert([
-            'id_cpl' => $cpl->id_cpl,
-            'id_pl' => $request->id_pls
-        ]);
-
-        return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil lulusan berhasil ditambahkan.');
+        return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil Lulusan berhasil ditambahkan.');
     }
 
 

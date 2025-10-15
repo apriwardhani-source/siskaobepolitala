@@ -158,10 +158,28 @@
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Progress Penyusunan Kurikulum OBE</h2>
 
                 <div class="space-y-6">
-                    {{-- Penjelasan minimal --}}
-                    <p class="text-sm text-gray-600 italic mb-4">
-                        Minimal: PL 3, CPL 9, BK 8, MK 108 SKS, CPMK 18, Sub CPMK 36
-                    </p>
+                    {{-- Penjelasan target kurikulum OBE --}}
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">Target Standar Kurikulum OBE:</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-blue-700">
+                            <div>
+                                <strong>CPL:</strong> 9
+                                <p class="text-xs text-blue-600">Capaian Profil Lulusan</p>
+                            </div>
+                            <div>
+                                <strong>Total SKS:</strong> 144
+                                <p class="text-xs text-blue-600">Mata Kuliah (program D4)</p>
+                            </div>
+                            <div>
+                                <strong>CPMK:</strong> 20
+                                <p class="text-xs text-blue-600">Capaian Pembelajaran MK</p>
+                            </div>
+                            <div>
+                                <strong>Sub CPMK:</strong> 40
+                                <p class="text-xs text-blue-600">Indikator pencapaian</p>
+                            </div>
+                        </div>
+                    </div>
                     @foreach ($prodis as $prodi)
                         <div class="border-b pb-5 prodi-card">
                             <div class="flex justify-between items-center mb-2">
@@ -176,34 +194,25 @@
                                 </div>
                             </div>
 
-                            <div class="flex justify-between mt-2 text-xs text-gray-500">
-                                <div class="flex space-x-6">
+                            <div class="flex justify-between mt-3 text-xs text-gray-600">
+                                <div class="flex flex-wrap gap-x-6 gap-y-2">
                                     <span class="flex items-center">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                                        PL ({{ $prodi->progress_pl }}%)
+                                        <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span>
+                                        <strong>CPL:</strong> {{ $prodi->cpl_count }}/9 ({{ $prodi->progress_cpl }}%)
                                     </span>
                                     <span class="flex items-center">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                                        CPL ({{ $prodi->progress_cpl }}%)
+                                        <span class="w-3 h-3 bg-yellow-500 rounded-full mr-1"></span>
+                                        <strong>SKS:</strong> {{ $prodi->sks_mk }}/144 ({{ $prodi->progress_sks_mk }}%)
                                     </span>
                                     <span class="flex items-center">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                                        BK ({{ $prodi->progress_bk }}%)
+                                        <span class="w-3 h-3 bg-orange-500 rounded-full mr-1"></span>
+                                        <strong>CPMK:</strong> {{ $prodi->cpmk_count }}/20 ({{ $prodi->progress_cpmk }}%)
                                     </span>
                                     <span class="flex items-center">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                                        SKS ({{ $prodi->progress_sks_mk }}%)
-                                    </span>
-                                    <span class="flex items-center">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                                        CPMK ({{ $prodi->progress_cpmk }}%)
-                                    </span>
-                                    <span class="flex items-center">
-                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                                        SUB_CPMK ({{ $prodi->progress_subcpmk }}%)
+                                        <span class="w-3 h-3 bg-red-500 rounded-full mr-1"></span>
+                                        <strong>Sub CPMK:</strong> {{ $prodi->subcpmk_count }}/40 ({{ $prodi->progress_subcpmk }}%)
                                     </span>
                                 </div>
-                                <a href="#" class="text-blue-500 hover:text-blue-700">Detail</a>
                             </div>
                         </div>
                     @endforeach
