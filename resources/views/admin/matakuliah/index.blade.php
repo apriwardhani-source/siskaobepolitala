@@ -174,7 +174,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach ($matakuliah as $index => $mk)
+                            @foreach ($mata_kuliahs as $index => $mk)
                             <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
                                     {{ $index + 1 }}
@@ -188,10 +188,10 @@
                                     {{ $mk->nama_mk }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
-                                    {{ $mk->sks }}
+                                    {{ $mk->sks_mk }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700">
-                                    {{ $mk->semester }}
+                                    {{ $mk->semester_mk }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center">
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
@@ -201,7 +201,7 @@
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('admin.matakuliah.detail', $mk->id_mk) }}" 
+                                        <a href="{{ route('admin.matakuliah.detail', $mk->kode_mk) }}" 
                                            class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
                                            title="Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

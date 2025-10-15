@@ -32,6 +32,7 @@ class TimMataKuliahController extends Controller
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
+                'mk.jenis_mk',
                 'mk.sks_mk',
                 'mk.semester_mk',
                 'mk.kompetensi_mk',
@@ -41,7 +42,9 @@ class TimMataKuliahController extends Controller
             ->orderBy('mk.kode_mk', 'asc')
             ->get();
 
-        return view("tim.matakuliah.index", compact("mata_kuliahs", "id_tahun", "tahun_tersedia"));
+        $dataKosong = $mata_kuliahs->isEmpty();
+
+        return view("tim.matakuliah.index", compact("mata_kuliahs", "id_tahun", "tahun_tersedia", "dataKosong"));
     }
 
     public function getCplByBk(Request $request)
@@ -332,15 +335,13 @@ class TimMataKuliahController extends Controller
                 'prodis.nama_prodi',
                 'prodis.kode_prodi'
             )
-            ->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
-            ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('pl.kode_prodi', $kodeProdi);
+            ->leftJoin('prodis', 'mk.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('mk.kode_prodi', $kodeProdi);
 
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
+                  ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+                  ->where('cpl.id_tahun', $id_tahun);
         }
 
         $query->groupBy(

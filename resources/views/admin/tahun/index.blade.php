@@ -1,126 +1,196 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-md mx-2 md:mx-0">
-        <div class="text-center mb-6 md:mb-8">
-            <h1 class="text-xl md:text-3xl font-bold text-gray-700">Daftar Tahun Kurikulum</h1>
-            <hr class="border-t-2 md:border-t-4 border-black my-3 md:my-4 mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Tahun Kurikulum</h1>
+                    <p class="mt-2 text-sm text-gray-600">Kelola tahun ajaran dan kurikulum</p>
+                </div>
+                
+                <a href="{{ route('admin.tahun.create') }}"
+                   class="btn-gradient-primary">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Tambah Tahun
+                </a>
+            </div>
         </div>
 
+        <!-- Alerts -->
         @if (session('success'))
-            <div id="alert"
-                class="bg-green-500 text-white px-4 py-2 rounded-md mb-4 text-center relative max-w-4xl mx-auto">
-                <span class="font-bold">{{ session('success') }}</span>
-                <button onclick="document.getElementById('alert').style.display='none'"
-                    class="absolute top-1 right-3 text-white font-bold text-lg">
-                    &times;
+        <div id="alert-success" class="mb-6 rounded-lg bg-green-50 border-l-4 border-green-500 p-4 shadow-sm animate-fade-in">
+            <div class="flex items-start">
+                <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="flex-1">
+                    <h3 class="text-sm font-semibold text-green-800">Berhasil!</h3>
+                    <p class="mt-1 text-sm text-green-700">{{ session('success') }}</p>
+                </div>
+                <button onclick="this.closest('#alert-success').remove()" 
+                        class="ml-4 text-green-500 hover:text-green-700 focus:outline-none">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
                 </button>
             </div>
+        </div>
         @endif
 
         @if (session('sukses'))
-            <div id="alert"
-                class="bg-red-500 text-white px-4 py-2 rounded-md mb-4 text-center relative max-w-4xl mx-auto">
-                <span class="font-bold">{{ session('sukses') }}</span>
-                <button onclick="document.getElementById('alert').style.display='none'"
-                    class="absolute top-1 right-3 text-white font-bold text-lg">
-                    &times;
+        <div id="alert-error" class="mb-6 rounded-lg bg-red-50 border-l-4 border-red-500 p-4 shadow-sm animate-fade-in">
+            <div class="flex items-start">
+                <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="flex-1">
+                    <h3 class="text-sm font-semibold text-red-800">Perhatian!</h3>
+                    <p class="mt-1 text-sm text-red-700">{{ session('sukses') }}</p>
+                </div>
+                <button onclick="this.closest('#alert-error').remove()" 
+                        class="ml-4 text-red-500 hover:text-red-700 focus:outline-none">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
                 </button>
             </div>
+        </div>
         @endif
 
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-6 gap-3 md:gap-4">
-            <div class="w-full md:w-auto mb-3 md:mb-0">
-                <a href="{{ route('admin.tahun.create') }}"
-                    class="w-full md:w-auto bg-green-600 hover:bg-green-800 text-white font-bold px-3 py-2 md:px-4 md:py-2 rounded-md inline-flex items-center justify-center text-sm md:text-base">
-                    Tambah
-                </a>
-            </div>
-
-            <!-- Search -->
-            <div class="sm:min-w-[250px] w-full sm:w-auto">
-                <div
-                    class="flex items-center border border-black rounded-md focus-within:ring-2 focus-within:ring-green-500 bg-white">
-                    <span class="pl-3 text-gray-400">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <input type="text" id="search" placeholder="Search..."
-                        class="px-3 py-2 w-full focus:outline-none bg-transparent" />
+        <!-- Main Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+            
+            <!-- Toolbar -->
+            <div class="px-6 py-5 border-b border-gray-200 bg-white">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Daftar Tahun Kurikulum</h2>
+                    
+                    <!-- Search -->
+                    <div class="w-80">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" id="search" placeholder="Cari tahun ajaran..." 
+                                   class="input-modern pl-10">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <!-- Content -->
             @if ($tahuns->isEmpty())
-                <div class="p-8 text-center text-gray-600">
-                    Data Tahun Ajaran belum tersedia.
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <h3 class="empty-state-title">Belum Ada Tahun Kurikulum</h3>
+                    <p class="empty-state-text">
+                        Klik tombol "Tambah Tahun" untuk menambahkan tahun ajaran baru.
+                    </p>
                 </div>
             @else
+                <!-- Table -->
                 <div class="overflow-x-auto">
-                    <table class="w-full border border-black rounded-lg overflow-hidden shadow-md">
-                        <thead class="bg-green-800 text-white">
+                    <table class="table-modern">
+                        <thead>
                             <tr>
-                                <th
-                                    class="px-3 py-2 md:px-6 md:py-3 text-center text-xs md:text-sm font-medium uppercase border-r border-gray-200">
-                                    No</th>
-                                <th
-                                    class="px-3 py-2 md:px-6 md:py-3 text-center text-xs md:text-sm font-medium uppercase border-r border-gray-200">
-                                    Tahun Ajaran</th>
-                                <th
-                                    class="px-3 py-2 md:px-6 md:py-3 text-center text-xs md:text-sm font-medium uppercase border-r border-gray-200">
-                                    Nama Kurikulum</th>
-                                <th class="px-3 py-2 md:px-6 md:py-3 text-center text-xs md:text-sm font-medium uppercase">
-                                    Aksi</th>
+                                <th class="w-16">No</th>
+                                <th class="w-40">Tahun Ajaran</th>
+                                <th>Nama Kurikulum</th>
+                                <th class="w-32">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($tahuns as $index => $tahun)
-                                <tr class="{{ $index % 2 == 0 ? 'bg-gray-50' : 'bg-white' }} hover:bg-gray-100">
-                                    <td
-                                        class="px-3 py-2 md:px-6 md:py-4 text-center border border-gray-200 text-xs md:text-sm">
-                                        {{ $tahuns->firstItem() + $index }}</td>
-                                    <td
-                                        class="px-3 py-2 md:px-6 md:py-4 text-center border border-gray-200 text-xs md:text-sm">
-                                        {{ $tahun->tahun }}</td>
-                                    <td
-                                        class="px-3 py-2 md:px-6 md:py-4 text-center border border-gray-200 text-xs md:text-sm">
-                                        {{ ucfirst($tahun->nama_kurikulum) }}</td>
-                                    <td class="px-3 py-2 md:px-6 md:py-4 border border-gray-200">
-                                        <div class="flex justify-center space-x-1 md:space-x-2">
-                                            <a href="{{ route('admin.tahun.edit', $tahun->id_tahun) }}"
-                                                class="bg-blue-600 hover:bg-blue-800 text-white p-1 md:p-2 rounded-md inline-flex items-center justify-center"
-                                                title="Edit">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4"
-                                                    viewBox="0 0 20 20" fill="currentColor">
-                                                    <path
-                                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            <tr>
+                                <td class="text-center font-medium">
+                                    {{ $tahuns->firstItem() + $index }}
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge-modern badge-blue">{{ $tahun->tahun }}</span>
+                                </td>
+                                <td class="font-medium text-gray-900">
+                                    {{ ucfirst($tahun->nama_kurikulum) }}
+                                </td>
+                                <td class="text-center">
+                                    <div class="flex justify-center space-x-2">
+                                        <a href="{{ route('admin.tahun.edit', $tahun->id_tahun) }}" 
+                                           class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                                           title="Edit">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </a>
+                                        <form action="{{ route('admin.tahun.destroy', $tahun->id_tahun) }}" method="POST" class="inline">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" 
+                                                    onclick="return confirm('Yakin ingin menghapus tahun ajaran ini?')"
+                                                    class="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-all duration-200"
+                                                    title="Hapus">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
-                                            </a>
-                                            <form action="{{ route('admin.tahun.destroy', $tahun->id_tahun) }}"
-                                                method="POST">
-                                                @csrf @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-red-600 hover:bg-red-800 text-white p-1 md:p-2 rounded-md inline-flex items-center justify-center"
-                                                    title="Hapus" onclick="return confirm('Hapus tahun ajaran ini?')">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4"
-                                                        viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4 px-4 py-2">
+
+                <!-- Pagination -->
+                @if($tahuns->hasPages())
+                <div class="px-6 py-4 border-t border-gray-200">
                     {{ $tahuns->links() }}
                 </div>
+                @endif
             @endif
+
         </div>
     </div>
+</div>
+
+@push('scripts')
+<script>
+// Search functionality
+document.getElementById('search').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchValue) ? '' : 'none';
+    });
+});
+
+// Auto-hide alerts
+setTimeout(function() {
+    const successEl = document.getElementById('alert-success');
+    const errorEl = document.getElementById('alert-error');
+    
+    if (successEl) {
+        successEl.classList.add('animate-fade-out');
+        setTimeout(() => successEl.remove(), 300);
+    }
+    
+    if (errorEl) {
+        errorEl.classList.add('animate-fade-out');
+        setTimeout(() => errorEl.remove(), 300);
+    }
+}, 5000);
+</script>
+@endpush
 @endsection

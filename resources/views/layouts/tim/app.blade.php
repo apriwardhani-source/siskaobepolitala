@@ -9,8 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Custom Modern Styles -->
+    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
 
     @vite(['resources/js/app.js'])
+    
+    @stack('styles')
 
     <style>
         .dropdown:hover .dropdown-menu {
