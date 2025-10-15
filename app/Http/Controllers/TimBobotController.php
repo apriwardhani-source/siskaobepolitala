@@ -55,61 +55,69 @@ class TimBobotController extends Controller
 
         $kodeProdi = $user->kode_prodi;
 
-        $capaianProfilLulusans = DB::table('capaian_profil_lulusans as cpl')
-            ->where('cpl.kode_prodi', $kodeProdi)
-            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
-            ->distinct()
-            ->get();
-
-        return view('tim.bobot.create', compact('capaianProfilLulusans'));
-    }
-
-    public function getmkbycpl(Request $request)
-    {
-        // Support both single id_cpl and array id_cpls
-        $id_cpls = $request->id_cpls ?? [$request->id_cpl];
-        
-        if (empty($id_cpls) || !is_array($id_cpls)) {
-            return response()->json([]);
-        }
-
-        $id_cpl = $id_cpls[0]; // Get first CPL for bobot (bobot is per CPL)
-
-        // Get MK yang terkait dengan CPL dan belum punya bobot
-        $mks = DB::table('cpl_mk')
-            ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->leftJoin('bobots', function($join) use ($id_cpl) {
-                $join->on('mk.kode_mk', '=', 'bobots.kode_mk')
-                     ->where('bobots.id_cpl', '=', $id_cpl);
-            })
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->whereNull('bobots.id_bobot') // Only MK that don't have bobot yet
+        $mataKuliahs = DB::table('mata_kuliahs as mk')
+            ->where('mk.kode_prodi', $kodeProdi)
             ->select('mk.kode_mk', 'mk.nama_mk')
             ->distinct()
             ->get();
 
-        return response()->json($mks);
+        return view('tim.bobot.create', compact('mataKuliahs'));
+    }
+
+    public function getcplbymk(Request $request)
+    {
+        $kode_mk = $request->kode_mk ?? null;
+
+        if (!$kode_mk) return response()->json([]);
+
+        // Ambil id CPL yang sudah diberi bobot untuk MK ini
+        $existingCPL = DB::table('bobots')
+            ->where('kode_mk', $kode_mk)
+            ->pluck('id_cpl');
+
+        // Ambil CPL dari relasi MK yang belum diberi bobot
+        $cpls = DB::table('cpl_mk')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->where('cpl_mk.kode_mk', $kode_mk)
+            ->whereNotIn('cpl_mk.id_cpl', $existingCPL)
+            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
+            ->distinct()
+            ->orderBy('cpl.kode_cpl')
+            ->get();
+
+        return response()->json($cpls);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id_cpl' => 'required',
+            'kode_mk' => 'required|exists:mata_kuliahs,kode_mk',
+            'id_cpl' => 'required|array|min:1',
+            'id_cpl.*' => 'exists:capaian_profil_lulusans,id_cpl',
             'bobot' => 'required|array',
-            'bobot.*' => 'required|numeric|min:0|max:100',
+            'bobot.*' => 'integer|min:0|max:100',
         ]);
 
-        // Validate total bobot must be 100
+        // Validasi total bobot harus 100
         $totalBobot = array_sum($request->bobot);
         if ($totalBobot != 100) {
-            return back()->withErrors(['bobot' => "Total bobot harus 100%. Saat ini: {$totalBobot}%"])->withInput();
+            return redirect()->back()->withErrors(['msg' => 'Total bobot harus 100%.'])->withInput();
         }
 
-        foreach ($request->bobot as $kode_mk => $bobotValue) {
+        foreach ($request->id_cpl as $id_cpl) {
+            // Cek apakah bobot untuk kode_mk dan id_cpl ini sudah ada
+            $existing = Bobot::where('kode_mk', $request->kode_mk)
+                ->where('id_cpl', $id_cpl)
+                ->exists();
+
+            if ($existing) {
+                return redirect()->back()->withErrors(['msg' => 'Bobot untuk MK dan CPL tersebut sudah ada.'])->withInput();
+            }
+
             Bobot::create([
-                'id_cpl' => $request->id_cpl,
-                'kode_mk' => $kode_mk,
-                'bobot' => $bobotValue,
+                'kode_mk' => $request->kode_mk,
+                'id_cpl' => $id_cpl,
+                'bobot' => $request->bobot[$id_cpl] ?? 0,
             ]);
         }
 

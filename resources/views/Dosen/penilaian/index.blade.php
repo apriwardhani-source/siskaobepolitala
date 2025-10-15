@@ -67,7 +67,7 @@
     </div>
 
     <!-- Tabel Nilai Mahasiswa -->
-    @if($mahasiswas !== null)
+    @if($mahasiswas !== null && $selectedMK !== null)
         @if($mahasiswas->count() > 0)
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex justify-between items-center mb-4">

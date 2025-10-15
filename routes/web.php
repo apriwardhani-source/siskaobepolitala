@@ -214,7 +214,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/bobot/{bobot}', [AdminBobotController::class, 'update'])->name('bobot.update');
         Route::get('/bobot/{bobot}/detail', [AdminBobotController::class, 'detail'])->name('bobot.detail');
         Route::delete('/bobot/{bobot}', [AdminBobotController::class, 'destroy'])->name('bobot.destroy');
-        Route::post('ajax-getmkbycpl', [AdminBobotController::class, 'getmkbycpl'])->name('bobot.getmkbycpl');
+        Route::post('ajax-getcplbymk', [AdminBobotController::class, 'getcplbymk'])->name('bobot.getCPLByMK');
         Route::get('/notes', [AdminNotesController::class, 'index'])->name('notes.index');
         Route::get('/notes/{note}/detail', [AdminNotesController::class, 'detail'])->name('notes.detail');
         Route::get('/visi/create', [VisiController::class, 'create'])->name('visi.create');
@@ -387,7 +387,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/bobot/{bobot}', [TimBobotController::class, 'update'])->name('bobot.update');
         Route::get('/bobot/{bobot}/detail', [TimBobotController::class, 'detail'])->name('bobot.detail');
         Route::delete('/bobot/{bobot}', [TimBobotController::class, 'destroy'])->name('bobot.destroy');
-        Route::post('ajax-getmkbycpl', [TimBobotController::class, 'getmkbycpl'])->name('bobot.getmkbycpl');
+        Route::post('ajax-getcplbymk', [TimBobotController::class, 'getcplbymk'])->name('bobot.getCPLByMK');
         Route::get('/notes', [TimNotesController::class, 'index'])->name('notes.index');
         Route::get('/notes/{note}/detail', [TimNotesController::class, 'detail'])->name('notes.detail');
         Route::get('/subcpmk/getMkByCpmk', [TimSubCpmkController::class, 'getMkByCpmk'])->name('subcpmk.getMkByCpmk');

@@ -22,28 +22,28 @@ class AdminBobotController extends Controller
         return view('admin.bobot.index', compact('bobots'));
     }
 
-    public function getmkbycpl(Request $request)
+    public function getcplbymk(Request $request)
     {
-        $id_cpl = $request->id_cpls[0] ?? null;
+        $kode_mk = $request->kode_mk ?? null;
 
-        if (!$id_cpl) return response()->json([]);
+        if (!$kode_mk) return response()->json([]);
 
-        // Ambil kode MK yang sudah diberi bobot
-        $existingMK = DB::table('bobots')
-            ->where('id_cpl', $id_cpl)
-            ->pluck('kode_mk');
+        // Ambil id CPL yang sudah diberi bobot untuk MK ini
+        $existingCPL = DB::table('bobots')
+            ->where('kode_mk', $kode_mk)
+            ->pluck('id_cpl');
 
-        // Ambil MK dari relasi CPL yang belum diberi bobot
-        $mks = DB::table('cpl_mk')
-            ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->whereNotIn('cpl_mk.kode_mk', $existingMK)
-            ->select('mk.kode_mk', 'mk.nama_mk')
+        // Ambil CPL dari relasi MK yang belum diberi bobot
+        $cpls = DB::table('cpl_mk')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->where('cpl_mk.kode_mk', $kode_mk)
+            ->whereNotIn('cpl_mk.id_cpl', $existingCPL)
+            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
             ->distinct()
-            ->orderBy('mk.kode_mk')
+            ->orderBy('cpl.kode_cpl')
             ->get();
 
-        return response()->json($mks);
+        return response()->json($cpls);
     }
 
     /**
@@ -63,27 +63,33 @@ class AdminBobotController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_cpl' => 'required|exists:capaian_profil_lulusans,id_cpl',
-            'kode_mk' => 'required|array|min:1',
-            'kode_mk.*' => 'exists:mata_kuliahs,kode_mk',
+            'kode_mk' => 'required|exists:mata_kuliahs,kode_mk',
+            'id_cpl' => 'required|array|min:1',
+            'id_cpl.*' => 'exists:capaian_profil_lulusans,id_cpl',
             'bobot' => 'required|array',
             'bobot.*' => 'integer|min:0|max:100',
         ]);
 
-        foreach ($request->kode_mk as $kode_mk) {
-            // Cek apakah bobot untuk id_cpl dan kode_mk ini sudah ada
-            $existing = Bobot::where('id_cpl', $request->id_cpl)
-                ->where('kode_mk', $kode_mk)
+        // Validasi total bobot harus 100
+        $totalBobot = array_sum($request->bobot);
+        if ($totalBobot != 100) {
+            return redirect()->back()->withErrors(['msg' => 'Total bobot harus 100%.'])->withInput();
+        }
+
+        foreach ($request->id_cpl as $id_cpl) {
+            // Cek apakah bobot untuk kode_mk dan id_cpl ini sudah ada
+            $existing = Bobot::where('kode_mk', $request->kode_mk)
+                ->where('id_cpl', $id_cpl)
                 ->exists();
 
             if ($existing) {
-                return redirect()->back()->withErrors(['msg' => 'Bobot untuk CPL dan MK tersebut sudah ada.'])->withInput();
+                return redirect()->back()->withErrors(['msg' => 'Bobot untuk MK dan CPL tersebut sudah ada.'])->withInput();
             }
 
             Bobot::create([
-                'id_cpl' => $request->id_cpl,
-                'kode_mk' => $kode_mk,
-                'bobot' => $request->bobot[$kode_mk] ?? 0,
+                'kode_mk' => $request->kode_mk,
+                'id_cpl' => $id_cpl,
+                'bobot' => $request->bobot[$id_cpl] ?? 0,
             ]);
         }
 

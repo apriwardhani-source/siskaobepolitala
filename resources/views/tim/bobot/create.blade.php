@@ -2,9 +2,8 @@
 
 @section('content')
     <div class="mx-20">
-        <h2 class="text-4xl font-extrabold text-center mb-4">Tambah Bobot CPL-MK</h2>
+        <h2 class="text-4xl font-extrabold text-center mb-4">Tambah Bobot MK-CPL</h2>
         <hr class="w-full border border-black mb-4">
-
         @if ($errors->any())
             <div id="alert"
                 class="bg-red-500 text-white px-4 py-2 rounded-md mb-6 text-center relative max-w-4xl mx-auto">
@@ -19,24 +18,32 @@
         <form action="{{ route('tim.bobot.store') }}" method="POST" id="bobotForm">
             @csrf
 
-            <label for="id_cpl" class="text-xl font-semibold mb-2">Pilih CPL</label>
-            <select id="id_cpl" name="id_cpl"
+            <label for="kode_mk" class="text-xl font-semibold mb-2">Pilih Mata Kuliah</label>
+            <select id="kode_mk" name="kode_mk"
                 class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-[#f7faff]"
                 required>
-                <option value="">-- Pilih CPL --</option>
-                @foreach ($capaianProfilLulusans as $cpl)
-                    <option value="{{ $cpl->id_cpl }}">
-                        {{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}
+                <option value="">-- Pilih Mata Kuliah --</option>
+                @foreach ($mataKuliahs as $mk)
+                    <option value="{{ $mk->kode_mk }}">
+                        {{ $mk->kode_mk }} - {{ $mk->nama_mk }}
                     </option>
                 @endforeach
             </select>
 
-            <div id="notifSudahAda" class="hidden"></div>
+            {{-- Notifikasi jika semua CPL sudah diberi bobot --}}
+            <div id="notifSudahAda"
+                class="hidden bg-red-500 text-white px-4 py-2 rounded-md mb-6 text-center relative max-w-4xl mx-auto">
+                <span class="font-bold">Bobot untuk Mata Kuliah ini sudah ditambahkan sebelumnya.</span>
+                <button onclick="document.getElementById('notifSudahAda').style.display='none'"
+                    class="absolute top-1 right-3 text-white font-bold text-lg">
+                    &times;
+                </button>
+            </div>
 
-            <div id="mkSection" class="mt-6 hidden">
-                <label class="text-xl font-semibold">Atur Bobot Mata Kuliah (Total harus 100%)</label>
-                <div id="loadingMK" class="mt-3 text-blue-500 italic">Memuat mata kuliah...</div>
-                <div id="mkList"
+            <div id="cplSection" class="mt-6 hidden">
+                <label class="text-xl font-semibold">Atur Bobot CPL (Total harus 100%)</label>
+                <div id="loadingCPL" class="mt-3 text-blue-500 italic">Memuat CPL...</div>
+                <div id="cplList"
                     class="mt-2 border border-black rounded-lg p-4 bg-gray-50 max-h-[300px] overflow-y-auto"></div>
                 <div class="mt-2 text-sm text-gray-600">Total Bobot: <span id="totalBobot">0%</span></div>
                 <p class="italic text-blue-600 text-sm mt-1">Gunakan tombol bagi rata jika ingin mendistribusikan secara
@@ -53,58 +60,48 @@
 
     @push('scripts')
         <script>
-            const cplSelect = document.getElementById('id_cpl');
-            const mkList = document.getElementById('mkList');
-            const mkSection = document.getElementById('mkSection');
-            const loadingMK = document.getElementById('loadingMK');
+            const mkSelect = document.getElementById('kode_mk');
+            const cplList = document.getElementById('cplList');
+            const cplSection = document.getElementById('cplSection');
+            const loadingCPL = document.getElementById('loadingCPL');
             const totalBobot = document.getElementById('totalBobot');
             const submitBtn = document.getElementById('submitBtn');
             const notifSudahAda = document.getElementById('notifSudahAda');
 
-            cplSelect.addEventListener('change', function() {
-                const idCPL = this.value;
-                if (!idCPL) {
-                    mkSection.classList.add('hidden');
-                    mkList.innerHTML = '';
+            mkSelect.addEventListener('change', function() {
+                const kodeMK = this.value;
+                if (!kodeMK) {
+                    cplSection.classList.add('hidden');
+                    cplList.innerHTML = '';
                     totalBobot.textContent = '0%';
                     submitBtn.disabled = true;
                     notifSudahAda.classList.add('hidden');
                     return;
                 }
 
-                mkSection.classList.remove('hidden');
-                loadingMK.classList.remove('hidden');
-                mkList.innerHTML = '';
+                cplSection.classList.remove('hidden');
+                loadingCPL.classList.remove('hidden');
+                cplList.innerHTML = '';
                 notifSudahAda.classList.add('hidden');
 
-                // Use the same protocol as current page
-                const url = "{{ route('tim.bobot.getmkbycpl') }}";
-                const secureUrl = url.replace(/^http:/, 'https:');
-                const finalUrl = window.location.protocol === 'https:' ? secureUrl : url;
-                
-                fetch(finalUrl, {
+                fetch("{{ route('tim.bobot.getCPLByMK') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
                         body: JSON.stringify({
-                            id_cpls: [idCPL]
+                            kode_mk: kodeMK
                         })
                     })
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error(`HTTP error! status: ${res.status}`);
-                        }
-                        return res.json();
-                    })
+                    .then(res => res.json())
                     .then(data => {
-                        loadingMK.classList.add('hidden');
-                        mkList.innerHTML = '';
+                        loadingCPL.classList.add('hidden');
+                        cplList.innerHTML = '';
 
                         if (data.length === 0) {
-                            mkList.innerHTML =
-                                '<div class="text-red-500 italic">Tidak ada MK terkait atau semua MK sudah diberi bobot</div>';
+                            cplList.innerHTML =
+                                '<div class="text-red-500 italic">Tidak ada CPL terkait atau semua CPL sudah diberi bobot</div>';
                             notifSudahAda.classList.remove('hidden');
                             submitBtn.disabled = true;
                             return;
@@ -112,24 +109,24 @@
                             notifSudahAda.classList.add('hidden');
                         }
 
-                        data.forEach((mk, index) => {
-                            const mkItem = document.createElement('div');
-                            mkItem.className =
+                        data.forEach((cpl, index) => {
+                            const cplItem = document.createElement('div');
+                            cplItem.className =
                                 'mb-3 flex items-center justify-between bg-white p-3 border rounded hover:bg-blue-50';
 
-                            mkItem.innerHTML = `
-                    <div>
-                        <strong>${mk.kode_mk}</strong> - ${mk.nama_mk}
+                            cplItem.innerHTML = `
+                    <div class="flex-1">
+                        <strong>${cpl.kode_cpl}</strong> - ${cpl.deskripsi_cpl}
                     </div>
-                    <input type="number" name="bobot[${mk.kode_mk}]" min="0" max="100" value="0"
+                    <input type="number" name="bobot[${cpl.id_cpl}]" min="0" max="100" value="0"
                         class="w-24 p-2 border rounded text-center bobot-input">
-                    <input type="hidden" name="kode_mk[]" value="${mk.kode_mk}">
+                    <input type="hidden" name="id_cpl[]" value="${cpl.id_cpl}">
                 `;
 
-                            mkList.appendChild(mkItem);
+                            cplList.appendChild(cplItem);
                         });
 
-                        mkList.innerHTML += `
+                        cplList.innerHTML += `
                 <div class="mt-4">
                     <button type="button" id="distributeBtn"
                         class="text-sm text-yellow-600 hover:text-yellow-800">Bagi Rata</button>
@@ -149,9 +146,9 @@
                         });
                     })
                     .catch(err => {
-                        loadingMK.classList.add('hidden');
-                        mkList.innerHTML = '<div class="text-red-500 italic">Terjadi kesalahan: ' + err.message + '</div>';
-                        console.error('Error details:', err);
+                        loadingCPL.classList.add('hidden');
+                        cplList.innerHTML = '<div class="text-red-500 italic">Terjadi kesalahan</div>';
+                        console.error(err);
                     });
             });
 

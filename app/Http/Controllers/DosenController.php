@@ -53,21 +53,24 @@ class DosenController extends Controller
             $selectedMK = MataKuliah::where('kode_mk', $request->kode_mk)->first();
             $selectedTahun = $request->id_tahun;
             
-            // Get mahasiswa berdasarkan prodi dan tahun kurikulum
-            $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
-                ->where('id_tahun_kurikulum', $request->id_tahun)
-                ->where('status', 'aktif')
-                ->with(['tahunKurikulum'])
-                ->orderBy('nim')
-                ->get();
-            
-            // Get nilai yang sudah ada
-            foreach ($mahasiswas as $mhs) {
-                $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
-                    ->where('kode_mk', $request->kode_mk)
-                    ->where('id_tahun', $request->id_tahun)
-                    ->first();
-                $mhs->nilai_akhir = $nilai ? $nilai->nilai_akhir : null;
+            // Hanya load mahasiswa jika mata kuliah ditemukan
+            if ($selectedMK) {
+                // Get mahasiswa berdasarkan prodi dan tahun kurikulum
+                $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
+                    ->where('id_tahun_kurikulum', $request->id_tahun)
+                    ->where('status', 'aktif')
+                    ->with(['tahunKurikulum'])
+                    ->orderBy('nim')
+                    ->get();
+                
+                // Get nilai yang sudah ada
+                foreach ($mahasiswas as $mhs) {
+                    $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
+                        ->where('kode_mk', $request->kode_mk)
+                        ->where('id_tahun', $request->id_tahun)
+                        ->first();
+                    $mhs->nilai_akhir = $nilai ? $nilai->nilai_akhir : null;
+                }
             }
         }
         
