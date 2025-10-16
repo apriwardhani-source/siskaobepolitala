@@ -1,4 +1,4 @@
-@extends('layouts.tim.app')
+﻿@extends('layouts.tim.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
@@ -179,11 +179,11 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-4 text-sm text-gray-700">
-                                    {{ Str::limit($subcpmk->deskripsi ?? '-', 150) }}
+                                    {{ Str::limit($subcpmk->uraian_cpmk ?? ($subcpmk->deskripsi_cpmk ?? '-'), 150) }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('tim.subcpmk.detail', $subcpmk->id_subcpmk) }}" 
+                                        <a href="{{ route('tim.subcpmk.detail', $subcpmk->id_sub_cpmk) }}" 
                                            class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
                                            title="Detail">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,7 +193,7 @@
                                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
                                         </a>
-                                        <a href="{{ route('tim.subcpmk.edit', $subcpmk->id_subcpmk) }}" 
+                                        <a href="{{ route('tim.subcpmk.edit', $subcpmk->id_sub_cpmk) }}" 
                                            class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"
                                            title="Edit">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +201,7 @@
                                                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('tim.subcpmk.destroy', $subcpmk->id_subcpmk) }}" method="POST" class="inline">
+                                        <form action="{{ route('tim.subcpmk.destroy', $subcpmk->id_sub_cpmk) }}" method="POST" class="inline">
                                             @csrf @method('DELETE')
                                             <button type="submit" 
                                                     onclick="return confirm('Yakin ingin menghapus Sub CPMK ini?')"
@@ -285,3 +285,4 @@ setTimeout(function() {
 </style>
 @endpush
 @endsection
+
