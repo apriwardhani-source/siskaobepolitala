@@ -59,7 +59,7 @@
 <body class="min-h-screen">
 
     <!-- Photo background -->
-    <div class="bg-photo" aria-hidden="true"></div>
+    <div class="bg-photo" aria-hidden="true" style="background-image: linear-gradient(180deg, rgba(6,28,61,.35), rgba(6,28,61,.35)), url('{{ asset('image/bg-kampus.jpg') }}');"></div>
 
     <!-- Subtle grain overlay -->
     <div aria-hidden="true" class="fixed inset-0 pointer-events-none opacity-[.04] mix-blend-overlay" style="background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,.6) 1px, transparent 1px); background-size: 6px 6px;"></div>
@@ -77,7 +77,7 @@
         <div class="glass overflow-hidden flex flex-col md:flex-row">
         
           <!-- Gambar / Hero -->
-          <div class="md:w-1/2 w-full h-64 md:h-auto bg-cover bg-center relative hero-bg">
+          <div class="md:w-1/2 w-full h-64 md:h-auto bg-cover bg-center relative" style="background-image: url('{{ asset('image/Politala.jpeg') }}'); filter: brightness(1.12) contrast(1.08) saturate(1.2);">
             <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));"></div>
             <div class="absolute bottom-4 left-4 right-4 text-white text-left animate-slideUp">
                 <h4 class="text-xs sm:text-sm md:text-base mb-1 opacity-90">Selamat Datang</h4>
@@ -186,5 +186,6 @@
     </script>
 </body>
 </html>
+
 
 
