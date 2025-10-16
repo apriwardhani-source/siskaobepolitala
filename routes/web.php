@@ -83,6 +83,9 @@ use App\Http\Controllers\MisiController;
 use App\Http\Controllers\TimVisiMisiController;
 use App\Http\Controllers\Wadir1VisiMisiController;
 use App\Http\Controllers\AdminVisiMisiController;
+use App\Http\Controllers\Admin\HasilObeController as AdminHasilObeController;
+use App\Http\Controllers\Wadir1\HasilObeController as Wadir1HasilObeController;
+use App\Http\Controllers\Kaprodi\HasilObeController as KaprodiHasilObeController;
 
 // Rute untuk tamu (guest)
 Route::middleware(['guest'])->group(function () {
@@ -234,6 +237,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/misi/{misi}/detail', [MisiController::class, 'detail'])->name('misi.detail');
         Route::delete('/misi/{misi}', [MisiController::class, 'destroy'])->name('misi.destroy');
         Route::get('/visimisi', [AdminVisiMisiController::class, 'index'])->name('visimisi.index');
+        
+        // Hasil OBE
+        Route::get('/hasilobe', [AdminHasilObeController::class, 'index'])->name('hasilobe.index');
+        Route::get('/hasilobe/{nim}', [AdminHasilObeController::class, 'detail'])->name('hasilobe.detail');
     });
 
     // Grup Route Wadir1
@@ -281,6 +288,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pemetaanmkcpmkcpl', [Wadir1PemetaanCplCpmkMkController::class, 'pemetaanmkcpmkcpl'])->name('pemetaancplcpmkmk.pemetaanmkcpmkcpl');
         Route::get('/pemetaanmkcpmksubcpmk', [Wadir1SubCpmkController::class, 'pemetaanmkcpmksubcpmk'])->name('pemetaanmkcpmksubcpmk.index');
         Route::get('/visimisi', [Wadir1VisiMisiController::class, 'index'])->name('visimisi.index');
+        
+        // Hasil OBE
+        Route::get('/hasilobe', [Wadir1HasilObeController::class, 'index'])->name('hasilobe.index');
+        Route::get('/hasilobe/{nim}', [Wadir1HasilObeController::class, 'detail'])->name('hasilobe.detail');
     });
 
     // Grup Route Kaprodi
@@ -318,6 +329,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/notes/{note}', [KaprodiNotesController::class, 'destroy'])->name('notes.destroy');
         Route::get('/tahun', [KaprodiTahunController::class, 'index'])->name('tahun.index');
         Route::get('/visimisi', [KaprodiVisiMisiController::class, 'index'])->name('visimisi.index');
+        
+        // Hasil OBE
+        Route::get('/hasilobe', [KaprodiHasilObeController::class, 'index'])->name('hasilobe.index');
+        Route::get('/hasilobe/{nim}', [KaprodiHasilObeController::class, 'detail'])->name('hasilobe.detail');
     });
 
     // Grup Route Tim
