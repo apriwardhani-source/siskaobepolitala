@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -6,127 +6,185 @@
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --brand-1: #0B6AA9;
+            --brand-2: #2FB3DA;
+            --brand-3: #8EC5FF;
+            --brand-ring: rgba(15,130,200,0.35);
+        }
+
+        /* Motion */
+        @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
+        @keyframes slideUp { from {transform: translateY(12px); opacity: 0} to {transform: translateY(0); opacity: 1} }
+        @keyframes pulseSoft { 0% { box-shadow: 0 0 0 0 rgba(48,148,198,0.25) } 70% { box-shadow: 0 0 0 12px rgba(48,148,198,0) } 100% { box-shadow: 0 0 0 0 rgba(48,148,198,0) } }
+        .animate-fadeIn { animation: fadeIn .6s ease-out both }
+        .animate-slideUp { animation: slideUp .6s ease-out both }
+        .btn-soft-pulse:hover { animation: pulseSoft 1.2s ease-out }
+        .transition-smooth { transition: all .2s ease }
+        .focus-glow:focus { box-shadow: 0 0 0 4px rgba(107,114,128,0.28) }
+
+        /* Background photo */
+        .bg-photo { position: fixed; inset:0; z-index:-2; 
+            /* lighten overlay so photo shows more */
+            background-image: linear-gradient(180deg, rgba(6,28,61,.35), rgba(6,28,61,.35)), url('/image/bg-kampus.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat; }
+
+        /* MORE TRANSPARENT glass */
+        .glass { position: relative; overflow:hidden; border-radius:18px;
+            background: rgba(255,255,255,0.06); /* was 0.10 */
+            border: 1px solid rgba(255,255,255,0.30); /* was 0.40 */
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            box-shadow: 0 10px 26px rgba(2,6,23,0.16), 0 1px 0 rgba(255,255,255,0.18) inset, 0 0 0 1px rgba(255,255,255,0.05) inset;
+        }
+        .glass::before { content:""; position:absolute; inset:0; background: radial-gradient(120% 60% at 0% 0%, rgba(255,255,255,0.18), rgba(255,255,255,0) 60%); pointer-events:none; }
+        .card-wrap { padding:1px; border-radius:18px; background: linear-gradient(120deg, rgba(156,163,175,0.25), rgba(229,231,235,0.15)); }
+        .divider-gradient { height:4px; background: linear-gradient(90deg, rgba(156,163,175,0.75), rgba(229,231,235,0.75)); border-radius:9999px }
+        .btn-brand { background: linear-gradient(90deg, var(--brand-1), var(--brand-2)); color:#fff; }
+        .btn-brand:hover { filter: brightness(1.05); }
+        .link-muted { color: rgba(248,250,252,0.8); }
+        .link-muted:hover { color: rgba(255,255,255,0.95); text-decoration: underline; }
+
+        @media (prefers-reduced-motion: reduce) { .animate-fadeIn, .animate-slideUp, .btn-soft-pulse:hover { animation:none } .transition-smooth { transition:none } }
+            /* HD hero image (uses image-set if available) */
+        .hero-bg { background-image: url('/image/Politala.jpeg');
+            background-image: -webkit-image-set(url('/image/Politala.jpeg') 1x, url('/image/Politala@2x.jpeg') 2x, url('/image/Politala@3x.jpeg') 3x);
+            background-image: image-set(url('/image/Politala.jpeg') 1x, url('/image/Politala@2x.jpeg') 2x, url('/image/Politala@3x.jpeg') 3x);
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            filter: brightness(1.12) contrast(1.08) saturate(1.2);
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-300 to-gray-100 min-h-screen">
+<body class="min-h-screen">
+
+    <!-- Photo background -->
+    <div class="bg-photo" aria-hidden="true"></div>
+
+    <!-- Subtle grain overlay -->
+    <div aria-hidden="true" class="fixed inset-0 pointer-events-none opacity-[.04] mix-blend-overlay" style="background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,.6) 1px, transparent 1px); background-size: 6px 6px;"></div>
 
     <div class="fixed top-4 left-4 z-50">
-        <a href="{{ url('/') }}" class="flex items-center text-white rounded-full px-3 py-2 shadow-md transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5  text-white " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <a href="{{ url("/") }}" class="flex items-center text-white/90 bg-black/20 rounded-full px-3 py-2 shadow-md transition-all duration-300 hover:bg-black/30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
         </a>
     </div>
 
-    <div class="min-h-screen flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-      <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+    <div class="min-h-screen flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div class="card-wrap w-full max-w-4xl animate-fadeIn shadow-2xl">
+        <div class="glass overflow-hidden flex flex-col md:flex-row">
         
-        <!-- Gambar -->
-        <div class="md:w-1/2 w-full h-64 md:h-auto bg-cover bg-center relative" style="background-image: url('/image/Politala.jpeg');">
-        
-            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-         
-            <div class="absolute bottom-4 left-4 right-4 text-white text-left">
-                <h4 class="text-xs sm:text-sm md:text-base mb-1">Selamat Datang</h4>
-                <hr class="border-t-2 border-white w-1/5 sm:w-1/5 mb-1">
+          <!-- Gambar / Hero -->
+          <div class="md:w-1/2 w-full h-64 md:h-auto bg-cover bg-center relative hero-bg">
+            <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));"></div>
+            <div class="absolute bottom-4 left-4 right-4 text-white text-left animate-slideUp">
+                <h4 class="text-xs sm:text-sm md:text-base mb-1 opacity-90">Selamat Datang</h4>
+                <div class="divider-gradient w-1/5 sm:w-1/5 mb-2"></div>
                 <h2 class="text-lg sm:text-xl md:text-2xl font-semibold mb-1 leading-tight">Sistem Kurikulum Berbasis OBE</h2>
                 <h3 class="text-sm sm:text-base md:text-lg font-bold leading-tight">Politeknik Negeri Tanah Laut</h3>
             </div>
-        </div>
+          </div>
         
-    
-        <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center h-full">
-            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-700 mb-4">LOGIN</h2>
-            <hr class="bg-[#3094c6] mx-auto border-none h-1 w-1/3 mb-4">
-            <p class="text-center text-[#3094c6] font-semibold text-sm sm:text-base">Sistem Informasi Penyusun Kurikulum Berbasis OBE</p>
+          <!-- Form Card -->
+          <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center h-full">
+            <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-100 mb-2 tracking-tight animate-slideUp">Masuk Akun</h1>
+            <div class="divider-gradient mx-auto w-1/3 mb-3 animate-fadeIn"></div>
+            <p class="text-center font-medium text-sm sm:text-base mb-4 text-gray-100/90">Sistem Informasi Penyusun Kurikulum Berbasis OBE</p>
             
             @if($errors->any())
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    showToast("{{ $errors->first() }}", 'error');
+                document.addEventListener("DOMContentLoaded", function() {
+                    showToast("{{ $errors->first() }}", "error");
                 });
             </script>
             @endif
             
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
+            <form action="{{ route("login.post") }}" method="POST" class="space-y-4" aria-describedby="form-help" novalidate>
                 @csrf
                 <div>
-                    <label class="block text-[#87acd6]">Email</label>
+                    <label for="email" class="block text-gray-100 font-medium">Email</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-1">
-                            <i class="fas fa-envelope text-gray-400"></i>
+                            <i class="fas fa-envelope text-slate-600"></i>
                         </div>
-                        <input type="email" name="email" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[#3094c6]" required placeholder="Masukkan Gmail">
+                        <input id="email" type="email" name="email" inputmode="email" autocomplete="email" autocapitalize="none"
+                               value="{{ old("email") }}"
+                               class="w-full border @error("email") border-red-400 @else border-white/60 @enderror rounded-lg px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus-glow transition-smooth bg-white/80 text-gray-900 placeholder:text-slate-500"
+                               required placeholder="nama@email.com">
                     </div>
+                    @error("email")
+                        <p id="emailHelp" class="text-red-300 text-xs mt-1 animate-slideUp">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
-                    <label class="block text-[#87acd6]">Password</label>
+                    <label for="password" class="block text-gray-100 font-medium">Kata Sandi</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-1">
-                            <i class="fas fa-lock text-gray-400"></i>
+                            <i class="fas fa-lock text-slate-600"></i>
                         </div>
-                        <input type="password" name="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[#3094c6]" required placeholder="Masukkan Password">
+                        <input id="password" type="password" name="password" autocomplete="current-password"
+                               class="w-full border @error("password") border-red-400 @else border-white/60 @enderror rounded-lg px-3 py-3 mt-1 pl-10 pr-10 focus:outline-none focus:ring-2 focus-glow transition-smooth bg-white/80 text-gray-900 placeholder:text-slate-500"
+                               required placeholder="Masukkan password">
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-600 hover:text-white transition-smooth" aria-label="Tampilkan/sembunyikan password" aria-pressed="false">
+                            <i class="far fa-eye" id="togglePasswordIcon"></i>
+                        </button>
                     </div>
+                    @error("password")
+                        <p class="text-red-300 text-xs mt-1 animate-slideUp">{{ $message }}</p>
+                    @enderror
                 </div>
-                <button href="/login" type="submit" class="w-full bg-[#3094c6] text-white py-2 rounded-lg hover:bg-[rgb(29,99,134)] transition-all">
-                    Login
+
+                <div class="flex items-center justify-between text-sm text-gray-100">
+                    <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" class="rounded border-white/40 bg-white/10 text-white focus:ring-white/30 transition-smooth">
+                        <span>Ingat saya</span>
+                    </label>
+                    <a href="/forgot-password" class="text-gray-100/90 hover:text-white">Lupa password?</a>
+                </div>
+
+                <button type="submit" id="submitBtn"
+                        class="btn-brand w-full py-2.5 rounded-lg active:scale-[.99] transition-smooth btn-soft-pulse flex items-center justify-center gap-2 shadow-md">
+                    <span id="submitText">Masuk</span>
+                    <svg id="submitSpinner" class="animate-spin h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
                 </button>
                 <p class="text-center mt-2">
-                    <a href="/forgot-password" class="text-[#3094c6] hover:underline ">Forgot Password?</a>
+                    <a href="/signup" class="text-gray-100/90 hover:text-white">Belum punya akun? Daftar</a>
                 </p>
-                <p class="text-center mt-2">
-                    <a href="/signup" class="text-[#3094c6] hover:underline">Sign up?</a>
-                </p>
+                <p id="form-help" class="sr-only">Masukkan email dan kata sandi Anda untuk masuk.</p>
             </form>
+          </div>
         </div>
       </div>
     </div>
     
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function showToast(message, type = 'success') {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top',
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-            
-            Toast.fire({
-                icon: type,
-                title: message
-            });
-        }
+        function showToast(message, type = "success") { const Toast = Swal.mixin({ toast: true, position: "top", showConfirmButton: false, timer: 2000, timerProgressBar: true, didOpen: (t) => { t.addEventListener("mouseenter", Swal.stopTimer); t.addEventListener("mouseleave", Swal.resumeTimer); } }); Toast.fire({ icon: type, title: message }); }
 
-        // Check for session messages
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener("DOMContentLoaded", function() {
         @if($errors->any())
-            Swal.fire({
-                icon: 'error',
-                title: '{{ $errors->first() }}',
-                showConfirmButton: false,
-                timer: 2000,
-                toast: true,
-                position: 'top'
-            });
+            Swal.fire({ icon: "error", title: "{{ $errors->first() }}", showConfirmButton: false, timer: 2000, toast: true, position: "top" });
         @endif
         
-        @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: '{{ session('error') }}',
-                showConfirmButton: false,
-                timer: 2000,
-                toast: true,
-                position: 'top'
-            });
+        @if(session("error"))
+            Swal.fire({ icon: "error", title: "{{ session("error") }}", showConfirmButton: false, timer: 2000, toast: true, position: "top" });
         @endif
+
+        const toggleBtn = document.getElementById("togglePassword");
+        const pwd = document.getElementById("password");
+        const icon = document.getElementById("togglePasswordIcon");
+        if (toggleBtn && pwd && icon) { toggleBtn.addEventListener("click", () => { const show = pwd.getAttribute("type") === "password"; pwd.setAttribute("type", show ? "text" : "password"); icon.classList.toggle("fa-eye"); icon.classList.toggle("fa-eye-slash"); toggleBtn.setAttribute("aria-pressed", String(show)); }); }
+
+        const form = document.querySelector("form"); const submitBtn = document.getElementById("submitBtn"); const submitText = document.getElementById("submitText"); const submitSpinner = document.getElementById("submitSpinner");
+        if (form && submitBtn && submitText && submitSpinner) { form.addEventListener("submit", () => { submitBtn.disabled = true; submitSpinner.classList.remove("hidden"); submitText.textContent = "Memproses..."; }); }
     });
     </script>
 </body>
 </html>
+
+
