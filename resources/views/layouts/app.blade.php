@@ -9,9 +9,6 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     
-    <!-- Custom Modern Styles -->
-    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
-
     @vite(['resources/js/app.js'])
     
     @stack('styles')
@@ -59,7 +56,15 @@
     <div class="px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
         <div class="flex items-center space-x-4">
-            <span class="font-bold text-xl uppercase">Politala OBE - Admin</span>
+            <span class="font-bold text-xl uppercase">
+                Politala OBE - 
+                @if(auth()->user()->role === 'admin') Admin
+                @elseif(auth()->user()->role === 'wadir1') Wadir 1
+                @elseif(auth()->user()->role === 'kaprodi') Kaprodi
+                @elseif(auth()->user()->role === 'tim') Tim
+                @elseif(auth()->user()->role === 'dosen') Dosen
+                @endif
+            </span>
         </div>
         
         <!-- Mobile Menu Button -->
@@ -90,95 +95,63 @@
         </div>
     </div>
     
-    <!-- Menu Bar (Desktop) -->
+    <!-- Menu Bar (Desktop) - Dynamic based on role -->
     <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
-        <!-- Dashboard -->
-        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        @php
+            $role = auth()->user()->role;
+            $routePrefix = $role;
+        @endphp
+
+        <!-- Dashboard (All Roles) -->
+        <a href="{{ route($routePrefix . '.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
             <i class="bi bi-house-door mr-2"></i>Beranda
         </a>
-        
-        <!-- Program Setup -->
+
+        @if(in_array($role, ['admin', 'tim']))
+        <!-- Menu untuk Admin & Tim (Full CRUD) -->
         <div class="relative dropdown">
             <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
-                Pengaturan Program <i class="bi bi-chevron-down ml-1"></i>
+                Pengaturan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48">
-                <a href="{{ route('admin.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-calendar mr-2"></i>Visi Misi
+                <a href="{{ route($routePrefix . '.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-bullseye mr-2"></i>Visi Misi
                 </a>
-                <a href="{{ route('admin.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-calendar mr-2"></i>Tahun
-                </a>
-            </div>
-        </div>
-        
-        <!-- Learning Outcomes -->
-        <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
-                Capaian Pembelajaran <i class="bi bi-chevron-down ml-1"></i>
-            </button>
-            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-check2-square mr-2"></i>CPL Prodi
+                <a href="{{ route($routePrefix . '.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-calendar mr-2"></i>Tahun Kurikulum
                 </a>
             </div>
         </div>
-        
-        <!-- Curriculum -->
-        <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
-                Kurikulum <i class="bi bi-chevron-down ml-1"></i>
-            </button>
-            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-book mr-2"></i>Susunan MK
-                </a>
-                <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-bar-chart mr-2"></i>CPL - MK
-                </a>
-            </div>
-        </div>
-        
-        <!-- Lanjutan -->
-        <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
-                Lanjutan <i class="bi bi-chevron-down ml-1"></i>
-            </button>
-            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
-                <a href="{{ route('admin.matakuliah.organisasimk') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-columns mr-2"></i>Organisasi MK
-                </a>
-            </div>
-        </div>
-        
-        <!-- Pemetaan -->
+
+        <a href="{{ route($routePrefix . '.capaianprofillulusan.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-check2-square mr-2"></i>CPL
+        </a>
+
+        <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-book mr-2"></i>Mata Kuliah
+        </a>
+
         <div class="relative dropdown">
             <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
                 Pemetaan <i class="bi bi-chevron-down ml-1"></i>
             </button>
-            <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
-                <a href="{{ route('admin.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
+                <a href="{{ route($routePrefix . '.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-bookmark mr-2"></i>CPMK
                 </a>
-                <a href="{{ route('admin.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route($routePrefix . '.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-diagram-3 mr-2"></i>Pemetaan CPL-CPMK-MK
                 </a>
-                <a href="{{ route('admin.pemetaancplcpmkmk.pemetaanmkcpmkcpl') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-graph-up mr-2"></i>Pemetaan MK-CPL-CPMK
-                </a>
-                <a href="{{ route('admin.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route($routePrefix . '.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-bookmark-check mr-2"></i>Sub CPMK
                 </a>
-                <a href="{{ route('admin.pemetaanmkcpmksubcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    <i class="bi bi-diagram-2 mr-2"></i>Pemetaan MK-CPMK-SubCPMK
-                </a>
-                <a href="{{ route('admin.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                <a href="{{ route($routePrefix . '.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
                     <i class="bi bi-speedometer2 mr-2"></i>Bobot CPL-MK
                 </a>
             </div>
         </div>
-        
-        <!-- Management -->
+
+        @if($role === 'admin')
         <div class="relative dropdown">
             <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
                 Manajemen <i class="bi bi-chevron-down ml-1"></i>
@@ -195,46 +168,101 @@
                 </a>
             </div>
         </div>
+        @endif
+
+        @elseif(in_array($role, ['wadir1', 'kaprodi']))
+        <!-- Menu untuk Wadir1 & Kaprodi (Read Only) -->
+        <a href="{{ route($routePrefix . '.visimisi.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-bullseye mr-2"></i>Visi Misi
+        </a>
+
+        <a href="{{ route($routePrefix . '.capaianpembelajaranlulusan.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-check2-square mr-2"></i>CPL
+        </a>
+
+        <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-book mr-2"></i>Mata Kuliah
+        </a>
+
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Pemetaan <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
+                <a href="{{ route($routePrefix . '.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-bookmark mr-2"></i>CPMK
+                </a>
+                <a href="{{ route($routePrefix . '.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-diagram-3 mr-2"></i>Pemetaan CPL-CPMK-MK
+                </a>
+                <a href="{{ route($routePrefix . '.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-bookmark-check mr-2"></i>Sub CPMK
+                </a>
+                <a href="{{ route($routePrefix . '.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-speedometer2 mr-2"></i>Bobot CPL-MK
+                </a>
+            </div>
+        </div>
+
+        @elseif($role === 'dosen')
+        <!-- Menu untuk Dosen -->
+        <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-clipboard-check mr-2"></i>Penilaian Mahasiswa
+        </a>
+        @endif
+
+        <!-- Hasil OBE (All roles except dosen) -->
+        @if(in_array($role, ['admin', 'wadir1', 'kaprodi']))
+        <a href="{{ route($routePrefix . '.hasilobe.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-bar-chart mr-2"></i>Hasil OBE
+        </a>
+        @endif
     </div>
     
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu md:hidden bg-gray-800">
         <div class="px-6 py-2 space-y-2">
-            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route($routePrefix . '.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-house-door mr-2"></i>Beranda
             </a>
-            <div class="border-t border-gray-700"></div>
-            <p class="text-gray-400 text-xs px-4 py-1">PENGATURAN PROGRAM</p>
-            <a href="{{ route('admin.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-calendar mr-2"></i>Visi Misi
+
+            @if(in_array($role, ['admin', 'wadir1', 'kaprodi']))
+            <a href="{{ route($routePrefix . '.hasilobe.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-bar-chart mr-2"></i>Hasil OBE
             </a>
-            <a href="{{ route('admin.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-calendar mr-2"></i>Tahun
+            @endif
+
+            @if(in_array($role, ['admin', 'tim']))
+            <div class="border-t border-gray-700 mt-2 pt-2"></div>
+            <p class="text-gray-400 text-xs px-4 py-1 uppercase">Data Master</p>
+            <a href="{{ route($routePrefix . '.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-bullseye mr-2"></i>Visi Misi
             </a>
-            <div class="border-t border-gray-700"></div>
-            <p class="text-gray-400 text-xs px-4 py-1">CAPAIAN PEMBELAJARAN</p>
-            <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-check2-square mr-2"></i>1. CPL Prodi
+            <a href="{{ route($routePrefix . '.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-check2-square mr-2"></i>CPL
             </a>
-            <div class="border-t border-gray-700"></div>
-            <p class="text-gray-400 text-xs px-4 py-1">KURIKULUM</p>
-            <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-book mr-2"></i>2. Susunan MK
+            <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-book mr-2"></i>Mata Kuliah
             </a>
-            <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
-            </a>
-            <div class="border-t border-gray-700"></div>
-            <p class="text-gray-400 text-xs px-4 py-1">MANAJEMEN</p>
+            @endif
+
+            @if($role === 'admin')
+            <div class="border-t border-gray-700 mt-2 pt-2"></div>
+            <p class="text-gray-400 text-xs px-4 py-1 uppercase">Manajemen</p>
             <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-people mr-2"></i>Pengguna
-            </a>
-            <a href="{{ route('admin.pendingusers.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
-                <i class="bi bi-person-check mr-2"></i>Persetujuan Pengguna
             </a>
             <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-mortarboard mr-2"></i>Program Studi
             </a>
+            @endif
+
+            @if($role === 'dosen')
+            <a href="{{ route('dosen.penilaian.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-clipboard-check mr-2"></i>Penilaian Mahasiswa
+            </a>
+            @endif
+
             <form action="{{ route('logout') }}" method="POST" class="mt-4">
                 @csrf
                 <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-700 rounded text-red-400">

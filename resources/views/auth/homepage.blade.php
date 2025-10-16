@@ -303,13 +303,9 @@
             Profil Kurikulum OBE <span class="text-sky-500">Politala</span>
           </h1>
           <p class="text-justify text-base text-gray-700 leading-relaxed mb-6">
-            Politeknik Negeri Lhokseumawe (POLITALA) merupakan perguruan tinggi vokasi di Aceh
-            yang berfokus pada pendidikan terapan. Kampus ini memiliki berbagai program studi unggulan yang
-            mendukung perkembangan teknologi dan industri di Indonesia. POLITALA berperan aktif dalam mendukung
-            pertumbuhan sektor
-            industri, teknologi, dan pembangunan daerah melalui pendidikan berbasis praktik, inovasi, serta kerja sama
-            dengan berbagai
-            mitra industri baik di dalam maupun luar negeri.
+            Politeknik Negeri Tanah Laut (Politala) merupakan perguruan tinggi vokasi yang berlokasi di Kabupaten Tanah Laut, Provinsi Kalimantan Selatan. Politala berfokus pada pendidikan terapan dengan tujuan mencetak lulusan yang kompeten, inovatif, dan siap kerja di berbagai bidang industri.
+
+Kampus ini memiliki berbagai program studi unggulan di bidang teknologi, pertanian, dan bisnis digital, yang dirancang untuk mendukung perkembangan industri dan pembangunan daerah. Politala juga aktif menjalin kerja sama dengan dunia industri serta lembaga pendidikan lain, baik di dalam maupun luar negeri, guna meningkatkan kualitas pendidikan dan relevansi kompetensi lulusan dengan kebutuhan pasar kerja.
           </p>
           <a href="{{ route('login') }}"
             class="inline-flex items-center bg-sky-500 hover:bg-sky-700 text-white mt-4 px-5 py-3 rounded-full shadow transition">
