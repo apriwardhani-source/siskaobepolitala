@@ -36,9 +36,7 @@ class KaprodiMataKuliahController extends Controller
             )
             ->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->where('prodis.kode_prodi', '=', $kodeProdi)
             ->groupBy(
                 'mk.kode_mk',
@@ -50,7 +48,7 @@ class KaprodiMataKuliahController extends Controller
                 'prodis.nama_prodi'
             );
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
         $mata_kuliahs = $query->get();
 
@@ -64,11 +62,8 @@ class KaprodiMataKuliahController extends Controller
 
         $selectedCPL = DB::table('cpl_mk as cplmk')
             ->join('capaian_profil_lulusans as cpl', 'cplmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
             ->where('cplmk.kode_mk', $matakuliah->kode_mk)
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->pluck('cplmk.id_cpl')
             ->unique()
             ->toArray();
@@ -79,11 +74,8 @@ class KaprodiMataKuliahController extends Controller
             ->join('bahan_kajians as bk', 'bkmk.id_bk', '=', 'bk.id_bk')
             ->join('cpl_bk', 'bk.id_bk', '=', 'cpl_bk.id_bk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
             ->where('bkmk.kode_mk', $matakuliah->kode_mk)
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->orderBy('bk.kode_bk')
             ->pluck('bkmk.id_bk')
             ->unique()
@@ -122,14 +114,12 @@ class KaprodiMataKuliahController extends Controller
             )
             ->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->where('prodis.kode_prodi', '=', $kodeProdi);
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $query->groupBy(

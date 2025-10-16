@@ -185,11 +185,11 @@
                             <div class="flex items-center space-x-4 flex-1">
                                 <div class="flex-shrink-0">
                                     <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                        {{ strtoupper(substr($mahasiswa->nama, 0, 1)) }}
+                                        {{ strtoupper(substr($mahasiswa->nama_mahasiswa, 0, 1)) }}
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <h3 class="text-sm font-semibold text-gray-900">{{ $mahasiswa->nama }}</h3>
+                                    <h3 class="text-sm font-semibold text-gray-900">{{ $mahasiswa->nama_mahasiswa }}</h3>
                                     <div class="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                                         <span class="flex items-center">
                                             <i class="fas fa-id-card mr-1"></i>

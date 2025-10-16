@@ -24,16 +24,20 @@ class HasilObeController extends Controller
         
         $mahasiswas = collect();
         $tahun_options = Tahun::orderBy('tahun', 'desc')->get();
+        $prodi_options = \App\Models\Prodi::where('kode_prodi', $kode_prodi)->get();
         
         if ($tahun_angkatan) {
-            $mahasiswas = Mahasiswa::where('tahun_kurikulum', $tahun_angkatan)
-                ->where('kode_prodi', $kode_prodi)
-                ->with('prodi')
-                ->orderBy('nama')
-                ->get();
+            $tahun = Tahun::where('tahun', $tahun_angkatan)->first();
+            if ($tahun) {
+                $mahasiswas = Mahasiswa::where('id_tahun_kurikulum', $tahun->id_tahun)
+                    ->where('kode_prodi', $kode_prodi)
+                    ->with(['prodi', 'tahunKurikulum'])
+                    ->orderBy('nama_mahasiswa')
+                    ->get();
+            }
         }
         
-        return view('kaprodi.hasilobe.index', compact('mahasiswas', 'tahun_options', 'tahun_angkatan', 'kode_prodi'));
+        return view('kaprodi.hasilobe.index', compact('mahasiswas', 'tahun_options', 'tahun_angkatan', 'kode_prodi', 'prodi_options'));
     }
     
     public function detail($nim)
