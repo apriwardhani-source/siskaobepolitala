@@ -11,7 +11,7 @@
     padding: 12px 24px;
     font-weight: 600;
     border-radius: 9999px; /* kapsul */
-    background: rgb(22, 163, 74);/* putih transparan */
+    background: rgb(55, 22, 163);/* putih transparan */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.4);

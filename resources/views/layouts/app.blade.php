@@ -1,156 +1,255 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Tambahkan ini jika kamu menggunakan request AJAX -->
-    <title>{{ config('app.name', 'Laravel App') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Hapus spasi di akhir -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Hapus spasi di akhir -->
-    <link rel="stylesheet" href="{{ asset('css/glass.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>@yield('title', 'Kurikulum OBE')</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <!-- Custom Modern Styles -->
+    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
 
+    @vite(['resources/js/app.js'])
+    
+    @stack('styles')
+    
     <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            background: url("{{ asset('images/background_login.png') }}") no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        /* Gaya untuk Header/Navbar Glass */
-        .header-nav {
-            position: sticky;
-            /* Buat header tetap di atas saat scroll */
-            top: 0;
-            z-index: 1000;
-            /* Agar muncul di atas konten lain */
-            width: 100%;
-            padding: 1rem 2rem;
-            /* Atur padding */
-            background: rgba(255, 255, 255, 0.15);
-            /* Warna transparan untuk efek glass */
-            backdrop-filter: blur(12px);
-            /* Efek blur */
-            -webkit-backdrop-filter: blur(12px);
-            /* Untuk Webkit */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-            /* Garis bawah halus */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            /* Bayangan halus */
-            display: flex;
-            justify-content: space-between;
-            /* Sejajarkan kiri dan kanan */
-            align-items: center;
-        }
-
-        .header-nav h2 {
-            margin: 0;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: white;
-            /* Warna teks untuk kontras */
-        }
-
-        .nav-menu {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            /* Buat menu horizontal */
-            gap: 1rem;
-            /* Jarak antar item menu */
-        }
-
-        .nav-menu li {
-            display: inline;
-        }
-
-        .nav-menu a,
-        .nav-menu button {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            /* Atur padding */
-            border-radius: 8px;
-            /* Sudut melengkung */
-            background: transparent;
-            border: none;
-            transition: background 0.3s;
-            font-size: 1rem;
-            /* Atur ukuran font */
+        .dropdown:hover .dropdown-menu {
             display: block;
-            /* Pastikan elemen mengambil lebar penuh item li */
         }
-
-        .nav-menu a:hover,
-        .nav-menu button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            text-decoration: none;
-            /* Pastikan tidak ada garis bawah saat hover */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
         }
-
-        /* Gaya untuk konten utama */
-        .content {
-            padding: 30px;
-            /* Jaga jarak dari header */
-            /* Tidak perlu margin-left karena tidak ada sidebar */
-        }
-
-        /* Gaya untuk glass card di konten utama */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            /* Warna transparan untuk efek glass */
-            backdrop-filter: blur(12px);
-            /* Kurangi blur sedikit */
-            background: rgba(92, 90, 138, 0.15);
-            /* Warna transparan untuk efek glass */
-            backdrop-filter: blur(12px);
-            /* Kurangi blur sedikit */
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            /* Kurangi shadow untuk tampilan lebih datar */
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: #ffffff;
-            /* Pastikan teks di dalam card tetap gelap */
-        }
-
-        /* Gaya untuk link di dalam glass-card agar kontras */
-        .glass-card a {
-            color: #ffffff;
-        }
-
-        .glass-card a:hover {
-            color: #d1e7ff;
-        }
-
-        /* Gaya untuk link kartu dashboard */
-        .glass-card-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            /* Pastikan link mengambil seluruh area kartu */
+        .mobile-menu.active {
+            max-height: 700px;
+            overflow-y: auto;
         }
     </style>
+    
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+        
+        function toggleDropdownProfil() {
+            const dropdown = document.getElementById("userDropdown");
+            dropdown.classList.toggle("hidden");
+        }
+    
+        document.addEventListener("click", function (event) {
+            const button = event.target.closest("button");
+            const dropdown = document.getElementById("userDropdown");
+            if (!button && !event.target.closest("#userDropdown")) {
+                dropdown?.classList.add("hidden");
+            }
+        });
+    </script>
 </head>
+<body class="bg-gray-100">
 
-<body>
-    {{-- Header/Navbar --}}
-    @include('layouts.nav') <!-- Ganti dengan include nav baru -->
-
-    {{-- Konten Utama --}}
-    <div class="content">
-        @yield('content')
+<!-- Navbar -->
+<nav class="bg-gray-900 text-white fixed top-0 left-0 w-full z-50 shadow-md">
+    <!-- Top Bar -->
+    <div class="px-6 py-4 flex items-center justify-between">
+        <!-- Logo -->
+        <div class="flex items-center space-x-4">
+            <span class="font-bold text-xl uppercase">Politala OBE - Admin</span>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button onclick="toggleMobileMenu()" class="md:hidden text-white">
+            <i class="bi bi-list text-3xl"></i>
+        </button>
+        
+        <!-- User Menu (Desktop) -->
+        <div class="hidden md:flex items-center space-x-4">
+            <span class="font-medium text-lg">{{ auth()->user()->name }}</span>
+            <div class="relative">
+                <button onclick="toggleDropdownProfil()" class="flex items-center focus:outline-none">
+                    <i class="bi bi-person-circle text-white text-2xl"></i>
+                    <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414L10 13.414 5.293 8.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <div id="userDropdown" class="absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 hidden w-48">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full flex items-center px-4 py-2 hover:bg-gray-100 text-red-600 text-left">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span>Keluar</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <!-- Menu Bar (Desktop) -->
+    <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
+        <!-- Dashboard -->
+        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <i class="bi bi-house-door mr-2"></i>Beranda
+        </a>
+        
+        <!-- Program Setup -->
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Pengaturan Program <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48">
+                <a href="{{ route('admin.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-calendar mr-2"></i>Visi Misi
+                </a>
+                <a href="{{ route('admin.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-calendar mr-2"></i>Tahun
+                </a>
+            </div>
+        </div>
+        
+        <!-- Learning Outcomes -->
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Capaian Pembelajaran <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
+                <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-check2-square mr-2"></i>CPL Prodi
+                </a>
+            </div>
+        </div>
+        
+        <!-- Curriculum -->
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Kurikulum <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
+                <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-book mr-2"></i>Susunan MK
+                </a>
+                <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-bar-chart mr-2"></i>CPL - MK
+                </a>
+            </div>
+        </div>
+        
+        <!-- Lanjutan -->
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Lanjutan <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
+                <a href="{{ route('admin.matakuliah.organisasimk') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-columns mr-2"></i>Organisasi MK
+                </a>
+            </div>
+        </div>
+        
+        <!-- Pemetaan -->
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Pemetaan <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
+                <a href="{{ route('admin.capaianpembelajaranmatakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-bookmark mr-2"></i>CPMK
+                </a>
+                <a href="{{ route('admin.pemetaancplcpmkmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-diagram-3 mr-2"></i>Pemetaan CPL-CPMK-MK
+                </a>
+                <a href="{{ route('admin.pemetaancplcpmkmk.pemetaanmkcpmkcpl') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-graph-up mr-2"></i>Pemetaan MK-CPL-CPMK
+                </a>
+                <a href="{{ route('admin.subcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-bookmark-check mr-2"></i>Sub CPMK
+                </a>
+                <a href="{{ route('admin.pemetaanmkcpmksubcpmk.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-diagram-2 mr-2"></i>Pemetaan MK-CPMK-SubCPMK
+                </a>
+                <a href="{{ route('admin.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-speedometer2 mr-2"></i>Bobot CPL-MK
+                </a>
+            </div>
+        </div>
+        
+        <!-- Management -->
+        <div class="relative dropdown">
+            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                Manajemen <i class="bi bi-chevron-down ml-1"></i>
+            </button>
+            <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
+                <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-people mr-2"></i>Pengguna
+                </a>
+                <a href="{{ route('admin.pendingusers.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-person-check mr-2"></i>Persetujuan Pengguna
+                </a>
+                <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-100">
+                    <i class="bi bi-mortarboard mr-2"></i>Program Studi
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu md:hidden bg-gray-800">
+        <div class="px-6 py-2 space-y-2">
+            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-house-door mr-2"></i>Beranda
+            </a>
+            <div class="border-t border-gray-700"></div>
+            <p class="text-gray-400 text-xs px-4 py-1">PENGATURAN PROGRAM</p>
+            <a href="{{ route('admin.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-calendar mr-2"></i>Visi Misi
+            </a>
+            <a href="{{ route('admin.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-calendar mr-2"></i>Tahun
+            </a>
+            <div class="border-t border-gray-700"></div>
+            <p class="text-gray-400 text-xs px-4 py-1">CAPAIAN PEMBELAJARAN</p>
+            <a href="{{ route('admin.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-check2-square mr-2"></i>1. CPL Prodi
+            </a>
+            <div class="border-t border-gray-700"></div>
+            <p class="text-gray-400 text-xs px-4 py-1">KURIKULUM</p>
+            <a href="{{ route('admin.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-book mr-2"></i>2. Susunan MK
+            </a>
+            <a href="{{ route('admin.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
+            </a>
+            <div class="border-t border-gray-700"></div>
+            <p class="text-gray-400 text-xs px-4 py-1">MANAJEMEN</p>
+            <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-people mr-2"></i>Pengguna
+            </a>
+            <a href="{{ route('admin.pendingusers.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-person-check mr-2"></i>Persetujuan Pengguna
+            </a>
+            <a href="{{ route('admin.prodi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-mortarboard mr-2"></i>Program Studi
+            </a>
+            <form action="{{ route('logout') }}" method="POST" class="mt-4">
+                @csrf
+                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-700 rounded text-red-400">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Keluar
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
 
-    <!-- Bootstrap JS (jika diperlukan untuk komponen JS seperti dropdown) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Hapus spasi di akhir -->
+<!-- Main Content -->
+<div class="container mx-auto px-4 py-6 mt-32">
+    @yield('content')
+</div>
+
+@stack('scripts')
 </body>
-
 </html>

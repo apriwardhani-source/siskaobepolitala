@@ -1,89 +1,132 @@
-@extends('layouts.auth')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-blue-300 to-gray-100 min-h-screen">
 
-@section('content')
-    {{-- Bagian kiri --}}
-    <div class="auth-left">
-        <img src="{{ asset('images/politala-logo.png') }}" alt="Logo">
-        <h2>{{ config('app.name', 'Aplikasi Kampus') }}</h2>
-        <p>Selamat datang kembali! Silakan login dengan akun Google atau akun kampus Anda</p>
+    <div class="fixed top-4 left-4 z-50">
+        <a href="{{ url('/') }}" class="flex items-center text-white rounded-full px-3 py-2 shadow-md transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5  text-white " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
     </div>
 
-    {{-- Bagian kanan --}}
-    <div class="auth-right">
-        <div class="auth-card text-center">
-            <h4 class="mb-4 text-white">Masuk ke Akun</h4>
-
-            {{-- Tombol login Google --}}
-            <a href="{{ route('auth.google') }}" class="btn btn-google w-100 mb-3">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
-                Masuk dengan Google
-            </a>
-
-            <div class="text-white-50 my-3">atau</div>
-
-            {{-- Form login manual --}}
-            <form method="POST" action="{{ route('login.post') }}">
-                @csrf
-                <div class="mb-3 text-start">
-                    <label for="email" class="form-label text-white">Email</label>
-                    <input type="email" id="email" name="email"
-                        class="form-control glass-input @error('email') is-invalid @enderror"
-                        value="{{ old('email') }}" required autofocus>
-                    @error('email')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                {{-- Input password dengan ikon mata --}}
-                <div class="mb-3 text-start position-relative">
-                    <label for="password" class="form-label text-white">Password</label>
-                    <div class="position-relative">
-                        <input type="password" id="password" name="password"
-                            class="form-control glass-input pe-5 @error('password') is-invalid @enderror" required>
-                        <button type="button" class="btn btn-sm bg-transparent border-0 position-absolute top-50 end-0 translate-middle-y me-2 toggle-password" tabindex="-1">
-                            <i class="fas fa-eye" style="color: #ccc;"></i>
-                        </button>
-                    </div>
-                    @error('password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="form-check">
-                        <input type="checkbox" name="remember" class="form-check-input" id="remember">
-                        <label class="form-check-label text-white-50" for="remember">Ingat saya</label>
-                    </div>
-                    <a href="#" class="text-white small">Lupa password?</a>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-
-            <p class="small text-white-50 mt-4">
-                Dengan masuk, Anda setuju dengan 
-                <a href="#" class="text-white">Syarat & Ketentuan</a> 
-                dan <a href="#" class="text-white">Kebijakan Privasi</a>.
-            </p>
+    <div class="min-h-screen flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
+      <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- Gambar -->
+        <div class="md:w-1/2 w-full h-64 md:h-auto bg-cover bg-center relative" style="background-image: url('/image/Politala.jpeg');">
+        
+            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+         
+            <div class="absolute bottom-4 left-4 right-4 text-white text-left">
+                <h4 class="text-xs sm:text-sm md:text-base mb-1">Selamat Datang</h4>
+                <hr class="border-t-2 border-white w-1/5 sm:w-1/5 mb-1">
+                <h2 class="text-lg sm:text-xl md:text-2xl font-semibold mb-1 leading-tight">Sistem Kurikulum Berbasis OBE</h2>
+                <h3 class="text-sm sm:text-base md:text-lg font-bold leading-tight">Politeknik Negeri Tanah Laut</h3>
+            </div>
         </div>
+        
+    
+        <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-center h-full">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-700 mb-4">LOGIN</h2>
+            <hr class="bg-[#3094c6] mx-auto border-none h-1 w-1/3 mb-4">
+            <p class="text-center text-[#3094c6] font-semibold text-sm sm:text-base">Sistem Informasi Penyusun Kurikulum Berbasis OBE</p>
+            
+            @if($errors->any())
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    showToast("{{ $errors->first() }}", 'error');
+                });
+            </script>
+            @endif
+            
+            <form action="{{ route('login.post') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-[#87acd6]">Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-1">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input type="email" name="email" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[#3094c6]" required placeholder="Masukkan Gmail">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[#87acd6]">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none mt-1">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input type="password" name="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[#3094c6]" required placeholder="Masukkan Password">
+                    </div>
+                </div>
+                <button href="/login" type="submit" class="w-full bg-[#3094c6] text-white py-2 rounded-lg hover:bg-[rgb(29,99,134)] transition-all">
+                    Login
+                </button>
+                <p class="text-center mt-2">
+                    <a href="/forgot-password" class="text-[#3094c6] hover:underline ">Forgot Password?</a>
+                </p>
+                <p class="text-center mt-2">
+                    <a href="/signup" class="text-[#3094c6] hover:underline">Sign up?</a>
+                </p>
+            </form>
+        </div>
+      </div>
     </div>
+    
 
-    {{-- Script toggle password --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const toggleButton = document.querySelector('.toggle-password');
-        const toggleIcon = toggleButton.querySelector('i');
-        const passwordInput = document.querySelector('#password');
+        function showToast(message, type = 'success') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+            
+            Toast.fire({
+                icon: type,
+                title: message
+            });
+        }
 
-        toggleButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Hindari form refresh
-            const isPassword = passwordInput.type === 'password';
-            passwordInput.type = isPassword ? 'text' : 'password';
-
-            toggleIcon.classList.toggle('fa-eye');
-            toggleIcon.classList.toggle('fa-eye-slash');
-        });
+        // Check for session messages
+        document.addEventListener('DOMContentLoaded', function() {
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $errors->first() }}',
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true,
+                position: 'top'
+            });
+        @endif
+        
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true,
+                position: 'top'
+            });
+        @endif
+    });
     </script>
-
-    {{-- Font Awesome CDN --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-@endsection
+</body>
+</html>

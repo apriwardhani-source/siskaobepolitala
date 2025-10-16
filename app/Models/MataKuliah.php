@@ -2,31 +2,53 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MataKuliah extends Model
 {
     use HasFactory;
-
     protected $table = 'mata_kuliahs';
+    protected $primaryKey = 'kode_mk';
+    public $incrementing = false;
+    public $timestamps = true;
 
     protected $fillable = [
-        'kode_matkul',
-        'nama_matkul',
-        'sks',
+        'kode_mk',
+        'nama_mk',
+        'sks_mk',
+        'semester_mk',
+        'kompetensi_mk',
+        'kode_prodi'
     ];
 
-    public function mappings()
+    public function bahankajians()
     {
-        return $this->belongsToMany(Mapping::class, 'mapping_mata_kuliahs', 'mata_kuliah_id', 'mapping_id')
+        return $this->belongsToMany(BahanKajian::class, 'mk_bk', 'kode_mk', 'kode_bk');
+    }
+
+    public function capaianprofilLulusans()
+    {
+        return $this->belongsToMany(CapaianProfilLulusan::class, 'cpl_mk', 'kode_mk', 'kode_cpl');
+    }
+
+    public function cplMkBks()
+    {
+        return $this->hasMany(CplMkBk::class, 'kode_mk', 'kode_mk');
+    }
+
+    // Relasi dengan Dosen (pengampu)
+    public function dosen()
+    {
+        return $this->belongsToMany(User::class, 'dosen_mata_kuliah', 'kode_mk', 'user_id')
+                    ->withPivot('id_tahun')
                     ->withTimestamps();
     }
 
-    // Relasi ke CPMK melalui pivot cpmk_mata_kuliah
-    public function cpmks()
+    // Relasi dengan Prodi
+    public function prodi()
     {
-        return $this->belongsToMany(Cpmk::class, 'cpmk_mata_kuliah', 'mata_kuliah_id', 'cpmk_id')
-                    ->withTimestamps();
+        return $this->belongsTo(Prodi::class, 'kode_prodi', 'kode_prodi');
     }
+
 }

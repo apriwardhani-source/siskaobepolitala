@@ -20,7 +20,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'nip',
+        'nohp',
         'password',
+        'role',
+        'kode_prodi',
+        'id_jurusan',
+        'status'
     ];
 
     /**
@@ -44,5 +50,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'kode_prodi', 'kode_prodi');
+    }
+
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'id_jurusan', 'id_jurusan');
+    }
+
+    // Relasi untuk Dosen - Mata Kuliah yang diampu
+    public function mataKuliahDiajar()
+    {
+        return $this->belongsToMany(MataKuliah::class, 'dosen_mata_kuliah', 'user_id', 'kode_mk')
+                    ->withPivot('id_tahun')
+                    ->withTimestamps();
     }
 }
