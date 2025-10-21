@@ -24,7 +24,7 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Export</label>
                             <select name="id_tahun" id="tahunSelect" required
                                 class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                       focus:ring-2 focus:ring-[#1e3c72] focus:border-transparent text-sm">
                                 <option value="" disabled {{ empty($id_tahun) ? 'selected' : '' }}>Pilih Tahun</option>
                                 @foreach ($availableYears as $th)
                                     <option value="{{ $th->id_tahun }}" {{ $id_tahun == $th->id_tahun ? 'selected' : '' }}>
@@ -44,9 +44,9 @@
                             </button>
 
                             <button type="button" onclick="exportWord()"
-                                class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 
+                                class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-[#1e3c72] to-[#2a5298] hover:from-[#2a5298] hover:to-[#4a90e2] 
                                        text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                       transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                       transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e3c72] hover:scale-105">
                                 <i class="fas fa-file-word mr-2"></i>
                                 Export Word
                             </button>
@@ -61,7 +61,7 @@
                         <div class="flex gap-3">
                             <select name="tahun_progress" required
                                 class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                       focus:ring-2 focus:ring-[#1e3c72] focus:border-transparent text-sm">
                                 <option value="" disabled selected>Pilih Tahun</option>
                                 @foreach ($availableYears as $th)
                                     <option value="{{ $th->id_tahun }}" {{ request('tahun_progress') == $th->id_tahun ? 'selected' : '' }}>
@@ -70,8 +70,8 @@
                                 @endforeach
                             </select>
                             <button type="submit"
-                                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium 
-                                       rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                                class="px-5 py-2.5 bg-gradient-to-r from-[#1e3c72] to-[#2a5298] hover:from-[#2a5298] hover:to-[#4a90e2] text-white font-medium 
+                                       rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105">
                                 Tampilkan
                             </button>
                         </div>
@@ -84,15 +84,15 @@
         @if (request()->filled('tahun_progress'))
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-5">
+                <div class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] px-6 py-5">
                     <h2 class="text-xl font-bold text-white">Grafik Progress Kurikulum OBE</h2>
                     <p class="mt-1 text-sm text-gray-300">Visualisasi progress per komponen kurikulum</p>
                 </div>
 
                 <div class="p-6">
                     <!-- Target Info Box -->
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-5 mb-6">
-                        <h4 class="font-semibold text-blue-900 mb-3 flex items-center">
+                    <div class="bg-gradient-to-r from-[#1e3c72]/5 to-[#4a90e2]/10 border-l-4 border-[#1e3c72] rounded-lg p-5 mb-6">
+                        <h4 class="font-semibold text-[#1e3c72] mb-3 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                             </svg>
@@ -100,7 +100,7 @@
                         </h4>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="bg-white rounded-lg p-3 shadow-sm">
-                                <div class="text-2xl font-bold text-blue-600">9</div>
+                                <div class="text-2xl font-bold text-[#1e3c72]">9</div>
                                 <div class="text-xs font-medium text-gray-600 mt-1">CPL</div>
                                 <div class="text-xs text-gray-500">Capaian Profil Lulusan</div>
                             </div>
@@ -161,32 +161,32 @@ document.addEventListener('DOMContentLoaded', function() {
         {
             label: 'CPL',
             data: prodis.map(prodi => prodi.progress_cpl || 0),
-            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-            borderColor: 'rgba(59, 130, 246, 1)',
+            backgroundColor: 'rgba(30, 60, 114, 0.7)',
+            borderColor: 'rgba(30, 60, 114, 1)',
             borderWidth: 2,
             borderRadius: 6
         },
         {
             label: 'Total SKS',
             data: prodis.map(prodi => prodi.progress_sks_mk || 0),
-            backgroundColor: 'rgba(251, 191, 36, 0.7)',
-            borderColor: 'rgba(251, 191, 36, 1)',
+            backgroundColor: 'rgba(42, 82, 152, 0.7)',
+            borderColor: 'rgba(42, 82, 152, 1)',
             borderWidth: 2,
             borderRadius: 6
         },
         {
             label: 'CPMK',
             data: prodis.map(prodi => prodi.progress_cpmk || 0),
-            backgroundColor: 'rgba(249, 115, 22, 0.7)',
-            borderColor: 'rgba(249, 115, 22, 1)',
+            backgroundColor: 'rgba(74, 144, 226, 0.7)',
+            borderColor: 'rgba(74, 144, 226, 1)',
             borderWidth: 2,
             borderRadius: 6
         },
         {
             label: 'Sub CPMK',
             data: prodis.map(prodi => prodi.progress_subcpmk || 0),
-            backgroundColor: 'rgba(239, 68, 68, 0.7)',
-            borderColor: 'rgba(239, 68, 68, 1)',
+            backgroundColor: 'rgba(139, 92, 246, 0.7)',
+            borderColor: 'rgba(139, 92, 246, 1)',
             borderWidth: 2,
             borderRadius: 6
         }

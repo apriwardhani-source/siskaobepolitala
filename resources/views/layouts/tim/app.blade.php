@@ -57,7 +57,7 @@
 <body class="bg-gray-100">
 
     <!-- Navbar -->
-    <nav class="bg-gray-900 text-white fixed top-0 left-0 w-full z-50 shadow-md">
+    <nav class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white fixed top-0 left-0 w-full z-50 shadow-lg">
         <!-- Top Bar -->
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Logo -->
@@ -98,15 +98,15 @@
         </div>
 
         <!-- Menu Bar (Desktop) -->
-        <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
+        <div class="hidden md:flex bg-[#1a2f5c] px-6 py-2 space-x-1">
             <!-- Beranda -->
-            <a href="{{ route('tim.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('tim.dashboard') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                 <i class="bi bi-house-door mr-2"></i>Beranda
             </a>
 
             <!-- Pengaturan Program -->
             <div class="relative dropdown">
-                <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                     Pengaturan Program <i class="bi bi-chevron-down ml-1"></i>
                 </button>
                 <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48">
@@ -121,7 +121,7 @@
 
             <!-- Capaian Pembelajaran -->
             <div class="relative dropdown">
-                <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                     Capaian Pembelajaran <i class="bi bi-chevron-down ml-1"></i>
                 </button>
                 <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -139,7 +139,7 @@
 
             <!-- Kurikulum -->
             <div class="relative dropdown">
-                <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                     Kurikulum <i class="bi bi-chevron-down ml-1"></i>
                 </button>
                 <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -154,7 +154,7 @@
 
             <!-- Manajemen -->
             <div class="relative dropdown">
-                <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                     Manajemen <i class="bi bi-chevron-down ml-1"></i>
                 </button>
                 <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -166,7 +166,7 @@
 
             <!-- Pemetaan -->
             <div class="relative dropdown">
-                <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+                <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                     Pemetaan <i class="bi bi-chevron-down ml-1"></i>
                 </button>
                 <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">

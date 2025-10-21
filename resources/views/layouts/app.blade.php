@@ -51,7 +51,7 @@
 <body class="bg-gray-100">
 
 <!-- Navbar -->
-<nav class="bg-gray-900 text-white fixed top-0 left-0 w-full z-50 shadow-md">
+<nav class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white fixed top-0 left-0 w-full z-50 shadow-lg">
     <!-- Top Bar -->
     <div class="px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
@@ -96,21 +96,21 @@
     </div>
     
     <!-- Menu Bar (Desktop) - Dynamic based on role -->
-    <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
+    <div class="hidden md:flex bg-[#1a2f5c] px-6 py-2 space-x-1">
         @php
             $role = auth()->user()->role;
             $routePrefix = $role;
         @endphp
 
         <!-- Dashboard (All Roles) -->
-        <a href="{{ route($routePrefix . '.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.dashboard') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-house-door mr-2"></i>Beranda
         </a>
 
         @if(in_array($role, ['admin', 'tim']))
         <!-- Menu untuk Admin & Tim (Full CRUD) -->
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                 Pengaturan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48">
@@ -123,16 +123,16 @@
             </div>
         </div>
 
-        <a href="{{ route($routePrefix . '.capaianprofillulusan.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.capaianprofillulusan.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-check2-square mr-2"></i>CPL
         </a>
 
-        <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-book mr-2"></i>Mata Kuliah
         </a>
 
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                 Pemetaan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
@@ -153,7 +153,7 @@
 
         @if($role === 'admin')
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                 Manajemen <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -180,12 +180,12 @@
             <i class="bi bi-check2-square mr-2"></i>CPL
         </a>
 
-        <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-book mr-2"></i>Mata Kuliah
         </a>
 
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 hover:bg-[#2a5298] rounded flex items-center transition-colors duration-200">
                 Pemetaan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
