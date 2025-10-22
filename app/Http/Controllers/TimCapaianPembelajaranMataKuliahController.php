@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CapaianPembelajaranMataKuliah;
 use App\Models\MataKuliah;
 use App\Models\CapaianProfilLulusan;
+use App\Imports\CpmkImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TimCapaianPembelajaranMataKuliahController extends Controller
 {
@@ -213,5 +215,86 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         $cpmk->delete();
 
         return redirect()->route('tim.capaianpembelajaranmatakuliah.index')->with('sukses', 'CPMK berhasil dihapus.');
+    }
+
+    public function import()
+    {
+        $user = Auth::user();
+        if (!$user || !$user->kode_prodi) {
+            abort(403);
+        }
+
+        $kodeProdi = $user->kode_prodi;
+
+        // Get CPL untuk prodi ini
+        $cpls = DB::table('capaian_profil_lulusans as cpl')
+            ->where('cpl.kode_prodi', $kodeProdi)
+            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
+            ->orderBy('cpl.kode_cpl', 'asc')
+            ->get();
+
+        return view('tim.capaianpembelajaranmatakuliah.import', compact('cpls'));
+    }
+
+    public function importStore(Request $request)
+    {
+        $request->validate([
+            'id_cpl' => 'required|exists:capaian_profil_lulusans,id_cpl',
+            'file' => 'required|mimes:xlsx,xls|max:2048'
+        ]);
+
+        try {
+            Excel::import(new CpmkImport($request->id_cpl), $request->file('file'));
+            return redirect()->route('tim.capaianpembelajaranmatakuliah.index')->with('sukses', 'Data CPMK berhasil diimport dari Excel');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            
+            return redirect()->back()->with('error', 'Import gagal: ' . implode(' | ', array_slice($errorMessages, 0, 3)))->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Import gagal: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $filename = 'template_import_cpmk.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $columns = ['kode_cpmk', 'deskripsi_cpmk', 'kode_mk'];
+        $sampleData = [
+            ['CPMK-01', 'Mahasiswa mampu memahami konsep dasar pemrograman', 'MK01; MK27; MK31'],
+            ['CPMK-02', 'Mahasiswa mampu mengimplementasikan algoritma sorting', 'MK14; MK34'],
+            ['CPMK-03', 'Mahasiswa mampu menganalisis kompleksitas algoritma', 'MK03'],
+        ];
+
+        $callback = function() use ($columns, $sampleData) {
+            $file = fopen('php://output', 'w');
+            
+            // UTF-8 BOM untuk Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header
+            fputcsv($file, $columns);
+            
+            // Sample data
+            foreach ($sampleData as $row) {
+                fputcsv($file, $row);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

@@ -148,6 +148,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/capaianprofillulusan', [AdminCapaianProfilLulusanController::class, 'index'])->name('capaianprofillulusan.index');
         Route::get('/capaianprofillulusan/create', [AdminCapaianProfilLulusanController::class, 'create'])->name('capaianprofillulusan.create');
+        Route::get('/capaianprofillulusan/import', [AdminCapaianProfilLulusanController::class, 'import'])->name('capaianprofillulusan.import');
+        Route::get('/capaianprofillulusan/import/template', [AdminCapaianProfilLulusanController::class, 'downloadTemplate'])->name('capaianprofillulusan.import.template');
+        Route::post('/capaianprofillulusan/import', [AdminCapaianProfilLulusanController::class, 'importStore'])->name('capaianprofillulusan.import.store');
         Route::post('/capaianprofillulusan', [AdminCapaianProfilLulusanController::class, 'store'])->name('capaianprofillulusan.store');
         Route::get('/capaianprofillulusan/{id_cpl}/edit', [AdminCapaianProfilLulusanController::class, 'edit'])->name('capaianprofillulusan.edit');
         Route::put('/capaianprofillulusan/{id_cpl}', [AdminCapaianProfilLulusanController::class, 'update'])->name('capaianprofillulusan.update');
@@ -340,6 +343,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [TimDashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('/capaianpembelajaranlulusan', [TimCapaianPembelajaranLulusanController::class, 'index'])->name('capaianpembelajaranlulusan.index');
         Route::get('/capaianpembelajaranlulusan/create', [TimCapaianPembelajaranLulusanController::class, 'create'])->name('capaianpembelajaranlulusan.create');
+        Route::get('/capaianpembelajaranlulusan/import', [TimCapaianPembelajaranLulusanController::class, 'import'])->name('capaianpembelajaranlulusan.import');
+        Route::get('/capaianpembelajaranlulusan/import/template', [TimCapaianPembelajaranLulusanController::class, 'downloadTemplate'])->name('capaianpembelajaranlulusan.import.template');
+        Route::post('/capaianpembelajaranlulusan/import', [TimCapaianPembelajaranLulusanController::class, 'importStore'])->name('capaianpembelajaranlulusan.import.store');
         Route::post('/capaianpembelajaranlulusan', [TimCapaianPembelajaranLulusanController::class, 'store'])->name('capaianpembelajaranlulusan.store');
         Route::get('/capaianpembelajaranlulusan/{id_cpl}/edit', [TimCapaianPembelajaranLulusanController::class, 'edit'])->name('capaianpembelajaranlulusan.edit');
         Route::put('/capaianpembelajaranlulusan/{id_cpl}', [TimCapaianPembelajaranLulusanController::class, 'update'])->name('capaianpembelajaranlulusan.update');
@@ -375,6 +381,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/mahasiswa/{id}', [\App\Http\Controllers\MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
         Route::get('/capaianpembelajaranmatakuliah', [TimCapaianPembelajaranMatakuliahController::class, 'index'])->name('capaianpembelajaranmatakuliah.index');
         Route::get('/capaianpembelajaranmatakuliah/create', [TimCapaianPembelajaranMataKuliahController::class, 'create'])->name('capaianpembelajaranmatakuliah.create');
+        Route::get('/capaianpembelajaranmatakuliah/import', [TimCapaianPembelajaranMataKuliahController::class, 'import'])->name('capaianpembelajaranmatakuliah.import');
+        Route::get('/capaianpembelajaranmatakuliah/import/template', [TimCapaianPembelajaranMataKuliahController::class, 'downloadTemplate'])->name('capaianpembelajaranmatakuliah.import.template');
+        Route::post('/capaianpembelajaranmatakuliah/import', [TimCapaianPembelajaranMataKuliahController::class, 'importStore'])->name('capaianpembelajaranmatakuliah.import.store');
         Route::post('/capaianpembelajaranmatakuliah', [TimCapaianPembelajaranMataKuliahController::class, 'store'])->name('capaianpembelajaranmatakuliah.store');
         Route::get('/capaianpembelajaranmatakuliah/{id_cpmk}/edit', [TimCapaianPembelajaranMataKuliahController::class, 'edit'])->name('capaianpembelajaranmatakuliah.edit');
         Route::put('/capaianpembelajaranmatakuliah/{id_cpmk}', [TimCapaianPembelajaranMataKuliahController::class, 'update'])->name('capaianpembelajaranmatakuliah.update');

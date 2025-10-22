@@ -12,16 +12,28 @@
                     <p class="mt-2 text-sm text-gray-600">Kelola capaian pembelajaran lulusan program studi</p>
                 </div>
                 
-                <a href="{{ route('tim.capaianpembelajaranlulusan.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                          hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah CPL
-                </a>
+                <div class="flex gap-3">
+                    <a href="{{ route('tim.capaianpembelajaranlulusan.import') }}"
+                       class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 
+                              hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg 
+                              shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
+                              focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        Import Excel
+                    </a>
+                    <a href="{{ route('tim.capaianpembelajaranlulusan.create') }}"
+                       class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
+                              hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
+                              shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
+                              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Tambah CPL
+                    </a>
+                </div>
             </div>
         </div>
 

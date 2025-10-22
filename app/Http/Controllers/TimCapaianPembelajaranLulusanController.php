@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProfilLulusan;
 use App\Models\CapaianProfilLulusan;
+use App\Imports\CplImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TimCapaianPembelajaranLulusanController extends Controller
 {
@@ -126,6 +128,66 @@ class TimCapaianPembelajaranLulusanController extends Controller
     {
         $id_cpl->delete();
         return redirect()->route('tim.capaianpembelajaranlulusan.index')->with('sukses', 'Capaian Pembelajaran lulusan berhasil dihapus.');
+    }
+
+    public function import()
+    {
+        return view('tim.capaianpembelajaranlulusan.import');
+    }
+
+    public function importStore(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls|max:2048'
+        ]);
+
+        try {
+            Excel::import(new CplImport, $request->file('file'));
+            return redirect()->route('tim.capaianpembelajaranlulusan.index')->with('sukses', 'Data CPL berhasil diimport dari Excel');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            return redirect()->back()->with('error', 'Import gagal. Silakan cek format Excel Anda.')->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Import gagal: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $filename = 'template_import_cpl.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $columns = ['kode_cpl', 'deskripsi_cpl'];
+        $sampleData = [
+            ['CPL-01', 'Mampu menerapkan pemikiran logis, kritis, inovatif dalam konteks pengembangan atau implementasi ilmu pengetahuan dan teknologi'],
+            ['CPL-02', 'Mampu menunjukkan kinerja mandiri, bermutu dan terukur'],
+            ['CPL-03', 'Mampu mengkaji implikasi pengembangan atau implementasi ilmu pengetahuan dan teknologi'],
+        ];
+
+        $callback = function() use ($columns, $sampleData) {
+            $file = fopen('php://output', 'w');
+            
+            // UTF-8 BOM untuk Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header
+            fputcsv($file, $columns);
+            
+            // Sample data
+            foreach ($sampleData as $row) {
+                fputcsv($file, $row);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     public function pemenuhan_cpl()
