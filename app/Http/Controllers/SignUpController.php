@@ -21,7 +21,7 @@ class SignUpController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:kaprodi,tim',
+            'role' => 'required|in:kaprodi,tim,dosen',
             'kode_prodi' => 'required|exists:prodis,kode_prodi',
             'nip' => 'required|string|min:10|max:20',
             'nohp' => 'required|string|min:10|max:15',

@@ -20,14 +20,38 @@
             <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-6">
                 <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
-                        <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-4 border-white/30">
-                            <span class="text-white font-bold text-3xl">
-                                {{ strtoupper(substr($mahasiswa->nama, 0, 1)) }}
-                            </span>
+                        @php
+                            $colors = [
+                                ['bg' => '#F44336', 'text' => '#FFFFFF'], // Red
+                                ['bg' => '#E91E63', 'text' => '#FFFFFF'], // Pink
+                                ['bg' => '#9C27B0', 'text' => '#FFFFFF'], // Purple
+                                ['bg' => '#3F51B5', 'text' => '#FFFFFF'], // Indigo
+                                ['bg' => '#2196F3', 'text' => '#FFFFFF'], // Blue
+                                ['bg' => '#00BCD4', 'text' => '#FFFFFF'], // Cyan
+                                ['bg' => '#4CAF50', 'text' => '#FFFFFF'], // Green
+                                ['bg' => '#FF9800', 'text' => '#FFFFFF'], // Orange
+                                ['bg' => '#795548', 'text' => '#FFFFFF'], // Brown
+                            ];
+                            $hash = 0;
+                            for ($i = 0; $i < strlen($mahasiswa->nama_mahasiswa); $i++) {
+                                $hash = ord($mahasiswa->nama_mahasiswa[$i]) + (($hash << 5) - $hash);
+                            }
+                            $colorIndex = abs($hash) % count($colors);
+                            $avatarColor = $colors[$colorIndex];
+                            
+                            // Get initials
+                            $words = explode(' ', trim($mahasiswa->nama_mahasiswa));
+                            $initials = count($words) >= 2 
+                                ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1))
+                                : strtoupper(substr($mahasiswa->nama_mahasiswa, 0, 2));
+                        @endphp
+                        <div class="w-20 h-20 rounded-full flex items-center justify-center border-4 border-white/30 shadow-lg" 
+                             style="background-color: {{ $avatarColor['bg'] }}; color: {{ $avatarColor['text'] }};">
+                            <span class="font-bold text-2xl">{{ $initials }}</span>
                         </div>
                     </div>
                     <div class="flex-1">
-                        <h1 class="text-2xl font-bold text-white mb-2">{{ $mahasiswa->nama }}</h1>
+                        <h1 class="text-2xl font-bold text-white mb-2">{{ $mahasiswa->nama_mahasiswa }}</h1>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
                             <div class="flex items-center text-white/90">
                                 <i class="fas fa-id-card mr-2"></i>

@@ -15,12 +15,16 @@ class CplImport implements ToModel, WithHeadingRow, WithValidation
         $user = Auth::user();
         $kodeProdi = $user->kode_prodi ?? null;
 
+        // Ambil tahun kurikulum terbaru sebagai default
+        $tahunTerbaru = \App\Models\Tahun::orderBy('tahun', 'desc')->first();
+        $idTahun = $tahunTerbaru ? $tahunTerbaru->id_tahun : null;
+
         return CapaianProfilLulusan::create([
             'kode_cpl' => $row['kode_cpl'],
             'deskripsi_cpl' => $row['deskripsi_cpl'],
             'status_cpl' => null,
             'kode_prodi' => $kodeProdi,
-            'id_tahun' => null,
+            'id_tahun' => $idTahun,
         ]);
     }
 

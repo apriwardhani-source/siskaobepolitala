@@ -94,8 +94,9 @@
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <div class="flex justify-center space-x-2">
-                                        <form action="{{ route('admin.users.approve', $user->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.pendingusers.approve', $user->id) }}" method="POST" class="inline">
                                             @csrf
+                                            @method('PUT')
                                             <button type="submit"
                                                     class="inline-flex items-center px-3 py-2 bg-green-600 hover:bg-green-700 
                                                            text-white text-xs font-medium rounded-lg shadow-sm hover:shadow-md 
@@ -106,7 +107,7 @@
                                                 Approve
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.users.reject', $user->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('admin.pendingusers.reject', $user->id) }}" method="POST" class="inline">
                                             @csrf @method('DELETE')
                                             <button type="submit" 
                                                     onclick="return confirm('Yakin ingin menolak pengguna ini?')"

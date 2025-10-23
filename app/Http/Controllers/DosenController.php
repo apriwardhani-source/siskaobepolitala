@@ -106,6 +106,21 @@ class DosenController extends Controller
                 continue;
             }
             
+            // Ambil CPMK dan CPL pertama yang terkait dengan MK ini
+            $cpmk = \DB::table('cpmk_mk')
+                ->where('kode_mk', $request->kode_mk)
+                ->first();
+            
+            $id_cpmk = $cpmk ? $cpmk->id_cpmk : null;
+            $id_cpl = null;
+            
+            if ($id_cpmk) {
+                $cpl = \DB::table('cpl_cpmk')
+                    ->where('id_cpmk', $id_cpmk)
+                    ->first();
+                $id_cpl = $cpl ? $cpl->id_cpl : null;
+            }
+            
             // Update or create nilai
             $nilaiMhs = NilaiMahasiswa::updateOrCreate(
                 [
@@ -116,6 +131,8 @@ class DosenController extends Controller
                 [
                     'nilai_akhir' => $nilai_akhir,
                     'user_id' => $user->id, // dosen yang input
+                    'id_cpmk' => $id_cpmk,  // Auto-link CPMK
+                    'id_cpl' => $id_cpl,    // Auto-link CPL
                 ]
             );
             

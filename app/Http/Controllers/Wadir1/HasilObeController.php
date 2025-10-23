@@ -21,14 +21,16 @@ class HasilObeController extends Controller
         $prodi_options = Prodi::all();
         
         if ($tahun_angkatan) {
-            $query = Mahasiswa::where('tahun_kurikulum', $tahun_angkatan)
-                ->with('prodi');
+            $query = Mahasiswa::with(['prodi', 'tahunKurikulum'])
+                ->whereHas('tahunKurikulum', function($q) use ($tahun_angkatan) {
+                    $q->where('tahun', $tahun_angkatan);
+                });
                 
             if ($kode_prodi) {
                 $query->where('kode_prodi', $kode_prodi);
             }
             
-            $mahasiswas = $query->orderBy('nama')->get();
+            $mahasiswas = $query->orderBy('nama_mahasiswa')->get();
         }
         
         return view('wadir1.hasilobe.index', compact('mahasiswas', 'tahun_options', 'prodi_options', 'tahun_angkatan', 'kode_prodi'));
@@ -38,12 +40,17 @@ class HasilObeController extends Controller
     {
         $mahasiswa = Mahasiswa::with('prodi')->where('nim', $nim)->firstOrFail();
         
-        $hasil_obe = DB::table('nilai_mahasiswa as nm')
-            ->join('mata_kuliahs as mk', 'nm.kode_mk', '=', 'mk.kode_mk')
-            ->leftJoin('capaian_profil_lulusans as cpl', 'nm.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('capaian_pembelajaran_mata_kuliahs as cpmk', 'nm.id_cpmk', '=', 'cpmk.id_cpmk')
-            ->leftJoin('teknik_penilaian as tp', 'nm.id_teknik', '=', 'tp.id_teknik')
-            ->where('nm.nim', $nim)
+        $nilaiMahasiswa = DB::table('nilai_mahasiswa')
+            ->where('nim', $nim)
+            ->get()
+            ->keyBy('kode_mk');
+        
+        $hasil_obe = DB::table('mata_kuliahs as mk')
+            ->join('cpmk_mk', 'mk.kode_mk', '=', 'cpmk_mk.kode_mk')
+            ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpmk_mk.id_cpmk', '=', 'cpmk.id_cpmk')
+            ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+            ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+            ->whereIn('mk.kode_mk', $nilaiMahasiswa->keys()->toArray())
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
@@ -52,15 +59,19 @@ class HasilObeController extends Controller
                 'cpl.kode_cpl',
                 'cpl.deskripsi_cpl',
                 'cpmk.kode_cpmk',
-                'cpmk.deskripsi_cpmk',
-                'tp.bobot as skor_maks',
-                DB::raw('COALESCE(nm.nilai_akhir, 0) as nilai_perkuliahan')
+                'cpmk.deskripsi_cpmk'
             )
             ->orderBy('mk.semester_mk')
             ->orderBy('mk.kode_mk')
             ->orderBy('cpl.kode_cpl')
             ->orderBy('cpmk.kode_cpmk')
-            ->get();
+            ->get()
+            ->map(function($item) use ($nilaiMahasiswa) {
+                $nilai = $nilaiMahasiswa->get($item->kode_mk);
+                $item->skor_maks = 100;
+                $item->nilai_perkuliahan = $nilai ? $nilai->nilai_akhir : 0;
+                return $item;
+            });
         
         $grouped_data = $hasil_obe->groupBy('kode_mk')->map(function ($items) {
             return [

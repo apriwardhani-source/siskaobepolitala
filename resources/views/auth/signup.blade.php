@@ -80,6 +80,17 @@
             </div>
           @endif
 
+          @if ($errors->any())
+            <div class="bg-red-500/90 text-white px-4 py-3 rounded-md mb-6">
+              <p class="font-bold mb-2">Terjadi Kesalahan:</p>
+              <ul class="list-disc list-inside space-y-1">
+                @foreach ($errors->all() as $error)
+                  <li class="text-sm">{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          @endif
+
           <form action="{{ route('signup.store') }}" method="POST" novalidate>
             @csrf
 
@@ -89,8 +100,11 @@
                 <i class="fas fa-user text-slate-600"></i>
               </div>
               <input type="text" name="name" placeholder="Nama Lengkap"
-                     class="w-full border border-white/60 rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
+                     class="w-full border @error('name') border-red-500 @else border-white/60 @enderror rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
                      value="{{ old('name') }}" required>
+              @error('name')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <!-- NIP -->
@@ -99,8 +113,11 @@
                 <i class="fas fa-id-card text-slate-600"></i>
               </div>
               <input type="text" name="nip" placeholder="NIP"
-                     class="w-full border border-white/60 rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
+                     class="w-full border @error('nip') border-red-500 @else border-white/60 @enderror rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
                      value="{{ old('nip') }}" required>
+              @error('nip')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <!-- No HP -->
@@ -109,8 +126,11 @@
                 <i class="fas fa-phone text-slate-600"></i>
               </div>
               <input type="text" name="nohp" placeholder="Nomor HP"
-                     class="w-full border border-white/60 rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
+                     class="w-full border @error('nohp') border-red-500 @else border-white/60 @enderror rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
                      value="{{ old('nohp') }}" required>
+              @error('nohp')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <!-- Email -->
@@ -119,8 +139,11 @@
                 <i class="fas fa-envelope text-slate-600"></i>
               </div>
               <input type="email" name="email" placeholder="Email"
-                     class="w-full border border-white/60 rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
+                     class="w-full border @error('email') border-red-500 @else border-white/60 @enderror rounded px-3 py-3 mt-1 pl-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
                      value="{{ old('email') }}" required>
+              @error('email')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <!-- Password -->
@@ -129,33 +152,42 @@
                 <i class="fas fa-lock text-slate-600"></i>
               </div>
               <input id="password" type="password" name="password" placeholder="Masukkan Password"
-                     class="w-full border border-white/60 rounded px-3 py-3 mt-1 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
+                     class="w-full border @error('password') border-red-500 @else border-white/60 @enderror rounded px-3 py-3 mt-1 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)] bg-white/80 text-slate-900 placeholder:text-slate-500"
                      required>
               <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-600 hover:text-slate-800 transition-smooth" aria-label="Tampilkan/sembunyikan password" aria-pressed="false">
                 <i class="far fa-eye" id="togglePasswordIcon"></i>
               </button>
+              @error('password')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <!-- Prodi -->
             <div class="mb-4">
               <label class="block mb-1 text-gray-100">Program Studi</label>
-              <select name="kode_prodi" class="w-full border border-white/60 py-3 px-3 rounded bg-white/80 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)]" required>
+              <select name="kode_prodi" class="w-full border @error('kode_prodi') border-red-500 @else border-white/60 @enderror py-3 px-3 rounded bg-white/80 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)]" required>
                 <option value="">-- Pilih Prodi --</option>
                 @foreach($prodis as $prodi)
                   <option value="{{ $prodi->kode_prodi }}" {{ old('kode_prodi') == $prodi->kode_prodi ? 'selected' : '' }}>{{ $prodi->nama_prodi }}</option>
                 @endforeach
               </select>
+              @error('kode_prodi')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <!-- Role -->
             <div class="mb-4">
               <label class="block mb-1 text-gray-100">Peran</label>
-              <select name="role" class="w-full border border-white/60 py-3 px-3 rounded bg-white/80 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)]" required>
+              <select name="role" class="w-full border @error('role') border-red-500 @else border-white/60 @enderror py-3 px-3 rounded bg-white/80 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-1)]" required>
                 <option value="">-- Pilih Peran --</option>
                 <option value="kaprodi" {{ old('role') == 'kaprodi' ? 'selected' : '' }}>Kaprodi</option>
                 <option value="tim" {{ old('role') == 'tim' ? 'selected' : '' }}>Admin Prodi</option>
                 <option value="dosen" {{ old('role') == 'dosen' ? 'selected' : '' }}>Dosen</option>
               </select>
+              @error('role')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
 
             <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
