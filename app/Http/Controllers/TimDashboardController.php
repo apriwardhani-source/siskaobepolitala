@@ -39,47 +39,38 @@ class TimDashboardController extends Controller
 
                 $prodi->pl_count = count($plIds);
 
-                $prodi->cpl_count = DB::table('cpl_pl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
+                $prodi->cpl_count = DB::table('capaian_profil_lulusans')
+                    ->where('kode_prodi', $kodeProdi)
+                    ->where('id_tahun', $tahun_progress)
                     ->distinct()->count('id_cpl');
 
                 $prodi->bk_count = DB::table('cpl_bk')
                     ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-                    ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
+                    ->where('cpl.kode_prodi', $kodeProdi)
+                    ->where('cpl.id_tahun', $tahun_progress)
                     ->distinct()->count('cpl_bk.id_bk');
 
                 $prodi->sks_mk = DB::table('mata_kuliahs')
-                    ->whereIn('kode_mk', function ($query) use ($plIds, $tahun_progress) {
+                    ->whereIn('kode_mk', function ($query) use ($kodeProdi, $tahun_progress) {
                         $query->select('cpl_mk.kode_mk')
                             ->from('cpl_mk')
                             ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-                            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                            ->whereIn('pl.id_pl', $plIds)
-                            ->where('pl.id_tahun', $tahun_progress)
+                            ->where('cpl.kode_prodi', $kodeProdi)
+                            ->where('cpl.id_tahun', $tahun_progress)
                             ->distinct();
                     })->sum('sks_mk');
 
                 $prodi->cpmk_count = DB::table('cpl_cpmk')
                     ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                    ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
+                    ->where('cpl.kode_prodi', $kodeProdi)
+                    ->where('cpl.id_tahun', $tahun_progress)
                     ->distinct()->count('cpl_cpmk.id_cpmk');
 
                 $prodi->subcpmk_count = DB::table('sub_cpmks')
                     ->join('cpl_cpmk', 'sub_cpmks.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
                     ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                    ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
+                    ->where('cpl.kode_prodi', $kodeProdi)
+                    ->where('cpl.id_tahun', $tahun_progress)
                     ->distinct()->count('sub_cpmks.id_sub_cpmk');
 
                 $target = [
