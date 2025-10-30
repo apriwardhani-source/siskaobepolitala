@@ -79,6 +79,19 @@
                 @endif
             </div>
 
+            <!-- Info Banner -->
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                    <div class="flex-1">
+                        <p class="text-sm text-blue-900 font-medium">Matriks Pemetaan CPL-MK</p>
+                        <p class="text-xs text-blue-700 mt-1">Tabel menampilkan relasi antara Capaian Profil Lulusan (CPL) dan Mata Kuliah (MK). Centang menunjukkan CPL yang terpetakan ke mata kuliah tertentu.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Content -->
             @if($cpls->isEmpty())
                 <!-- Empty State -->
@@ -96,14 +109,24 @@
                 <!-- Matrix Table -->
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800 sticky top-0">
+                        <thead class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] sticky top-0 z-10">
                             <tr>
-                                <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider border-r border-gray-600 sticky left-0 bg-gradient-to-r from-gray-700 to-gray-800 z-10">
-                                    CPL
+                                <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider border-r border-[#2a5298] sticky left-0 bg-gradient-to-r from-[#1e3c72] to-[#2a5298] z-20">
+                                    <div class="flex items-center justify-center">
+                                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        CPL
+                                    </div>
                                 </th>
                                 @foreach ($mks as $mk)
-                                    <th class="px-3 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider border-r border-gray-600 whitespace-nowrap">
-                                        {{ $mk->kode_mk }}
+                                    <th class="px-3 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider border-r border-[#2a5298] whitespace-nowrap">
+                                        <div class="flex items-center justify-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                                            </svg>
+                                            {{ $mk->kode_mk }}
+                                        </div>
                                     </th>
                                 @endforeach
                             </tr>
@@ -175,6 +198,63 @@
     </div>
 </div>
 
+@push('styles')
+<style>
+/* Custom checkbox styling */
+input[type="checkbox"]:checked.checked-custom {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+/* Sticky header and column styling */
+.sticky {
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* Smooth scroll for overflow */
+.overflow-x-auto {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+    height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f7fafc;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background-color: #cbd5e0;
+    border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background-color: #a0aec0;
+}
+
+/* Fade animations */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+
+.animate-fade-out {
+    animation: fade-out 0.3s ease-out;
+}
+</style>
+@endpush
+
 @push('scripts')
 <script>
 function updateFilter() {
@@ -199,36 +279,5 @@ setTimeout(function() {
     }
 }, 5000);
 </script>
-
-<style>
-/* Custom checkbox styling */
-input[type="checkbox"]:checked.checked-custom {
-    background-color: #10b981;
-    border-color: #10b981;
-}
-
-@keyframes fade-in {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-.animate-fade-in {
-    animation: fade-in 0.3s ease-out;
-}
-
-.animate-fade-out {
-    animation: fade-out 0.3s ease-out;
-}
-
-/* Sticky column shadow */
-.sticky {
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-}
-</style>
 @endpush
 @endsection

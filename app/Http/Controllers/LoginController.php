@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -174,5 +175,141 @@ class LoginController extends Controller
     public function logout() {
         Auth::logout();
         return redirect()->route('login')->with('success', 'Logout berhasil');
+    }
+
+    /**
+     * Redirect to Google for authentication
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Handle callback from Google
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+            
+            // Check if user exists by google_id
+            $user = User::where('google_id', $googleUser->getId())->first();
+            
+            if (!$user) {
+                // Check if user exists by email
+                $user = User::where('email', $googleUser->getEmail())->first();
+                
+                if ($user) {
+                    // Update existing user with google_id
+                    $user->update([
+                        'google_id' => $googleUser->getId(),
+                        'avatar' => $googleUser->getAvatar(),
+                    ]);
+                } else {
+                    // New user - store Google data in session and redirect to role selection
+                    session([
+                        'google_user' => [
+                            'name' => $googleUser->getName(),
+                            'email' => $googleUser->getEmail(),
+                            'google_id' => $googleUser->getId(),
+                            'avatar' => $googleUser->getAvatar(),
+                        ]
+                    ]);
+                    
+                    return redirect()->route('auth.google.select-role');
+                }
+            }
+            
+            // Check if user status is approved
+            if ($user->status === 'pending') {
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Akun Anda masih dalam status pending. Silakan hubungi administrator.'
+                ]);
+            }
+            
+            // Log the user in
+            Auth::login($user);
+            
+            $message = 'Login berhasil! Selamat datang, ' . $user->name . '!';
+            
+            // Redirect based on role
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard')->with('login_success', $message);
+                case 'wadir1':
+                    return redirect()->route('wadir1.dashboard')->with('login_success', $message);
+                case 'tim':
+                    return redirect()->route('tim.dashboard')->with('login_success', $message);
+                case 'kaprodi':
+                    return redirect()->route('kaprodi.dashboard')->with('login_success', $message);
+                case 'dosen':
+                    return redirect()->route('dosen.dashboard')->with('login_success', $message);
+                default:
+                    Auth::logout();
+                    return redirect()->route('login')->with('error', 'Role tidak dikenali. Hubungi admin.');
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Google OAuth Error: ' . $e->getMessage());
+            return redirect()->route('login')->withErrors([
+                'email' => 'Terjadi kesalahan saat login dengan Google. Silakan coba lagi.'
+            ]);
+        }
+    }
+
+    /**
+     * Show role selection page for new Google users
+     */
+    public function showRoleSelection()
+    {
+        if (!session('google_user')) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Sesi telah berakhir. Silakan login kembali.'
+            ]);
+        }
+
+        return view('auth.select-role');
+    }
+
+    /**
+     * Handle role selection for new Google users
+     */
+    public function handleRoleSelection(Request $request)
+    {
+        $request->validate([
+            'role' => 'required|in:admin,wadir1,kaprodi,tim,dosen',
+            'nip' => 'nullable|string|max:50',
+            'nohp' => 'nullable|string|max:20',
+        ]);
+
+        $googleUserData = session('google_user');
+
+        if (!$googleUserData) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Sesi telah berakhir. Silakan login kembali.'
+            ]);
+        }
+
+        // Create new user with selected role
+        $user = User::create([
+            'name' => $googleUserData['name'],
+            'email' => $googleUserData['email'],
+            'google_id' => $googleUserData['google_id'],
+            'avatar' => $googleUserData['avatar'],
+            'password' => Hash::make(Str::random(16)),
+            'role' => $request->role,
+            'nip' => $request->nip,
+            'nohp' => $request->nohp,
+            'status' => 'pending',
+        ]);
+
+        // Clear session
+        session()->forget('google_user');
+
+        // Redirect to login with message
+        return redirect()->route('login')->with('success', 
+            'Pendaftaran berhasil! Akun Anda sedang menunggu persetujuan admin. Anda akan mendapat notifikasi melalui email setelah akun disetujui.'
+        );
     }
 }
