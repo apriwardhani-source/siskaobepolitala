@@ -27,7 +27,7 @@ class MahasiswaController extends Controller
         
         $query->where('kode_prodi', $kode_prodi);
         
-        $mahasiswas = $query->with(['prodi', 'tahunKurikulum'])->get();
+        $mahasiswas = $query->with(['prodi', 'tahunKurikulum'])->orderBy('nim', 'asc')->get();
         $tahun_angkatans = Tahun::all();
         // Hanya prodi user yang tampil di dropdown
         $prodis = collect([Prodi::where('kode_prodi', $kode_prodi)->first()]);
