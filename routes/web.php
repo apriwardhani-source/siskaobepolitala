@@ -92,6 +92,13 @@ Route::middleware(['guest'])->group(function () {
     // Auth
     Route::get('/login', [LoginController::class, 'loginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+    
+    // Google SSO
+    Route::get('/auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+    Route::get('/auth/google/select-role', [LoginController::class, 'showRoleSelection'])->name('auth.google.select-role');
+    Route::post('/auth/google/select-role', [LoginController::class, 'handleRoleSelection'])->name('auth.google.select-role.post');
+    
     Route::post('/forgot-password', [LoginController::class, 'forgotPassword'])->name('forgot-password.post');
     Route::get('/forgot-password', [LoginController::class, 'showForgotPasswordForm'])->name('forgot-password');
 

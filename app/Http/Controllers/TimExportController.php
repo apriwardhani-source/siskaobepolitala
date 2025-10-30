@@ -17,11 +17,19 @@ class TimExportController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        // Allow wadir1 to access without kode_prodi check
-        $kodeProdi = $user->role === 'wadir1' ? null : $user->kode_prodi;
+        // Determine kode_prodi based on role
+        $kodeProdi = null;
         
-        if ($user->role !== 'wadir1' && !$kodeProdi) {
-            abort(403, 'Akses ditolak. Kode prodi tidak ditemukan.');
+        if (in_array($user->role, ['admin', 'wadir1'])) {
+            // Admin and wadir1 can export for any prodi via query parameter
+            $kodeProdi = $request->get('kode_prodi');
+        } else {
+            // Tim, kaprodi, and other roles use their assigned prodi
+            $kodeProdi = $user->kode_prodi;
+            
+            if (!$kodeProdi) {
+                abort(403, 'Akses ditolak. Kode prodi tidak ditemukan.');
+            }
         }
 
         $idTahun = $request->get('id_tahun');
