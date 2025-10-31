@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
+use App\Models\Prodi;
 
 class LoginController extends Controller
 {
@@ -216,12 +217,28 @@ class LoginController extends Controller
                 ->redirectUrl($callback)
                 ->user();
             
+            Log::info('Google OAuth Callback', [
+                'google_id' => $googleUser->getId(),
+                'email' => $googleUser->getEmail(),
+                'name' => $googleUser->getName(),
+            ]);
+            
             // Check if user exists by google_id
             $user = User::where('google_id', $googleUser->getId())->first();
+            
+            Log::info('User lookup by google_id', [
+                'found' => $user ? 'yes' : 'no',
+                'user_id' => $user ? $user->id : null,
+            ]);
             
             if (!$user) {
                 // Check if user exists by email
                 $user = User::where('email', $googleUser->getEmail())->first();
+                
+                Log::info('User lookup by email', [
+                    'found' => $user ? 'yes' : 'no',
+                    'user_id' => $user ? $user->id : null,
+                ]);
                 
                 if ($user) {
                     // Update existing user with google_id
@@ -245,7 +262,14 @@ class LoginController extends Controller
             }
             
             // Check if user status is approved
+            Log::info('User status check', [
+                'user_id' => $user->id,
+                'status' => $user->status,
+                'role' => $user->role,
+            ]);
+            
             if ($user->status === 'pending') {
+                Log::warning('Login rejected: pending status', ['user_id' => $user->id]);
                 return redirect()->route('login')->withErrors([
                     'email' => 'Akun Anda masih dalam status pending. Silakan hubungi administrator.'
                 ]);
@@ -253,6 +277,15 @@ class LoginController extends Controller
             
             // Log the user in
             Auth::login($user);
+            
+            // Regenerate session to prevent fixation
+            request()->session()->regenerate();
+            
+            Log::info('User logged in successfully', [
+                'user_id' => $user->id,
+                'role' => $user->role,
+                'auth_check' => Auth::check(),
+            ]);
             
             $message = 'Login berhasil! Selamat datang, ' . $user->name . '!';
             
@@ -292,7 +325,8 @@ class LoginController extends Controller
             ]);
         }
 
-        return view('auth.select-role');
+        $prodis = Prodi::all();
+        return view('auth.select-role', compact('prodis'));
     }
 
     /**
@@ -302,9 +336,19 @@ class LoginController extends Controller
     {
         $request->validate([
             'role' => 'required|in:admin,wadir1,kaprodi,tim,dosen',
-            'nip' => 'nullable|string|max:50',
-            'nohp' => 'nullable|string|max:20',
+            'nip' => 'nullable|string|max:50|unique:users,nip',
+            'nohp' => 'nullable|string|max:20|unique:users,nohp',
+            'kode_prodi' => 'nullable|exists:prodi,kode_prodi',
+        ], [
+            'nip.unique' => 'NIP sudah digunakan oleh user lain.',
+            'nohp.unique' => 'Nomor HP sudah digunakan oleh user lain.',
+            'kode_prodi.exists' => 'Program studi tidak valid.',
         ]);
+
+        // Validate kode_prodi is required for certain roles
+        if (in_array($request->role, ['kaprodi', 'tim', 'dosen']) && !$request->kode_prodi) {
+            return back()->withErrors(['kode_prodi' => 'Program studi wajib dipilih untuk role ini.'])->withInput();
+        }
 
         $googleUserData = session('google_user');
 
@@ -314,6 +358,9 @@ class LoginController extends Controller
             ]);
         }
 
+        // Set kode_prodi to null for admin and wadir1
+        $kodeProdi = in_array($request->role, ['admin', 'wadir1']) ? null : $request->kode_prodi;
+
         // Create new user with selected role
         $user = User::create([
             'name' => $googleUserData['name'],
@@ -322,8 +369,9 @@ class LoginController extends Controller
             'avatar' => $googleUserData['avatar'],
             'password' => Hash::make(Str::random(16)),
             'role' => $request->role,
-            'nip' => $request->nip,
-            'nohp' => $request->nohp,
+            'nip' => $request->filled('nip') ? $request->nip : null,
+            'nohp' => $request->filled('nohp') ? $request->nohp : null,
+            'kode_prodi' => $kodeProdi,
             'status' => 'pending',
         ]);
 

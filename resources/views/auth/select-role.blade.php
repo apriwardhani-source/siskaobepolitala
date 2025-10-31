@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilih Role - SISKAO</title>
+    <title>Pilih Role </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -129,7 +129,7 @@
                                 <div class="text-4xl mb-3">
                                     <i class="fas fa-users text-green-400"></i>
                                 </div>
-                                <h3 class="text-white font-bold text-lg mb-2">Tim</h3>
+                                <h3 class="text-white font-bold text-lg mb-2">Admin Prodi</h3>
                                 <p class="text-gray-300 text-sm">Tim Penyusun Kurikulum</p>
                             </div>
 
@@ -151,28 +151,51 @@
                     <!-- Optional Fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <div>
-                            <label for="nip" class="block text-white font-medium mb-2">NIP (Opsional)</label>
+                            <label for="nip" class="block text-white font-medium mb-2">NIP</label>
                             <input type="text" name="nip" id="nip" 
-                                   class="w-full px-4 py-3 rounded-lg border border-white/40 bg-white/80 text-gray-900 
+                                   class="w-full px-4 py-3 rounded-lg border @error('nip') border-red-400 @else border-white/40 @enderror bg-white/80 text-gray-900 
                                           focus:outline-none focus:ring-2 focus:ring-blue-400 transition-smooth"
                                    placeholder="Nomor Induk Pegawai"
                                    value="{{ old('nip') }}">
                             @error('nip')
-                                <p class="text-red-300 text-sm mt-1">{{ $message }}</p>
+                                <p class="text-red-300 text-sm mt-1 font-semibold">{{ $message }}</p>
                             @enderror
+                            <p class="text-gray-300 text-xs mt-1">Kosongkan jika tidak ada</p>
                         </div>
 
                         <div>
-                            <label for="nohp" class="block text-white font-medium mb-2">No. HP (Opsional)</label>
+                            <label for="nohp" class="block text-white font-medium mb-2">No. HP</label>
                             <input type="text" name="nohp" id="nohp" 
-                                   class="w-full px-4 py-3 rounded-lg border border-white/40 bg-white/80 text-gray-900 
+                                   class="w-full px-4 py-3 rounded-lg border @error('nohp') border-red-400 @else border-white/40 @enderror bg-white/80 text-gray-900 
                                           focus:outline-none focus:ring-2 focus:ring-blue-400 transition-smooth"
                                    placeholder="08xxxxxxxxxx"
                                    value="{{ old('nohp') }}">
                             @error('nohp')
-                                <p class="text-red-300 text-sm mt-1">{{ $message }}</p>
+                                <p class="text-red-300 text-sm mt-1 font-semibold">{{ $message }}</p>
                             @enderror
+                            <p class="text-gray-300 text-xs mt-1">Kosongkan jika tidak ada</p>
                         </div>
+                    </div>
+
+                    <!-- Program Studi Field (Conditional) -->
+                    <div id="prodi-field" class="mt-4" style="display: none;">
+                        <label for="kode_prodi" class="block text-white font-medium mb-2">
+                            Program Studi <span class="text-red-400">*</span>
+                        </label>
+                        <select name="kode_prodi" id="kode_prodi"
+                                class="w-full px-4 py-3 rounded-lg border @error('kode_prodi') border-red-400 @else border-white/40 @enderror bg-white/80 text-gray-900 
+                                       focus:outline-none focus:ring-2 focus:ring-blue-400 transition-smooth">
+                            <option value="">Pilih Program Studi</option>
+                            @foreach ($prodis as $prodi)
+                                <option value="{{ $prodi->kode_prodi }}" {{ old('kode_prodi') == $prodi->kode_prodi ? 'selected' : '' }}>
+                                    {{ $prodi->nama_prodi }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('kode_prodi')
+                            <p class="text-red-300 text-sm mt-1 font-semibold">{{ $message }}</p>
+                        @enderror
+                        <p class="text-gray-300 text-xs mt-1">Wajib diisi untuk role Admin Prodi, Kaprodi, dan Dosen</p>
                     </div>
 
                     <!-- Info Message -->
@@ -214,6 +237,8 @@
         let selectedRole = null;
         const submitBtn = document.getElementById('submitBtn');
         const submitText = document.getElementById('submitText');
+        const prodiField = document.getElementById('prodi-field');
+        const prodiSelect = document.getElementById('kode_prodi');
 
         function selectRole(role, card) {
             // Remove previous selection
@@ -226,6 +251,17 @@
             
             // Check the radio button
             document.getElementById(`role-${role}`).checked = true;
+            
+            // Show/hide program studi field based on role
+            const rolesNeedingProdi = ['tim', 'kaprodi', 'dosen'];
+            if (rolesNeedingProdi.includes(role)) {
+                prodiField.style.display = 'block';
+                prodiSelect.required = true;
+            } else {
+                prodiField.style.display = 'none';
+                prodiSelect.required = false;
+                prodiSelect.value = ''; // Clear selection
+            }
             
             // Enable submit button
             selectedRole = role;
@@ -259,21 +295,48 @@
                 });
                 return false;
             }
+
+            // Check if prodi is required but not selected
+            const rolesNeedingProdi = ['tim', 'kaprodi', 'dosen'];
+            if (rolesNeedingProdi.includes(selectedRole) && !prodiSelect.value) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Program Studi Belum Dipilih',
+                    text: 'Silakan pilih program studi terlebih dahulu',
+                    toast: true,
+                    position: 'top',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                return false;
+            }
             
             submitBtn.disabled = true;
             submitText.textContent = 'Memproses...';
         });
+
+        // Initialize prodi field visibility if there's an old role value
+        @if(old('role'))
+            const oldRole = '{{ old("role") }}';
+            const oldRoleCard = document.querySelector(`input[value="${oldRole}"]`)?.closest('.role-card');
+            if (oldRoleCard) {
+                selectRole(oldRole, oldRoleCard);
+            }
+        @endif
 
         // Show validation errors
         @if($errors->any())
             Swal.fire({
                 icon: 'error',
                 title: 'Validasi Gagal',
-                text: '{{ $errors->first() }}',
-                toast: true,
-                position: 'top',
-                timer: 3000,
-                showConfirmButton: false
+                html: `
+                    @foreach($errors->all() as $error)
+                        <div style="text-align: left; margin-bottom: 8px;">• {{ $error }}</div>
+                    @endforeach
+                `,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#0B6AA9',
             });
         @endif
     </script>
