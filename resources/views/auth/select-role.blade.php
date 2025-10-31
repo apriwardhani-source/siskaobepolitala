@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilih Role - SISKAO</title>
+    <title>Pilih Role </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -129,7 +129,7 @@
                                 <div class="text-4xl mb-3">
                                     <i class="fas fa-users text-green-400"></i>
                                 </div>
-                                <h3 class="text-white font-bold text-lg mb-2">Tim</h3>
+                                <h3 class="text-white font-bold text-lg mb-2">Admin Prodi</h3>
                                 <p class="text-gray-300 text-sm">Tim Penyusun Kurikulum</p>
                             </div>
 
@@ -151,7 +151,7 @@
                     <!-- Optional Fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <div>
-                            <label for="nip" class="block text-white font-medium mb-2">NIP (Opsional)</label>
+                            <label for="nip" class="block text-white font-medium mb-2">NIP</label>
                             <input type="text" name="nip" id="nip" 
                                    class="w-full px-4 py-3 rounded-lg border @error('nip') border-red-400 @else border-white/40 @enderror bg-white/80 text-gray-900 
                                           focus:outline-none focus:ring-2 focus:ring-blue-400 transition-smooth"
@@ -164,7 +164,7 @@
                         </div>
 
                         <div>
-                            <label for="nohp" class="block text-white font-medium mb-2">No. HP (Opsional)</label>
+                            <label for="nohp" class="block text-white font-medium mb-2">No. HP</label>
                             <input type="text" name="nohp" id="nohp" 
                                    class="w-full px-4 py-3 rounded-lg border @error('nohp') border-red-400 @else border-white/40 @enderror bg-white/80 text-gray-900 
                                           focus:outline-none focus:ring-2 focus:ring-blue-400 transition-smooth"
@@ -195,7 +195,7 @@
                         @error('kode_prodi')
                             <p class="text-red-300 text-sm mt-1 font-semibold">{{ $message }}</p>
                         @enderror
-                        <p class="text-gray-300 text-xs mt-1">Wajib diisi untuk role Tim, Kaprodi, dan Dosen</p>
+                        <p class="text-gray-300 text-xs mt-1">Wajib diisi untuk role Admin Prodi, Kaprodi, dan Dosen</p>
                     </div>
 
                     <!-- Info Message -->
