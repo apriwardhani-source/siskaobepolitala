@@ -17,8 +17,23 @@ class TimMiddleware
             return redirect()->guest(route('login'));
         }
 
-        if (Auth::user()->role !== 'tim') {
-            abort(403, 'Akses ditolak. Halaman ini hanya untuk Tim.');
+        $user = Auth::user();
+        
+        // Debug logging
+        \Log::info('TimMiddleware Debug', [
+            'user_id' => $user->id,
+            'user_role' => $user->role,
+            'user_status' => $user->status,
+            'expected_role' => 'tim'
+        ]);
+
+        if ($user->role !== 'tim') {
+            \Log::warning('Access Denied: Role Mismatch', [
+                'user_id' => $user->id,
+                'current_role' => $user->role,
+                'required_role' => 'tim'
+            ]);
+            abort(403, 'Akses ditolak. Halaman ini hanya untuk Tim. Role Anda: ' . $user->role);
         }
 
         return $next($request);

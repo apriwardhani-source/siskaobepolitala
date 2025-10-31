@@ -99,6 +99,44 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/auth/google/select-role', [LoginController::class, 'showRoleSelection'])->name('auth.google.select-role');
     Route::post('/auth/google/select-role', [LoginController::class, 'handleRoleSelection'])->name('auth.google.select-role.post');
     
+    // Debug: Force login user 26 - HAPUS SETELAH TESTING
+    Route::get('/force-login-26', function() {
+        $user = \App\Models\User::find(26);
+        if ($user) {
+            Auth::login($user);
+            request()->session()->regenerate();
+            return redirect('/debug-auth')->with('message', 'Force logged in as user 26');
+        }
+        return 'User 26 not found!';
+    })->name('debug.force-login');
+    
+    // Debug route - HAPUS SETELAH TESTING
+    Route::get('/debug-auth', function() {
+        $sessionData = [
+            'session_id' => session()->getId(),
+            'has_session' => session()->has('_token'),
+        ];
+        
+        if (Auth::check()) {
+            $user = Auth::user();
+            return response()->json([
+                'authenticated' => true,
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'status' => $user->status,
+                'google_id' => $user->google_id,
+                'session' => $sessionData,
+            ]);
+        }
+        return response()->json([
+            'authenticated' => false,
+            'session' => $sessionData,
+            'message' => 'User not logged in. Please login via Google SSO first.'
+        ]);
+    })->name('debug.auth');
+    
     Route::post('/forgot-password', [LoginController::class, 'forgotPassword'])->name('forgot-password.post');
     Route::get('/forgot-password', [LoginController::class, 'showForgotPasswordForm'])->name('forgot-password');
 
