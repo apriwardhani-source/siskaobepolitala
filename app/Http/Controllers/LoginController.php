@@ -338,7 +338,7 @@ class LoginController extends Controller
             'role' => 'required|in:admin,wadir1,kaprodi,tim,dosen',
             'nip' => 'nullable|string|max:50|unique:users,nip',
             'nohp' => 'nullable|string|max:20|unique:users,nohp',
-            'kode_prodi' => 'nullable|exists:prodi,kode_prodi',
+            'kode_prodi' => 'nullable|exists:prodis,kode_prodi',
         ], [
             'nip.unique' => 'NIP sudah digunakan oleh user lain.',
             'nohp.unique' => 'Nomor HP sudah digunakan oleh user lain.',

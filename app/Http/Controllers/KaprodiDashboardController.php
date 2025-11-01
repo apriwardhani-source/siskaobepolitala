@@ -18,110 +18,96 @@ class KaprodiDashboardController extends Controller
         }
 
         $kodeProdi = $user->kode_prodi;
-        $tahun_progress = $request->get('tahun_progress');
-        $id_tahun = $request->get('id_tahun');
+        $tahun_progress = $request->get('tahun_progress'); // untuk progress display
+        $id_tahun = $request->get('id_tahun'); // untuk export excel
         $availableYears = Tahun::orderBy('tahun', 'desc')->get();
 
-        $prodis = Prodi::with(['profillulusans' => function ($query) use ($tahun_progress) {
-            if ($tahun_progress) {
-                $query->where('id_tahun', $tahun_progress);
-            }
-        }])->where('kode_prodi', $kodeProdi)->get();
+        // Get single prodi info
+        $prodi = Prodi::where('kode_prodi', $kodeProdi)->first();
+        
+        if (!$prodi) {
+            abort(403, 'Program studi tidak ditemukan.');
+        }
 
-        $prodicount = $tahun_progress ? $prodis->count() : 0;
-        $ProdiSelesai = 0;
-        $ProdiProgress = 0;
-        $ProdiBelumMulai = 0;
+        // Initialize stats
+        $stats = null;
 
         if ($tahun_progress) {
-            foreach ($prodis as $prodi) {
-                $plIds = $prodi->profillulusans->pluck('id_pl')->toArray();
+            // Hitung CPL per prodi & tahun (tanpa PL dan BK)
+            $cpl_count = DB::table('capaian_profil_lulusans')
+                ->where('kode_prodi', $kodeProdi)
+                ->where('id_tahun', $tahun_progress)
+                ->count();
 
-                $prodi->pl_count = count($plIds);
+            // Hitung total SKS Mata Kuliah per prodi
+            $sks_mk = DB::table('mata_kuliahs')
+                ->where('kode_prodi', $kodeProdi)
+                ->sum('sks_mk');
 
-                $prodi->cpl_count = DB::table('cpl_pl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
-                    ->distinct()->count('id_cpl');
+            // Hitung jumlah Mata Kuliah
+            $mk_count = DB::table('mata_kuliahs')
+                ->where('kode_prodi', $kodeProdi)
+                ->count();
 
-                $prodi->bk_count = DB::table('cpl_bk')
-                    ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-                    ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
-                    ->distinct()->count('cpl_bk.id_bk');
+            // Hitung CPMK per prodi & tahun (lewat CPL)
+            $cpmk_count = DB::table('cpl_cpmk')
+                ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+                ->where('cpl.kode_prodi', $kodeProdi)
+                ->where('cpl.id_tahun', $tahun_progress)
+                ->distinct()
+                ->count('cpl_cpmk.id_cpmk');
 
-                $prodi->sks_mk = DB::table('mata_kuliahs')
-                    ->whereIn('kode_mk', function ($query) use ($plIds, $tahun_progress) {
-                        $query->select('cpl_mk.kode_mk')
-                            ->from('cpl_mk')
-                            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-                            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                            ->whereIn('pl.id_pl', $plIds)
-                            ->where('pl.id_tahun', $tahun_progress)
-                            ->distinct();
-                    })->sum('sks_mk');
+            // Hitung Sub CPMK per prodi & tahun (lewat CPMK → CPL)
+            $subcpmk_count = DB::table('sub_cpmks')
+                ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub_cpmks.id_cpmk', '=', 'cpmk.id_cpmk')
+                ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+                ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+                ->where('cpl.kode_prodi', $kodeProdi)
+                ->where('cpl.id_tahun', $tahun_progress)
+                ->distinct()
+                ->count('sub_cpmks.id_sub_cpmk');
 
-                $prodi->cpmk_count = DB::table('cpl_cpmk')
-                    ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                    ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
-                    ->distinct()->count('cpl_cpmk.id_cpmk');
+            // Hitung progress (tanpa PL dan BK)
+            $target = [
+                'cpl' => 9,
+                'sks_mk' => 144,
+                'mk' => 48,
+                'cpmk' => 20,
+                'subcpmk' => 40
+            ];
 
-                $prodi->subcpmk_count = DB::table('sub_cpmks')
-                    ->join('cpl_cpmk', 'sub_cpmks.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
-                    ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                    ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                    ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                    ->whereIn('pl.id_pl', $plIds)
-                    ->where('pl.id_tahun', $tahun_progress)
-                    ->distinct()->count('sub_cpmks.id_sub_cpmk');
+            $progress = [
+                'cpl' => min(100, $cpl_count > 0 ? round(($cpl_count / $target['cpl']) * 100) : 0),
+                'sks_mk' => min(100, $sks_mk > 0 ? round(($sks_mk / $target['sks_mk']) * 100) : 0),
+                'mk' => min(100, $mk_count > 0 ? round(($mk_count / $target['mk']) * 100) : 0),
+                'cpmk' => min(100, $cpmk_count > 0 ? round(($cpmk_count / $target['cpmk']) * 100) : 0),
+                'subcpmk' => min(100, $subcpmk_count > 0 ? round(($subcpmk_count / $target['subcpmk']) * 100) : 0),
+            ];
 
-                // Hitung progress
-                $target = [
-                    'pl' => 3,
-                    'cpl' => 9,
-                    'bk' => 8,
-                    'sks_mk' => 108,
-                    'cpmk' => 18,
-                    'subcpmk' => 36
+            $avg_progress = round(array_sum($progress) / count($progress));
+
+            // Only create stats if there's any data
+            if ($cpl_count > 0 || $sks_mk > 0 || $cpmk_count > 0 || $subcpmk_count > 0) {
+                $stats = [
+                    'cpl_count' => $cpl_count,
+                    'sks_mk' => $sks_mk,
+                    'mk_count' => $mk_count,
+                    'cpmk_count' => $cpmk_count,
+                    'subcpmk_count' => $subcpmk_count,
+                    'progress_cpl' => $progress['cpl'],
+                    'progress_sks_mk' => $progress['sks_mk'],
+                    'progress_mk' => $progress['mk'],
+                    'progress_cpmk' => $progress['cpmk'],
+                    'progress_subcpmk' => $progress['subcpmk'],
+                    'avg_progress' => $avg_progress,
+                    'target' => $target
                 ];
-
-                $progress = [
-                    'pl' => min(100, round(($prodi->pl_count / $target['pl']) * 100)),
-                    'cpl' => min(100, round(($prodi->cpl_count / $target['cpl']) * 100)),
-                    'bk' => min(100, round(($prodi->bk_count / $target['bk']) * 100)),
-                    'sks_mk' => min(100, round(($prodi->sks_mk / $target['sks_mk']) * 100)),
-                    'cpmk' => min(100, round(($prodi->cpmk_count / $target['cpmk']) * 100)),
-                    'subcpmk' => min(100, round(($prodi->subcpmk_count / $target['subcpmk']) * 100)),
-                ];
-
-                $prodi->progress_pl = $progress['pl'];
-                $prodi->progress_cpl = $progress['cpl'];
-                $prodi->progress_bk = $progress['bk'];
-                $prodi->progress_sks_mk = $progress['sks_mk'];
-                $prodi->progress_cpmk = $progress['cpmk'];
-                $prodi->progress_subcpmk = $progress['subcpmk'];
-                $prodi->avg_progress = round(array_sum($progress) / count($progress));
-
-                if ($prodi->avg_progress == 100) $ProdiSelesai++;
-                elseif ($prodi->avg_progress > 0) $ProdiProgress++;
-                else $ProdiBelumMulai++;
             }
         }
 
         return view('kaprodi.dashboard', compact(
-            'prodis',
-            'prodicount',
-            'ProdiSelesai',
-            'ProdiProgress',
-            'ProdiBelumMulai',
-            'tahun_progress',
+            'prodi',
+            'stats',
             'id_tahun',
             'availableYears'
         ));
