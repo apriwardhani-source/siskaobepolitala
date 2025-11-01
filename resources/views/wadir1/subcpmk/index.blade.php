@@ -40,15 +40,29 @@
                 @endforeach
               </select>
             </div>
-            <div class="self-end">
-              <button class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"><i class="fas fa-search mr-2"></i>Filter</button>
+            <div class="self-end flex gap-2">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i>Tampilkan Data</button>
+              <a href="{{ route('wadir1.export.subcpmk', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                <i class="fas fa-file-excel mr-2"></i> Export Excel
+              </a>
             </div>
           </div>
         </form>
       </div>
     </div>
 
-    @if(($subcpmks ?? collect())->isNotEmpty())
+    @php $isFiltered = !empty($kode_prodi) || !empty($id_tahun); @endphp
+    @if(!$isFiltered)
+      <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+        <div class="flex justify-center mb-4">
+          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+            <i class="fas fa-filter text-3xl"></i>
+          </div>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+        <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data Sub CPMK.</p>
+      </div>
+    @elseif(($subcpmks ?? collect())->isNotEmpty())
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
         <div class="px-6 py-4 border-b bg-gray-50"><h2 class="text-lg font-semibold text-gray-800">Daftar Sub CPMK</h2></div>
         <div class="overflow-x-auto">
@@ -78,4 +92,3 @@
   </div>
 </div>
 @endsection
-

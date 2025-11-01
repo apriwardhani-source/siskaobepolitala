@@ -50,10 +50,13 @@
                 @endforeach
               </select>
             </div>
-            <div class="self-end">
-              <button class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                <i class="fas fa-search mr-2"></i> Filter
+            <div class="self-end flex gap-2">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-search mr-2"></i> Tampilkan Data
               </button>
+              <a href="{{ route('wadir1.export.cpl', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                <i class="fas fa-file-excel mr-2"></i> Export Excel
+              </a>
             </div>
           </div>
         </form>

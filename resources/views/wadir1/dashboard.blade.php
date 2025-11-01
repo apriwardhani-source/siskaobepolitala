@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Dashboard Wadir 1')
 
@@ -81,51 +81,35 @@
         </div>
 
         <!-- Toolbar -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-                
-                <!-- Export Section -->
-                <form id="exportForm" action="{{ route('wadir1.export.excel') }}" method="GET" class="flex-1">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center"><i class="fas fa-filter mr-2"></i>Filter Dashboard</h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('wadir1.dashboard') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                            <select name="id_tahun" required
-                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="" disabled {{ empty($id_tahun) ? 'selected' : '' }}>Pilih Tahun</option>
+                            <select name="tahun_progress" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="" disabled {{ empty($tahun_progress) ? 'selected' : '' }}>Pilih Tahun</option>
                                 @foreach ($availableYears as $th)
-                                    <option value="{{ $th->id_tahun }}" {{ $id_tahun == $th->id_tahun ? 'selected' : '' }}>
-                                        {{ $th->tahun }}
-                                    </option>
+                                    <option value="{{ $th->id_tahun }}" {{ $tahun_progress == $th->id_tahun ? 'selected' : '' }}>{{ $th->tahun }}</option>
                                 @endforeach
                             </select>
                         </div>
-
-                        <div class="flex items-end">
-                            <button type="submit"
-                                class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 
-                                       text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                       transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
-                                <i class="fas fa-file-excel mr-2"></i>
-                                Export Excel
-                            </button>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Program Studi</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="fas fa-search text-gray-400"></i></div>
+                                <input type="text" id="search-prodi-dashboard" placeholder="Cari prodi..." class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 text-sm transition-all duration-200">
+                            </div>
+                        </div>
+                        <div class="flex items-end gap-3">
+                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i> Tampilkan Data</button>
+                            <button type="submit" formaction="{{ route('wadir1.export.excel') }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"><i class="fas fa-file-excel mr-2"></i> Export Excel</button>
                         </div>
                     </div>
                 </form>
-
-                <!-- Search -->
-                <div class="lg:w-80">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Program Studi</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
-                        </div>
-                        <input type="text" id="search-prodi-dashboard" placeholder="Cari prodi..." 
-                               class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg 
-                                      focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-                                      placeholder-gray-400 text-sm transition-all duration-200">
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -138,7 +122,7 @@
                     <p class="mt-1 text-sm text-gray-300">Tahun Kurikulum: {{ $availableYears->firstWhere('id_tahun', request('tahun_progress'))->tahun ?? '-' }}</p>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6" id="tahunProgress">
                     <!-- Target Info Box -->
                     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-5 mb-8">
                         <h4 class="font-semibold text-blue-900 mb-3 flex items-center">
@@ -250,35 +234,22 @@
                 </div>
             </div>
         @else
-            <!-- Empty State -->
-            <div class="bg-white rounded-xl shadow-lg p-12 text-center">
-                <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                </svg>
-                <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Tahun Progress</h3>
-                <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                    Silakan pilih tahun kurikulum di bawah untuk menampilkan progress implementasi OBE per program studi.
-                </p>
-                
-                <!-- Year Filter Form -->
-                <form method="GET" action="{{ route('wadir1.dashboard') }}" class="mt-6 max-w-sm mx-auto">
-                    <div class="flex gap-3">
-                        <select name="tahun_progress" required
-                            class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" disabled selected>Pilih Tahun Kurikulum</option>
-                            @foreach ($availableYears as $th)
-                                <option value="{{ $th->id_tahun }}">{{ $th->tahun }}</option>
-                            @endforeach
-                        </select>
-                        <button type="submit"
-                            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium 
-                                   rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-                            Tampilkan
-                        </button>
+            <!-- Empty State (tanpa tombol) -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-12 text-center mb-8">
+                <div class="flex justify-center mb-2">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                        <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                            <path d="M4 20h16" stroke-width="1.5" stroke-linecap="round"/>
+                            <rect x="5" y="12" width="3" height="6" rx="1.5" fill="currentColor"/>
+                            <rect x="10.5" y="9" width="3" height="9" rx="1.5" fill="currentColor"/>
+                            <rect x="16" y="6" width="3" height="12" rx="1.5" fill="currentColor"/>
+                        </svg>
                     </div>
-                </form>
+                </div>
+                <h3 class="mt-6 text-xl font-semibold text-gray-900">Pilih Tahun Progress</h3>
+                <p class="mt-2 text-sm text-gray-600 max-w-xl mx-auto">
+                    Silakan gunakan "Filter Dashboard" di atas untuk memilih tahun dan menampilkan data.
+                </p>
             </div>
         @endif
 
@@ -301,3 +272,4 @@ document.getElementById('search-prodi-dashboard').addEventListener('input', func
 @endpush
 
 @endsection
+

@@ -83,6 +83,7 @@ use App\Http\Controllers\MisiController;
 use App\Http\Controllers\TimVisiMisiController;
 use App\Http\Controllers\Wadir1VisiMisiController;
 use App\Http\Controllers\AdminVisiMisiController;
+use App\Http\Controllers\Wadir1ExportController;
 use App\Http\Controllers\Admin\HasilObeController as AdminHasilObeController;
 use App\Http\Controllers\Wadir1\HasilObeController as Wadir1HasilObeController;
 use App\Http\Controllers\Kaprodi\HasilObeController as KaprodiHasilObeController;
@@ -312,6 +313,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/capaianpembelajaranmatakuliah', [Wadir1CapaianPembelajaranMatakuliahController::class, 'index'])->name('capaianpembelajaranmatakuliah.index');
         Route::get('/capaianpembelajaranmatakuliah/{id_cpmk}/detail', [Wadir1CapaianPembelajaranMatakuliahController::class, 'detail'])->name('capaianpembelajaranmatakuliah.detail');
         Route::get('/export/excel', [TimExportController::class, 'export'])->name('export.excel');
+        // Export endpoints (Excel)
+        Route::get('/export/cpl', [Wadir1ExportController::class, 'exportCpl'])->name('export.cpl');
+        Route::get('/export/matakuliah', [Wadir1ExportController::class, 'exportMk'])->name('export.mk');
+        Route::get('/export/cpmk', [Wadir1ExportController::class, 'exportCpmk'])->name('export.cpmk');
+        Route::get('/export/pemetaan-cpl-cpmk-mk', [Wadir1ExportController::class, 'exportPemetaan'])->name('export.pemetaan');
+        Route::get('/export/subcpmk', [Wadir1ExportController::class, 'exportSubCpmk'])->name('export.subcpmk');
+        Route::get('/export/bobot', [Wadir1ExportController::class, 'exportBobot'])->name('export.bobot');
+        Route::get('/export/hasilobe', [Wadir1ExportController::class, 'exportHasilObe'])->name('export.hasilobe');
         // Catatan (read-only)
         Route::get('/notes', [Wadir1NotesController::class, 'index'])->name('notes.index');
         Route::get('/notes/{note}/detail', [Wadir1NotesController::class, 'detail'])->name('notes.detail');

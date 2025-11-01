@@ -41,14 +41,25 @@
               </select>
             </div>
             <div class="self-end">
-              <button class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"><i class="fas fa-search mr-2"></i>Filter</button>
+              <button type="submit" class="w-full px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i>Tampilkan Data</button>
             </div>
           </div>
         </form>
       </div>
     </div>
 
-    @if(($query ?? collect())->isNotEmpty())
+    @php $isFiltered = !empty($kode_prodi) || !empty($id_tahun); @endphp
+    @if(!$isFiltered)
+      <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+        <div class="flex justify-center mb-4">
+          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+            <i class="fas fa-filter text-3xl"></i>
+          </div>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+        <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data pemetaan MK-CPMK-SubCPMK.</p>
+      </div>
+    @elseif(($query ?? collect())->isNotEmpty())
       <div class="space-y-6">
         @php
           $group = ($query ?? collect())->groupBy('kode_mk');
@@ -80,4 +91,3 @@
   </div>
 </div>
 @endsection
-
