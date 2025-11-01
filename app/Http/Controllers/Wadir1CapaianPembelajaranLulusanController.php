@@ -21,22 +21,13 @@ class Wadir1CapaianPembelajaranLulusanController extends Controller
             return view("wadir1.capaianpembelajaranlulusan.index", compact("prodis", "kode_prodi", "id_tahun", "tahun_tersedia"));
         }
 
-        $query = DB::table('capaian_profil_lulusans')
-            ->leftJoin('cpl_pl', 'capaian_profil_lulusans.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->leftJoin('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->select('capaian_profil_lulusans.id_cpl', 'capaian_profil_lulusans.deskripsi_cpl', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.status_cpl', 'prodis.nama_prodi')
-            ->groupBy('capaian_profil_lulusans.id_cpl', 'capaian_profil_lulusans.deskripsi_cpl', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.status_cpl', 'prodis.nama_prodi')
-            ->orderBy('kode_cpl', 'asc');
-
-        if ($kode_prodi) {
-            $query->where('prodis.kode_prodi', $kode_prodi);
-        }
-
-        // Filter berdasarkan tahun jika ada
-        if ($id_tahun) {
-            $query->where('profil_lulusans.id_tahun', $id_tahun);
-        }
+        // Gunakan kolom langsung pada tabel CPL (karena skema sudah punya kode_prodi & id_tahun)
+        $query = DB::table('capaian_profil_lulusans as cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->select('cpl.id_cpl', 'cpl.deskripsi_cpl', 'cpl.kode_cpl', 'cpl.status_cpl', 'prodis.nama_prodi')
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
+            ->orderBy('cpl.kode_cpl', 'asc');
 
         $capaianprofillulusans = $query->get();
 

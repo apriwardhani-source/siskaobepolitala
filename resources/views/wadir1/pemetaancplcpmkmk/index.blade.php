@@ -1,0 +1,85 @@
+@extends('layouts.app')
+@section('title', 'Pemetaan CPL-CPMK-MK - Wadir 1')
+@section('content')
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-8">
+      <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-diagram-project text-white text-2xl"></i>
+          </div>
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan CPL - CPMK - MK</h1>
+          <p class="mt-1 text-sm text-gray-600">Relasi CPL ke CPMK dan Mata Kuliah</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4"><h2 class="text-xl font-bold text-white"><i class="fas fa-filter mr-2"></i>Filter</h2></div>
+      <div class="p-6">
+        <form method="GET" action="{{ route('wadir1.pemetaancplcpmkmk.index') }}" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+              <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="">Semua Prodi</option>
+                @foreach(($prodis ?? []) as $p)
+                  <option value="{{ $p->kode_prodi }}" {{ ($kode_prodi ?? '')==$p->kode_prodi ? 'selected' : '' }}>{{ $p->nama_prodi }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+              <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="">Semua</option>
+                @foreach(($tahun_tersedia ?? []) as $t)
+                  <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '')==$t->id_tahun ? 'selected' : '' }}>{{ $t->tahun }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="self-end">
+              <button class="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"><i class="fas fa-search mr-2"></i>Filter</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    @if(isset($kode_prodi) && $kode_prodi!=='' && ($dataKosong ?? false))
+      <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded"><div class="text-sm text-yellow-800">Data kosong untuk filter yang dipilih.</div></div>
+    @endif
+
+    @if(!empty($matrix))
+      @foreach($matrix as $kodeCpl => $cpl)
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-6">
+          <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-800">CPL {{ $kodeCpl }}</h2>
+            <span class="text-sm text-gray-500">{{ $cpl['deskripsi'] ?? '' }}</span>
+          </div>
+          <div class="p-6 space-y-4">
+            @forelse(($cpl['cpmk'] ?? []) as $kodeCpmk => $row)
+              <div class="border rounded-lg p-4">
+                <div class="font-semibold text-gray-800 mb-1">CPMK {{ $kodeCpmk }}</div>
+                <div class="text-sm text-gray-600 mb-2">{{ $row['deskripsi'] ?? '-' }}</div>
+                <div class="flex flex-wrap gap-2">
+                  @foreach(($row['mk'] ?? []) as $mk)
+                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">{{ $mk }}</span>
+                  @endforeach
+                  @if(empty($row['mk']))
+                    <span class="text-gray-500 text-sm">Belum terpetakan ke MK</span>
+                  @endif
+                </div>
+              </div>
+            @empty
+              <div class="text-gray-600">Belum ada CPMK untuk CPL ini.</div>
+            @endforelse
+          </div>
+        </div>
+      @endforeach
+    @endif
+  </div>
+</div>
+@endsection
