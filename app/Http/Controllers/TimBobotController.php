@@ -25,6 +25,7 @@ class TimBobotController extends Controller
         $query = DB::table('bobots')
             ->join('capaian_profil_lulusans as cpl', 'bobots.id_cpl', '=', 'cpl.id_cpl')
             ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('mata_kuliahs as mk', 'bobots.kode_mk', '=', 'mk.kode_mk')
             ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'bobots.id_bobot',
@@ -34,14 +35,15 @@ class TimBobotController extends Controller
                 'cpl.kode_cpl',
                 'cpl.deskripsi_cpl',
                 'cpl.id_tahun',
-                'prodis.nama_prodi'
+                'prodis.nama_prodi',
+                'mk.nama_mk'
             );
 
         if ($id_tahun) {
             $query->where('cpl.id_tahun', $id_tahun);
         }
 
-        $bobots = $query->orderBy('bobots.id_cpl')->get();
+        $bobots = $query->orderBy('bobots.kode_mk')->orderBy('bobots.id_cpl')->get();
 
         return view('tim.bobot.index', compact('bobots', 'id_tahun', 'tahun_tersedia'));
     }

@@ -8,8 +8,8 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot CPL - MK</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola bobot capaian profil lulusan terhadap mata kuliah</p>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot MK - CPL</h1>
+                    <p class="mt-2 text-sm text-gray-600">Kelola bobot mata kuliah terhadap capaian profil lulusan</p>
                 </div>
                 
                 <a href="{{ route('tim.bobot.create') }}"
@@ -52,7 +52,7 @@
             <!-- Toolbar -->
             <div class="px-6 py-5 border-b border-gray-200 bg-white">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Daftar Bobot per CPL</h2>
+                    <h2 class="text-lg font-semibold text-gray-900">Daftar Bobot per MK</h2>
                     
                     <!-- Filter -->
                     <div class="w-64">
@@ -99,7 +99,7 @@
                     </svg>
                     <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data Bobot</h3>
                     <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Belum ada bobot CPL-MK. Klik tombol "Tambah Bobot" untuk menambahkan data baru.
+                        Belum ada bobot MK-CPL. Klik tombol "Tambah Bobot" untuk menambahkan data baru.
                     </p>
                     <div class="mt-6">
                         <a href="{{ route('tim.bobot.create') }}" 
@@ -120,9 +120,9 @@
                         <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                             <tr>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode CPL</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">CPL</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">MK</th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode MK</th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama MK</th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">CPL</th>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Bobot</th>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Total Bobot</th>
                                 <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
@@ -130,9 +130,9 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @php
-                                $grouped = $bobots->groupBy('id_cpl');
+                                $grouped = $bobots->groupBy('kode_mk');
                             @endphp
-                            @foreach ($grouped as $id_cpl => $items)
+                            @foreach ($grouped as $kode_mk => $items)
                                 @php
                                     $first = $items->first();
                                     $totalBobot = $items->sum('bobot');
@@ -142,16 +142,16 @@
                                         {{ $loop->iteration }}
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center align-top" rowspan="{{ $items->count() }}">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                            {{ $first->kode_cpl }}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            {{ $first->kode_mk }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-4 text-sm text-gray-700 align-top" rowspan="{{ $items->count() }}">
-                                        {{ Str::limit($first->deskripsi_cpl, 100) }}
+                                        {{ $first->nama_mk ?? '-' }}
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-purple-100 text-purple-800">
-                                            {{ $items->first()->kode_mk }}
+                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                            {{ $items->first()->kode_cpl }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
@@ -189,8 +189,8 @@
                                 @foreach ($items->skip(1) as $item)
                                 <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $loop->parent->even ? 'bg-gray-50' : 'bg-white' }}">
                                     <td class="px-4 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-purple-100 text-purple-800">
-                                            {{ $item->kode_mk }}
+                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                            {{ $item->kode_cpl }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">

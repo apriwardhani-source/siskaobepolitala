@@ -15,8 +15,20 @@ class AdminBobotController extends Controller
      */
     public function index()
     {
-        $bobots = Bobot::with(['capaianProfilLulusan', 'mataKuliah'])
-            ->orderBy('id_cpl')
+        $bobots = DB::table('bobots')
+            ->join('capaian_profil_lulusans as cpl', 'bobots.id_cpl', '=', 'cpl.id_cpl')
+            ->join('mata_kuliahs as mk', 'bobots.kode_mk', '=', 'mk.kode_mk')
+            ->select(
+                'bobots.id_bobot',
+                'bobots.id_cpl',
+                'bobots.kode_mk',
+                'bobots.bobot',
+                'cpl.kode_cpl',
+                'cpl.deskripsi_cpl',
+                'mk.nama_mk'
+            )
+            ->orderBy('bobots.kode_mk')
+            ->orderBy('bobots.id_cpl')
             ->get();
 
         return view('admin.bobot.index', compact('bobots'));

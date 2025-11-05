@@ -27,8 +27,11 @@ class AdminCapaianPembelajaranMataKuliahController extends Controller
             ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
             ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
-            ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
+            ->leftJoin('cpmk_mk', 'cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
+            ->leftJoin('mata_kuliahs as mk', 'cpmk_mk.kode_mk', '=', 'mk.kode_mk')
+            ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi', 'mk.kode_mk', 'mk.nama_mk')
+            ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi', 'mk.kode_mk', 'mk.nama_mk')
+            ->orderBy('mk.kode_mk', 'asc')
             ->orderBy('cpmk.kode_cpmk', 'asc');
 
         if ($kode_prodi) {
@@ -37,7 +40,7 @@ class AdminCapaianPembelajaranMataKuliahController extends Controller
 
         // Filter berdasarkan tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $cpmks = $query->get();

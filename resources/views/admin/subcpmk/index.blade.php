@@ -42,7 +42,8 @@
                     <!-- Filters & Search -->
                     <div class="flex flex-col sm:flex-row gap-3">
                         <select id="prodi" name="kode_prodi" onchange="updateFilter()"
-                                class="select-modern">
+                                class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg 
+                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                             <option value="" {{ empty($kode_prodi) ? 'selected' : '' }} disabled>Pilih Prodi</option>
                             @foreach ($prodis as $prodi)
                                 <option value="{{ $prodi->kode_prodi }}" {{ $kode_prodi == $prodi->kode_prodi ? 'selected' : '' }}>
@@ -52,7 +53,8 @@
                         </select>
 
                         <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                                class="select-modern">
+                                class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg 
+                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                             <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
                             @if ($tahun_tersedia->isNotEmpty())
                                 @foreach ($tahun_tersedia as $thn)
@@ -63,12 +65,14 @@
                             @endif
                         </select>
 
-                        <div class="relative">
+                        <div class="relative w-full sm:w-80">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-search text-gray-400"></i>
                             </div>
                             <input type="text" id="search" placeholder="Cari sub CPMK..." 
-                                   class="input-modern pl-10">
+                                   class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg 
+                                          focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                                          placeholder-gray-400 text-sm transition-all duration-200">
                         </div>
                     </div>
                 </div>
@@ -79,7 +83,7 @@
                     <div class="flex flex-wrap gap-2 items-center">
                         <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
                         @if ($kode_prodi)
-                            <span class="badge-modern badge-blue">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
                                 Prodi: {{ $prodis->where('kode_prodi', $kode_prodi)->first()->nama_prodi ?? $kode_prodi }}
                             </span>
                         @endif
@@ -87,7 +91,7 @@
                             @php
                                 $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
                             @endphp
-                            <span class="badge-modern badge-blue">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
                                 Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
                             </span>
                         @endif
@@ -103,55 +107,65 @@
             <!-- Content -->
             @if (empty($kode_prodi))
                 <!-- Empty State - No Prodi Selected -->
-                <div class="empty-state">
-                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="px-6 py-16 text-center">
+                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    <h3 class="empty-state-title">Pilih Program Studi</h3>
-                    <p class="empty-state-text">
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Program Studi</h3>
+                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
                         Silakan pilih program studi terlebih dahulu untuk menampilkan data Sub CPMK.
                     </p>
                 </div>
             @elseif ($subcpmks->isEmpty())
                 <!-- Empty State - No Data -->
-                <div class="empty-state">
-                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="px-6 py-16 text-center">
+                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    <h3 class="empty-state-title">Belum Ada Data Sub CPMK</h3>
-                    <p class="empty-state-text">
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data Sub CPMK</h3>
+                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
                         Tidak ada data Sub CPMK untuk program studi yang dipilih.
                     </p>
                 </div>
             @else
                 <!-- Table -->
                 <div class="overflow-x-auto">
-                    <table class="table-modern">
-                        <thead>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                             <tr>
-                                <th class="w-16">No</th>
-                                <th class="w-28">Kode CPMK</th>
-                                <th>Deskripsi CPMK</th>
-                                <th class="w-28">Sub CPMK</th>
-                                <th>Uraian Sub CPMK</th>
-                                <th class="w-24">Aksi</th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode CPMK</th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Deskripsi CPMK</th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Sub CPMK</th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Uraian Sub CPMK</th>
+                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($subcpmks as $index => $subcpmk)
-                            <tr>
-                                <td class="text-center font-medium">{{ $index + 1 }}</td>
-                                <td class="text-center">
-                                    <span class="badge-modern badge-blue">{{ $subcpmk->kode_cpmk }}</span>
+                            <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
+                                    {{ $index + 1 }}
                                 </td>
-                                <td>{{ $subcpmk->deskripsi_cpmk ?? '-' }}</td>
-                                <td class="text-center">
-                                    <span class="badge-modern badge-purple">{{ $subcpmk->sub_cpmk }}</span>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                        {{ $subcpmk->kode_cpmk }}
+                                    </span>
                                 </td>
-                                <td>{{ $subcpmk->uraian_cpmk }}</td>
-                                <td class="text-center">
+                                <td class="px-4 py-4 text-sm text-gray-700">
+                                    {{ $subcpmk->deskripsi_cpmk ?? '-' }}
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                        {{ $subcpmk->sub_cpmk }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-4 text-sm text-gray-700">
+                                    {{ $subcpmk->uraian_cpmk }}
+                                </td>
+                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <a href="{{ route('admin.subcpmk.detail', $subcpmk->id_sub_cpmk) }}"
                                        class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 inline-block"
                                        title="Detail">
