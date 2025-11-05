@@ -183,7 +183,23 @@ class LoginController extends Controller
      */
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        // Validate Google OAuth configuration
+        if (!config('services.google.client_id') || !config('services.google.client_secret')) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Google OAuth belum dikonfigurasi. Isi GOOGLE_CLIENT_ID dan GOOGLE_CLIENT_SECRET di .env'
+            ]);
+        }
+
+        // Ensure absolute callback URL
+        $callback = (string) config('services.google.redirect');
+        if (!\Illuminate\Support\Str::startsWith($callback, ['http://', 'https://'])) {
+            $callback = rtrim(config('app.url'), '/') . '/' . ltrim($callback, '/');
+        }
+
+        return Socialite::driver('google')
+            ->redirectUrl($callback)
+            ->scopes(['openid', 'email', 'profile'])
+            ->redirect();
     }
 
     /**
@@ -192,7 +208,14 @@ class LoginController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $callback = (string) config('services.google.redirect');
+            if (!\Illuminate\Support\Str::startsWith($callback, ['http://', 'https://'])) {
+                $callback = rtrim(config('app.url'), '/') . '/' . ltrim($callback, '/');
+            }
+
+            $googleUser = Socialite::driver('google')
+                ->redirectUrl($callback)
+                ->user();
             
             Log::info('Google OAuth Callback', [
                 'google_id' => $googleUser->getId(),

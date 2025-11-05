@@ -38,7 +38,8 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
+        // Use an absolute callback URL by default to avoid redirect_uri mismatch
+        'redirect' => env('GOOGLE_REDIRECT_URI', rtrim(env('APP_URL', 'http://127.0.0.1:8000'), '/') . '/auth/google/callback'),
     ],
 
 ];

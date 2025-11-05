@@ -237,13 +237,15 @@
                 </a>
             </div>
         @else
-            <!-- Empty State - No Filter -->
-            <div class="bg-white rounded-xl shadow-lg p-12 text-center">
-                <i class="fas fa-filter text-gray-300 text-6xl mb-4"></i>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">Pilih Filter</h3>
-                <p class="text-sm text-gray-500">
-                    Silakan pilih tahun angkatan dan program studi untuk menampilkan data mahasiswa.
-                </p>
+            <!-- Empty State - No Filter (match CPL style) -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">Silakan pilih tahun angkatan dan program studi untuk menampilkan data mahasiswa.</p>
             </div>
         @endif
 

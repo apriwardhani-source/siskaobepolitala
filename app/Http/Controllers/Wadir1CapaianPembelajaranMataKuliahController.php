@@ -44,17 +44,11 @@ class Wadir1CapaianPembelajaranMataKuliahController extends Controller
             )
             ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kode_prodi)
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
             ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
             ->orderBy('cpmk.kode_cpmk', 'asc');
-
-        // Filter tahun jika dipilih
-        if (!empty($id_tahun)) {
-            $query->where('pl.id_tahun', $id_tahun);
-        }
 
         $cpmks = $query->get();
 

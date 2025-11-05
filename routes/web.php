@@ -83,6 +83,7 @@ use App\Http\Controllers\MisiController;
 use App\Http\Controllers\TimVisiMisiController;
 use App\Http\Controllers\Wadir1VisiMisiController;
 use App\Http\Controllers\AdminVisiMisiController;
+use App\Http\Controllers\Wadir1ExportController;
 use App\Http\Controllers\Admin\HasilObeController as AdminHasilObeController;
 use App\Http\Controllers\Wadir1\HasilObeController as Wadir1HasilObeController;
 use App\Http\Controllers\Kaprodi\HasilObeController as KaprodiHasilObeController;
@@ -292,7 +293,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Grup Route Wadir1
-    Route::prefix('wadir1')->name('wadir1.')->middleware(['auth.wadir1'])->group(function () {
+    Route::prefix('wadir1')->name('wadir1.')->middleware(['auth.wadir1','read.only'])->group(function () {
         Route::get('/users', [Wadir1UserController::class, 'index'])->name('users.index');
         Route::get('/users/{id}/detail', [Wadir1UserController::class, 'detail'])->name('users.detail');
         Route::get('/dashboard', [Wadir1DashboardController::class, 'dashboard'])->name('dashboard');
@@ -312,17 +313,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/capaianpembelajaranmatakuliah', [Wadir1CapaianPembelajaranMatakuliahController::class, 'index'])->name('capaianpembelajaranmatakuliah.index');
         Route::get('/capaianpembelajaranmatakuliah/{id_cpmk}/detail', [Wadir1CapaianPembelajaranMatakuliahController::class, 'detail'])->name('capaianpembelajaranmatakuliah.detail');
         Route::get('/export/excel', [TimExportController::class, 'export'])->name('export.excel');
-        //catatan
+        // Export endpoints (Excel)
+        Route::get('/export/cpl', [Wadir1ExportController::class, 'exportCpl'])->name('export.cpl');
+        Route::get('/export/matakuliah', [Wadir1ExportController::class, 'exportMk'])->name('export.mk');
+        Route::get('/export/cpmk', [Wadir1ExportController::class, 'exportCpmk'])->name('export.cpmk');
+        Route::get('/export/pemetaan-cpl-cpmk-mk', [Wadir1ExportController::class, 'exportPemetaan'])->name('export.pemetaan');
+        Route::get('/export/subcpmk', [Wadir1ExportController::class, 'exportSubCpmk'])->name('export.subcpmk');
+        Route::get('/export/bobot', [Wadir1ExportController::class, 'exportBobot'])->name('export.bobot');
+        Route::get('/export/hasilobe', [Wadir1ExportController::class, 'exportHasilObe'])->name('export.hasilobe');
+        // Catatan (read-only)
         Route::get('/notes', [Wadir1NotesController::class, 'index'])->name('notes.index');
-        Route::get('/notes/create', [Wadir1NotesController::class, 'create'])->name('notes.create');
-        Route::post('/notes', [Wadir1NotesController::class, 'store'])->name('notes.store');
-        Route::delete('/notes/{note}', [Wadir1NotesController::class, 'destroy'])->name('notes.destroy');
-        
-        Route::resource('notes', Wadir1NotesController::class);
         Route::get('/notes/{note}/detail', [Wadir1NotesController::class, 'detail'])->name('notes.detail');
-        Route::get('/notes/{note}/edit', [Wadir1NotesController::class, 'edit'])->name('notes.edit');
-        Route::put('/notes/{note}', [Wadir1NotesController::class, 'update'])->name('notes.update');
-        Route::delete('/notes/{note}', [Wadir1NotesController::class, 'destroy'])->name('notes.destroy');
 
         Route::get('/bobot', [Wadir1BobotController::class, 'index'])->name('bobot.index');
         Route::get('/bobot/{bobot}/detail', [Wadir1BobotController::class, 'detail'])->name('bobot.detail');

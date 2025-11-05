@@ -21,22 +21,13 @@ class Wadir1CapaianPembelajaranLulusanController extends Controller
             return view("wadir1.capaianpembelajaranlulusan.index", compact("prodis", "kode_prodi", "id_tahun", "tahun_tersedia"));
         }
 
-        $query = DB::table('capaian_profil_lulusans')
-            ->leftJoin('cpl_pl', 'capaian_profil_lulusans.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->leftJoin('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->select('capaian_profil_lulusans.id_cpl', 'capaian_profil_lulusans.deskripsi_cpl', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.status_cpl', 'prodis.nama_prodi')
-            ->groupBy('capaian_profil_lulusans.id_cpl', 'capaian_profil_lulusans.deskripsi_cpl', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.status_cpl', 'prodis.nama_prodi')
-            ->orderBy('kode_cpl', 'asc');
-
-        if ($kode_prodi) {
-            $query->where('prodis.kode_prodi', $kode_prodi);
-        }
-
-        // Filter berdasarkan tahun jika ada
-        if ($id_tahun) {
-            $query->where('profil_lulusans.id_tahun', $id_tahun);
-        }
+        // Gunakan kolom langsung pada tabel CPL (karena skema sudah punya kode_prodi & id_tahun)
+        $query = DB::table('capaian_profil_lulusans as cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->select('cpl.id_cpl', 'cpl.deskripsi_cpl', 'cpl.kode_cpl', 'cpl.status_cpl', 'prodis.nama_prodi')
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
+            ->orderBy('cpl.kode_cpl', 'asc');
 
         $capaianprofillulusans = $query->get();
 
@@ -51,16 +42,15 @@ class Wadir1CapaianPembelajaranLulusanController extends Controller
 
     public function detail(CapaianProfilLulusan $id_cpl)
     {
-        $selectedPlIds = DB::table('cpl_pl')
-            ->where('id_cpl', $id_cpl->id_cpl)
-            ->pluck('id_pl')
-            ->toArray();
-
-        $profilLulusans = ProfilLulusan::whereIn('id_pl', $selectedPlIds)->get();
+        // Skema baru: ambil Profil Lulusan berdasarkan prodi & tahun CPL
+        $profilLulusans = ProfilLulusan::where('kode_prodi', $id_cpl->kode_prodi)
+            ->where('id_tahun', $id_cpl->id_tahun)
+            ->orderBy('kode_pl')
+            ->get();
 
         return view('wadir1.capaianpembelajaranlulusan.detail', [
             'id_cpl' => $id_cpl,
-            'selectedProfilLulusans' => $selectedPlIds,
+            'selectedProfilLulusans' => [],
             'profilLulusans' => $profilLulusans
         ]);
     }
@@ -75,22 +65,14 @@ class Wadir1CapaianPembelajaranLulusanController extends Controller
         }
 
         $query = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl as cplpl', 'cpl.id_cpl', '=', 'cplpl.id_cpl')
-            ->join('profil_lulusans as pl', 'cplpl.id_pl', '=', 'pl.id_pl')
-            ->Join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->join('prodis as ps', 'pl.kode_prodi', '=', 'ps.kode_prodi')
             ->leftJoin('cpl_mk as cmk', 'cpl.id_cpl', '=', 'cmk.id_cpl')
             ->leftJoin('mata_kuliahs as mk', 'cmk.kode_mk', '=', 'mk.kode_mk')
+            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->leftJoin('prodis as ps', 'cpl.kode_prodi', '=', 'ps.kode_prodi')
             ->select('cpl.id_cpl', 'cpl.kode_cpl', 'mk.semester_mk', 'mk.kode_mk', 'mk.nama_mk', 'ps.kode_prodi', 'tahun.tahun', 'ps.nama_prodi')
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
             ->distinct();
-
-        if ($kode_prodi) {
-            $query->where('ps.kode_prodi', $kode_prodi);
-        }
-
-        if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
-        }
 
         $data = $query
             ->orderBy('cpl.kode_cpl', 'asc')

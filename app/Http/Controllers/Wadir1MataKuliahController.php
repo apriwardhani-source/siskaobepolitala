@@ -34,18 +34,16 @@ class Wadir1MataKuliahController extends Controller
             )
             ->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('tahun', 'pl.id_tahun', '=', 'tahun.id_tahun')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->groupBy('mk.kode_mk', 'mk.nama_mk', 'mk.jenis_mk', 'mk.sks_mk', 'mk.semester_mk', 'mk.kompetensi_mk', 'prodis.nama_prodi', 'tahun.tahun');
 
         if ($kode_prodi) {
-            $query->where('prodis.kode_prodi', $kode_prodi);
+            $query->where('cpl.kode_prodi', $kode_prodi);
         }
 
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $mata_kuliahs = $query->get();
@@ -100,9 +98,7 @@ class Wadir1MataKuliahController extends Controller
             )
             ->leftJoin('cpl_mk', 'mk.kode_mk', '=', 'cpl_mk.kode_mk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->groupBy(
                 'mk.kode_mk',
                 'mk.nama_mk',
@@ -125,7 +121,7 @@ class Wadir1MataKuliahController extends Controller
         }
 
         if (!empty($id_tahun)) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $matakuliah = $query->get();

@@ -39,54 +39,50 @@ class Wadir1DashboardController extends Controller
                 continue;
             }
 
+            // Hitung PL (tetap memakai relasi eager loaded)
             $plIds = $prodi->profillulusans->pluck('id_pl')->toArray();
             $prodi->pl_count = count($plIds);
 
-            $prodi->cpl_count = DB::table('cpl_pl')
-                ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                ->whereIn('pl.id_pl', $plIds)
-                ->when($tahun_progress, fn($q) => $q->where('pl.id_tahun', $tahun_progress))
-                ->distinct()
-                ->count('id_cpl');
+            // CPL langsung dari tabel CPL berdasarkan prodi & tahun
+            $prodi->cpl_count = DB::table('capaian_profil_lulusans')
+                ->where('kode_prodi', $prodi->kode_prodi)
+                ->when($tahun_progress, fn($q) => $q->where('id_tahun', $tahun_progress))
+                ->count();
 
+            // BK terkait CPL
             $prodi->bk_count = DB::table('cpl_bk')
                 ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-                ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                ->whereIn('pl.id_pl', $plIds)
-                ->when($tahun_progress, fn($q) => $q->where('pl.id_tahun', $tahun_progress))
+                ->where('cpl.kode_prodi', $prodi->kode_prodi)
+                ->when($tahun_progress, fn($q) => $q->where('cpl.id_tahun', $tahun_progress))
                 ->distinct()
                 ->count('cpl_bk.id_bk');
 
+            // Total SKS MK yang terkait CPL prodi & tahun
             $prodi->sks_mk = DB::table('mata_kuliahs')
-                ->whereIn('kode_mk', function ($query) use ($plIds, $tahun_progress) {
+                ->whereIn('kode_mk', function ($query) use ($prodi, $tahun_progress) {
                     $query->select('cpl_mk.kode_mk')
                         ->from('cpl_mk')
                         ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-                        ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                        ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                        ->whereIn('pl.id_pl', $plIds)
-                        ->when($tahun_progress, fn($q) => $q->where('pl.id_tahun', $tahun_progress))
+                        ->where('cpl.kode_prodi', $prodi->kode_prodi)
+                        ->when($tahun_progress, fn($q) => $q->where('cpl.id_tahun', $tahun_progress))
                         ->distinct();
                 })
                 ->sum('sks_mk');
 
+            // CPMK terkait CPL
             $prodi->cpmk_count = DB::table('cpl_cpmk')
                 ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                ->whereIn('pl.id_pl', $plIds)
-                ->when($tahun_progress, fn($q) => $q->where('pl.id_tahun', $tahun_progress))
+                ->where('cpl.kode_prodi', $prodi->kode_prodi)
+                ->when($tahun_progress, fn($q) => $q->where('cpl.id_tahun', $tahun_progress))
                 ->distinct()
                 ->count('cpl_cpmk.id_cpmk');
 
+            // SubCPMK terkait lewat CPMK & CPL
             $prodi->subcpmk_count = DB::table('sub_cpmks')
                 ->join('cpl_cpmk', 'sub_cpmks.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
                 ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-                ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-                ->whereIn('pl.id_pl', $plIds)
-                ->when($tahun_progress, fn($q) => $q->where('pl.id_tahun', $tahun_progress))
+                ->where('cpl.kode_prodi', $prodi->kode_prodi)
+                ->when($tahun_progress, fn($q) => $q->where('cpl.id_tahun', $tahun_progress))
                 ->distinct()
                 ->count('sub_cpmks.id_sub_cpmk');
 

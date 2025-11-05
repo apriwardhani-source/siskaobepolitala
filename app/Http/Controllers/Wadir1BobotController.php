@@ -29,12 +29,12 @@ class Wadir1BobotController extends Controller
             ]);
         }
 
-        // Query dengan filter prodi dan tahun melalui relasi CPL -> profil_lulusans
-        $bobots = Bobot::with(['capaianProfilLulusan.profilLulusans', 'mataKuliah'])
-            ->whereHas('capaianProfilLulusan.profilLulusans', function ($query) use ($kode_prodi, $id_tahun) {
-                $query->where('kode_prodi', $kode_prodi);
+        // Query dengan filter prodi dan tahun langsung pada CPL (skema baru)
+        $bobots = Bobot::with(['capaianProfilLulusan', 'mataKuliah'])
+            ->whereHas('capaianProfilLulusan', function ($q) use ($kode_prodi, $id_tahun) {
+                $q->where('kode_prodi', $kode_prodi);
                 if ($id_tahun) {
-                    $query->where('id_tahun', $id_tahun);
+                    $q->where('id_tahun', $id_tahun);
                 }
             })
             ->orderBy('id_cpl')
