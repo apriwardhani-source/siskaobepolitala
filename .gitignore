@@ -22,3 +22,12 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# WhatsApp Web.js Session & Auth (JANGAN COMMIT!)
+whatsapp-auth/
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Evolution API (Docker - JANGAN COMMIT!)
+evolution-whatsapp/
+docker-compose-whatsapp.yml

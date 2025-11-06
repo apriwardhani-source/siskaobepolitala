@@ -157,6 +157,9 @@ Route::middleware(['guest'])->group(function () {
         return view('auth.homepage');
     });
    Route::get('/', [HomepageController::class, 'homepage'])->name('homepage');
+   
+   // Contact form submission (tidak perlu auth)
+   Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 });
 
 // Rute yang memerlukan autentikasi
@@ -271,6 +274,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax-getcplbymk', [AdminBobotController::class, 'getcplbymk'])->name('bobot.getCPLByMK');
         Route::get('/notes', [AdminNotesController::class, 'index'])->name('notes.index');
         Route::get('/notes/{note}/detail', [AdminNotesController::class, 'detail'])->name('notes.detail');
+        
+        // Contact messages from homepage
+        Route::get('/contacts', [\App\Http\Controllers\AdminContactController::class, 'index'])->name('contacts.index');
+        Route::get('/contacts/{id}', [\App\Http\Controllers\AdminContactController::class, 'show'])->name('contacts.show');
+        Route::delete('/contacts/{id}', [\App\Http\Controllers\AdminContactController::class, 'destroy'])->name('contacts.destroy');
         Route::get('/visi/create', [VisiController::class, 'create'])->name('visi.create');
         Route::post('/visi', [VisiController::class, 'store'])->name('visi.store');
         Route::get('/visi', [VisiController::class, 'index'])->name('visi.index');
