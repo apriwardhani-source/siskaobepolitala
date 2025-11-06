@@ -41,11 +41,10 @@ class ContactController extends Controller
                 'message' => $request->message,
             ]);
 
-            // Kirim notifikasi WHATSAPP ke admin (OTOMATIS & GRATIS!)
+            // Kirim notifikasi WHATSAPP ke admin (OTOMATIS!)
             $whatsappSent = false;
-            $emailSent = false;
             
-            // 1. Kirim via WhatsApp (Priority)
+            // Kirim via WhatsApp
             try {
                 $adminNumber = env('WHATSAPP_ADMIN_NUMBER', '6285754631899');
                 $whatsappMessage = "📬 *Pesan Baru dari Website Politala OBE*\n\n";
@@ -56,7 +55,7 @@ class ContactController extends Controller
                 $whatsappMessage .= "🔗 *Dashboard:* " . url('/admin/contacts');
                 
                 // Call WhatsApp Web.js service
-                $response = \Illuminate\Support\Facades\Http::timeout(5)->post('http://localhost:3000/send', [
+                $response = \Illuminate\Support\Facades\Http::timeout(15)->post('http://localhost:3001/send', [
                     'number' => $adminNumber,
                     'message' => $whatsappMessage
                 ]);
@@ -65,49 +64,30 @@ class ContactController extends Controller
                     $whatsappSent = true;
                     Log::info('WhatsApp notification sent successfully', [
                         'contact_id' => $contact->id,
-                        'admin_number' => $adminNumber
+                        'admin_number' => $adminNumber,
+                        'response' => $response->json()
+                    ]);
+                } else {
+                    Log::error('WhatsApp API returned error', [
+                        'status' => $response->status(),
+                        'body' => $response->body()
                     ]);
                 }
             } catch (\Exception $whatsappError) {
-                Log::warning('WhatsApp notification failed, trying email backup', [
+                Log::error('WhatsApp notification exception', [
                     'contact_id' => $contact->id,
-                    'error' => $whatsappError->getMessage()
+                    'error' => $whatsappError->getMessage(),
+                    'trace' => $whatsappError->getTraceAsString()
                 ]);
             }
             
-            // 2. Backup: Kirim via Email jika WhatsApp gagal
-            if (!$whatsappSent) {
-                try {
-                    Mail::to(env('ADMIN_EMAIL', 'admin@politala.ac.id'))
-                        ->send(new ContactNotification([
-                            'name' => $request->name,
-                            'email' => $request->email,
-                            'message' => $request->message,
-                        ]));
-                    
-                    $emailSent = true;
-                    
-                    Log::info('Email notification sent successfully (WhatsApp backup)', [
-                        'contact_id' => $contact->id,
-                        'admin_email' => env('ADMIN_EMAIL')
-                    ]);
-                } catch (\Exception $emailError) {
-                    Log::error('Both WhatsApp and Email notification failed', [
-                        'contact_id' => $contact->id,
-                        'whatsapp_error' => $whatsappError->getMessage() ?? 'N/A',
-                        'email_error' => $emailError->getMessage()
-                    ]);
-                }
-            }
-
-            $notificationMethod = $whatsappSent ? 'WhatsApp' : ($emailSent ? 'Email' : 'Database');
+            $notificationMethod = $whatsappSent ? 'WhatsApp' : 'Database';
             
             return response()->json([
                 'success' => true,
                 'message' => "Pesan Anda berhasil dikirim! Admin akan segera diberitahu via {$notificationMethod}.",
                 'data' => $contact,
-                'whatsapp_sent' => $whatsappSent,
-                'email_sent' => $emailSent
+                'whatsapp_sent' => $whatsappSent
             ], 200);
 
         } catch (\Exception $e) {

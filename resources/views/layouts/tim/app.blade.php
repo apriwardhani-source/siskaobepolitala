@@ -41,14 +41,18 @@
 
         function toggleDropdownProfil() {
             const dropdown = document.getElementById("userDropdown");
-            dropdown.classList.toggle("hidden");
+            if (dropdown.style.display === "none") {
+                dropdown.style.display = "block";
+            } else {
+                dropdown.style.display = "none";
+            }
         }
 
         document.addEventListener("click", function(event) {
             const button = event.target.closest("button");
             const dropdown = document.getElementById("userDropdown");
             if (!button && !event.target.closest("#userDropdown")) {
-                dropdown?.classList.add("hidden");
+                if (dropdown) dropdown.style.display = "none";
             }
         });
     </script>
@@ -83,7 +87,14 @@
                         </svg>
                     </button>
                     <div id="userDropdown"
-                        class="absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 hidden w-48">
+                        class="absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48 z-50" style="display: none;">
+                        @auth
+                            <a href="{{ route('settings.profile') }}" class="flex items-center px-4 py-2 hover:bg-gray-100 transition-colors">
+                                <i class="fas fa-user-circle mr-2 text-blue-600"></i>
+                                <span>Profil Saya</span>
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                        @endauth
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"

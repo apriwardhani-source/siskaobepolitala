@@ -176,7 +176,7 @@ app.post('/send', async (req, res) => {
 });
 
 // Start Server
-const PORT = 3000;
+const PORT = 3001; // Changed to 3001 to avoid conflict
 app.listen(PORT, () => {
     console.log(`\n📡 WhatsApp Service running on http://localhost:${PORT}`);
     console.log(`📱 QR Code URL: http://localhost:${PORT}/qr`);
