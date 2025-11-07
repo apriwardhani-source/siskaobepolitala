@@ -157,12 +157,20 @@ Route::middleware(['guest'])->group(function () {
         return view('auth.homepage');
     });
    Route::get('/', [HomepageController::class, 'homepage'])->name('homepage');
+   
+   // Contact form submission (tidak perlu auth)
+   Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 });
 
 // Rute yang memerlukan autentikasi
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-        Route::get('/export/kpt', [ExportKptController::class, 'export'])->name('export.kpt');
+    Route::get('/export/kpt', [ExportKptController::class, 'export'])->name('export.kpt');
+    
+    // Generic Settings Routes (untuk semua role)
+    Route::get('/settings/profile', [App\Http\Controllers\SettingsController::class, 'profile'])->name('settings.profile');
+    Route::post('/settings/profile', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/settings/password', [App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password.update');
     // Grup Route Admin
     Route::prefix('admin')->name('admin.')->middleware(['auth.admin'])->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
@@ -176,6 +184,21 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
+        
+        // Settings Routes
+        Route::get('/settings', [App\Http\Controllers\AdminSettingsController::class, 'index'])->name('settings.index');
+        Route::get('/settings/profile', [App\Http\Controllers\AdminSettingsController::class, 'profile'])->name('settings.profile');
+        Route::post('/settings/profile', [App\Http\Controllers\AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+        Route::post('/settings/password', [App\Http\Controllers\AdminSettingsController::class, 'updatePassword'])->name('settings.password.update');
+        Route::get('/settings/system', [App\Http\Controllers\AdminSettingsController::class, 'system'])->name('settings.system');
+        
+        // WhatsApp Integration Routes
+        Route::get('/whatsapp/connect', [App\Http\Controllers\AdminWhatsAppController::class, 'connect'])->name('whatsapp.connect');
+        Route::get('/whatsapp/qr', [App\Http\Controllers\AdminWhatsAppController::class, 'getQR'])->name('whatsapp.qr');
+        Route::get('/whatsapp/status', [App\Http\Controllers\AdminWhatsAppController::class, 'status'])->name('whatsapp.status');
+        Route::post('/whatsapp/test', [App\Http\Controllers\AdminWhatsAppController::class, 'testSend'])->name('whatsapp.test');
+        Route::post('/whatsapp/start', [App\Http\Controllers\AdminWhatsAppController::class, 'startService'])->name('whatsapp.start');
+        Route::post('/whatsapp/restart', [App\Http\Controllers\AdminWhatsAppController::class, 'restartService'])->name('whatsapp.restart');
 
         Route::get('/prodi', [AdminProdiController::class, 'index'])->name('prodi.index');
         Route::get('/prodi/create', [AdminProdiController::class, 'create'])->name('prodi.create');
@@ -271,6 +294,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('ajax-getcplbymk', [AdminBobotController::class, 'getcplbymk'])->name('bobot.getCPLByMK');
         Route::get('/notes', [AdminNotesController::class, 'index'])->name('notes.index');
         Route::get('/notes/{note}/detail', [AdminNotesController::class, 'detail'])->name('notes.detail');
+        
+        // Contact messages from homepage
+        Route::get('/contacts', [\App\Http\Controllers\AdminContactController::class, 'index'])->name('contacts.index');
+        Route::get('/contacts/{id}', [\App\Http\Controllers\AdminContactController::class, 'show'])->name('contacts.show');
+        Route::delete('/contacts/{id}', [\App\Http\Controllers\AdminContactController::class, 'destroy'])->name('contacts.destroy');
         Route::get('/visi/create', [VisiController::class, 'create'])->name('visi.create');
         Route::post('/visi', [VisiController::class, 'store'])->name('visi.store');
         Route::get('/visi', [VisiController::class, 'index'])->name('visi.index');
