@@ -140,9 +140,15 @@
             </div>
         </div>
 
+        @if($role === 'admin')
         <a href="{{ route($routePrefix . '.capaianprofillulusan.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-check2-square mr-2"></i>CPL
         </a>
+        @else
+        <a href="{{ route($routePrefix . '.capaianpembelajaranlulusan.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-check2-square mr-2"></i>CPL
+        </a>
+        @endif
 
         <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-book mr-2"></i>Mata Kuliah
@@ -258,9 +264,15 @@
             <a href="{{ route($routePrefix . '.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-bullseye mr-2"></i>Visi Misi
             </a>
+            @if($role === 'admin')
             <a href="{{ route($routePrefix . '.capaianprofillulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-check2-square mr-2"></i>CPL
             </a>
+            @else
+            <a href="{{ route($routePrefix . '.capaianpembelajaranlulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-check2-square mr-2"></i>CPL
+            </a>
+            @endif
             <a href="{{ route($routePrefix . '.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-book mr-2"></i>Mata Kuliah
             </a>
