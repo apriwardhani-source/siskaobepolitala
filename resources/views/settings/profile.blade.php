@@ -1,12 +1,20 @@
-@extends('layouts.settings')
+@extends('layouts.app')
 
 @section('content')
-<div class="max-w-5xl mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 px-4">
+    <div class="container-fluid max-w-5xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
             <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
                 <div class="flex items-center justify-between flex-wrap gap-4">
                     <div class="flex items-center gap-4">
+                        @php
+                            $role = auth()->user()->role;
+                            $dashboardRoute = $role . '.dashboard';
+                        @endphp
+                        <a href="{{ route($dashboardRoute) }}" class="text-gray-500 hover:text-indigo-600 transition-colors">
+                            <i class="fas fa-arrow-left text-2xl"></i>
+                        </a>
                         <div class="relative">
                             <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-600 rounded-2xl blur opacity-75"></div>
                             <div class="relative bg-gradient-to-br from-blue-500 to-cyan-600 text-white p-4 rounded-2xl">
@@ -84,6 +92,10 @@
                     </div>
 
                     <div class="flex justify-end gap-4 pt-6 border-t border-gray-200">
+                        <a href="{{ route($dashboardRoute) }}" 
+                           class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all">
+                            <i class="fas fa-times mr-2"></i>Batal
+                        </a>
                         <button type="submit" 
                                 class="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white rounded-xl font-semibold shadow-lg transition-all transform hover:scale-105">
                             <i class="fas fa-save mr-2"></i>Simpan Profil
@@ -142,5 +154,6 @@
                 </form>
             </div>
         </div>
+    </div>
 </div>
 @endsection
