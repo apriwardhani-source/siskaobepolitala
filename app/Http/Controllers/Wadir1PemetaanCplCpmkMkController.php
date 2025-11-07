@@ -215,6 +215,7 @@ class Wadir1PemetaanCplCpmkMkController extends Controller
         $relasi = DB::table('cpl_cpmk')
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpl_cpmk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->join('cpmk_mk', 'cpl_cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
             ->join('mata_kuliahs as mk', 'cpmk_mk.kode_mk', '=', 'mk.kode_mk')
             ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
@@ -227,7 +228,8 @@ class Wadir1PemetaanCplCpmkMkController extends Controller
                 'cpl.kode_cpl',
                 'cpmk.kode_cpmk',
                 'cpmk.deskripsi_cpmk',
-                'tahun.tahun'
+                'tahun.tahun',
+                DB::raw('prodis.nama_prodi as nama_prodi')
             )
             ->get();
 

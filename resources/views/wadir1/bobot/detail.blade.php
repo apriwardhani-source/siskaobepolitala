@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.wadir1.app')
 @section('title', 'Detail Bobot CPL-MK - Wadir 1')
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">

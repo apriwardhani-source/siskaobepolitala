@@ -341,6 +341,7 @@ Route::middleware(['auth'])->group(function () {
         // Hasil OBE
         Route::get('/hasilobe', [Wadir1HasilObeController::class, 'index'])->name('hasilobe.index');
         Route::get('/hasilobe/{nim}', [Wadir1HasilObeController::class, 'detail'])->name('hasilobe.detail');
+        Route::get('/hasilobe/{nim}/pdf', [Wadir1HasilObeController::class, 'exportPdf'])->name('hasilobe.pdf');
     });
 
     // Grup Route Kaprodi
