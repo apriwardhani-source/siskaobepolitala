@@ -410,6 +410,14 @@ Route::middleware(['auth'])->group(function () {
         // Hasil OBE
         Route::get('/hasilobe', [KaprodiHasilObeController::class, 'index'])->name('hasilobe.index');
         Route::get('/hasilobe/{nim}', [KaprodiHasilObeController::class, 'detail'])->name('hasilobe.detail');
+        
+        // Ranking Mahasiswa (SAW Method)
+        Route::get('/ranking', [\App\Http\Controllers\Kaprodi\RankingMahasiswaController::class, 'index'])->name('ranking.index');
+        Route::post('/ranking/hitung', [\App\Http\Controllers\Kaprodi\RankingMahasiswaController::class, 'hitungRanking'])->name('ranking.hitung');
+        Route::get('/ranking/{id_session}/hasil', [\App\Http\Controllers\Kaprodi\RankingMahasiswaController::class, 'hasil'])->name('ranking.hasil');
+        Route::get('/ranking/{id_session}/detail/{nim}', [\App\Http\Controllers\Kaprodi\RankingMahasiswaController::class, 'detail'])->name('ranking.detail');
+        Route::delete('/ranking/{id_session}', [\App\Http\Controllers\Kaprodi\RankingMahasiswaController::class, 'destroy'])->name('ranking.destroy');
+        Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Kaprodi\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
     });
 
     // Grup Route Tim

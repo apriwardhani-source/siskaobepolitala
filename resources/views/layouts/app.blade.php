@@ -230,6 +230,13 @@
             </div>
         </div>
 
+        <!-- Ranking Mahasiswa (SAW) - Khusus Kaprodi -->
+        @if($role === 'kaprodi')
+        <a href="{{ route('kaprodi.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+        </a>
+        @endif
+
         @elseif($role === 'dosen')
         <!-- Menu untuk Dosen -->
         <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
