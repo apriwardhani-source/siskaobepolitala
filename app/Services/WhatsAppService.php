@@ -10,13 +10,27 @@ class WhatsAppService
     protected $apiKey;
     protected $apiUrl;
     protected $instanceName;
+    protected $enabled;
 
     public function __construct()
     {
+        // Check if WhatsApp is enabled (for development/production toggle)
+        $this->enabled = env('WHATSAPP_ENABLED', true);
+        
         // Evolution API Config (GRATIS!)
         $this->apiKey = env('EVOLUTION_API_KEY', 'your_api_key_here');
         $this->apiUrl = env('EVOLUTION_API_URL', 'http://localhost:8080');
         $this->instanceName = env('EVOLUTION_INSTANCE', 'politala-bot');
+    }
+    
+    /**
+     * Check if WhatsApp service is enabled
+     * 
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 
     /**
@@ -28,6 +42,22 @@ class WhatsAppService
      */
     public function sendMessage($to, $message)
     {
+        // Check if WhatsApp is enabled
+        if (!$this->enabled) {
+            Log::info('WhatsApp DISABLED - Message NOT sent (Development Mode)', [
+                'to' => $to,
+                'message' => $message,
+                'note' => 'Set WHATSAPP_ENABLED=true in .env to enable'
+            ]);
+
+            return [
+                'success' => true,
+                'data' => ['message' => 'WhatsApp disabled in development mode'],
+                'status' => 200,
+                'development_mode' => true
+            ];
+        }
+
         try {
             $response = Http::withHeaders([
                 'apikey' => $this->apiKey,

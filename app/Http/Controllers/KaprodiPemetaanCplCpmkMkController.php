@@ -23,9 +23,6 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
 
         $query = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
             ->leftJoin('cpl_cpmk', 'cpl.id_cpl', '=', 'cpl_cpmk.id_cpl')
             ->leftJoin('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpl_cpmk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->leftJoin('cpmk_mk', 'cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
@@ -39,13 +36,13 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
                 'cpmk.deskripsi_cpmk',
                 'mk.nama_mk'
             )
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->orderBy('cpl.kode_cpl', 'asc')
             ->orderBy('cpmk.id_cpmk', 'asc');
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $data = $query->get();
@@ -73,14 +70,12 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
 
         $query = DB::table('capaian_profil_lulusans as cpl')
-            ->Join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->leftJoin('cpl_cpmk as cpl_cpmk', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
             ->leftJoin('capaian_pembelajaran_mata_kuliahs as cpmk', 'cpl_cpmk.id_cpmk', '=', 'cpmk.id_cpmk')
             ->leftJoin('cpmk_mk', 'cpl_cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
             ->leftJoin('mata_kuliahs as mk', 'cpmk_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'cpl.kode_cpl',
                 'cpl.deskripsi_cpl',
@@ -96,7 +91,7 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $data = $query->get();
@@ -135,32 +130,27 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
 
         // Query untuk semua CPL dengan filter tahun
         $semuaCplQuery = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl', 'prodis.nama_prodi')
             ->orderBy('cpl.kode_cpl');
 
         if ($id_tahun) {
-            $semuaCplQuery->where('pl.id_tahun', $id_tahun);
+            $semuaCplQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $semuaCpl = $semuaCplQuery->get();
 
         // Query untuk semua MK dengan filter tahun
         $semuaMkQuery = DB::table('capaian_profil_lulusans as cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
             ->join('cpl_mk', 'cpl.id_cpl', '=', 'cpl_mk.id_cpl')
             ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('mk.kode_mk', 'mk.nama_mk', 'mk.semester_mk')
             ->orderBy('mk.kode_mk');
 
         if ($id_tahun) {
-            $semuaMkQuery->where('pl.id_tahun', $id_tahun);
+            $semuaMkQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $semuaMk = $semuaMkQuery->get();
@@ -171,10 +161,8 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
             ->join('cpmk_mk', 'cpl_cpmk.id_cpmk', '=', 'cpmk_mk.id_cpmk')
             ->join('mata_kuliahs as mk', 'cpmk_mk.kode_mk', '=', 'mk.kode_mk')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
@@ -189,7 +177,7 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
             ->orderBy('cpl.kode_cpl');
 
         if ($id_tahun) {
-            $relasiQuery->where('pl.id_tahun', $id_tahun);
+            $relasiQuery->where('cpl.id_tahun', $id_tahun);
         }
 
         $relasi = $relasiQuery->get();
