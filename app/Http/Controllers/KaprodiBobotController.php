@@ -24,10 +24,9 @@ class KaprodiBobotController extends Controller
 
         $query = DB::table('bobots')
             ->join('capaian_profil_lulusans as cpl', 'bobots.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            // Schema baru: gunakan kode_prodi dan id_tahun dari CPL
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'bobots.id_bobot',
                 'bobots.id_cpl',
@@ -35,12 +34,12 @@ class KaprodiBobotController extends Controller
                 'bobots.bobot',
                 'cpl.kode_cpl',
                 'cpl.deskripsi_cpl',
-                'pl.id_tahun',
+                'cpl.id_tahun',
                 'prodis.nama_prodi'
             );
 
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $bobots = $query->orderBy('bobots.id_cpl')->get();
@@ -57,10 +56,9 @@ class KaprodiBobotController extends Controller
 
         $mk_terkait = DB::table('cpl_mk')
             ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
-            ->join('cpl_pl', 'cpl_mk.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->join('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->where('cpl_mk.id_cpl', $id_cpl)
             ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
             ->get();

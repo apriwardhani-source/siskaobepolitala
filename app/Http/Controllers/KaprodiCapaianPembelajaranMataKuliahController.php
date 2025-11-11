@@ -24,17 +24,17 @@ class KaprodiCapaianPembelajaranMataKuliahController extends Controller
         $query = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
             ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->leftJoin('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->leftJoin('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->leftJoin('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('prodis.kode_prodi', $kodeProdi)
+            // Schema baru: CPL sudah menyimpan kode_prodi dan id_tahun
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
             ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
             ->orderBy('cpmk.kode_cpmk', 'asc');
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            // Filter berdasarkan tahun dari CPL (bukan lagi dari PL)
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $capaianpembelajaranmatakuliahs = $query->get();
@@ -48,11 +48,9 @@ class KaprodiCapaianPembelajaranMataKuliahController extends Controller
 
         $akses = DB::table('cpl_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            // Validasi akses langsung via kode_prodi di CPL sesuai schema baru
             ->where('cpl_cpmk.id_cpmk', $id_cpmk)
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->exists();
 
         if (!$akses) {
