@@ -52,7 +52,7 @@
 <body class="bg-gray-100">
 
 <!-- Navbar -->
-<nav class="bg-gray-900 text-white fixed top-0 left-0 w-full z-50 shadow-md">
+<nav class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white fixed top-0 left-0 w-full z-50 shadow-lg">
     <!-- Top Bar -->
     <div class="px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
@@ -96,15 +96,15 @@
     </div>
     
     <!-- Menu Bar (Desktop) -->
-    <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
+    <div class="hidden md:flex bg-[#1a2f5c] px-6 py-2 space-x-1">
         <!-- Dashboard -->
-        <a href="{{ route('wadir1.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route('wadir1.dashboard') }}" class="px-4 py-2 rounded hover:bg-[#2a5298] transition-colors duration-200">
             <i class="bi bi-house-door mr-2"></i>Beranda
         </a>
         
         <!-- Program Setup -->
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 rounded flex items-center hover:bg-[#2a5298] transition-colors duration-200">
                 Pengaturan Program <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-48">
@@ -119,7 +119,7 @@
         
         <!-- Learning Outcomes -->
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 rounded flex items-center hover:bg-[#2a5298] transition-colors duration-200">
                 Capaian Pembelajaran <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -131,7 +131,7 @@
         
         <!-- Curriculum -->
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 rounded flex items-center hover:bg-[#2a5298] transition-colors duration-200">
                 Kurikulum <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -146,7 +146,7 @@
         
         <!-- Advanced Mapping -->
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 rounded flex items-center hover:bg-[#2a5298] transition-colors duration-200">
                 Lanjutan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute left-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-56">
@@ -158,7 +158,7 @@
         
         <!-- Pemetaan -->
         <div class="relative dropdown">
-            <button class="px-4 py-2 hover:bg-gray-700 rounded flex items-center">
+            <button class="px-4 py-2 rounded flex items-center hover:bg-[#2a5298] transition-colors duration-200">
                 Pemetaan <i class="bi bi-chevron-down ml-1"></i>
             </button>
             <div class="dropdown-menu hidden absolute right-0 mt-2 bg-white text-black rounded-md shadow-lg py-2 w-64">
@@ -182,47 +182,62 @@
                 </a>
             </div>
         </div>
+<<<<<<< HEAD
         
         <!-- Ranking Mahasiswa -->
         <a href="{{ route('wadir1.ranking.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded transition-colors duration-200">
             <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+=======
+
+        <!-- Hasil OBE -->
+        <a href="{{ route('wadir1.hasilobe.index') }}" class="px-4 py-2 rounded hover:bg-[#2a5298] transition-colors duration-200">
+            <i class="bi bi-graph-up-arrow mr-2"></i>Hasil OBE
+>>>>>>> 61aa36dfb15ffb4caf6fd729e71fa86c35470d5f
         </a>
     </div>
     
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu md:hidden bg-gray-800">
-        <div class="px-6 py-2 space-y-2">
-            <a href="{{ route('wadir1.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-[#1a2f5c]">
+            <div class="px-6 py-2 space-y-2">
+            <a href="{{ route('wadir1.dashboard') }}" class="block px-4 py-2 rounded hover:bg-[#2a5298]">
                 <i class="bi bi-house-door mr-2"></i>Beranda
             </a>
-            <div class="border-t border-gray-700"></div>
+            <div class="border-t border-[#2a5298]"></div>
             <p class="text-gray-400 text-xs px-4 py-1">PENGATURAN PROGRAM</p>
-            <a href="{{ route('wadir1.visimisi.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('wadir1.visimisi.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-calendar mr-2"></i>Visi Misi
             </a>
-            <a href="{{ route('wadir1.tahun.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('wadir1.tahun.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-calendar mr-2"></i>Tahun
             </a>
-            <div class="border-t border-gray-700"></div>
+            <div class="border-t border-[#2a5298]"></div>
             <p class="text-gray-400 text-xs px-4 py-1">CAPAIAN PEMBELAJARAN</p>
-            <a href="{{ route('wadir1.capaianpembelajaranlulusan.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('wadir1.capaianpembelajaranlulusan.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-check2-square mr-2"></i>1. CPL Prodi
             </a>
-            <div class="border-t border-gray-700"></div>
+            <div class="border-t border-[#2a5298]"></div>
             <p class="text-gray-400 text-xs px-4 py-1">KURIKULUM</p>
-            <a href="{{ route('wadir1.matakuliah.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('wadir1.matakuliah.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-book mr-2"></i>2. Susunan MK
             </a>
-            <a href="{{ route('wadir1.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('wadir1.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
             </a>
+<<<<<<< HEAD
             <div class="border-t border-gray-700"></div>
             <a href="{{ route('wadir1.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+=======
+
+            <div class="border-t border-[#2a5298]"></div>
+            <p class="text-gray-400 text-xs px-4 py-1">PELAPORAN</p>
+            <a href="{{ route('wadir1.hasilobe.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
+                <i class="bi bi-graph-up-arrow mr-2"></i>Hasil OBE
+>>>>>>> 61aa36dfb15ffb4caf6fd729e71fa86c35470d5f
             </a>
             <form action="{{ route('logout') }}" method="POST" class="mt-4">
                 @csrf
-                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-700 rounded text-red-400">
+                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-[#2a5298] rounded text-red-300">
                     <i class="fas fa-sign-out-alt mr-2"></i>Keluar
                 </button>
             </form>

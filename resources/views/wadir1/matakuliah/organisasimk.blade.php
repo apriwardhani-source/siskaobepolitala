@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.wadir1.app')
 @section('content')
 <div class="p-6 space-y-4">
     <h1 class="text-xl font-semibold">Organisasi Mata Kuliah per Semester</h1>

@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.wadir1.app')
 
 @section('title', 'Dashboard Wadir 1')
 

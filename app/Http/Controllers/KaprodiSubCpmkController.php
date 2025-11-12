@@ -26,15 +26,15 @@ class KaprodiSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sc.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
+            // Schema baru: gunakan kode_prodi langsung dari CPL
             ->select('sc.*', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'cpmk.kode_cpmk')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->orderBy('sc.sub_cpmk');
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            // Filter tahun dari CPL sesuai skema baru
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $subcpmks = $query->get();
@@ -50,9 +50,7 @@ class KaprodiSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sc.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk as cplcpmk', 'cpmk.id_cpmk', '=', 'cplcpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cplcpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->where('sc.id_sub_cpmk', $id)
             ->select(
                 'sc.id_sub_cpmk',
@@ -87,11 +85,9 @@ class KaprodiSubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->join('mata_kuliahs as mk', 'sub.kode_mk', '=', 'mk.kode_mk') // <-- ambil dari sub_cpmk langsung
-            ->where('prodis.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
@@ -107,7 +103,7 @@ class KaprodiSubCpmkController extends Controller
 
         // Tambahkan filter tahun jika ada
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $data = $query->get();

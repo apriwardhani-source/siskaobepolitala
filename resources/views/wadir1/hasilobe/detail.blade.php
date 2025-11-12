@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.wadir1.app')
 
 @section('title', 'Detail Hasil OBE')
 
@@ -65,7 +65,7 @@
                             <div class="flex items-center text-white/90">
                                 <i class="fas fa-calendar mr-2"></i>
                                 <span class="font-medium">Angkatan:</span>
-                                <span class="ml-2">{{ $mahasiswa->tahun_kurikulum }}</span>
+                                <span class="ml-2">{{ $mahasiswa->tahunKurikulum->tahun ?? '-' }}</span>
                             </div>
                         </div>
                     </div>
@@ -77,11 +77,11 @@
                             <i class="fas fa-print mr-2"></i>
                             Print
                         </button>
-                        <button onclick="exportPDF()" 
-                                class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm border border-white/30 transition-all">
+                        <a href="{{ route('wadir1.hasilobe.pdf', ['nim' => $mahasiswa->nim]) }}" target="_blank"
+                           class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm border border-white/30 transition-all">
                             <i class="fas fa-file-pdf mr-2"></i>
                             Export PDF
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -265,11 +265,6 @@
 
 @push('scripts')
 <script>
-function exportPDF() {
-    alert('Fitur export PDF akan segera tersedia!');
-    // Implementasi export PDF bisa menggunakan library seperti jsPDF atau server-side PDF generator
-}
-
 // Print styling
 window.onbeforeprint = function() {
     document.body.classList.add('printing');
@@ -300,3 +295,5 @@ window.onafterprint = function() {
 @endpush
 
 @endsection
+
+

@@ -94,9 +94,7 @@ class Wadir1SubCpmkController extends Controller
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub.id_cpmk', '=', 'cpmk.id_cpmk')
             ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
-            ->join('prodis', 'pl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->join('mata_kuliahs as mk', 'sub.kode_mk', '=', 'mk.kode_mk') // ambil langsung dari sub_cpmk
             ->where('prodis.kode_prodi', $kode_prodi)
             ->select(
@@ -113,7 +111,7 @@ class Wadir1SubCpmkController extends Controller
             ->distinct();
 
         if ($id_tahun) {
-            $query->where('pl.id_tahun', $id_tahun);
+            $query->where('cpl.id_tahun', $id_tahun);
         }
 
         $query = $query->get();
