@@ -54,6 +54,21 @@ class ImportDatabase extends Command
                     DB::table($tableName)->truncate();
                 }
 
+                // Tentukan primary key untuk setiap tabel
+                $primaryKeys = [
+                    'mahasiswas' => 'nim',
+                    'mata_kuliahs' => 'kode_mk',
+                    'prodis' => 'kode_prodi',
+                    'tahun' => 'id_tahun',
+                    'nilai_mahasiswa' => 'id_nilai',
+                    'users' => 'id',
+                    'capaian_profil_lulusans' => 'id_cpl',
+                    'bahan_kajians' => 'id_bk',
+                    'capaian_pembelajaran_mata_kuliahs' => 'id_cpmk',
+                ];
+
+                $primaryKey = $primaryKeys[$tableName] ?? 'id';
+
                 // Chunk data untuk performa lebih baik
                 $chunks = array_chunk($data, 100);
                 $totalInserted = 0;
@@ -67,8 +82,16 @@ class ImportDatabase extends Command
                     // Insert or update
                     foreach ($chunk as $row) {
                         try {
+                            // Get primary key value
+                            $keyValue = $row[$primaryKey] ?? null;
+                            
+                            if ($keyValue === null) {
+                                // Skip jika tidak ada primary key
+                                continue;
+                            }
+
                             DB::table($tableName)->updateOrInsert(
-                                ['id' => $row['id'] ?? null],
+                                [$primaryKey => $keyValue],
                                 $row
                             );
                             $totalInserted++;
