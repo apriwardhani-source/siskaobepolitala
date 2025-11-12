@@ -382,16 +382,12 @@ Route::middleware(['auth'])->group(function () {
         // Hasil OBE
         Route::get('/hasilobe', [Wadir1HasilObeController::class, 'index'])->name('hasilobe.index');
         Route::get('/hasilobe/{nim}', [Wadir1HasilObeController::class, 'detail'])->name('hasilobe.detail');
-<<<<<<< HEAD
         
         // Ranking Mahasiswa (SAW Method - Read Only)
         Route::get('/ranking', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'index'])->name('ranking.index');
         Route::get('/ranking/{id_session}/hasil', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'hasil'])->name('ranking.hasil');
         Route::get('/ranking/{id_session}/detail/{nim}', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'detail'])->name('ranking.detail');
         Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
-=======
-        Route::get('/hasilobe/{nim}/pdf', [Wadir1HasilObeController::class, 'exportPdf'])->name('hasilobe.pdf');
->>>>>>> 61aa36dfb15ffb4caf6fd729e71fa86c35470d5f
     });
 
     // Grup Route Kaprodi

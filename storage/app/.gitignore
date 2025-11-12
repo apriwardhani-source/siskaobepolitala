@@ -1,4 +1,3 @@
 *
-!private/
-!public/
+!database-exports/
 !.gitignore
