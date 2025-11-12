@@ -284,10 +284,8 @@ class TimMataKuliahController extends Controller
 
         $selectedCplIds = DB::table('cpl_mk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('cpl_pl', 'cpl.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans as pl', 'cpl_pl.id_pl', '=', 'pl.id_pl')
             ->where('cpl_mk.kode_mk', $matakuliah->kode_mk)
-            ->where('pl.kode_prodi', $kodeProdi)
+            ->where('cpl.kode_prodi', $kodeProdi)
             ->pluck('cpl_mk.id_cpl')
             ->toArray();
 
@@ -296,6 +294,10 @@ class TimMataKuliahController extends Controller
         }
 
         $capaianprofillulusans = CapaianProfilLulusan::whereIn('id_cpl', $selectedCplIds)->get();
+        
+        // Alias untuk view compatibility
+        $selectedCPL = $selectedCplIds;
+        $cplList = $capaianprofillulusans;
 
         $selectedBksIds = DB::table('bk_mk')
             ->where('kode_mk', $matakuliah->kode_mk)
@@ -303,8 +305,10 @@ class TimMataKuliahController extends Controller
             ->toArray();
 
         $bahanKajians = BahanKajian::whereIn('id_bk', $selectedBksIds)->get();
+        $selectedBK = $selectedBksIds;
+        $bkList = $bahanKajians;
 
-        return view('tim.matakuliah.detail', compact('matakuliah', 'selectedCplIds', 'selectedBksIds', 'capaianprofillulusans', 'bahanKajians'));
+        return view('tim.matakuliah.detail', compact('matakuliah', 'selectedCplIds', 'selectedBksIds', 'capaianprofillulusans', 'bahanKajians', 'selectedCPL', 'cplList', 'selectedBK', 'bkList'));
     }
 
     public function destroy(MataKuliah $matakuliah)

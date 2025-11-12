@@ -195,8 +195,9 @@
             </div>
         </div>
         @endif
+        @endif
 
-        @elseif(in_array($role, ['wadir1', 'kaprodi']))
+        @if(in_array($role, ['wadir1', 'kaprodi']))
         <!-- Menu untuk Wadir1 & Kaprodi (Read Only) -->
         <a href="{{ route($routePrefix . '.visimisi.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
             <i class="bi bi-bullseye mr-2"></i>Visi Misi
@@ -229,15 +230,32 @@
                 </a>
             </div>
         </div>
+        @endif
 
-        <!-- Ranking Mahasiswa (SAW) - Khusus Kaprodi -->
-        @if($role === 'kaprodi')
+        <!-- Ranking Mahasiswa (SAW) - Semua Role -->
+        @if($role === 'admin')
+        <a href="{{ route('admin.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+        </a>
+        @elseif($role === 'wadir1')
+        <a href="{{ route('wadir1.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+        </a>
+        @elseif($role === 'kaprodi')
         <a href="{{ route('kaprodi.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+        </a>
+        @elseif($role === 'tim')
+        <a href="{{ route('tim.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+        </a>
+        @elseif($role === 'dosen')
+        <a href="{{ route('dosen.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
         </a>
         @endif
 
-        @elseif($role === 'dosen')
+        @if($role === 'dosen')
         <!-- Menu untuk Dosen -->
         <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
             <i class="bi bi-clipboard-check mr-2"></i>Penilaian Mahasiswa
@@ -297,11 +315,26 @@
             <a href="{{ route('admin.contacts.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-envelope mr-2"></i>Pesan Kontak
             </a>
+            <div class="border-t border-gray-700 mt-2 pt-2"></div>
+            <a href="{{ route('admin.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+            </a>
+            @endif
+
+            @if(in_array($role, ['wadir1', 'kaprodi', 'tim']))
+            <div class="border-t border-gray-700 mt-2 pt-2"></div>
+            <a href="{{ route($routePrefix . '.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+            </a>
             @endif
 
             @if($role === 'dosen')
+            <div class="border-t border-gray-700 mt-2 pt-2"></div>
             <a href="{{ route('dosen.penilaian.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-clipboard-check mr-2"></i>Penilaian Mahasiswa
+            </a>
+            <a href="{{ route('dosen.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
             </a>
             @endif
 

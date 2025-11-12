@@ -207,6 +207,11 @@
                     </a>
                 </div>
             </div>
+            
+            <!-- Ranking Mahasiswa -->
+            <a href="{{ route('tim.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+                <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+            </a>
 
         </div>
 
@@ -257,6 +262,10 @@
                 </a>
                 <a href="{{ route('tim.bobot.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                     <i class="bi bi-speedometer2 mr-2"></i>Bobot CPL - MK
+                </a>
+                <div class="border-t border-gray-700"></div>
+                <a href="{{ route('tim.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
                 </a>
                 <div class="border-t border-gray-700"></div>
                 <p class="text-gray-400 text-xs px-4 py-1">MANAJEMEN</p>

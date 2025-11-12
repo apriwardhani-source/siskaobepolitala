@@ -114,6 +114,11 @@
             <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-pencil-square mr-2"></i>Penilaian
             </a>
+            
+            <!-- Ranking Mahasiswa -->
+            <a href="{{ route('dosen.ranking.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+                <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
+            </a>
         </div>
 
         <!-- Mobile Menu -->
@@ -125,6 +130,10 @@
                 <div class="border-t border-gray-700"></div>
                 <a href="{{ route('dosen.penilaian.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                     <i class="bi bi-pencil-square mr-2"></i>Penilaian
+                </a>
+                <div class="border-t border-gray-700"></div>
+                <a href="{{ route('dosen.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
                 </a>
                 <div class="border-t border-gray-700"></div>
                 <form action="{{ route('logout') }}" method="POST" class="mt-2">

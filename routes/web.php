@@ -167,6 +167,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/export/kpt', [ExportKptController::class, 'export'])->name('export.kpt');
     
+    // Debug navbar
+    Route::get('/test-navbar', function() {
+        return view('test-navbar');
+    })->name('test.navbar');
+    
     // Generic Settings Routes (untuk semua role)
     Route::get('/settings/profile', [App\Http\Controllers\SettingsController::class, 'profile'])->name('settings.profile');
     Route::post('/settings/profile', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
@@ -318,6 +323,14 @@ Route::middleware(['auth'])->group(function () {
         // Hasil OBE
         Route::get('/hasilobe', [AdminHasilObeController::class, 'index'])->name('hasilobe.index');
         Route::get('/hasilobe/{nim}', [AdminHasilObeController::class, 'detail'])->name('hasilobe.detail');
+        
+        // Ranking Mahasiswa (SAW Method)
+        Route::get('/ranking', [\App\Http\Controllers\Admin\RankingMahasiswaController::class, 'index'])->name('ranking.index');
+        Route::post('/ranking/hitung', [\App\Http\Controllers\Admin\RankingMahasiswaController::class, 'hitungRanking'])->name('ranking.hitung');
+        Route::get('/ranking/{id_session}/hasil', [\App\Http\Controllers\Admin\RankingMahasiswaController::class, 'hasil'])->name('ranking.hasil');
+        Route::get('/ranking/{id_session}/detail/{nim}', [\App\Http\Controllers\Admin\RankingMahasiswaController::class, 'detail'])->name('ranking.detail');
+        Route::delete('/ranking/{id_session}', [\App\Http\Controllers\Admin\RankingMahasiswaController::class, 'destroy'])->name('ranking.destroy');
+        Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Admin\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
     });
 
     // Grup Route Wadir1
@@ -369,6 +382,12 @@ Route::middleware(['auth'])->group(function () {
         // Hasil OBE
         Route::get('/hasilobe', [Wadir1HasilObeController::class, 'index'])->name('hasilobe.index');
         Route::get('/hasilobe/{nim}', [Wadir1HasilObeController::class, 'detail'])->name('hasilobe.detail');
+        
+        // Ranking Mahasiswa (SAW Method - Read Only)
+        Route::get('/ranking', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'index'])->name('ranking.index');
+        Route::get('/ranking/{id_session}/hasil', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'hasil'])->name('ranking.hasil');
+        Route::get('/ranking/{id_session}/detail/{nim}', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'detail'])->name('ranking.detail');
+        Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
     });
 
     // Grup Route Kaprodi
@@ -503,6 +522,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/subcpmk/getMkByCpmk', [TimSubCpmkController::class, 'getMkByCpmk'])->name('subcpmk.getMkByCpmk');
         Route::delete('/subcpmk/{id}', [TimSubCpmkController::class, 'destroy'])->name('subcpmk.destroy');
         Route::get('/visimisi', [TimVisiMisiController::class, 'index'])->name('visimisi.index');
+        
+        // Ranking Mahasiswa (SAW Method)
+        Route::get('/ranking', [\App\Http\Controllers\Tim\RankingMahasiswaController::class, 'index'])->name('ranking.index');
+        Route::post('/ranking/hitung', [\App\Http\Controllers\Tim\RankingMahasiswaController::class, 'hitungRanking'])->name('ranking.hitung');
+        Route::get('/ranking/{id_session}/hasil', [\App\Http\Controllers\Tim\RankingMahasiswaController::class, 'hasil'])->name('ranking.hasil');
+        Route::get('/ranking/{id_session}/detail/{nim}', [\App\Http\Controllers\Tim\RankingMahasiswaController::class, 'detail'])->name('ranking.detail');
+        Route::delete('/ranking/{id_session}', [\App\Http\Controllers\Tim\RankingMahasiswaController::class, 'destroy'])->name('ranking.destroy');
+        Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Tim\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
     });
 
     // Grup Route Dosen
@@ -510,5 +537,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\DosenController::class, 'dashboard'])->name('dashboard');
         Route::get('/penilaian', [\App\Http\Controllers\DosenController::class, 'penilaian'])->name('penilaian.index');
         Route::post('/penilaian/store', [\App\Http\Controllers\DosenController::class, 'storeNilai'])->name('penilaian.store');
+        
+        // Ranking Mahasiswa (SAW Method - Read Only)
+        Route::get('/ranking', [\App\Http\Controllers\Dosen\RankingMahasiswaController::class, 'index'])->name('ranking.index');
+        Route::get('/ranking/{id_session}/hasil', [\App\Http\Controllers\Dosen\RankingMahasiswaController::class, 'hasil'])->name('ranking.hasil');
+        Route::get('/ranking/{id_session}/detail/{nim}', [\App\Http\Controllers\Dosen\RankingMahasiswaController::class, 'detail'])->name('ranking.detail');
+        Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Dosen\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
     });
 });
