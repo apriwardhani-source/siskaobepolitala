@@ -754,8 +754,6 @@
         "updated_at": "2025-11-12 02:51:30",
         "user_id": 18,
         "nilai_akhir": 68.15
-<<<<<<< HEAD
-=======
     },
     {
         "id_nilai": 60,
@@ -1260,6 +1258,5 @@
         "updated_at": "2025-11-12 03:10:42",
         "user_id": 18,
         "nilai_akhir": 80.9
->>>>>>> e68e5351f5d5fa4950324c0d1cf339e3a66e4ee6
     }
 ]
