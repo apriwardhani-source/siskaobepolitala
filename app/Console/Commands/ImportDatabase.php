@@ -61,6 +61,7 @@ class ImportDatabase extends Command
                     'prodis' => 'kode_prodi',
                     'tahun' => 'id_tahun',
                     'nilai_mahasiswa' => 'id_nilai',
+                    'dosen_mata_kuliah' => 'id',
                     'users' => 'id',
                     'capaian_profil_lulusans' => 'id_cpl',
                     'bahan_kajians' => 'id_bk',

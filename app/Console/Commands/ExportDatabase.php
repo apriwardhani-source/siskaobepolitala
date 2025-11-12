@@ -17,8 +17,10 @@ class ExportDatabase extends Command
             'mahasiswas',
             'nilai_mahasiswa',
             'mata_kuliahs',
+            'dosen_mata_kuliah',
             'tahun',
             'prodis',
+            'users',
         ];
 
         $exportPath = storage_path('app/database-exports');
