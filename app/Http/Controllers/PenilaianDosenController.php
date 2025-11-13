@@ -75,10 +75,22 @@ class PenilaianDosenController extends Controller
         $nilai->load(['mahasiswa', 'mataKuliah', 'teknikPenilaian', 'tahun']);
 
         // Kirim notifikasi WhatsApp konfirmasi ke dosen
+        \Log::info('🔔 NOTIFIKASI: Mulai kirim WhatsApp ke dosen');
+        
         try {
             $dosen = Auth::user();
+            
+            // DEBUG: Log dosen info
+            \Log::info('🔔 NOTIFIKASI: Data dosen', [
+                'id' => $dosen->id,
+                'name' => $dosen->name,
+                'email' => $dosen->email,
+                'nohp' => $dosen->nohp,
+                'nohp_cleaned' => preg_replace('/[^\d]/', '', $dosen->nohp ?? '')
+            ]);
+            
             $whatsappService = new WhatsAppService();
-            $whatsappService->sendNilaiNotification([
+            $result = $whatsappService->sendNilaiNotification([
                 'dosen_name' => $dosen->name,
                 'dosen_phone' => $dosen->nohp, // Nomor WhatsApp dosen
                 'mata_kuliah' => $nilai->mataKuliah->nama_mk ?? 'N/A',
@@ -89,9 +101,18 @@ class PenilaianDosenController extends Controller
                 'nilai' => $nilai->nilai,
                 'tahun' => $nilai->tahun->tahun ?? 'N/A',
             ]);
+            
+            // DEBUG: Log result
+            \Log::info('🔔 NOTIFIKASI: WhatsApp result', ['result' => $result]);
+            
         } catch (\Exception $e) {
-            // Log error tapi jangan block proses
-            \Log::error('WhatsApp notification failed: ' . $e->getMessage());
+            // Log error dengan detail lengkap
+            \Log::error('🔔 NOTIFIKASI: WhatsApp notification failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
 
         return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim');
@@ -170,14 +191,25 @@ class PenilaianDosenController extends Controller
 
         // Kirim notifikasi WhatsApp konfirmasi bulk ke dosen
         if (!empty($nilaiList)) {
+            \Log::info('🔔 NOTIFIKASI BULK: Mulai kirim WhatsApp ke dosen');
+            
             try {
                 $dosen = Auth::user();
                 $mahasiswa = Mahasiswa::where('nim', $nim)->first();
                 $mataKuliah = MataKuliah::where('kode_mk', $kode_mk)->first();
                 $tahunData = Tahun::find($tahun);
 
+                // DEBUG: Log dosen info
+                \Log::info('🔔 NOTIFIKASI BULK: Data dosen', [
+                    'id' => $dosen->id,
+                    'name' => $dosen->name,
+                    'email' => $dosen->email,
+                    'nohp' => $dosen->nohp,
+                    'nilai_count' => count($nilaiList)
+                ]);
+
                 $whatsappService = new WhatsAppService();
-                $whatsappService->sendBulkNilaiNotification([
+                $result = $whatsappService->sendBulkNilaiNotification([
                     'dosen_name' => $dosen->name,
                     'dosen_phone' => $dosen->nohp, // Nomor WhatsApp dosen
                     'mata_kuliah' => $mataKuliah->nama_mk ?? 'N/A',
@@ -187,9 +219,18 @@ class PenilaianDosenController extends Controller
                     'tahun' => $tahunData->tahun ?? 'N/A',
                     'nilai_list' => $nilaiList,
                 ]);
+                
+                // DEBUG: Log result
+                \Log::info('🔔 NOTIFIKASI BULK: WhatsApp result', ['result' => $result]);
+                
             } catch (\Exception $e) {
-                // Log error tapi jangan block proses
-                \Log::error('WhatsApp bulk notification failed: ' . $e->getMessage());
+                // Log error dengan detail lengkap
+                \Log::error('🔔 NOTIFIKASI BULK: WhatsApp notification failed', [
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]);
             }
         }
 
