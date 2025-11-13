@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.admin.app')
 
 @section('title', 'Hasil OBE - Daftar Mahasiswa')
 
