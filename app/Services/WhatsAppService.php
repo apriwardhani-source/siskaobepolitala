@@ -116,6 +116,66 @@ class WhatsAppService
     }
 
     /**
+     * Kirim notifikasi ke admin saat dosen input nilai mahasiswa
+     * 
+     * @param array $nilaiData Data nilai (mahasiswa, mata kuliah, nilai, dosen)
+     * @return array Response
+     */
+    public function sendNilaiNotification($nilaiData)
+    {
+        $adminNumber = env('WHATSAPP_ADMIN_NUMBER');
+        
+        $message = "*📊 NILAI MAHASISWA BARU*\n\n";
+        $message .= "👨‍🏫 *Dosen:* {$nilaiData['dosen_name']}\n";
+        $message .= "📚 *Mata Kuliah:* {$nilaiData['mata_kuliah']}\n";
+        $message .= "📖 *Kode MK:* {$nilaiData['kode_mk']}\n\n";
+        $message .= "👤 *Mahasiswa:* {$nilaiData['mahasiswa_name']}\n";
+        $message .= "🆔 *NIM:* {$nilaiData['nim']}\n";
+        $message .= "📝 *Teknik Penilaian:* {$nilaiData['teknik_penilaian']}\n";
+        $message .= "✅ *Nilai:* {$nilaiData['nilai']}\n";
+        $message .= "📅 *Tahun:* {$nilaiData['tahun']}\n\n";
+        $message .= "⏰ *Waktu Input:* " . now()->format('d M Y H:i') . "\n\n";
+        $message .= "---\n";
+        $message .= "_Notifikasi otomatis dari Sistem OBE Politala_";
+
+        return $this->sendMessage($adminNumber, $message);
+    }
+
+    /**
+     * Kirim notifikasi bulk input nilai (untuk storeMultiple)
+     * 
+     * @param array $bulkData Data multiple nilai
+     * @return array Response
+     */
+    public function sendBulkNilaiNotification($bulkData)
+    {
+        $adminNumber = env('WHATSAPP_ADMIN_NUMBER');
+        
+        $totalNilai = count($bulkData['nilai_list']);
+        
+        $message = "*📊 INPUT NILAI MAHASISWA (BULK)*\n\n";
+        $message .= "👨‍🏫 *Dosen:* {$bulkData['dosen_name']}\n";
+        $message .= "📚 *Mata Kuliah:* {$bulkData['mata_kuliah']}\n";
+        $message .= "📖 *Kode MK:* {$bulkData['kode_mk']}\n\n";
+        $message .= "👤 *Mahasiswa:* {$bulkData['mahasiswa_name']}\n";
+        $message .= "🆔 *NIM:* {$bulkData['nim']}\n";
+        $message .= "📝 *Jumlah Nilai:* {$totalNilai} nilai\n";
+        $message .= "📅 *Tahun:* {$bulkData['tahun']}\n\n";
+        
+        $message .= "*Detail Nilai:*\n";
+        foreach ($bulkData['nilai_list'] as $index => $item) {
+            $no = $index + 1;
+            $message .= "{$no}. {$item['teknik']} = {$item['nilai']}\n";
+        }
+        
+        $message .= "\n⏰ *Waktu Input:* " . now()->format('d M Y H:i') . "\n\n";
+        $message .= "---\n";
+        $message .= "_Notifikasi otomatis dari Sistem OBE Politala_";
+
+        return $this->sendMessage($adminNumber, $message);
+    }
+
+    /**
      * Check device status (opsional)
      * 
      * @return array Status device

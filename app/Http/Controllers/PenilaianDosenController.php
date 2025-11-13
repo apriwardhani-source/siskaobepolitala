@@ -9,7 +9,9 @@ use App\Models\TeknikPenilaian;
 use App\Models\CapaianProfilLulusan;
 use App\Models\CapaianPembelajaranMataKuliah;
 use App\Models\Tahun;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PenilaianDosenController extends Controller
 {
@@ -63,9 +65,34 @@ class PenilaianDosenController extends Controller
             'id_tahun' => 'required',
         ]);
 
-        NilaiMahasiswa::create($request->all());
+        // Create nilai
+        $nilai = NilaiMahasiswa::create(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
+        ));
 
-        return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan');
+        // Load relationships untuk notifikasi
+        $nilai->load(['mahasiswa', 'mataKuliah', 'teknikPenilaian', 'tahun']);
+
+        // Kirim notifikasi WhatsApp ke admin
+        try {
+            $whatsappService = new WhatsAppService();
+            $whatsappService->sendNilaiNotification([
+                'dosen_name' => Auth::user()->name,
+                'mata_kuliah' => $nilai->mataKuliah->nama_mk ?? 'N/A',
+                'kode_mk' => $nilai->kode_mk,
+                'mahasiswa_name' => $nilai->mahasiswa->nama ?? 'N/A',
+                'nim' => $nilai->nim,
+                'teknik_penilaian' => $nilai->teknikPenilaian->nama_teknik ?? 'N/A',
+                'nilai' => $nilai->nilai,
+                'tahun' => $nilai->tahun->tahun ?? 'N/A',
+            ]);
+        } catch (\Exception $e) {
+            // Log error tapi jangan block proses
+            \Log::error('WhatsApp notification failed: ' . $e->getMessage());
+        }
+
+        return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim ke admin');
     }
 
     public function edit($id)
@@ -113,6 +140,8 @@ class PenilaianDosenController extends Controller
         $kode_mk = $request->kode_mk;
         $nim = $request->nim;
 
+        $nilaiList = [];
+
         foreach ($teknik_penilaian_ids as $index => $teknik_id) {
             if (isset($nilai_data[$teknik_id]) && $nilai_data[$teknik_id] !== null) {
                 NilaiMahasiswa::updateOrCreate(
@@ -124,11 +153,42 @@ class PenilaianDosenController extends Controller
                     ],
                     [
                         'nilai' => $nilai_data[$teknik_id],
+                        'user_id' => Auth::id(),
                     ]
                 );
+
+                // Collect untuk notifikasi
+                $teknik = TeknikPenilaian::find($teknik_id);
+                $nilaiList[] = [
+                    'teknik' => $teknik->nama_teknik ?? "Teknik #{$teknik_id}",
+                    'nilai' => $nilai_data[$teknik_id]
+                ];
             }
         }
 
-        return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan');
+        // Kirim notifikasi WhatsApp bulk ke admin
+        if (!empty($nilaiList)) {
+            try {
+                $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+                $mataKuliah = MataKuliah::where('kode_mk', $kode_mk)->first();
+                $tahunData = Tahun::find($tahun);
+
+                $whatsappService = new WhatsAppService();
+                $whatsappService->sendBulkNilaiNotification([
+                    'dosen_name' => Auth::user()->name,
+                    'mata_kuliah' => $mataKuliah->nama_mk ?? 'N/A',
+                    'kode_mk' => $kode_mk,
+                    'mahasiswa_name' => $mahasiswa->nama ?? 'N/A',
+                    'nim' => $nim,
+                    'tahun' => $tahunData->tahun ?? 'N/A',
+                    'nilai_list' => $nilaiList,
+                ]);
+            } catch (\Exception $e) {
+                // Log error tapi jangan block proses
+                \Log::error('WhatsApp bulk notification failed: ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim ke admin');
     }
 }
