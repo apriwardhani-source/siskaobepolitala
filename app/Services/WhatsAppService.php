@@ -116,17 +116,30 @@ class WhatsAppService
     }
 
     /**
-     * Kirim notifikasi ke admin saat dosen input nilai mahasiswa
+     * Kirim notifikasi konfirmasi ke dosen saat input nilai mahasiswa
      * 
      * @param array $nilaiData Data nilai (mahasiswa, mata kuliah, nilai, dosen)
      * @return array Response
      */
     public function sendNilaiNotification($nilaiData)
     {
-        $adminNumber = env('WHATSAPP_ADMIN_NUMBER');
+        // Kirim notifikasi ke nomor WhatsApp dosen
+        $dosenNumber = $nilaiData['dosen_phone'] ?? null;
         
-        $message = "*📊 NILAI MAHASISWA BARU*\n\n";
-        $message .= "👨‍🏫 *Dosen:* {$nilaiData['dosen_name']}\n";
+        if (!$dosenNumber) {
+            Log::warning('Dosen tidak punya nomor WhatsApp', [
+                'dosen' => $nilaiData['dosen_name']
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Nomor WhatsApp dosen tidak terdaftar'
+            ];
+        }
+        
+        $message = "*✅ KONFIRMASI INPUT NILAI*\n\n";
+        $message .= "Halo *{$nilaiData['dosen_name']}*,\n\n";
+        $message .= "Nilai mahasiswa berhasil disimpan ke sistem:\n\n";
         $message .= "📚 *Mata Kuliah:* {$nilaiData['mata_kuliah']}\n";
         $message .= "📖 *Kode MK:* {$nilaiData['kode_mk']}\n\n";
         $message .= "👤 *Mahasiswa:* {$nilaiData['mahasiswa_name']}\n";
@@ -138,23 +151,36 @@ class WhatsAppService
         $message .= "---\n";
         $message .= "_Notifikasi otomatis dari Sistem OBE Politala_";
 
-        return $this->sendMessage($adminNumber, $message);
+        return $this->sendMessage($dosenNumber, $message);
     }
 
     /**
-     * Kirim notifikasi bulk input nilai (untuk storeMultiple)
+     * Kirim notifikasi bulk input nilai ke dosen (untuk storeMultiple)
      * 
      * @param array $bulkData Data multiple nilai
      * @return array Response
      */
     public function sendBulkNilaiNotification($bulkData)
     {
-        $adminNumber = env('WHATSAPP_ADMIN_NUMBER');
+        // Kirim notifikasi ke nomor WhatsApp dosen
+        $dosenNumber = $bulkData['dosen_phone'] ?? null;
+        
+        if (!$dosenNumber) {
+            Log::warning('Dosen tidak punya nomor WhatsApp', [
+                'dosen' => $bulkData['dosen_name']
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Nomor WhatsApp dosen tidak terdaftar'
+            ];
+        }
         
         $totalNilai = count($bulkData['nilai_list']);
         
-        $message = "*📊 INPUT NILAI MAHASISWA (BULK)*\n\n";
-        $message .= "👨‍🏫 *Dosen:* {$bulkData['dosen_name']}\n";
+        $message = "*✅ KONFIRMASI INPUT NILAI (MULTIPLE)*\n\n";
+        $message .= "Halo *{$bulkData['dosen_name']}*,\n\n";
+        $message .= "Beberapa nilai mahasiswa berhasil disimpan:\n\n";
         $message .= "📚 *Mata Kuliah:* {$bulkData['mata_kuliah']}\n";
         $message .= "📖 *Kode MK:* {$bulkData['kode_mk']}\n\n";
         $message .= "👤 *Mahasiswa:* {$bulkData['mahasiswa_name']}\n";
@@ -172,7 +198,7 @@ class WhatsAppService
         $message .= "---\n";
         $message .= "_Notifikasi otomatis dari Sistem OBE Politala_";
 
-        return $this->sendMessage($adminNumber, $message);
+        return $this->sendMessage($dosenNumber, $message);
     }
 
     /**

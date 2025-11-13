@@ -2,24 +2,27 @@
 
 ## 🎯 Fitur Notifikasi Input Nilai Mahasiswa
 
-Sistem akan **otomatis mengirim notifikasi WhatsApp ke admin** setiap kali dosen menginput nilai mahasiswa.
+Sistem akan **otomatis mengirim notifikasi konfirmasi WhatsApp ke dosen** setiap kali mereka menginput nilai mahasiswa.
 
 ---
 
 ## 📋 Informasi yang Dikirim
 
 ### Single Input Nilai
-Ketika dosen input satu nilai:
+Ketika dosen input satu nilai, **dosen tersebut** akan menerima konfirmasi:
 ```
-📊 NILAI MAHASISWA BARU
+✅ KONFIRMASI INPUT NILAI
 
-👨‍🏫 Dosen: Nama Dosen
-📚 Mata Kuliah: Nama MK
-📖 Kode MK: XXXX
+Halo Pak/Bu Budi,
 
-👤 Mahasiswa: Nama Mahasiswa
-🆔 NIM: 123456789
-📝 Teknik Penilaian: UTS/UAS/Quiz/etc
+Nilai mahasiswa berhasil disimpan ke sistem:
+
+📚 Mata Kuliah: Pemrograman Web
+📖 Kode MK: PW101
+
+👤 Mahasiswa: Ahmad Ridwan
+🆔 NIM: 2024010001
+📝 Teknik Penilaian: UTS
 ✅ Nilai: 85
 📅 Tahun: 2024
 
@@ -30,16 +33,19 @@ Notifikasi otomatis dari Sistem OBE Politala
 ```
 
 ### Bulk Input Nilai
-Ketika dosen input multiple nilai sekaligus:
+Ketika dosen input multiple nilai sekaligus, **dosen tersebut** akan menerima konfirmasi:
 ```
-📊 INPUT NILAI MAHASISWA (BULK)
+✅ KONFIRMASI INPUT NILAI (MULTIPLE)
 
-👨‍🏫 Dosen: Nama Dosen
-📚 Mata Kuliah: Nama MK
-📖 Kode MK: XXXX
+Halo Pak/Bu Budi,
 
-👤 Mahasiswa: Nama Mahasiswa
-🆔 NIM: 123456789
+Beberapa nilai mahasiswa berhasil disimpan:
+
+📚 Mata Kuliah: Pemrograman Web
+📖 Kode MK: PW101
+
+👤 Mahasiswa: Ahmad Ridwan
+🆔 NIM: 2024010001
 📝 Jumlah Nilai: 3 nilai
 📅 Tahun: 2024
 
@@ -63,12 +69,14 @@ Notifikasi otomatis dari Sistem OBE Politala
 # WhatsApp Service Configuration (whatsapp-web.js)
 WHATSAPP_API_URL=http://localhost:3001
 
-# Nomor Admin yang akan menerima notifikasi
-WHATSAPP_ADMIN_NUMBER=6285754631899
-
 # Enable/Disable notifikasi (optional)
 WHATSAPP_ENABLED=true
 ```
+
+**PENTING:** Pastikan setiap dosen sudah punya nomor WhatsApp di database!
+- Field: `users.nohp`
+- Format: `628xxx` (tanpa tanda +)
+- Edit di menu User Management → Edit Dosen
 
 ### Development Mode
 Untuk development lokal (tidak mengirim WA):
@@ -97,13 +105,14 @@ Gunakan admin panel untuk setup:
 ### 2. Sistem Proses
 - Nilai disimpan ke database
 - Sistem otomatis collect data (dosen, mahasiswa, mk, nilai)
+- Ambil nomor WhatsApp dosen dari database (`users.nohp`)
 - WhatsAppService dipanggil
-- Format pesan dibuat
+- Format pesan konfirmasi dibuat
 
 ### 3. Kirim Notifikasi
-- Pesan dikirim via Evolution API
-- Admin menerima notifikasi di WhatsApp
-- Jika gagal: error di-log, proses input tetap sukses
+- Pesan dikirim via WhatsApp Service (port 3001)
+- **Dosen yang input** menerima notifikasi konfirmasi di WhatsApp mereka
+- Jika gagal (dosen tidak punya nomor WA): warning di-log, proses input tetap sukses
 
 ---
 

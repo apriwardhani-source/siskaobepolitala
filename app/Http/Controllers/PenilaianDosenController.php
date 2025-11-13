@@ -74,11 +74,13 @@ class PenilaianDosenController extends Controller
         // Load relationships untuk notifikasi
         $nilai->load(['mahasiswa', 'mataKuliah', 'teknikPenilaian', 'tahun']);
 
-        // Kirim notifikasi WhatsApp ke admin
+        // Kirim notifikasi WhatsApp konfirmasi ke dosen
         try {
+            $dosen = Auth::user();
             $whatsappService = new WhatsAppService();
             $whatsappService->sendNilaiNotification([
-                'dosen_name' => Auth::user()->name,
+                'dosen_name' => $dosen->name,
+                'dosen_phone' => $dosen->nohp, // Nomor WhatsApp dosen
                 'mata_kuliah' => $nilai->mataKuliah->nama_mk ?? 'N/A',
                 'kode_mk' => $nilai->kode_mk,
                 'mahasiswa_name' => $nilai->mahasiswa->nama ?? 'N/A',
@@ -92,7 +94,7 @@ class PenilaianDosenController extends Controller
             \Log::error('WhatsApp notification failed: ' . $e->getMessage());
         }
 
-        return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim ke admin');
+        return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim');
     }
 
     public function edit($id)
@@ -166,16 +168,18 @@ class PenilaianDosenController extends Controller
             }
         }
 
-        // Kirim notifikasi WhatsApp bulk ke admin
+        // Kirim notifikasi WhatsApp konfirmasi bulk ke dosen
         if (!empty($nilaiList)) {
             try {
+                $dosen = Auth::user();
                 $mahasiswa = Mahasiswa::where('nim', $nim)->first();
                 $mataKuliah = MataKuliah::where('kode_mk', $kode_mk)->first();
                 $tahunData = Tahun::find($tahun);
 
                 $whatsappService = new WhatsAppService();
                 $whatsappService->sendBulkNilaiNotification([
-                    'dosen_name' => Auth::user()->name,
+                    'dosen_name' => $dosen->name,
+                    'dosen_phone' => $dosen->nohp, // Nomor WhatsApp dosen
                     'mata_kuliah' => $mataKuliah->nama_mk ?? 'N/A',
                     'kode_mk' => $kode_mk,
                     'mahasiswa_name' => $mahasiswa->nama ?? 'N/A',
@@ -189,6 +193,6 @@ class PenilaianDosenController extends Controller
             }
         }
 
-        return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim ke admin');
+        return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim');
     }
 }
