@@ -8,7 +8,7 @@
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
           <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-            <i class="fas fa-sitemap text-white text-2xl"></i>
+            <i class="fas fa-project-diagram text-white text-2xl"></i>
           </div>
         </div>
         <div>

@@ -484,5 +484,23 @@
         "updated_at": "2025-11-06 13:07:10",
         "google_id": "106589096777009681838",
         "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocLgvMBANhPzfK9Z7BeKTIO1oE2xafeaR_f8D4PPjRlYP1hmQw=s96-c"
+    },
+    {
+        "id": 30,
+        "name": "zen",
+        "nip": "24022327832",
+        "nohp": "082738402000",
+        "email": "zen@gmail.com",
+        "email_verified_at": null,
+        "password": "$2y$12$Hm.UycbiXqNihGLih8xUyOfRplgHArzRG4LCOhyiciYgFfIGXoNxy",
+        "role": "wadir1",
+        "kode_prodi": null,
+        "id_jurusan": null,
+        "status": "approved",
+        "remember_token": null,
+        "created_at": "2025-11-13 00:18:37",
+        "updated_at": "2025-11-13 00:18:37",
+        "google_id": null,
+        "avatar": null
     }
 ]
