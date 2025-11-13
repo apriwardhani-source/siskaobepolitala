@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.admin.app')
 
 @section('content')
     <div class="mr-20 ml-20">
