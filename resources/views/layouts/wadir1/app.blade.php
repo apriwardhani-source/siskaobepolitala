@@ -183,6 +183,11 @@
             </div>
         </div>
         
+        <!-- Hasil OBE -->
+        <a href="{{ route('wadir1.hasilobe.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
+            <i class="bi bi-bar-chart mr-2"></i>Hasil OBE
+        </a>
+        
         <!-- Ranking Mahasiswa -->
         <a href="{{ route('wadir1.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
@@ -217,6 +222,9 @@
                 <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
             </a>
             <div class="border-t border-gray-700"></div>
+            <a href="{{ route('wadir1.hasilobe.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
+                <i class="bi bi-bar-chart mr-2"></i>Hasil OBE
+            </a>
             <a href="{{ route('wadir1.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
             </a>
