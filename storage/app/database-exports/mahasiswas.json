@@ -98,5 +98,15 @@
         "status": "aktif",
         "created_at": "2025-11-12 01:54:07",
         "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 13,
+        "nim": "2401301054",
+        "nama_mahasiswa": "Apri Wardhani",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 07:34:28",
+        "updated_at": "2025-11-12 07:34:28"
     }
 ]
