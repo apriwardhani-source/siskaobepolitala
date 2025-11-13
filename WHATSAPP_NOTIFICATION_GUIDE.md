@@ -60,10 +60,8 @@ Notifikasi otomatis dari Sistem OBE Politala
 
 ### Required Settings
 ```env
-# WhatsApp API Configuration (Evolution API)
-EVOLUTION_API_URL=http://localhost:8080
-EVOLUTION_API_KEY=dhaniganteng
-EVOLUTION_INSTANCE=politala-bot
+# WhatsApp Service Configuration (whatsapp-web.js)
+WHATSAPP_API_URL=http://localhost:3001
 
 # Nomor Admin yang akan menerima notifikasi
 WHATSAPP_ADMIN_NUMBER=6285754631899
@@ -77,6 +75,14 @@ Untuk development lokal (tidak mengirim WA):
 ```env
 WHATSAPP_ENABLED=false
 ```
+
+### Setup WhatsApp Service
+Gunakan admin panel untuk setup:
+1. Login sebagai admin
+2. Buka menu **Settings** → **WhatsApp Integration**
+3. Klik **"Start Service"** (hanya sekali)
+4. Scan QR code yang muncul
+5. Done! Notifikasi otomatis aktif
 
 ---
 
@@ -260,23 +266,30 @@ $mockWhatsApp->shouldReceive('sendNilaiNotification')->once();
 
 ### Issue: "WhatsApp notification failed"
 **Solution:**
-1. Check Evolution API status
-2. Verify admin number format
-3. Check API key valid
-4. Review logs for detail error
+1. Check WhatsApp service status: http://localhost:3001/status
+2. Verify admin number format (628xxx)
+3. Review logs: `storage/logs/laravel.log`
+4. Restart service via admin panel
 
 ### Issue: "Message sent but admin tidak terima"
 **Solution:**
-1. Pastikan admin number correct
-2. Check WhatsApp connected di Evolution
-3. Test kirim pesan manual dulu
-4. Cek spam/blocked messages
+1. Pastikan admin number correct di `.env`
+2. Check WhatsApp connected via admin panel
+3. Test kirim pesan manual di admin panel
+4. Cek spam/blocked messages di HP
 
-### Issue: "Too many requests"
+### Issue: "Service not running"
 **Solution:**
-1. Evolution API punya rate limit
-2. Implementasi queue system
-3. Atau upgrade ke paid plan
+1. Buka admin panel → Settings → WhatsApp Integration
+2. Klik "Start Service"
+3. Atau manual via terminal: `npx pm2 start ecosystem.config.cjs`
+4. Check status: `npx pm2 list`
+
+### Issue: "Need new QR code"
+**Solution:**
+1. Di admin panel, klik "Restart Service"
+2. QR code baru akan muncul
+3. Scan ulang dengan WhatsApp
 
 ---
 
@@ -284,10 +297,11 @@ $mockWhatsApp->shouldReceive('sendNilaiNotification')->once();
 
 Jika ada masalah dengan integrasi WhatsApp:
 
-1. Check dokumentasi Evolution API: https://doc.evolution-api.com
+1. Cek admin panel: Login → Settings → WhatsApp Integration
 2. Review logs Laravel di `storage/logs/`
-3. Contact system admin
-4. Disable sementara: `WHATSAPP_ENABLED=false`
+3. Test manual via admin panel (ada fitur test message)
+4. Disable sementara: `WHATSAPP_ENABLED=false` di `.env`
+5. Contact system admin untuk help
 
 ---
 

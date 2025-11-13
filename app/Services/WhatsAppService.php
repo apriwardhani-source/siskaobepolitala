@@ -17,9 +17,11 @@ class WhatsAppService
         // Check if WhatsApp is enabled (for development/production toggle)
         $this->enabled = env('WHATSAPP_ENABLED', true);
         
-        // Evolution API Config (GRATIS!)
+        // WhatsApp Service Config (whatsapp-web.js)
+        $this->apiUrl = env('WHATSAPP_API_URL', 'http://localhost:3001');
+        
+        // Backward compatibility (Evolution API) - optional
         $this->apiKey = env('EVOLUTION_API_KEY', 'your_api_key_here');
-        $this->apiUrl = env('EVOLUTION_API_URL', 'http://localhost:8080');
         $this->instanceName = env('EVOLUTION_INSTANCE', 'politala-bot');
     }
     
@@ -34,7 +36,7 @@ class WhatsAppService
     }
 
     /**
-     * Kirim pesan WhatsApp via Evolution API (Gratis!)
+     * Kirim pesan WhatsApp via WhatsApp Web.js Service
      * 
      * @param string $to Nomor tujuan (format: 628xxx)
      * @param string $message Isi pesan
@@ -59,24 +61,22 @@ class WhatsAppService
         }
 
         try {
-            $response = Http::withHeaders([
-                'apikey' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])->post("{$this->apiUrl}/message/sendText/{$this->instanceName}", [
+            // Send via whatsapp-web.js service (port 3001)
+            $response = Http::timeout(15)->post("{$this->apiUrl}/send", [
                 'number' => $to,
-                'text' => $message,
+                'message' => $message,
             ]);
 
             $result = $response->json();
 
             // Log response
-            Log::info('WhatsApp Message Sent (Evolution API)', [
+            Log::info('WhatsApp Message Sent (WhatsApp-Web.js)', [
                 'to' => $to,
                 'response' => $result
             ]);
 
             return [
-                'success' => $response->successful(),
+                'success' => $response->successful() && isset($result['success']) && $result['success'],
                 'data' => $result,
                 'status' => $response->status()
             ];
