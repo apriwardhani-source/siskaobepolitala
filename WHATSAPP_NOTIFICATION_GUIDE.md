@@ -75,7 +75,11 @@ WHATSAPP_ENABLED=true
 
 **PENTING:** Pastikan setiap dosen sudah punya nomor WhatsApp di database!
 - Field: `users.nohp`
-- Format: `628xxx` (tanpa tanda +)
+- **Format didukung:** (semua auto-convert ke 628xxx)
+  - ✅ `08xxx` (format Indonesia) → auto jadi `628xxx`
+  - ✅ `628xxx` (format internasional) → langsung pakai
+  - ✅ `+628xxx` (dengan plus) → auto remove `+`
+  - ✅ `0857-5463-1899` (dengan strip/spasi) → auto clean
 - Edit di menu User Management → Edit Dosen
 
 ### Development Mode
@@ -91,6 +95,23 @@ Gunakan admin panel untuk setup:
 3. Klik **"Start Service"** (hanya sekali)
 4. Scan QR code yang muncul
 5. Done! Notifikasi otomatis aktif
+
+---
+
+## 📞 Format Nomor WhatsApp yang Didukung
+
+Sistem **otomatis convert** berbagai format nomor ke format internasional (628xxx):
+
+| Input Format | Auto Convert Jadi | Status |
+|--------------|-------------------|--------|
+| `085754631899` | `6285754631899` | ✅ OK |
+| `0857-5463-1899` | `6285754631899` | ✅ OK |
+| `0857 5463 1899` | `6285754631899` | ✅ OK |
+| `6285754631899` | `6285754631899` | ✅ OK |
+| `+6285754631899` | `6285754631899` | ✅ OK |
+| `628-5754-631899` | `6285754631899` | ✅ OK |
+
+**Kesimpulan:** Admin/Dosen bisa input nomor dengan format **apapun**, sistem otomatis handle!
 
 ---
 
@@ -141,9 +162,12 @@ public function store(Request $request)
     
     // 3. Send WhatsApp notification
     try {
+        $dosen = Auth::user();
         $whatsappService = new WhatsAppService();
+        
         $whatsappService->sendNilaiNotification([
-            'dosen_name' => Auth::user()->name,
+            'dosen_name' => $dosen->name,
+            'dosen_phone' => $dosen->nohp, // Support: 08xxx, 628xxx, +628xxx
             'mata_kuliah' => $nilai->mataKuliah->nama_mk,
             // ... other data
         ]);
@@ -156,6 +180,24 @@ public function store(Request $request)
 }
 ```
 
+### Phone Number Auto-Formatting
+```php
+// WhatsAppService.php - formatPhoneNumber() method
+
+Input: "085754631899"    → Output: "6285754631899" ✅
+Input: "0857-5463-1899"  → Output: "6285754631899" ✅
+Input: "+6285754631899"  → Output: "6285754631899" ✅
+Input: "6285754631899"   → Output: "6285754631899" ✅
+Input: "8577"            → Output: null (too short) ❌
+
+Process:
+1. Remove non-digit characters (spaces, dashes, plus)
+2. If starts with "0" → replace with "62"
+3. If doesn't start with "62" → prepend "62"
+4. Validate length (11-15 digits)
+5. Return formatted number or null
+```
+
 ---
 
 ## 🛡️ Error Handling
@@ -166,6 +208,13 @@ Jika WhatsApp API gagal:
 - ✅ User tetap mendapat success message
 - ⚠️ Error di-log untuk debugging
 - ⚠️ Admin perlu cek manual di sistem
+
+### Invalid Phone Number Format
+Jika nomor tidak valid (terlalu pendek/panjang):
+- ✅ Nilai tetap tersimpan ke database
+- ⚠️ Warning log: "Invalid phone number length"
+- ⚠️ Notifikasi tidak terkirim
+- 🔧 Fix: Edit user, perbaiki nomor HP
 
 ### Common Issues
 

@@ -36,18 +36,68 @@ class WhatsAppService
     }
 
     /**
+     * Format nomor WhatsApp ke format internasional (628xxx)
+     * Mendukung berbagai format input:
+     * - 08xxx → 628xxx
+     * - +628xxx → 628xxx
+     * - 628xxx → 628xxx (no change)
+     * - 62xxx → 62xxx (no change)
+     * 
+     * @param string|null $number Nomor telepon
+     * @return string|null Nomor dalam format 628xxx atau null jika invalid
+     */
+    protected function formatPhoneNumber($number)
+    {
+        if (!$number) {
+            return null;
+        }
+
+        // Remove spaces, dashes, and special characters
+        $number = preg_replace('/[^\d]/', '', $number);
+
+        // If starts with 0, replace with 62
+        if (substr($number, 0, 1) === '0') {
+            $number = '62' . substr($number, 1);
+        }
+
+        // If doesn't start with 62, add it (assuming Indonesian number)
+        if (substr($number, 0, 2) !== '62') {
+            $number = '62' . $number;
+        }
+
+        // Validate length (Indonesian phone: 10-13 digits after 62)
+        if (strlen($number) < 11 || strlen($number) > 15) {
+            Log::warning('Invalid phone number length', ['number' => $number]);
+            return null;
+        }
+
+        return $number;
+    }
+
+    /**
      * Kirim pesan WhatsApp via WhatsApp Web.js Service
      * 
-     * @param string $to Nomor tujuan (format: 628xxx)
+     * @param string $to Nomor tujuan (support: 08xxx, 628xxx, +628xxx)
      * @param string $message Isi pesan
      * @return array Response dari API
      */
     public function sendMessage($to, $message)
     {
+        // Format phone number to international format
+        $formattedNumber = $this->formatPhoneNumber($to);
+        
+        if (!$formattedNumber) {
+            Log::error('Invalid phone number format', ['original' => $to]);
+            return [
+                'success' => false,
+                'error' => 'Invalid phone number format'
+            ];
+        }
+
         // Check if WhatsApp is enabled
         if (!$this->enabled) {
             Log::info('WhatsApp DISABLED - Message NOT sent (Development Mode)', [
-                'to' => $to,
+                'to' => $formattedNumber,
                 'message' => $message,
                 'note' => 'Set WHATSAPP_ENABLED=true in .env to enable'
             ]);
@@ -63,7 +113,7 @@ class WhatsAppService
         try {
             // Send via whatsapp-web.js service (port 3001)
             $response = Http::timeout(15)->post("{$this->apiUrl}/send", [
-                'number' => $to,
+                'number' => $formattedNumber,
                 'message' => $message,
             ]);
 
@@ -71,7 +121,8 @@ class WhatsAppService
 
             // Log response
             Log::info('WhatsApp Message Sent (WhatsApp-Web.js)', [
-                'to' => $to,
+                'to' => $formattedNumber,
+                'original' => $to,
                 'response' => $result
             ]);
 
