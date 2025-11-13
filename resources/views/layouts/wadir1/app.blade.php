@@ -182,17 +182,10 @@
                 </a>
             </div>
         </div>
-<<<<<<< HEAD
         
         <!-- Ranking Mahasiswa -->
-        <a href="{{ route('wadir1.ranking.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded transition-colors duration-200">
+        <a href="{{ route('wadir1.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
-=======
-
-        <!-- Hasil OBE -->
-        <a href="{{ route('wadir1.hasilobe.index') }}" class="px-4 py-2 rounded hover:bg-[#2a5298] transition-colors duration-200">
-            <i class="bi bi-graph-up-arrow mr-2"></i>Hasil OBE
->>>>>>> 61aa36dfb15ffb4caf6fd729e71fa86c35470d5f
         </a>
     </div>
     
@@ -223,17 +216,9 @@
             <a href="{{ route('wadir1.pemetaancplmk.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-bar-chart mr-2"></i>3. CPL - MK
             </a>
-<<<<<<< HEAD
             <div class="border-t border-gray-700"></div>
             <a href="{{ route('wadir1.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
                 <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
-=======
-
-            <div class="border-t border-[#2a5298]"></div>
-            <p class="text-gray-400 text-xs px-4 py-1">PELAPORAN</p>
-            <a href="{{ route('wadir1.hasilobe.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
-                <i class="bi bi-graph-up-arrow mr-2"></i>Hasil OBE
->>>>>>> 61aa36dfb15ffb4caf6fd729e71fa86c35470d5f
             </a>
             <form action="{{ route('logout') }}" method="POST" class="mt-4">
                 @csrf

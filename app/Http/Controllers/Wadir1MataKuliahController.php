@@ -126,15 +126,19 @@ class Wadir1MataKuliahController extends Controller
 
         $matakuliah = $query->get();
 
-        $organisasiMK = $matakuliah->groupBy('semester_mk')->map(function ($items, $semester_mk) {
-            return [
-                'semester_mk' => $semester_mk,
-                'sks_mk' => $items->sum('sks_mk'),
-                'jumlah_mk' => $items->count(),
-                'nama_mk' => $items->pluck('nama_mk')->toArray(),
-                'mata_kuliah' => $items,
-            ];
-        });
+        $organisasiMK = $matakuliah
+            ->groupBy('semester_mk')
+            ->map(function ($items, $semester_mk) {
+                return [
+                    'semester_mk' => $semester_mk,
+                    'sks_mk' => $items->sum('sks_mk'),
+                    'jumlah_mk' => $items->count(),
+                    'nama_mk' => $items->pluck('nama_mk')->toArray(),
+                    'mata_kuliah' => $items,
+                ];
+            })
+            ->sortBy(fn($row) => (int) $row['semester_mk'])
+            ->values();
 
         return view('wadir1.matakuliah.organisasimk', compact(
             'organisasiMK',

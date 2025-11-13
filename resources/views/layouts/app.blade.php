@@ -264,7 +264,7 @@
 
         <!-- Hasil OBE (All roles except dosen) -->
         @if(in_array($role, ['admin', 'wadir1', 'kaprodi']))
-        <a href="{{ route($routePrefix . '.hasilobe.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.hasilobe.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded">
             <i class="bi bi-bar-chart mr-2"></i>Hasil OBE
         </a>
         @endif
@@ -278,7 +278,7 @@
             </a>
 
             @if(in_array($role, ['admin', 'wadir1', 'kaprodi']))
-            <a href="{{ route($routePrefix . '.hasilobe.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route($routePrefix . '.hasilobe.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded">
                 <i class="bi bi-bar-chart mr-2"></i>Hasil OBE
             </a>
             @endif
