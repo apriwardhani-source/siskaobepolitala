@@ -17,9 +17,11 @@ class WhatsAppService
         // Check if WhatsApp is enabled (for development/production toggle)
         $this->enabled = env('WHATSAPP_ENABLED', true);
         
-        // Evolution API Config (GRATIS!)
+        // WhatsApp Service Config (whatsapp-web.js)
+        $this->apiUrl = env('WHATSAPP_API_URL', 'http://localhost:3001');
+        
+        // Backward compatibility (Evolution API) - optional
         $this->apiKey = env('EVOLUTION_API_KEY', 'your_api_key_here');
-        $this->apiUrl = env('EVOLUTION_API_URL', 'http://localhost:8080');
         $this->instanceName = env('EVOLUTION_INSTANCE', 'politala-bot');
     }
     
@@ -34,18 +36,68 @@ class WhatsAppService
     }
 
     /**
-     * Kirim pesan WhatsApp via Evolution API (Gratis!)
+     * Format nomor WhatsApp ke format internasional (628xxx)
+     * Mendukung berbagai format input:
+     * - 08xxx → 628xxx
+     * - +628xxx → 628xxx
+     * - 628xxx → 628xxx (no change)
+     * - 62xxx → 62xxx (no change)
      * 
-     * @param string $to Nomor tujuan (format: 628xxx)
+     * @param string|null $number Nomor telepon
+     * @return string|null Nomor dalam format 628xxx atau null jika invalid
+     */
+    protected function formatPhoneNumber($number)
+    {
+        if (!$number) {
+            return null;
+        }
+
+        // Remove spaces, dashes, and special characters
+        $number = preg_replace('/[^\d]/', '', $number);
+
+        // If starts with 0, replace with 62
+        if (substr($number, 0, 1) === '0') {
+            $number = '62' . substr($number, 1);
+        }
+
+        // If doesn't start with 62, add it (assuming Indonesian number)
+        if (substr($number, 0, 2) !== '62') {
+            $number = '62' . $number;
+        }
+
+        // Validate length (Indonesian phone: 10-13 digits after 62)
+        if (strlen($number) < 11 || strlen($number) > 15) {
+            Log::warning('Invalid phone number length', ['number' => $number]);
+            return null;
+        }
+
+        return $number;
+    }
+
+    /**
+     * Kirim pesan WhatsApp via WhatsApp Web.js Service
+     * 
+     * @param string $to Nomor tujuan (support: 08xxx, 628xxx, +628xxx)
      * @param string $message Isi pesan
      * @return array Response dari API
      */
     public function sendMessage($to, $message)
     {
+        // Format phone number to international format
+        $formattedNumber = $this->formatPhoneNumber($to);
+        
+        if (!$formattedNumber) {
+            Log::error('Invalid phone number format', ['original' => $to]);
+            return [
+                'success' => false,
+                'error' => 'Invalid phone number format'
+            ];
+        }
+
         // Check if WhatsApp is enabled
         if (!$this->enabled) {
             Log::info('WhatsApp DISABLED - Message NOT sent (Development Mode)', [
-                'to' => $to,
+                'to' => $formattedNumber,
                 'message' => $message,
                 'note' => 'Set WHATSAPP_ENABLED=true in .env to enable'
             ]);
@@ -59,24 +111,23 @@ class WhatsAppService
         }
 
         try {
-            $response = Http::withHeaders([
-                'apikey' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])->post("{$this->apiUrl}/message/sendText/{$this->instanceName}", [
-                'number' => $to,
-                'text' => $message,
+            // Send via whatsapp-web.js service (port 3001)
+            $response = Http::timeout(15)->post("{$this->apiUrl}/send", [
+                'number' => $formattedNumber,
+                'message' => $message,
             ]);
 
             $result = $response->json();
 
             // Log response
-            Log::info('WhatsApp Message Sent (Evolution API)', [
-                'to' => $to,
+            Log::info('WhatsApp Message Sent (WhatsApp-Web.js)', [
+                'to' => $formattedNumber,
+                'original' => $to,
                 'response' => $result
             ]);
 
             return [
-                'success' => $response->successful(),
+                'success' => $response->successful() && isset($result['success']) && $result['success'],
                 'data' => $result,
                 'status' => $response->status()
             ];
@@ -113,6 +164,92 @@ class WhatsAppService
         $message .= "_Pesan ini dikirim otomatis dari sistem_";
 
         return $this->sendMessage($adminNumber, $message);
+    }
+
+    /**
+     * Kirim notifikasi konfirmasi ke dosen saat input nilai mahasiswa
+     * 
+     * @param array $nilaiData Data nilai (mahasiswa, mata kuliah, nilai, dosen)
+     * @return array Response
+     */
+    public function sendNilaiNotification($nilaiData)
+    {
+        // Kirim notifikasi ke nomor WhatsApp dosen
+        $dosenNumber = $nilaiData['dosen_phone'] ?? null;
+        
+        if (!$dosenNumber) {
+            Log::warning('Dosen tidak punya nomor WhatsApp', [
+                'dosen' => $nilaiData['dosen_name']
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Nomor WhatsApp dosen tidak terdaftar'
+            ];
+        }
+        
+        $message = "*✅ KONFIRMASI INPUT NILAI*\n\n";
+        $message .= "Halo *{$nilaiData['dosen_name']}*,\n\n";
+        $message .= "Nilai mahasiswa berhasil disimpan ke sistem:\n\n";
+        $message .= "📚 *Mata Kuliah:* {$nilaiData['mata_kuliah']}\n";
+        $message .= "📖 *Kode MK:* {$nilaiData['kode_mk']}\n\n";
+        $message .= "👤 *Mahasiswa:* {$nilaiData['mahasiswa_name']}\n";
+        $message .= "🆔 *NIM:* {$nilaiData['nim']}\n";
+        $message .= "📝 *Teknik Penilaian:* {$nilaiData['teknik_penilaian']}\n";
+        $message .= "✅ *Nilai:* {$nilaiData['nilai']}\n";
+        $message .= "📅 *Tahun:* {$nilaiData['tahun']}\n\n";
+        $message .= "⏰ *Waktu Input:* " . now()->format('d M Y H:i') . "\n\n";
+        $message .= "---\n";
+        $message .= "_Notifikasi otomatis dari Sistem OBE Politala_";
+
+        return $this->sendMessage($dosenNumber, $message);
+    }
+
+    /**
+     * Kirim notifikasi bulk input nilai ke dosen (untuk storeMultiple)
+     * 
+     * @param array $bulkData Data multiple nilai
+     * @return array Response
+     */
+    public function sendBulkNilaiNotification($bulkData)
+    {
+        // Kirim notifikasi ke nomor WhatsApp dosen
+        $dosenNumber = $bulkData['dosen_phone'] ?? null;
+        
+        if (!$dosenNumber) {
+            Log::warning('Dosen tidak punya nomor WhatsApp', [
+                'dosen' => $bulkData['dosen_name']
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Nomor WhatsApp dosen tidak terdaftar'
+            ];
+        }
+        
+        $totalNilai = count($bulkData['nilai_list']);
+        
+        $message = "*✅ KONFIRMASI INPUT NILAI (MULTIPLE)*\n\n";
+        $message .= "Halo *{$bulkData['dosen_name']}*,\n\n";
+        $message .= "Beberapa nilai mahasiswa berhasil disimpan:\n\n";
+        $message .= "📚 *Mata Kuliah:* {$bulkData['mata_kuliah']}\n";
+        $message .= "📖 *Kode MK:* {$bulkData['kode_mk']}\n\n";
+        $message .= "👤 *Mahasiswa:* {$bulkData['mahasiswa_name']}\n";
+        $message .= "🆔 *NIM:* {$bulkData['nim']}\n";
+        $message .= "📝 *Jumlah Nilai:* {$totalNilai} nilai\n";
+        $message .= "📅 *Tahun:* {$bulkData['tahun']}\n\n";
+        
+        $message .= "*Detail Nilai:*\n";
+        foreach ($bulkData['nilai_list'] as $index => $item) {
+            $no = $index + 1;
+            $message .= "{$no}. {$item['teknik']} = {$item['nilai']}\n";
+        }
+        
+        $message .= "\n⏰ *Waktu Input:* " . now()->format('d M Y H:i') . "\n\n";
+        $message .= "---\n";
+        $message .= "_Notifikasi otomatis dari Sistem OBE Politala_";
+
+        return $this->sendMessage($dosenNumber, $message);
     }
 
     /**

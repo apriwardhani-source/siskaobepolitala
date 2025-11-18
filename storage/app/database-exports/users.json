@@ -502,5 +502,23 @@
         "updated_at": "2025-11-13 00:18:37",
         "google_id": null,
         "avatar": null
+    },
+    {
+        "id": 31,
+        "name": "zein",
+        "nip": "2401301043",
+        "nohp": "0895414819763",
+        "email": "zein@gmail.com",
+        "email_verified_at": null,
+        "password": "$2y$12$MaA33lzn22siuVWuBowzGuDqv1tJyBpCnj\/Lh0RceRCtefHg3wwm6",
+        "role": "dosen",
+        "kode_prodi": "TI",
+        "id_jurusan": null,
+        "status": "approved",
+        "remember_token": null,
+        "created_at": "2025-11-13 07:12:03",
+        "updated_at": "2025-11-13 07:12:03",
+        "google_id": null,
+        "avatar": null
     }
 ]

@@ -9,7 +9,9 @@ use App\Models\TeknikPenilaian;
 use App\Models\CapaianProfilLulusan;
 use App\Models\CapaianPembelajaranMataKuliah;
 use App\Models\Tahun;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PenilaianDosenController extends Controller
 {
@@ -63,9 +65,57 @@ class PenilaianDosenController extends Controller
             'id_tahun' => 'required',
         ]);
 
-        NilaiMahasiswa::create($request->all());
+        // Create nilai
+        $nilai = NilaiMahasiswa::create(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
+        ));
 
-        return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan');
+        // Load relationships untuk notifikasi
+        $nilai->load(['mahasiswa', 'mataKuliah', 'teknikPenilaian', 'tahun']);
+
+        // Kirim notifikasi WhatsApp konfirmasi ke dosen
+        \Log::info('🔔 NOTIFIKASI: Mulai kirim WhatsApp ke dosen');
+        
+        try {
+            $dosen = Auth::user();
+            
+            // DEBUG: Log dosen info
+            \Log::info('🔔 NOTIFIKASI: Data dosen', [
+                'id' => $dosen->id,
+                'name' => $dosen->name,
+                'email' => $dosen->email,
+                'nohp' => $dosen->nohp,
+                'nohp_cleaned' => preg_replace('/[^\d]/', '', $dosen->nohp ?? '')
+            ]);
+            
+            $whatsappService = new WhatsAppService();
+            $result = $whatsappService->sendNilaiNotification([
+                'dosen_name' => $dosen->name,
+                'dosen_phone' => $dosen->nohp, // Nomor WhatsApp dosen
+                'mata_kuliah' => $nilai->mataKuliah->nama_mk ?? 'N/A',
+                'kode_mk' => $nilai->kode_mk,
+                'mahasiswa_name' => $nilai->mahasiswa->nama ?? 'N/A',
+                'nim' => $nilai->nim,
+                'teknik_penilaian' => $nilai->teknikPenilaian->nama_teknik ?? 'N/A',
+                'nilai' => $nilai->nilai,
+                'tahun' => $nilai->tahun->tahun ?? 'N/A',
+            ]);
+            
+            // DEBUG: Log result
+            \Log::info('🔔 NOTIFIKASI: WhatsApp result', ['result' => $result]);
+            
+        } catch (\Exception $e) {
+            // Log error dengan detail lengkap
+            \Log::error('🔔 NOTIFIKASI: WhatsApp notification failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+
+        return redirect()->route('dosen.penilaian.index')->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim');
     }
 
     public function edit($id)
@@ -113,6 +163,8 @@ class PenilaianDosenController extends Controller
         $kode_mk = $request->kode_mk;
         $nim = $request->nim;
 
+        $nilaiList = [];
+
         foreach ($teknik_penilaian_ids as $index => $teknik_id) {
             if (isset($nilai_data[$teknik_id]) && $nilai_data[$teknik_id] !== null) {
                 NilaiMahasiswa::updateOrCreate(
@@ -124,11 +176,64 @@ class PenilaianDosenController extends Controller
                     ],
                     [
                         'nilai' => $nilai_data[$teknik_id],
+                        'user_id' => Auth::id(),
                     ]
                 );
+
+                // Collect untuk notifikasi
+                $teknik = TeknikPenilaian::find($teknik_id);
+                $nilaiList[] = [
+                    'teknik' => $teknik->nama_teknik ?? "Teknik #{$teknik_id}",
+                    'nilai' => $nilai_data[$teknik_id]
+                ];
             }
         }
 
-        return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan');
+        // Kirim notifikasi WhatsApp konfirmasi bulk ke dosen
+        if (!empty($nilaiList)) {
+            \Log::info('🔔 NOTIFIKASI BULK: Mulai kirim WhatsApp ke dosen');
+            
+            try {
+                $dosen = Auth::user();
+                $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+                $mataKuliah = MataKuliah::where('kode_mk', $kode_mk)->first();
+                $tahunData = Tahun::find($tahun);
+
+                // DEBUG: Log dosen info
+                \Log::info('🔔 NOTIFIKASI BULK: Data dosen', [
+                    'id' => $dosen->id,
+                    'name' => $dosen->name,
+                    'email' => $dosen->email,
+                    'nohp' => $dosen->nohp,
+                    'nilai_count' => count($nilaiList)
+                ]);
+
+                $whatsappService = new WhatsAppService();
+                $result = $whatsappService->sendBulkNilaiNotification([
+                    'dosen_name' => $dosen->name,
+                    'dosen_phone' => $dosen->nohp, // Nomor WhatsApp dosen
+                    'mata_kuliah' => $mataKuliah->nama_mk ?? 'N/A',
+                    'kode_mk' => $kode_mk,
+                    'mahasiswa_name' => $mahasiswa->nama ?? 'N/A',
+                    'nim' => $nim,
+                    'tahun' => $tahunData->tahun ?? 'N/A',
+                    'nilai_list' => $nilaiList,
+                ]);
+                
+                // DEBUG: Log result
+                \Log::info('🔔 NOTIFIKASI BULK: WhatsApp result', ['result' => $result]);
+                
+            } catch (\Exception $e) {
+                // Log error dengan detail lengkap
+                \Log::error('🔔 NOTIFIKASI BULK: WhatsApp notification failed', [
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        }
+
+        return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim');
     }
 }

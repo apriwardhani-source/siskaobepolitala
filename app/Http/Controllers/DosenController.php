@@ -8,51 +8,52 @@ use App\Models\MataKuliah;
 use App\Models\Mahasiswa;
 use App\Models\Tahun;
 use App\Models\NilaiMahasiswa;
+use App\Services\WhatsAppService;
 
 class DosenController extends Controller
 {
     public function dashboard()
     {
         $user = Auth::user();
-        
+
         // Get mata kuliah yang diampu oleh dosen ini
         $mataKuliahs = $user->mataKuliahDiajar()
             ->with(['prodi', 'dosen'])
             ->get();
-        
+
         // Get tahun kurikulum
         $tahunKurikulums = Tahun::all();
-        
+
         // Statistik
         $totalMK = $mataKuliahs->count();
         $totalMahasiswa = Mahasiswa::where('kode_prodi', $user->kode_prodi)
             ->where('status', 'aktif')
             ->count();
-        
+
         return view('dosen.dashboard', compact('mataKuliahs', 'tahunKurikulums', 'totalMK', 'totalMahasiswa'));
     }
 
     public function penilaian(Request $request)
     {
         $user = Auth::user();
-        
+
         // Get mata kuliah yang diampu
         $mataKuliahs = $user->mataKuliahDiajar()
             ->with(['prodi'])
             ->get();
-        
+
         // Get tahun kurikulum
         $tahunKurikulums = Tahun::all();
-        
+
         // Jika form sudah disubmit (ada filter)
         $mahasiswas = null;
         $selectedMK = null;
         $selectedTahun = null;
-        
+
         if ($request->filled('kode_mk') && $request->filled('id_tahun')) {
             $selectedMK = MataKuliah::where('kode_mk', $request->kode_mk)->first();
             $selectedTahun = $request->id_tahun;
-            
+
             // Hanya load mahasiswa jika mata kuliah ditemukan
             if ($selectedMK) {
                 // Get mahasiswa berdasarkan prodi dan tahun kurikulum
@@ -62,7 +63,7 @@ class DosenController extends Controller
                     ->with(['tahunKurikulum'])
                     ->orderBy('nim')
                     ->get();
-                
+
                 // Get nilai yang sudah ada
                 foreach ($mahasiswas as $mhs) {
                     $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
@@ -73,54 +74,54 @@ class DosenController extends Controller
                 }
             }
         }
-        
+
         return view('dosen.penilaian.index', compact('mataKuliahs', 'tahunKurikulums', 'mahasiswas', 'selectedMK', 'selectedTahun'));
     }
 
     public function storeNilai(Request $request)
     {
         $user = Auth::user();
-        
+
         $request->validate([
             'kode_mk' => 'required|exists:mata_kuliahs,kode_mk',
             'id_tahun' => 'required|exists:tahun,id_tahun',
             'nilai' => 'required|array',
             'nilai.*' => 'nullable|numeric|min:0|max:100',
         ]);
-        
+
         $updated = 0;
         $created = 0;
-        
+
         foreach ($request->nilai as $nim => $nilai_akhir) {
             if ($nilai_akhir === null || $nilai_akhir === '') {
                 continue;
             }
-            
+
             // Cek apakah mahasiswa ada dan aktif
             $mahasiswa = Mahasiswa::where('nim', $nim)
                 ->where('kode_prodi', $user->kode_prodi)
                 ->where('status', 'aktif')
                 ->first();
-            
+
             if (!$mahasiswa) {
                 continue;
             }
-            
+
             // Ambil CPMK dan CPL pertama yang terkait dengan MK ini
             $cpmk = \DB::table('cpmk_mk')
                 ->where('kode_mk', $request->kode_mk)
                 ->first();
-            
+
             $id_cpmk = $cpmk ? $cpmk->id_cpmk : null;
             $id_cpl = null;
-            
+
             if ($id_cpmk) {
                 $cpl = \DB::table('cpl_cpmk')
                     ->where('id_cpmk', $id_cpmk)
                     ->first();
                 $id_cpl = $cpl ? $cpl->id_cpl : null;
             }
-            
+
             // Update or create nilai
             $nilaiMhs = NilaiMahasiswa::updateOrCreate(
                 [
@@ -135,15 +136,67 @@ class DosenController extends Controller
                     'id_cpl' => $id_cpl,    // Auto-link CPL
                 ]
             );
-            
+
             if ($nilaiMhs->wasRecentlyCreated) {
                 $created++;
             } else {
                 $updated++;
             }
         }
-        
+
         $message = "Berhasil menyimpan nilai: {$created} data baru, {$updated} data diupdate.";
+
+        // Kirim notifikasi WhatsApp konfirmasi ke dosen
+        if ($created > 0 || $updated > 0) {
+            \Log::info('🔔 NOTIFIKASI: Mulai kirim WhatsApp ke dosen');
+
+            try {
+                $dosen = Auth::user();
+                $mataKuliah = MataKuliah::where('kode_mk', $request->kode_mk)->first();
+                $tahunData = Tahun::find($request->id_tahun);
+
+                // DEBUG: Log dosen info
+                \Log::info('🔔 NOTIFIKASI: Data dosen', [
+                    'id' => $dosen->id,
+                    'name' => $dosen->name,
+                    'email' => $dosen->email,
+                    'nohp' => $dosen->nohp,
+                    'created' => $created,
+                    'updated' => $updated
+                ]);
+
+                // Format pesan konfirmasi
+                $totalMahasiswa = $created + $updated;
+                $pesanKonfirmasi = "✅ KONFIRMASI INPUT NILAI\n\n";
+                $pesanKonfirmasi .= "Halo Pak/Bu {$dosen->name},\n\n";
+                $pesanKonfirmasi .= "Nilai mahasiswa berhasil disimpan ke sistem:\n\n";
+                $pesanKonfirmasi .= "📚 Mata Kuliah: " . ($mataKuliah->nama_mk ?? 'N/A') . "\n";
+                $pesanKonfirmasi .= "📖 Kode MK: {$request->kode_mk}\n";
+                $pesanKonfirmasi .= "📅 Tahun: " . ($tahunData->tahun ?? 'N/A') . "\n\n";
+                $pesanKonfirmasi .= "👥 Total Mahasiswa: {$totalMahasiswa} mahasiswa\n";
+                $pesanKonfirmasi .= "   • Data baru: {$created}\n";
+                $pesanKonfirmasi .= "   • Data diupdate: {$updated}\n\n";
+                $pesanKonfirmasi .= "⏰ Waktu Input: " . now()->format('d M Y H:i') . "\n\n";
+                $pesanKonfirmasi .= "---\n";
+                $pesanKonfirmasi .= "by Nandank Ganteng";
+
+                // Kirim via WhatsApp Service
+                $whatsappService = new WhatsAppService();
+                $result = $whatsappService->sendMessage($dosen->nohp, $pesanKonfirmasi);
+
+                // DEBUG: Log result
+                \Log::info('🔔 NOTIFIKASI: WhatsApp result', ['result' => $result]);
+            } catch (\Exception $e) {
+                // Log error dengan detail lengkap
+                \Log::error('🔔 NOTIFIKASI: WhatsApp notification failed', [
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+            }
+        }
+
         return redirect()->route('dosen.penilaian.index', [
             'kode_mk' => $request->kode_mk,
             'id_tahun' => $request->id_tahun
