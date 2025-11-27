@@ -1,7 +1,7 @@
 ﻿@extends('layouts.wadir1.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Header -->
@@ -31,7 +31,7 @@
         </div>
 
         <!-- Info Card -->
-        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <div class="flex items-start">
                 <svg class="w-5 h-5 text-blue-600 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
@@ -59,7 +59,7 @@
             
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <thead class="bg-blue-600">
                         <tr>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase w-20">Rank</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-white uppercase">NIM</th>
@@ -95,7 +95,7 @@
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $rank->nim }}</td>
                             <td class="px-6 py-4 text-sm text-gray-900">{{ $rank->nama_mahasiswa }}</td>
                             <td class="px-6 py-4 text-center">
-                                <span class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-gradient-to-r from-green-500 to-green-600 text-white shadow-sm">
+                                <span class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-green-500 text-white shadow-sm">
                                     {{ number_format($rank->total_skor, 4) }}
                                 </span>
                             </td>

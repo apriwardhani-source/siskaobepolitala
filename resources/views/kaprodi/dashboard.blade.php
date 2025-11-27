@@ -20,57 +20,59 @@
         </div>
 
         <!-- Toolbar -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <!-- Export & Filter Section -->
-            <form method="GET" action="{{ route('kaprodi.dashboard') }}" class="mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                        <select name="id_tahun" required
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" disabled {{ empty($id_tahun) ? 'selected' : '' }}>Pilih Tahun</option>
-                            @foreach ($availableYears as $th)
-                                <option value="{{ $th->id_tahun }}" {{ $id_tahun == $th->id_tahun ? 'selected' : '' }}>
-                                    {{ $th->nama_kurikulum }} - {{ $th->tahun }}
-                                </option>
-                            @endforeach
-                        </select>
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter Dashboard
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('kaprodi.dashboard') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-file-excel text-green-500 mr-1"></i>
+                            Tahun Kurikulum (Export)
+                        </label>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Pilih Tahun</option>
+                                @foreach ($availableYears as $th)
+                                    <option value="{{ $th->id_tahun }}" {{ $id_tahun == $th->id_tahun ? 'selected' : '' }}>
+                                        {{ $th->nama_kurikulum }} - {{ $th->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-chart-line text-blue-500 mr-1"></i>
+                                Tahun Progress
+                            </label>
+                            <select name="tahun_progress" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Pilih Tahun untuk Melihat Progress</option>
+                                @foreach ($availableYears as $th)
+                                    <option value="{{ $th->id_tahun }}" {{ request('tahun_progress') == $th->id_tahun ? 'selected' : '' }}>
+                                        {{ $th->nama_kurikulum }} - {{ $th->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex items-end gap-3">
+                            <button type="submit"
+                                class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>
+                                Tampilkan Data
+                            </button>
+                            <button type="submit" formaction="{{ route('kaprodi.export.excel') }}"
+                                class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                                <i class="fas fa-file-excel mr-2"></i>
+                                Export Excel
+                            </button>
+                        </div>
                     </div>
-
-                    <div class="flex items-end">
-                        <button type="submit"
-                            class="w-full inline-flex items-center justify-center px-5 py-2.5 bg-green-600 hover:bg-green-700 
-                                   text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                   transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
-                            <i class="fas fa-file-excel mr-2"></i>
-                            Export Excel
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Progress Filter -->
-            <form method="GET" action="{{ route('kaprodi.dashboard') }}">
-                <div class="flex gap-3">
-                    <select name="tahun_progress" required
-                        class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg 
-                               focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                        <option value="" disabled selected>Pilih Tahun untuk Melihat Progress</option>
-                        @foreach ($availableYears as $th)
-                            <option value="{{ $th->id_tahun }}">
-                                {{ $th->nama_kurikulum }} - {{ $th->tahun }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <button type="submit"
-                        class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium 
-                               rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-                        <i class="fas fa-chart-bar mr-2"></i>
-                        Tampilkan
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
 
         <!-- Progress Section -->

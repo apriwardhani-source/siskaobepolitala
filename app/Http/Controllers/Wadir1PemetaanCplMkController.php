@@ -18,7 +18,9 @@ class Wadir1PemetaanCplMkController extends Controller
             ->orderBy('tahun', 'desc')
             ->get();
 
-        if (empty($kode_prodi)) {
+        // Izinkan tampil jika salah satu filter terisi (prodi atau tahun)
+        $hasFilter = !empty($kode_prodi) || !empty($id_tahun);
+        if (!$hasFilter) {
             return view('wadir1.pemetaancplmk.index', [
                 'cpls' => collect(),
                 'mks' => collect(),
@@ -32,40 +34,37 @@ class Wadir1PemetaanCplMkController extends Controller
             ]);
         }
 
-        $prodi = $prodis->where('kode_prodi', $kode_prodi)->first();
+        $prodi = $kode_prodi ? $prodis->where('kode_prodi', $kode_prodi)->first() : null;
 
-        // Ambil CPL sesuai prodi
-        $cpls = DB::table('cpl_pl as cp')
-            ->join('capaian_profil_lulusans as cpl', 'cp.id_cpl', '=', 'cpl.id_cpl')
-            ->join('profil_lulusans as pl', 'cp.id_pl', '=', 'pl.id_pl')
+        // Ambil CPL langsung dari tabel CPL, filter dinamis prodi/tahun
+        $cpls = DB::table('capaian_profil_lulusans as cpl')
             ->select('cpl.*')
-            ->orderBy('kode_cpl', 'asc')
-            ->where('pl.kode_prodi', $kode_prodi)
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
+            ->orderBy('cpl.kode_cpl', 'asc')
             ->get();
 
         $cplIds = $cpls->pluck('id_cpl')->toArray();
 
         // Prodi berdasarkan CPL (untuk tooltip atau info)
-        $prodiByCpl = DB::table('cpl_mk')
-            ->join('capaian_profil_lulusans', 'cpl_mk.id_cpl', '=', 'capaian_profil_lulusans.id_cpl')
-            ->join('cpl_pl', 'capaian_profil_lulusans.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->join('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->select('cpl_mk.id_cpl', 'prodis.nama_prodi')
+        $prodiByCpl = DB::table('capaian_profil_lulusans as cpl')
+            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->select('cpl.id_cpl', 'prodis.nama_prodi')
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
             ->get()
             ->groupBy('id_cpl')
             ->map(fn($items) => $items->first()->nama_prodi ?? '-');
 
         // Ambil Mata Kuliah khusus untuk prodi ini
         $mks = DB::table('cpl_mk')
-            ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
-            ->join('capaian_profil_lulusans', 'cpl_mk.id_cpl', '=', 'capaian_profil_lulusans.id_cpl')
-            ->join('cpl_pl', 'capaian_profil_lulusans.id_cpl', '=', 'cpl_pl.id_cpl')
-            ->join('profil_lulusans', 'cpl_pl.id_pl', '=', 'profil_lulusans.id_pl')
-            ->join('prodis', 'profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
-            ->where('profil_lulusans.kode_prodi', $kode_prodi)
-            ->select('mata_kuliahs.*', 'prodis.nama_prodi')
-            ->orderBy('mata_kuliahs.kode_mk', 'asc')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
+            ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
+            ->select('mk.*', 'prodis.nama_prodi')
+            ->orderBy('mk.kode_mk', 'asc')
             ->distinct()
             ->get();
 

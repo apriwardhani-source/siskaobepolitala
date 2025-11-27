@@ -1,14 +1,14 @@
 @extends('layouts.wadir1.app')
 @section('title', 'CPL - Wadir 1')
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
 
     <!-- Header ala Hasil OBE -->
     <div class="mb-8">
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
-          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+          <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
             <i class="fas fa-check-square text-white text-2xl"></i>
           </div>
         </div>
@@ -21,7 +21,7 @@
 
     <!-- Kartu Filter -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+      <div class="bg-blue-600 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
           <i class="fas fa-filter mr-2"></i>
           Filter CPL
@@ -51,7 +51,7 @@
               </select>
             </div>
             <div class="self-end flex gap-2">
-              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                 <i class="fas fa-search mr-2"></i> Tampilkan Data
               </button>
               <a href="{{ route('wadir1.export.cpl', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
@@ -73,7 +73,7 @@
       <!-- Empty state sebelum filter -->
       <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
         <div class="flex justify-center mb-4">
-          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+          <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
             <i class="fas fa-filter text-3xl"></i>
           </div>
         </div>
@@ -105,7 +105,7 @@
               <p class="text-sm font-medium text-gray-600 uppercase">Total CPL</p>
               <p class="mt-2 text-3xl font-bold text-gray-900">{{ ($capaianprofillulusans ?? collect())->count() }}</p>
             </div>
-            <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-check-square text-2xl"></i></div>
+            <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-check-square text-2xl"></i></div>
           </div>
         </div>
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
@@ -114,7 +114,7 @@
             <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
           </div>
-          <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-calendar text-2xl"></i></div>
+          <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-calendar text-2xl"></i></div>
         </div>
       </div>
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
@@ -123,7 +123,7 @@
             <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
             <p class="mt-2 text-xl font-bold text-gray-900">{{ $selectedProdi->nama_prodi ?? '-' }}</p>
           </div>
-          <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-graduation-cap text-2xl"></i></div>
+          <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-graduation-cap text-2xl"></i></div>
         </div>
       </div>
       </div>
@@ -146,18 +146,57 @@
           </div>
         </div>
         <div class="overflow-x-auto">
-          <table id="tableCpl" class="min-w-full text-sm">
-            <thead class="bg-gray-100">
+          <table id="tableCpl" class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead class="bg-gray-800 text-white">
               <tr>
-                <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode CPL</th>
-                <th class="px-6 py-3 text-left font-semibold text-gray-700">Deskripsi</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-16">No</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-32">Kode CPL</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Deskripsi</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-40">Program Studi</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-28">Tahun</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-40">Status</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-32">Aksi</th>
               </tr>
             </thead>
-            <tbody class="divide-y">
-              @foreach($capaianprofillulusans as $cpl)
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-3">{{ $cpl->kode_cpl }}</td>
-                  <td class="px-6 py-3">{{ $cpl->deskripsi_cpl }}</td>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @foreach($capaianprofillulusans as $index => $cpl)
+                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                  <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    {{ $index + 1 }}
+                  </td>
+                  <td class="px-4 py-3 whitespace-nowrap">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                      {{ $cpl->kode_cpl }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-sm text-gray-700">
+                    {{ Str::limit($cpl->deskripsi_cpl, 100) }}
+                  </td>
+                  <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                    {{ $cpl->nama_prodi ?? '-' }}
+                  </td>
+                  <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                    {{ $cpl->tahun ?? '-' }}
+                  </td>
+                  <td class="px-4 py-3 whitespace-nowrap">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                                 {{ $cpl->status_cpl === 'Kompetensi Utama Bidang' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
+                      {{ $cpl->status_cpl === 'Kompetensi Utama Bidang' ? 'Utama' : 'Tambahan' }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 whitespace-nowrap text-sm text-center">
+                    <a href="{{ route('wadir1.capaianpembelajaranlulusan.detail', $cpl->id_cpl) }}"
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                       title="Lihat Detail">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      </svg>
+                      Detail
+                    </a>
+                  </td>
                 </tr>
               @endforeach
             </tbody>

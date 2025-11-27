@@ -1,4 +1,4 @@
-﻿@extends('layouts.kaprodi.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
@@ -9,12 +9,12 @@
             <div class="flex items-center justify-between">
                 <div>
                     <a href="{{ route('kaprodi.ranking.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium mb-2 inline-block">
-                        ← Kembali
+                        ? Kembali
                     </a>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">{{ $session->judul }}</h1>
                     <p class="mt-2 text-sm text-gray-600">
-                        Total {{ $session->total_mahasiswa }} mahasiswa •
-                        {{ $kriteria->count() }} kriteria •
+                        Total {{ $session->total_mahasiswa }} mahasiswa �
+                        {{ $kriteria->count() }} kriteria �
                         Diupload {{ $session->created_at->diffForHumans() }}
                     </p>
                 </div>
@@ -75,17 +75,17 @@
                             <td class="px-6 py-4">
                                 @if($rank->ranking == 1)
                                     <div class="flex items-center">
-                                        <span class="text-2xl">🥇</span>
+                                        <span class="text-2xl">??</span>
                                         <span class="ml-2 font-bold text-lg text-yellow-600">1</span>
                                     </div>
                                 @elseif($rank->ranking == 2)
                                     <div class="flex items-center">
-                                        <span class="text-2xl">🥈</span>
+                                        <span class="text-2xl">??</span>
                                         <span class="ml-2 font-bold text-lg text-gray-500">2</span>
                                     </div>
                                 @elseif($rank->ranking == 3)
                                     <div class="flex items-center">
-                                        <span class="text-2xl">🥉</span>
+                                        <span class="text-2xl">??</span>
                                         <span class="ml-2 font-bold text-lg text-orange-600">3</span>
                                     </div>
                                 @else
@@ -102,7 +102,7 @@
                             <td class="px-6 py-4 text-center">
                                 <a href="{{ route('kaprodi.ranking.detail', [$session->id_session, $rank->nim]) }}" 
                                    class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                                    Detail →
+                                    Detail ?
                                 </a>
                             </td>
                         </tr>
@@ -118,3 +118,4 @@
     </div>
 </div>
 @endsection
+

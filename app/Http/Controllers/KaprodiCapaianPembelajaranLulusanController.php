@@ -63,7 +63,15 @@ class KaprodiCapaianPembelajaranLulusanController extends Controller
             ->where('id_tahun', $id_cpl->id_tahun)
             ->get();
 
-        return view('kaprodi.capaianpembelajaranlulusan.detail', compact('id_cpl', 'profilLulusans'));
+        // Untuk saat ini PL terkait hanya ditampilkan jika ada data relasi di masa depan,
+        // inisialisasi sebagai array kosong agar view tetap aman.
+        $selectedProfilLulusans = [];
+
+        return view('kaprodi.capaianpembelajaranlulusan.detail', compact(
+            'id_cpl',
+            'profilLulusans',
+            'selectedProfilLulusans'
+        ));
     }
 
     public function destroy(CapaianProfilLulusan $id_cpl)

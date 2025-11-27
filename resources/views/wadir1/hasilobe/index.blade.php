@@ -3,14 +3,14 @@
 @section('title', 'Hasil OBE - Daftar Mahasiswa')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                         <i class="fas fa-chart-line text-white text-2xl"></i>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
 
         <!-- Filter Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-filter mr-2"></i>
                     Filter Mahasiswa
@@ -72,7 +72,7 @@
                         <!-- Button -->
                         <div class="flex items-end">
                             <button type="submit" 
-                                class="w-full px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                                class="w-full px-6 py-2.5 bg-blue-600 hover:bg-blue-700 
                                        text-white font-semibold rounded-lg shadow-md hover:shadow-lg 
                                        transform hover:scale-105 transition-all duration-200">
                                 <i class="fas fa-search mr-2"></i>
@@ -167,7 +167,7 @@
 
             <!-- Mahasiswa Cards -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-                <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4">
+                <div class="bg-gray-800 px-6 py-4">
                     <div class="flex items-center justify-between">
                         <h2 class="text-xl font-bold text-white">Daftar Mahasiswa</h2>
                         <div class="relative">
@@ -184,7 +184,7 @@
                         <div class="px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center space-x-4 flex-1">
                                 <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                                         {{ strtoupper(substr($mahasiswa->nama, 0, 1)) }}
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@
                             </div>
                             <div>
                                 <a href="{{ route('wadir1.hasilobe.detail', $mahasiswa->nim) }}" 
-                                   class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                                   class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 
                                           text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
                                           transform hover:scale-105 transition-all duration-200">
                                     <i class="fas fa-chart-bar mr-2"></i>
@@ -240,7 +240,7 @@
             <!-- Empty State - No Filter (match CPL style) -->
             <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center">
                 <div class="flex justify-center mb-4">
-                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
                         <i class="fas fa-filter text-3xl"></i>
                     </div>
                 </div>

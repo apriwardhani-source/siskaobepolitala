@@ -199,11 +199,11 @@
 
         @if(in_array($role, ['wadir1', 'kaprodi']))
         <!-- Menu untuk Wadir1 & Kaprodi (Read Only) -->
-        <a href="{{ route($routePrefix . '.visimisi.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.visimisi.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-bullseye mr-2"></i>Visi Misi
         </a>
 
-        <a href="{{ route($routePrefix . '.capaianpembelajaranlulusan.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <a href="{{ route($routePrefix . '.capaianpembelajaranlulusan.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-check2-square mr-2"></i>CPL
         </a>
 
