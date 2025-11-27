@@ -53,26 +53,60 @@
 
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
+            <!-- Header Filter -->
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between text-white">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center shadow">
+                        <i class="fas fa-filter text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Filter Pemetaan CPL–CPMK–MK</h2>
+                        <p class="text-xs text-blue-100">Pilih tahun kurikulum untuk menampilkan matriks pemetaan.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Toolbar -->
             <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Matriks Pemetaan</h2>
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-900">Matriks Pemetaan</h2>
+                    </div>
                     
-                    <!-- Filters -->
-                    <div class="flex gap-4">
-                        <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                            class="w-64 px-4 py-2.5 border border-gray-300 rounded-lg 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                            @if (isset($tahun_tersedia))
-                                @foreach ($tahun_tersedia as $thn)
-                                    <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
+                    <!-- Filters + Actions -->
+                    <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-end">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                <i class="fas fa-calendar text-green-500 mr-1"></i>
+                                Tahun Kurikulum
+                            </label>
+                            <select id="tahun" name="id_tahun"
+                                class="w-64 px-4 py-2.5 border border-gray-300 rounded-lg 
+                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
+                                @if (isset($tahun_tersedia))
+                                    @foreach ($tahun_tersedia as $thn)
+                                        <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
+                                            {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="button" onclick="updateFilter()"
+                                    class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 
+                                           text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
+                                           transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>
+                                Tampilkan Data
+                            </button>
+                            <a href="{{ route('kaprodi.export.excel', ['id_tahun' => $id_tahun ?? request('id_tahun')]) }}"
+                               class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                                <i class="fas fa-file-excel mr-2"></i>
+                                Export Excel
+                            </a>
+                        </div>
                     </div>
                 </div>
 

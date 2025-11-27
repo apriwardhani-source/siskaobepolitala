@@ -1,7 +1,7 @@
 ﻿@extends('layouts.wadir1.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto">
         
         <!-- Header -->
@@ -15,7 +15,7 @@
 
         <!-- Mahasiswa Info -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-6">
-            <div class="px-6 py-5 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div class="px-6 py-5 bg-blue-50">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-xl font-bold text-gray-900">{{ $detail['nama'] }}</h2>
@@ -85,7 +85,7 @@
                 @endforeach
             </div>
             
-            <div class="px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-t border-green-200">
+            <div class="px-6 py-4 bg-green-50 border-t border-green-200">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-700">Total Skor SAW (Penjumlahan Semua Skor Kriteria):</p>

@@ -52,7 +52,7 @@
 <body class="bg-gray-100">
 
 <!-- Navbar -->
-<nav class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white fixed top-0 left-0 w-full z-50 shadow-lg">
+<nav class="bg-[#1e3c72] text-white fixed top-0 left-0 w-full z-50 shadow-lg">
     <!-- Top Bar -->
     <div class="px-6 py-4 flex items-center justify-between">
         <!-- Logo -->

@@ -1,12 +1,12 @@
 @extends('layouts.wadir1.app')
 @section('title', 'Pemetaan CPL-CPMK-MK - Wadir 1')
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
     <div class="mb-8">
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
-          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+          <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
             <i class="fas fa-diagram-project text-white text-2xl"></i>
           </div>
         </div>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4"><h2 class="text-xl font-bold text-white"><i class="fas fa-filter mr-2"></i>Filter</h2></div>
+      <div class="bg-blue-600 px-6 py-4"><h2 class="text-xl font-bold text-white"><i class="fas fa-filter mr-2"></i>Filter</h2></div>
       <div class="p-6">
         <form method="GET" action="{{ route('wadir1.pemetaancplcpmkmk.index') }}" class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -41,7 +41,7 @@
               </select>
             </div>
             <div class="self-end flex gap-2">
-              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i>Tampilkan Data</button>
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i>Tampilkan Data</button>
               <a href="{{ route('wadir1.export.pemetaan', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
                 <i class="fas fa-file-excel mr-2"></i> Export Excel
               </a>
@@ -55,7 +55,7 @@
     @if(!$isFiltered)
       <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
         <div class="flex justify-center mb-4">
-          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+          <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
             <i class="fas fa-filter text-3xl"></i>
           </div>
         </div>
@@ -66,34 +66,136 @@
       <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded"><div class="text-sm text-yellow-800">Data kosong untuk filter yang dipilih.</div></div>
     @endif
 
-    @if(!empty($matrix))
-      @foreach($matrix as $kodeCpl => $cpl)
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-6">
-          <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-800">CPL {{ $kodeCpl }}</h2>
-            <span class="text-sm text-gray-500">{{ $cpl['deskripsi'] ?? '' }}</span>
-          </div>
-          <div class="p-6 space-y-4">
-            @forelse(($cpl['cpmk'] ?? []) as $kodeCpmk => $row)
-              <div class="border rounded-lg p-4">
-                <div class="font-semibold text-gray-800 mb-1">CPMK {{ $kodeCpmk }}</div>
-                <div class="text-sm text-gray-600 mb-2">{{ $row['deskripsi'] ?? '-' }}</div>
-                <div class="flex flex-wrap gap-2">
-                  @foreach(($row['mk'] ?? []) as $mk)
-                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">{{ $mk }}</span>
+    @if($isFiltered && !empty($matrix))
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-800 text-white">
+              <tr>
+                <th class="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider border-r border-indigo-600">
+                  <div class="flex items-center">
+                    <i class="fas fa-bullseye mr-2"></i>
+                    Kode CPL
+                  </div>
+                </th>
+                <th class="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider border-r border-indigo-600 w-96">
+                  <div class="flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Deskripsi CPL
+                  </div>
+                </th>
+                <th class="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider border-r border-indigo-600 w-32">
+                  <div class="flex items-center">
+                    <i class="fas fa-list-ol mr-2"></i>
+                    Kode CPMK
+                  </div>
+                </th>
+                <th class="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider border-r border-indigo-600">
+                  <div class="flex items-center">
+                    <i class="fas fa-align-left mr-2"></i>
+                    Deskripsi CPMK
+                  </div>
+                </th>
+                <th class="px-4 py-4 text-left text-xs font-semibold uppercase tracking-wider">
+                  <div class="flex items-center">
+                    <i class="fas fa-book mr-2"></i>
+                    Mata Kuliah
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @foreach ($matrix as $kode_cpl => $cpl)
+                @php
+                  $cpmk_count = isset($cpl['cpmk']) ? count($cpl['cpmk']) : 1;
+                  $first = true;
+                @endphp
+
+                @if(isset($cpl['cpmk']) && !empty($cpl['cpmk']))
+                  @foreach ($cpl['cpmk'] as $kode_cpmk => $cpmk)
+                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                      @if ($first)
+                        <td class="px-4 py-4 border-r border-gray-200 align-top bg-blue-50" rowspan="{{ $cpmk_count }}">
+                          <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 text-white shadow-sm">
+                            {{ $kode_cpl }}
+                          </span>
+                        </td>
+                        <td class="px-4 py-4 border-r border-gray-200 text-sm text-gray-700 align-top leading-relaxed" rowspan="{{ $cpmk_count }}">
+                          {{ $cpl['deskripsi'] ?? '-' }}
+                        </td>
+                        @php $first = false; @endphp
+                      @endif
+
+                      <td class="px-4 py-4 border-r border-gray-200">
+                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white shadow-sm">
+                          {{ $kode_cpmk }}
+                        </span>
+                      </td>
+                      <td class="px-4 py-4 border-r border-gray-200 text-sm text-gray-700 leading-relaxed">
+                        {{ $cpmk['deskripsi'] ?? '-' }}
+                      </td>
+                      <td class="px-4 py-4">
+                        @if(isset($cpmk['mk']) && !empty($cpmk['mk']))
+                          <div class="flex flex-wrap gap-2">
+                            @foreach (array_unique($cpmk['mk']) as $mk)
+                              <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-green-500 text-white shadow-sm">
+                                {{ $mk }}
+                              </span>
+                            @endforeach
+                          </div>
+                        @else
+                          <span class="text-gray-400 text-sm">-</span>
+                        @endif
+                      </td>
+                    </tr>
                   @endforeach
-                  @if(empty($row['mk']))
-                    <span class="text-gray-500 text-sm">Belum terpetakan ke MK</span>
-                  @endif
-                </div>
-              </div>
-            @empty
-              <div class="text-gray-600">Belum ada CPMK untuk CPL ini.</div>
-            @endforelse
-          </div>
+                @else
+                  <tr class="hover:bg-blue-50 transition-colors duration-150">
+                    <td class="px-4 py-4 border-r border-gray-200 align-top bg-blue-50">
+                      <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-600 text-white shadow-sm">
+                        {{ $kode_cpl }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-4 border-r border-gray-200 text-sm text-gray-700 leading-relaxed">
+                      {{ $cpl['deskripsi'] ?? '-' }}
+                    </td>
+                    <td class="px-4 py-4 border-r border-gray-200 text-center text-sm text-gray-400">-</td>
+                    <td class="px-4 py-4 border-r border-gray-200 text-sm text-gray-400">-</td>
+                    <td class="px-4 py-4 text-sm text-gray-400">-</td>
+                  </tr>
+                @endif
+              @endforeach
+            </tbody>
+          </table>
         </div>
-      @endforeach
+      </div>
     @endif
   </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f7fafc;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background-color: #a0aec0;
+}
+</style>
+@endpush

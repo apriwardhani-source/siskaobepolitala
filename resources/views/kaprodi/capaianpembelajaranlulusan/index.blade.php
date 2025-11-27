@@ -57,17 +57,31 @@
 
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
+            <!-- Header Filter -->
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between text-white">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center shadow">
+                        <i class="fas fa-filter text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Filter CPL</h2>
+                        <p class="text-xs text-blue-100">Pilih program studi dan tahun kurikulum untuk menampilkan daftar CPL.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Toolbar -->
             <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                    
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between space-y-4 sm:space-y-0">
                     <!-- Filter -->
-                    <form method="GET" action="{{ route('kaprodi.capaianpembelajaranlulusan.index') }}" class="flex-1">
+                    <form id="kaprodi-cpl-filter" method="GET" action="{{ route('kaprodi.capaianpembelajaranlulusan.index') }}" class="flex-1">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
-                                <select name="kode_prodi" onchange="this.form.submit()"
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-university text-blue-500 mr-1"></i>
+                                    Program Studi
+                                </label>
+                                <select name="kode_prodi"
                                     class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
                                            focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                                     <option value="">Pilih Program Studi</option>
@@ -81,8 +95,11 @@
 
                             @if($kode_prodi)
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                                <select name="id_tahun" onchange="this.form.submit()"
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-calendar text-green-500 mr-1"></i>
+                                    Tahun Kurikulum
+                                </label>
+                                <select name="id_tahun"
                                     class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
                                            focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                                     <option value="">Semua Tahun</option>
@@ -96,6 +113,22 @@
                             @endif
                         </div>
                     </form>
+
+                    <!-- Actions -->
+                    <div class="flex gap-3">
+                        <button type="submit" form="kaprodi-cpl-filter"
+                                class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 
+                                       text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
+                                       transform hover:scale-105 transition-all duration-200">
+                            <i class="fas fa-search mr-2"></i>
+                            Tampilkan Data
+                        </button>
+                        <a href="{{ route('kaprodi.export.excel', ['id_tahun' => $id_tahun ?? request('id_tahun')]) }}"
+                           class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                            <i class="fas fa-file-excel mr-2"></i>
+                            Export Excel
+                        </a>
+                    </div>
                 </div>
             </div>
 

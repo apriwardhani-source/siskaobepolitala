@@ -3,7 +3,7 @@
 @section('title', 'Detail Hasil OBE')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Back Button -->
@@ -17,7 +17,7 @@
 
         <!-- Mahasiswa Info Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-6">
+            <div class="bg-blue-600 px-6 py-6">
                 <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
                         @php
@@ -89,7 +89,7 @@
 
         <!-- Hasil OBE Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-chart-line mr-3"></i>
                     Hasil Capaian Pembelajaran per Mata Kuliah

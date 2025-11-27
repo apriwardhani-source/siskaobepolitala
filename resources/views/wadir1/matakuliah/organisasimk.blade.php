@@ -1,13 +1,13 @@
 @extends('layouts.wadir1.app')
 @section('title', 'Organisasi MK - Wadir 1')
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <div class="mb-8">
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
-          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+          <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
             <i class="fas fa-project-diagram text-white text-2xl"></i>
           </div>
         </div>
@@ -20,7 +20,7 @@
 
     <!-- Filter Card -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+      <div class="bg-blue-600 px-6 py-4">
         <h2 class="text-xl font-bold text-white"><i class="fas fa-filter mr-2"></i>Filter Organisasi MK</h2>
       </div>
       <div class="p-6">
@@ -45,7 +45,7 @@
               </select>
             </div>
             <div class="self-end flex gap-2">
-              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                 <i class="fas fa-search mr-2"></i>Tampilkan Data
               </button>
               <a href="{{ route('wadir1.export.mk', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
@@ -62,7 +62,7 @@
       <!-- Empty Prompt When No Filter -->
       <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
         <div class="flex justify-center mb-4">
-          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+          <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
             <i class="fas fa-filter text-3xl"></i>
           </div>
         </div>

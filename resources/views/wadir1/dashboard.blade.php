@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Header -->
@@ -23,7 +23,7 @@
                             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $prodicount }}</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-graduation-cap text-white text-2xl"></i>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $ProdiSelesai }}</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-check-circle text-white text-2xl"></i>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $ProdiProgress }}</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <div class="w-14 h-14 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-spinner text-white text-2xl"></i>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $ProdiBelumMulai }}</p>
                         </div>
                         <div class="flex-shrink-0">
-                            <div class="w-14 h-14 bg-gradient-to-br from-red-400 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <div class="w-14 h-14 bg-red-500 rounded-xl flex items-center justify-center shadow-lg">
                                 <i class="fas fa-exclamation-circle text-white text-2xl"></i>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
 
         <!-- Toolbar -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center"><i class="fas fa-filter mr-2"></i>Filter Dashboard</h2>
             </div>
             <div class="p-6">
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                         <div class="flex items-end gap-3">
-                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i> Tampilkan Data</button>
+                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"><i class="fas fa-search mr-2"></i> Tampilkan Data</button>
                             <button type="submit" formaction="{{ route('wadir1.export.excel') }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"><i class="fas fa-file-excel mr-2"></i> Export Excel</button>
                         </div>
                     </div>
@@ -117,14 +117,14 @@
         @if (request()->filled('tahun_progress'))
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-5">
+                <div class="bg-gray-800 px-6 py-5">
                     <h2 class="text-xl font-bold text-white">Progress Penyusunan Kurikulum OBE</h2>
                     <p class="mt-1 text-sm text-gray-300">Tahun Kurikulum: {{ $availableYears->firstWhere('id_tahun', request('tahun_progress'))->tahun ?? '-' }}</p>
                 </div>
 
                 <div class="p-6" id="tahunProgress">
                     <!-- Target Info Box -->
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-5 mb-8">
+                    <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-5 mb-8">
                         <h4 class="font-semibold text-blue-900 mb-3 flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
@@ -182,9 +182,9 @@
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                                     <div class="h-full rounded-full transition-all duration-500 
-                                                {{ $prodi->avg_progress >= 80 ? 'bg-gradient-to-r from-green-500 to-green-600' : 
-                                                   ($prodi->avg_progress >= 50 ? 'bg-gradient-to-r from-amber-500 to-amber-600' : 
-                                                   'bg-gradient-to-r from-red-500 to-red-600') }}"
+                                                {{ $prodi->avg_progress >= 80 ? 'bg-green-500' : 
+                                                   ($prodi->avg_progress >= 50 ? 'bg-amber-500' : 
+                                                   'bg-red-500') }}"
                                          style="width: {{ $prodi->avg_progress }}%">
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@
             <!-- Empty State (tanpa tombol) -->
             <div class="bg-white rounded-xl shadow border border-gray-200 p-12 text-center mb-8">
                 <div class="flex justify-center mb-2">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
                         <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                             <path d="M4 20h16" stroke-width="1.5" stroke-linecap="round"/>
                             <rect x="5" y="12" width="3" height="6" rx="1.5" fill="currentColor"/>
@@ -272,4 +272,3 @@ document.getElementById('search-prodi-dashboard').addEventListener('input', func
 @endpush
 
 @endsection
-

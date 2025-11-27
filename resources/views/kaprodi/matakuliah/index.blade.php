@@ -57,15 +57,30 @@
 
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
+            <!-- Header Filter -->
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between text-white">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-blue-500 flex items-center justify-center shadow">
+                        <i class="fas fa-filter text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Filter Mata Kuliah</h2>
+                        <p class="text-xs text-blue-100">Pilih tahun kurikulum dan cari mata kuliah berdasarkan kata kunci.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Toolbar -->
             <div class="px-6 py-5 border-b border-gray-200 bg-white">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between space-y-4 lg:space-y-0 gap-4">
                     
                     <!-- Filter -->
                     <div class="flex-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                        <select id="tahun" name="id_tahun" onchange="updateFilter()"
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-calendar text-green-500 mr-1"></i>
+                            Tahun Kurikulum
+                        </label>
+                        <select id="tahun" name="id_tahun"
                             class="block w-full max-w-xs px-4 py-2.5 border border-gray-300 rounded-lg 
                                    focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
                             <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
@@ -81,7 +96,10 @@
 
                     <!-- Search -->
                     <div class="lg:w-80">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Mata Kuliah</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-search text-blue-500 mr-1"></i>
+                            Cari Mata Kuliah
+                        </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-search text-gray-400"></i>
@@ -91,6 +109,22 @@
                                           focus:ring-2 focus:ring-blue-500 focus:border-transparent 
                                           placeholder-gray-400 text-sm transition-all duration-200">
                         </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-3">
+                        <button type="button" onclick="updateFilter()"
+                                class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 
+                                       text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
+                                       transform hover:scale-105 transition-all duration-200">
+                            <i class="fas fa-search mr-2"></i>
+                            Tampilkan Data
+                        </button>
+                        <a href="{{ route('kaprodi.export.excel', ['id_tahun' => $id_tahun ?? request('id_tahun')]) }}"
+                           class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                            <i class="fas fa-file-excel mr-2"></i>
+                            Export Excel
+                        </a>
                     </div>
                 </div>
 

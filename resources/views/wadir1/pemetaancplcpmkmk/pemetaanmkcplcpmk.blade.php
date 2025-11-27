@@ -2,13 +2,13 @@
 
 @section('title', 'Pemetaan MK - CPL - CPMK (Wadir1)')
 @section('content')
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
 
             <div class="mb-8">
                 <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                             <i class="fas fa-diagram-project text-white text-2xl"></i>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+                <div class="bg-blue-600 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center"><i class="fas fa-filter mr-2"></i>Filter</h2>
                 </div>
                 <div class="p-6">
@@ -66,7 +66,7 @@
             @if (empty($kode_prodi))
                 <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
                     <div class="flex justify-center mb-4">
-                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+                        <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
                             <i class="fas fa-filter text-3xl"></i>
                         </div>
                     </div>
@@ -141,4 +141,3 @@
         }
     </script>
 @endsection
-

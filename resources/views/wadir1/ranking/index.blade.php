@@ -1,7 +1,7 @@
 ﻿@extends('layouts.wadir1.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Header -->
@@ -12,7 +12,7 @@
 
         <!-- Filter Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div class="px-6 py-5 border-b border-gray-200 bg-blue-50">
                 <h2 class="text-lg font-semibold text-gray-900 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"/>
@@ -43,7 +43,7 @@
 
         <!-- Daftar Session Ranking -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-green-50 to-emerald-50">
+            <div class="px-6 py-5 border-b border-gray-200 bg-green-50">
                 <h2 class="text-lg font-semibold text-gray-900 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>

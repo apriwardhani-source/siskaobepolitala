@@ -1,7 +1,7 @@
 @extends('layouts.wadir1.app')
 @section('title', 'Pemetaan CPL - MK - Wadir 1')
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-full mx-auto">
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan CPL - MK</h1>
@@ -26,7 +26,7 @@
                   <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? '') == $thn->id_tahun ? 'selected' : '' }}>{{ $thn->nama_kurikulum }} - {{ $thn->tahun }}</option>
                 @endforeach
               </select>
-              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                 <i class="fas fa-search mr-2"></i> Terapkan
               </button>
             </form>
@@ -54,7 +54,7 @@
         @endif
       </div>
 
-      <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+      <div class="px-6 py-4 bg-blue-50 border-b border-blue-100">
         <div class="flex items-start">
           <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center mr-3">
             <i class="fas fa-info"></i>
@@ -66,7 +66,7 @@
       @if(!$hasFilter)
         <div class="p-10 text-center">
           <div class="flex justify-center mb-4">
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+            <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
               <i class="fas fa-filter text-3xl"></i>
             </div>
           </div>
@@ -74,43 +74,45 @@
           <p class="text-gray-600 mt-1">Silakan pilih program studi dan/atau tahun untuk menampilkan matriks pemetaan.</p>
         </div>
       @else
-        <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead>
+        <div class="overflow-auto border">
+          <table class="min-w-full divide-y divide-black text-sm">
+            <thead class="bg-green-800 text-white text-center">
               <tr>
-                <th class="px-4 py-3 text-left bg-gray-50 border-b border-r border-gray-200 sticky left-0 z-20">CPL \ MK</th>
-                @foreach (($mks ?? []) as $mk)
-                  <th class="px-4 py-3 text-center bg-gray-50 border-b border-r border-gray-200 whitespace-nowrap">
-                    <div class="relative group inline-block">
-                      <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold bg-gray-100 text-gray-800">{{ $mk->kode_mk }}</span>
-                      <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-72 bg-gray-900 text-white text-sm rounded-lg shadow-2xl z-50">
-                        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-lg px-4 py-2 font-bold">{{ $mk->nama_prodi ?? 'Program Studi' }}</div>
-                        <div class="px-4 py-3 text-left leading-relaxed"><strong>{{ $mk->kode_mk }}</strong> - {{ $mk->nama_mk }}</div>
-                        <div class="absolute left-1/2 -translate-x-1/2 top-full"><div class="border-8 border-transparent border-t-gray-900"></div></div>
+                <th class="border px-4 py-2">Kode MK</th>
+                <th class="border px-4 py-2">Nama Mata Kuliah</th>
+                @foreach (($cpls ?? []) as $cpl)
+                  <th class="border px-4 py-2 relative group cursor-pointer">
+                    {{ $cpl->kode_cpl }}
+                    <div
+                      class="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block w-64 bg-black text-white text-xs rounded p-2 z-50 text-center shadow-lg">
+                      <div class="bg-gray-600 font-semibold">
+                        {{ $prodiByCpl[$cpl->id_cpl] ?? 'Program Studi' }}
+                      </div>
+                      <div class="mt-2 text-justify">
+                        {{ $cpl->deskripsi_cpl ?? '-' }}
                       </div>
                     </div>
                   </th>
                 @endforeach
               </tr>
             </thead>
-            <tbody class="bg-white">
-              @foreach (($cpls ?? []) as $index => $cpl)
-                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
-                  <td class="px-4 py-4 border-r border-b border-gray-200 sticky left-0 z-10 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
-                    <div class="relative group">
-                      <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 cursor-help whitespace-nowrap">{{ $cpl->kode_cpl }}</span>
-                      <div class="absolute left-full ml-2 top-1/2 -translate-y-1/2 hidden group-hover:block w-80 bg-gray-900 text-white text-sm rounded-lg shadow-2xl z-50">
-                        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-t-lg px-4 py-2 font-bold">{{ ($prodiByCpl[$cpl->id_cpl] ?? 'Program Studi') }}</div>
-                        <div class="px-4 py-3 text-left leading-relaxed">{{ $cpl->deskripsi_cpl }}</div>
-                        <div class="absolute right-full top-1/2 -translate-y-1/2"><div class="border-8 border-transparent border-r-gray-900"></div></div>
-                      </div>
-                    </div>
-                  </td>
-                  @foreach (($mks ?? []) as $mk)
-                    <td class="px-4 py-4 text-center border-r border-b border-gray-200">
-                      <input type="checkbox" disabled
-                        {{ isset($relasi[$mk->kode_mk]) && in_array($cpl->id_cpl, ($relasi[$mk->kode_mk]->pluck('id_cpl')->toArray() ?? [])) ? 'checked' : '' }}
-                        class="h-6 w-6 mx-auto appearance-none rounded border-2 border-blue-500 bg-white checked:bg-blue-600 checked:border-blue-600 disabled:opacity-100 disabled:cursor-default relative transition-all duration-200">
+            <tbody class="bg-white text-gray-800">
+              @foreach (($mks ?? []) as $mk)
+                <tr>
+                  <td class="border px-4 py-2 align-top text-center">{{ $mk->kode_mk }}</td>
+                  <td class="border px-4 py-2 align-top">{{ $mk->nama_mk }}</td>
+                  @foreach (($cpls ?? []) as $cpl)
+                    @php
+                      $mkRelasi = $relasi[$mk->kode_mk] ?? collect();
+                      $terpetakan = $mkRelasi->pluck('id_cpl')->contains($cpl->id_cpl);
+                    @endphp
+                    <td class="border px-4 py-2 text-center">
+                      @if ($terpetakan)
+                        <span
+                          class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-500 text-white text-sm font-bold">
+                          ✓
+                        </span>
+                      @endif
                     </td>
                   @endforeach
                 </tr>

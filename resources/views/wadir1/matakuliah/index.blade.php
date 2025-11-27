@@ -1,14 +1,14 @@
 @extends('layouts.wadir1.app')
 @section('title', 'Mata Kuliah - Wadir 1')
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
 
     <!-- Header ala Hasil OBE -->
     <div class="mb-8">
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
-          <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+          <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
             <i class="fas fa-book text-white text-2xl"></i>
           </div>
         </div>
@@ -21,7 +21,7 @@
 
     <!-- Kartu Filter -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+      <div class="bg-blue-600 px-6 py-4">
         <h2 class="text-xl font-bold text-white flex items-center">
           <i class="fas fa-filter mr-2"></i>
           Filter Mata Kuliah
@@ -49,7 +49,7 @@
               </select>
             </div>
             <div class="self-end flex gap-2">
-              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                 <i class="fas fa-search mr-2"></i> Tampilkan Data
               </button>
               <a href="{{ route('wadir1.export.mk', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
@@ -71,7 +71,7 @@
       <!-- Empty state sebelum filter -->
       <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
         <div class="flex justify-center mb-4">
-          <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+          <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
             <i class="fas fa-filter text-3xl"></i>
           </div>
         </div>
@@ -103,7 +103,7 @@
               <p class="text-sm font-medium text-gray-600 uppercase">Total MK</p>
               <p class="mt-2 text-3xl font-bold text-gray-900">{{ ($mata_kuliahs ?? collect())->count() }}</p>
             </div>
-            <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-book text-2xl"></i></div>
+            <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-book text-2xl"></i></div>
           </div>
         </div>
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
@@ -112,7 +112,7 @@
             <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
           </div>
-          <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-calendar text-2xl"></i></div>
+          <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-calendar text-2xl"></i></div>
         </div>
       </div>
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
@@ -121,7 +121,7 @@
             <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
             <p class="mt-2 text-xl font-bold text-gray-900">{{ $selectedProdi->nama_prodi ?? '-' }}</p>
           </div>
-          <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-graduation-cap text-2xl"></i></div>
+          <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-graduation-cap text-2xl"></i></div>
         </div>
       </div>
       </div>

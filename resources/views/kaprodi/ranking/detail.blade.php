@@ -1,4 +1,4 @@
-﻿@extends('layouts.kaprodi.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
@@ -7,7 +7,7 @@
         <!-- Header -->
         <div class="mb-8">
             <a href="{{ route('kaprodi.ranking.hasil', $session->id_session) }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium mb-2 inline-block">
-                ← Kembali ke Ranking
+                ? Kembali ke Ranking
             </a>
             <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Detail Perhitungan SAW</h1>
             <p class="mt-2 text-sm text-gray-600">Breakdown perhitungan untuk mahasiswa {{ $detail['nim'] }}</p>
@@ -77,7 +77,7 @@
                     
                     <div class="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600">
                         <p class="font-mono">
-                            Rumus: ({{ number_format($data['nilai_asli'], 2) }} / {{ number_format($data['nilai_max'], 2) }}) × {{ number_format($data['bobot_normalized'], 6) }} = 
+                            Rumus: ({{ number_format($data['nilai_asli'], 2) }} / {{ number_format($data['nilai_max'], 2) }}) � {{ number_format($data['bobot_normalized'], 6) }} = 
                             <span class="font-bold text-green-600">{{ number_format($data['skor_kriteria'], 6) }}</span>
                         </p>
                     </div>
@@ -104,3 +104,4 @@
     </div>
 </div>
 @endsection
+

@@ -1,10 +1,10 @@
 @extends('layouts.wadir1.app')
 @section('title','Visi & Misi - Wadir 1')
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-5xl mx-auto space-y-6">
     <div class="flex items-center space-x-4">
-      <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
+      <div class="w-16 h-16 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
         <i class="fas fa-bullseye text-2xl"></i>
       </div>
       <div>
