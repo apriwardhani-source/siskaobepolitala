@@ -1,0 +1,459 @@
+====================================
+📱 TEMPLATE PESAN WHATSAPP BROADCAST
+   SISTEM OBE POLITALA
+====================================
+
+Pilih template yang sesuai dengan kebutuhan, copy, dan gunakan untuk broadcast!
+
+────────────────────────────────────
+
+📢 TEMPLATE 1: PENGUMUMAN FITUR BARU NOTIFIKASI WHATSAPP
+────────────────────────────────────
+
+✨ FITUR BARU SISTEM OBE POLITALA ✨
+
+Halo Bapak/Ibu Dosen,
+
+Kabar baik! Sistem OBE Politala kini memiliki fitur notifikasi WhatsApp otomatis! 🎉
+
+📝 Apa yang baru?
+Setiap kali Bapak/Ibu menginput nilai mahasiswa, sistem akan langsung mengirim konfirmasi ke WhatsApp sebagai bukti input telah tersimpan.
+
+✅ Keuntungannya:
+• Konfirmasi real-time setiap input nilai
+• Rekam jejak digital yang aman
+• Tidak perlu cek manual di sistem
+• Notifikasi langsung ke HP
+
+🔗 Akses Sistem:
+[URL_SISTEM_ANDA]
+
+📱 Pastikan nomor WhatsApp Bapak/Ibu sudah terdaftar di sistem. Jika belum, silakan hubungi admin.
+
+Terima kasih atas perhatiannya!
+
+---
+Tim Sistem Informasi OBE
+Politeknik Tanah Laut
+
+────────────────────────────────────
+
+⏰ TEMPLATE 2: REMINDER INPUT NILAI
+────────────────────────────────────
+
+📋 REMINDER INPUT NILAI MAHASISWA
+
+Kepada Yth. Bapak/Ibu Dosen,
+
+Semester ini akan segera berakhir. Berikut reminder input nilai mahasiswa:
+
+📅 Batas Waktu: [TANGGAL_DEADLINE]
+⏳ Sisa Waktu: [X] hari lagi
+
+📝 Yang perlu diinput:
+• Nilai UTS (jika belum)
+• Nilai UAS
+• Nilai Tugas/Quiz
+• Nilai Praktikum (jika ada)
+
+🔗 Link Input Nilai:
+[URL_SISTEM_ANDA]/penilaian
+
+💡 Tips:
+• Sistem sudah support bulk input (banyak nilai sekaligus)
+• Setiap input akan ada konfirmasi WhatsApp otomatis
+• Data tersimpan aman di cloud
+
+Jika ada kendala, silakan hubungi admin atau tim IT.
+
+Terima kasih!
+
+---
+Sistem OBE Politala
+[CONTACT_ADMIN]
+
+────────────────────────────────────
+
+🔧 TEMPLATE 3: INFO MAINTENANCE SISTEM
+────────────────────────────────────
+
+⚠️ MAINTENANCE SISTEM OBE POLITALA
+
+Kepada Yth. Bapak/Ibu Dosen & Mahasiswa,
+
+Sistem OBE Politala akan menjalani maintenance terjadwal untuk peningkatan performa dan keamanan.
+
+📅 Jadwal Maintenance:
+• Tanggal: [TANGGAL]
+• Waktu: [JAM_MULAI] - [JAM_SELESAI] WIB
+• Durasi: ± [X] jam
+
+🚫 Selama maintenance:
+Sistem tidak dapat diakses untuk sementara waktu.
+
+✨ Setelah maintenance:
+• Sistem lebih cepat
+• Fitur baru [SEBUTKAN_FITUR]
+• Bug fixes dan security updates
+
+💡 Saran:
+Pastikan semua input nilai sudah selesai sebelum waktu maintenance dimulai.
+
+Mohon maaf atas ketidaknyamanannya. Terima kasih atas pengertiannya!
+
+---
+Tim IT Sistem OBE Politala
+Info: [CONTACT_ADMIN]
+
+────────────────────────────────────
+
+👋 TEMPLATE 4: WELCOME MESSAGE USER BARU (DOSEN)
+────────────────────────────────────
+
+Selamat Datang di Sistem OBE Politala! 👋
+
+Halo Bapak/Ibu [NAMA_DOSEN],
+
+Akun Anda telah berhasil didaftarkan di Sistem OBE (Outcome-Based Education) Politeknik Tanah Laut.
+
+📝 Data Akun Anda:
+• Username: [USERNAME]
+• Email: [EMAIL]
+• Role: Dosen
+• Status: Aktif ✅
+
+🔑 Password:
+Password awal akan dikirim melalui email. Silakan login dan segera ganti password Anda.
+
+🔗 Link Login:
+[URL_SISTEM_ANDA]/login
+
+📱 Fitur Utama:
+• Input nilai mahasiswa (single & bulk)
+• Monitoring capaian pembelajaran
+• Notifikasi WhatsApp otomatis
+• Export data & laporan
+
+📚 Panduan Penggunaan:
+[URL_PANDUAN] (jika ada)
+
+Jika ada pertanyaan atau kendala, jangan ragu untuk menghubungi tim IT kami.
+
+Selamat menggunakan sistem!
+
+---
+Tim Sistem Informasi OBE
+Politeknik Tanah Laut
+
+────────────────────────────────────
+
+🎓 TEMPLATE 5: WELCOME MESSAGE USER BARU (MAHASISWA)
+────────────────────────────────────
+
+Selamat Datang Mahasiswa Baru! 🎓
+
+Halo [NAMA_MAHASISWA],
+
+Selamat bergabung di Politeknik Tanah Laut! Akun Sistem OBE Anda telah aktif.
+
+📝 Data Mahasiswa:
+• Nama: [NAMA_LENGKAP]
+• NIM: [NIM]
+• Jurusan: [JURUSAN]
+• Prodi: [PRODI]
+
+🔗 Akses Sistem:
+[URL_SISTEM_ANDA]/login
+
+Username: [NIM_ANDA]
+Password: Cek email Anda
+
+📱 Melalui sistem ini Anda dapat:
+• Melihat nilai mata kuliah
+• Monitoring capaian pembelajaran
+• Cek profil lulusan program studi
+• Download transkrip nilai
+
+⚠️ PENTING:
+Segera ganti password setelah login pertama untuk keamanan akun Anda!
+
+Semangat belajar! 🚀
+
+---
+Politeknik Tanah Laut
+[WEBSITE_KAMPUS]
+
+────────────────────────────────────
+
+📊 TEMPLATE 6: UPDATE SISTEM / CHANGELOG
+────────────────────────────────────
+
+🚀 UPDATE SISTEM OBE POLITALA v2.0
+
+Kepada Yth. Pengguna Sistem OBE,
+
+Sistem telah diupdate dengan fitur-fitur baru dan perbaikan!
+
+✨ Fitur Baru:
+• 📱 Notifikasi WhatsApp otomatis untuk dosen
+• 📊 Dashboard analytics capaian pembelajaran
+• 📤 Bulk input nilai (input banyak sekaligus)
+• 🔄 Auto-sync data untuk tim development
+• 📈 Export laporan dengan format baru
+
+🔧 Perbaikan:
+• Performance sistem lebih cepat 30%
+• Fix bug input nilai decimal
+• Tampilan UI/UX lebih modern
+• Security update
+
+📱 Support format nomor WhatsApp:
+Sistem kini support berbagai format (08xxx, 628xxx, +628xxx) - auto convert!
+
+🔗 Silakan akses:
+[URL_SISTEM_ANDA]
+
+Feedback & saran bisa kirim ke:
+[EMAIL_ADMIN] atau [WA_ADMIN]
+
+Terima kasih!
+
+---
+Tim Development Sistem OBE
+Politeknik Tanah Laut
+
+────────────────────────────────────
+
+⚡ TEMPLATE 7: URGENT - BATAS WAKTU INPUT NILAI
+────────────────────────────────────
+
+🚨 URGENT: BATAS WAKTU INPUT NILAI!
+
+Kepada Yth. [NAMA_DOSEN],
+
+Ini adalah reminder TERAKHIR untuk input nilai mahasiswa semester ini.
+
+⏰ BATAS WAKTU:
+[TANGGAL] jam [JAM] WIB
+(BESOK!)
+
+📋 Status Input Anda:
+Mata Kuliah: [NAMA_MK]
+Kelas: [KELAS]
+Belum input: [X] mahasiswa
+Total mahasiswa: [Y] mahasiswa
+
+⚠️ PENTING:
+Setelah deadline, sistem akan otomatis terkunci dan nilai tidak bisa diinput/diubah!
+
+🔗 Input Sekarang:
+[URL_SISTEM_ANDA]/penilaian
+
+💡 Butuh bantuan?
+Hubungi admin: [CONTACT_ADMIN]
+(Respons cepat via WhatsApp)
+
+Terima kasih atas kerjasamanya!
+
+---
+Bagian Akademik
+Politeknik Tanah Laut
+
+────────────────────────────────────
+
+📢 TEMPLATE 8: PENGUMUMAN UMUM KAMPUS
+────────────────────────────────────
+
+📢 PENGUMUMAN PENTING
+
+Kepada Yth. Civitas Akademika Politala,
+
+[ISI_PENGUMUMAN_UTAMA]
+
+📅 Tanggal: [TANGGAL]
+📍 Tempat: [LOKASI] (jika ada)
+⏰ Waktu: [JAM] WIB
+
+📝 Detail:
+[DETAIL_PENGUMUMAN]
+
+📎 Link Informasi:
+[URL_JIKA_ADA]
+
+Untuk informasi lebih lanjut, silakan hubungi:
+[CONTACT_PERSON]
+[NO_TELP/EMAIL]
+
+Terima kasih atas perhatiannya.
+
+---
+[NAMA_DEPARTEMEN/BAGIAN]
+Politeknik Tanah Laut
+
+────────────────────────────────────
+
+🎉 TEMPLATE 9: SELAMAT & APRESIASI
+────────────────────────────────────
+
+🎉 SELAMAT & TERIMA KASIH!
+
+Kepada Yth. Bapak/Ibu Dosen,
+
+Kami mengucapkan terima kasih atas dedikasi Bapak/Ibu dalam menggunakan Sistem OBE Politala!
+
+📊 Pencapaian Semester Ini:
+• ✅ 100% input nilai tepat waktu
+• ✅ [X] mata kuliah terinput
+• ✅ [Y] mahasiswa tercatat nilainya
+• ✅ Response time cepat dalam input
+
+🏆 Apresiasi khusus untuk:
+• Penggunaan fitur bulk input
+• Data yang akurat dan lengkap
+• Feedback konstruktif untuk sistem
+
+✨ Dengan kontribusi Bapak/Ibu, sistem OBE kita semakin baik dan membantu proses pembelajaran yang lebih efektif.
+
+Mari kita lanjutkan kerjasama yang baik di semester mendatang! 🚀
+
+Salam hormat,
+
+---
+Tim Sistem Informasi OBE
+Politeknik Tanah Laut
+
+────────────────────────────────────
+
+🆘 TEMPLATE 10: BANTUAN & SUPPORT
+────────────────────────────────────
+
+🆘 BUTUH BANTUAN SISTEM OBE?
+
+Halo!
+
+Jika Anda mengalami kendala atau memiliki pertanyaan seputar Sistem OBE Politala, kami siap membantu!
+
+🔧 Masalah Umum & Solusi:
+
+1️⃣ Lupa Password
+   → Reset via: [URL]/forgot-password
+   → Atau hubungi admin
+
+2️⃣ Error Saat Input Nilai
+   → Clear browser cache
+   → Gunakan Chrome/Edge terbaru
+   → Screenshot error, kirim ke admin
+
+3️⃣ Nomor WhatsApp Belum Terdaftar
+   → Hubungi admin untuk update data
+   → Format: 08xxx atau 628xxx
+
+4️⃣ Nilai Tidak Muncul/Error
+   → Cek koneksi internet
+   → Refresh halaman (F5)
+   → Logout & login kembali
+
+📱 Hubungi Kami:
+• WhatsApp: [NO_ADMIN]
+• Email: [EMAIL_SUPPORT]
+• Jam Kerja: Senin-Jumat, 08:00-16:00 WIB
+
+💡 Tips:
+• Screenshot error untuk mempercepat troubleshooting
+• Sebutkan username & deskripsi masalah
+• Response time: < 2 jam (jam kerja)
+
+Kami siap membantu! 🙋‍♂️
+
+---
+Tim IT Support
+Sistem OBE Politala
+
+────────────────────────────────────
+
+💡 CARA MENGGUNAKAN TEMPLATE:
+
+1. Pilih template yang sesuai kebutuhan
+2. Copy text template
+3. Ganti [PLACEHOLDER] dengan data yang sesuai:
+   - [NAMA_DOSEN] → Nama dosen/user
+   - [TANGGAL] → Tanggal spesifik
+   - [URL_SISTEM_ANDA] → Link sistem Anda
+   - [CONTACT_ADMIN] → Kontak admin
+   - dll.
+4. Paste ke broadcast script:
+   • Untuk input manual: node broadcast-wa.cjs
+   • Untuk dari file: node broadcast-wa-file.cjs "paste pesan disini"
+
+────────────────────────────────────
+
+✅ TEMPLATE SIAP PAKAI UNTUK:
+✓ Pengumuman fitur baru
+✓ Reminder deadline
+✓ Info maintenance
+✓ Welcome message
+✓ Update sistem
+✓ Urgent notification
+✓ Apresiasi & terima kasih
+✓ Bantuan & support
+
+────────────────────────────────────
+
+🎯 TIPS BROADCAST EFEKTIF:
+
+1. ⏰ Timing:
+   • Pagi (08:00-10:00) - Tingkat baca tinggi
+   • Hindari malam (> 21:00)
+   • Hindari weekend (kecuali urgent)
+
+2. 📝 Konten:
+   • Jelas & to the point
+   • Gunakan emoji secukupnya (jangan berlebihan)
+   • Sertakan link/contact jika perlu tindak lanjut
+   • Max 4-5 paragraf
+
+3. 📱 Format:
+   • Gunakan line break untuk readability
+   • Bold untuk poin penting (jika support)
+   • Tutup dengan signature/identitas pengirim
+
+4. 🎯 Target:
+   • Segmentasi: dosen, mahasiswa, atau admin
+   • Personalisasi dengan [NAMA] jika memungkinkan
+   • Relevansi pesan dengan penerima
+
+────────────────────────────────────
+
+📞 CONTOH PENGGUNAAN:
+
+# Dari file numbers.txt (RECOMMENDED untuk banyak nomor):
+node broadcast-wa-file.cjs "✨ FITUR BARU SISTEM OBE...dst"
+
+# Input manual di terminal:
+node broadcast-wa.cjs
+# Lalu input nomor dan pesan saat diminta
+
+────────────────────────────────────
+
+🔒 CATATAN KEAMANAN:
+
+⚠️ Jangan kirim pesan berisi:
+  • Password user
+  • Data pribadi sensitif (alamat lengkap, dll)
+  • Informasi finansial
+  • Link mencurigakan/phishing
+
+✅ Hanya kirim:
+  • Informasi akademik umum
+  • Pengumuman resmi
+  • Reminder yang bermanfaat
+  • Support & bantuan
+
+────────────────────────────────────
+
+Semoga template ini membantu! 🚀
+Sesuaikan dengan kebutuhan project Anda.
+
+---
+Generated by: Sistem OBE Politala
+Last Updated: November 2025
