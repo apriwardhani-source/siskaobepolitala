@@ -60,16 +60,24 @@ class KaprodiBobotController extends Controller
             ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->where('cpl.kode_prodi', $kodeProdi)
             ->where('cpl_mk.id_cpl', $id_cpl)
-            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
+            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
             ->get();
 
         $bobots = Bobot::where('id_cpl', $id_cpl)->get();
         $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
+        $totalBobot = array_sum($existingBobots);
+
+        $first = $mk_terkait->first();
+        $kode_cpl = $first->kode_cpl ?? $id_cpl;
+        $deskripsi_cpl = $first->deskripsi_cpl ?? '-';
 
         return view('kaprodi.bobot.detail', [
             'id_cpl' => $id_cpl,
             'mataKuliahs' => $mk_terkait,
-            'existingBobots' => $existingBobots
+            'existingBobots' => $existingBobots,
+            'kode_cpl' => $kode_cpl,
+            'deskripsi_cpl' => $deskripsi_cpl,
+            'totalBobot' => $totalBobot,
         ]);
     }
 }

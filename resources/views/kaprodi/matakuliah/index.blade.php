@@ -6,7 +6,12 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
+                </div>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Mata Kuliah</h1>
                     <p class="mt-2 text-sm text-gray-600">Lihat mata kuliah dan kurikulum program studi</p>
@@ -128,28 +133,74 @@
                     </div>
                 </div>
 
-                <!-- Filter Info -->
-                @if ($id_tahun)
-                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                        @php
-                            $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                        @endphp
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                            Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                        </span>
-                        <a href="{{ route('kaprodi.matakuliah.index') }}" 
-                           class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                            Reset filter
-                        </a>
+                @php
+                    $selectedYear = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun);
+                    $isFiltered = !empty($id_tahun);
+                    $prodiName = ($mata_kuliahs ?? collect())->first()->nama_prodi ?? (Auth::user()->prodi->nama_prodi ?? '-');
+                @endphp
+
+                @if(($mata_kuliahs ?? collect())->isNotEmpty())
+                    <!-- Filter aktif + summary cards ala Wadir1 -->
+                    <div class="mt-4 space-y-4">
+                        <div class="bg-white rounded-xl shadow border border-gray-200 p-4">
+                            <div class="text-sm text-gray-600 mb-2">Filter aktif:</div>
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    Angkatan: {{ $selectedYear->tahun ?? '-' }}
+                                </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+                                    <i class="fas fa-university mr-2"></i>
+                                    {{ $prodiName }}
+                                </span>
+                                <a href="{{ route('kaprodi.matakuliah.index') }}" 
+                                   class="text-red-600 text-sm ml-2">
+                                    <i class="fas fa-times mr-1"></i>Reset
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-600 uppercase">Total MK</p>
+                                        <p class="mt-2 text-3xl font-bold text-gray-900">{{ ($mata_kuliahs ?? collect())->count() }}</p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
+                                        <i class="fas fa-book text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
+                                        <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                                        <i class="fas fa-calendar text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
+                                        <p class="mt-2 text-xl font-bold text-gray-900">{{ $prodiName }}</p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white">
+                                        <i class="fas fa-graduation-cap text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 @endif
             </div>
 
             <!-- Content -->
-            @if(isset($dataKosong) && $dataKosong)
+            @if($isFiltered && ($mata_kuliahs ?? collect())->isEmpty())
                 <!-- Empty State -->
                 <div class="px-6 py-16 text-center">
                     <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

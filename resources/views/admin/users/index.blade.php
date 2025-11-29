@@ -4,24 +4,25 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
+        <!-- Header ala CPL -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Manajemen Pengguna</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola data pengguna sistem SISKA OBE</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-users-cog text-white text-2xl"></i>
+                    </div>
                 </div>
-                
-                <a href="{{ route('admin.users.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 
-                          hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg 
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-                    </svg>
-                    Tambah Pengguna
-                </a>
+                <div class="flex-1 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Manajemen Pengguna</h1>
+                        <p class="mt-1 text-sm text-gray-600">Kelola data pengguna sistem SISKA OBE.</p>
+                    </div>
+                    <a href="{{ route('admin.users.create') }}"
+                       class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <i class="fas fa-user-plus mr-2 text-xs"></i>
+                        Tambah Pengguna
+                    </a>
+                </div>
             </div>
         </div>
 

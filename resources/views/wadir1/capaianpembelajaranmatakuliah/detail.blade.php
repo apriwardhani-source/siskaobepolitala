@@ -1,35 +1,97 @@
 @extends('layouts.wadir1.app')
+
+@section('title', 'Detail CPMK - Wadir 1')
+
 @section('content')
-<div class="p-6 space-y-4">
-    <h1 class="text-xl font-semibold">Detail CPMK</h1>
-    <div class="bg-white shadow rounded p-4">
-        <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><dt class="text-gray-500">Kode</dt><dd class="font-medium">{{ $cpmk->kode_cpmk ?? '-' }}</dd></div>
-            <div class="md:col-span-2"><dt class="text-gray-500">Deskripsi</dt><dd class="font-medium">{{ $cpmk->deskripsi_cpmk ?? '-' }}</dd></div>
-        </dl>
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto">
+
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Detail Capaian Pembelajaran Mata Kuliah</h1>
+      <p class="mt-2 text-sm text-gray-600">Informasi lengkap tentang CPMK {{ $cpmk->kode_cpmk ?? '-' }}</p>
     </div>
-    <div class="bg-white shadow rounded p-4">
-        <h2 class="font-semibold mb-2">CPL Terkait</h2>
-        <ul class="list-disc pl-5">
-            @foreach(($cpls ?? []) as $cpl)
-                <li>{{ $cpl->kode_cpl }} — {{ $cpl->deskripsi_cpl }}</li>
-            @endforeach
-            @if(($cpls ?? collect())->isEmpty())
-                <li class="list-none text-gray-600">Tidak ada data.</li>
-            @endif
-        </ul>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+      <div class="px-8 py-6 space-y-6">
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Kode CPMK</label>
+          <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-medium">
+            {{ $cpmk->kode_cpmk ?? '-' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi CPMK</label>
+          <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 min-h-[100px]">
+            {{ $cpmk->deskripsi_cpmk ?? '-' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            CPL Terkait
+            <span class="ml-2 text-xs font-normal text-gray-500">({{ ($cpls ?? collect())->count() }} CPL)</span>
+          </label>
+          <div class="w-full bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+            @forelse ($cpls ?? collect() as $cpl)
+              <div class="flex items-start mb-3 last:mb-0">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-100 text-blue-800 mr-3 flex-shrink-0">
+                  {{ $cpl->kode_cpl }}
+                </span>
+                <span class="text-sm text-gray-700">{{ $cpl->deskripsi_cpl }}</span>
+              </div>
+            @empty
+              <div class="text-gray-500 italic text-sm flex items-center">
+                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Tidak ada CPL terkait dengan CPMK ini
+              </div>
+            @endforelse
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Mata Kuliah Terkait
+            <span class="ml-2 text-xs font-normal text-gray-500">({{ ($mks ?? collect())->count() }} Mata Kuliah)</span>
+          </label>
+          <div class="w-full bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+            @forelse ($mks ?? collect() as $mk)
+              <div class="flex items-start mb-3 last:mb-0">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-green-100 text-green-800 mr-3 flex-shrink-0">
+                  {{ $mk->kode_mk }}
+                </span>
+                <span class="text-sm text-gray-700">{{ $mk->nama_mk }}</span>
+              </div>
+            @empty
+              <div class="text-gray-500 italic text-sm flex items-center">
+                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Tidak ada mata kuliah terkait dengan CPMK ini
+              </div>
+            @endforelse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="px-8 py-4 bg-gray-50 border-t border-gray-200">
+        <div class="flex justify-between items-center">
+          <a href="{{ route('wadir1.capaianpembelajaranmatakuliah.index') }}"
+             class="inline-flex items-center px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Kembali
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="bg-white shadow rounded p-4">
-        <h2 class="font-semibold mb-2">MK Terkait</h2>
-        <ul class="list-disc pl-5">
-            @foreach(($mks ?? []) as $mk)
-                <li>{{ $mk->kode_mk }} — {{ $mk->nama_mk }}</li>
-            @endforeach
-            @if(($mks ?? collect())->isEmpty())
-                <li class="list-none text-gray-600">Tidak ada data.</li>
-            @endif
-        </ul>
-    </div>
+
+  </div>
 </div>
 @endsection
 

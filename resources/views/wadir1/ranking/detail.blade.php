@@ -1,21 +1,32 @@
 ﻿@extends('layouts.wadir1.app')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto">
         
         <!-- Header -->
         <div class="mb-8">
-            <a href="{{ route('wadir1.ranking.hasil', $session->id_session) }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium mb-2 inline-block">
-                ← Kembali ke Ranking
+            <a href="{{ route('wadir1.ranking.hasil', $session->id_session) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium mb-3">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span>Kembali ke Ranking</span>
             </a>
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Detail Perhitungan SAW</h1>
-            <p class="mt-2 text-sm text-gray-600">Breakdown perhitungan untuk mahasiswa {{ $detail['nim'] }}</p>
+
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Detail Perhitungan SAW</h1>
+                    <p class="mt-2 text-sm text-gray-600">Breakdown perhitungan untuk mahasiswa {{ $detail['nim'] }}</p>
+                </div>
+            </div>
         </div>
 
         <!-- Mahasiswa Info -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-6">
-            <div class="px-6 py-5 bg-blue-50">
+            <div class="px-6 py-5 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-xl font-bold text-gray-900">{{ $detail['nama'] }}</h2>
@@ -77,7 +88,7 @@
                     
                     <div class="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600">
                         <p class="font-mono">
-                            Rumus: ({{ number_format($data['nilai_asli'], 2) }} / {{ number_format($data['nilai_max'], 2) }}) × {{ number_format($data['bobot_normalized'], 6) }} = 
+                            Rumus: ({{ number_format($data['nilai_asli'], 2) }} / {{ number_format($data['nilai_max'], 2) }}) x {{ number_format($data['bobot_normalized'], 6) }} = 
                             <span class="font-bold text-green-600">{{ number_format($data['skor_kriteria'], 6) }}</span>
                         </p>
                     </div>
@@ -85,7 +96,7 @@
                 @endforeach
             </div>
             
-            <div class="px-6 py-4 bg-green-50 border-t border-green-200">
+            <div class="px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-t border-green-200">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-700">Total Skor SAW (Penjumlahan Semua Skor Kriteria):</p>

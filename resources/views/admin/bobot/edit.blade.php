@@ -45,6 +45,9 @@
 
 @push('scripts')
 <script>
+    const totalBobot = document.getElementById('totalBobot');
+    const submitBtn = document.getElementById('submitBtn');
+
     function updateTotal() {
         let total = 0;
         document.querySelectorAll('.bobot-input').forEach(input => {

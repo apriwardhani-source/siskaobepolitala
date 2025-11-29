@@ -27,12 +27,14 @@ class KaprodiCapaianPembelajaranLulusanController extends Controller
         // Query baru tanpa cpl_pl (karena sudah di-drop)
         $query = DB::table('capaian_profil_lulusans as cpl')
             ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
             ->select(
                 'cpl.id_cpl',
                 'cpl.deskripsi_cpl',
                 'cpl.kode_cpl',
                 'cpl.status_cpl',
-                'prodis.nama_prodi'
+                'prodis.nama_prodi',
+                'tahun.tahun as tahun'
             )
             ->where('cpl.kode_prodi', $kodeProdi)
             ->orderBy('cpl.kode_cpl', 'asc');

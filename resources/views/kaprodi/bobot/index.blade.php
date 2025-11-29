@@ -4,8 +4,17 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot CPL - MK (Kaprodi)</h1>
-      <p class="mt-2 text-sm text-gray-600">Pembobotan kontribusi MK terhadap CPL di prodi Anda</p>
+      <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-balance-scale text-white text-2xl"></i>
+          </div>
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot CPL - MK (Kaprodi)</h1>
+          <p class="mt-2 text-sm text-gray-600">Pembobotan kontribusi MK terhadap CPL di prodi Anda</p>
+        </div>
+      </div>
     </div>
 
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
@@ -53,31 +62,45 @@
         <h2 class="text-lg font-semibold text-gray-800">Daftar Bobot</h2>
       </div>
       <div class="overflow-x-auto">
-        <table class="min-w-full text-sm">
-          <thead class="bg-gray-100">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+          <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
             <tr>
-              <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode MK</th>
-              <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode CPL</th>
-              <th class="px-6 py-3 text-left font-semibold text-gray-700">Bobot</th>
-              <th class="px-6 py-3"></th>
+              <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
+              <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode MK</th>
+              <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode CPL</th>
+              <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Bobot</th>
+              <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
             </tr>
           </thead>
-          <tbody class="divide-y">
-            @forelse(($bobots ?? []) as $b)
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-3">{{ $b->kode_mk }}</td>
-                <td class="px-6 py-3">{{ $b->kode_cpl ?? ($b->kode_cpl ?? '-') }}</td>
-                <td class="px-6 py-3">{{ $b->bobot }}</td>
-                <td class="px-6 py-3 text-right">
-                  <a href="{{ route('kaprodi.bobot.detail', $b->id_cpl) }}" class="inline-flex items-center px-3 py-1.5 text-blue-600 hover:text-blue-800">
+          <tbody class="bg-white divide-y divide-gray-200">
+            @forelse(($bobots ?? []) as $index => $b)
+              <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
+                  {{ $index + 1 }}
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-center">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                    {{ $b->kode_mk }}
+                  </span>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-center">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                    {{ $b->kode_cpl ?? '-' }}
+                  </span>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
+                  {{ $b->bobot }}
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
+                  <a href="{{ route('kaprodi.bobot.detail', $b->id_cpl) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200">
                     <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                    Detail CPL
+                    Detail
                   </a>
                 </td>
               </tr>
             @empty
               <tr>
-                <td colspan="4" class="px-6 py-6 text-center text-gray-600">Tidak ada data.</td>
+                <td colspan="5" class="px-6 py-6 text-center text-gray-600">Tidak ada data.</td>
               </tr>
             @endforelse
           </tbody>

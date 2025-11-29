@@ -9,14 +9,23 @@
         
         <!-- Header with Prodi Info -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Dashboard Kurikulum OBE</h1>
-            <div class="mt-2 flex items-center gap-2">
-                <span class="inline-flex items-center px-3 py-1 rounded-lg bg-blue-100 text-blue-800 text-sm font-semibold">
-                    {{ $prodi->kode_prodi }}
-                </span>
-                <span class="text-gray-700 font-medium">{{ $prodi->nama_prodi }}</span>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Dashboard Kurikulum OBE</h1>
+                    <div class="mt-2 flex items-center gap-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-lg bg-blue-100 text-blue-800 text-sm font-semibold">
+                            {{ $prodi->kode_prodi }}
+                        </span>
+                        <span class="text-gray-700 font-medium">{{ $prodi->nama_prodi }}</span>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-600">Monitoring progress implementasi kurikulum berbasis Outcome-Based Education</p>
+                </div>
             </div>
-            <p class="mt-1 text-sm text-gray-600">Monitoring progress implementasi kurikulum berbasis Outcome-Based Education</p>
         </div>
 
         <!-- Toolbar -->

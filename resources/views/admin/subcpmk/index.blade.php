@@ -1,13 +1,21 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-        
-        <!-- Header -->
+        <!-- Header ala Wadir1 -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Sub CPMK</h1>
-            <p class="mt-2 text-sm text-gray-600">Kelola sub capaian pembelajaran mata kuliah</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-list-check text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Sub CPMK</h1>
+                    <p class="mt-1 text-sm text-gray-600">Daftar indikator pencapaian per CPMK</p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -31,194 +39,105 @@
         </div>
         @endif
 
-        <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
-            <!-- Toolbar -->
-            <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Daftar Sub CPMK</h2>
-                    
-                    <!-- Filters & Search -->
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <select id="prodi" name="kode_prodi" onchange="updateFilter()"
-                                class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" {{ empty($kode_prodi) ? 'selected' : '' }} disabled>Pilih Prodi</option>
-                            @foreach ($prodis as $prodi)
-                                <option value="{{ $prodi->kode_prodi }}" {{ $kode_prodi == $prodi->kode_prodi ? 'selected' : '' }}>
-                                    {{ $prodi->nama_prodi }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                                class="w-full sm:w-64 px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                            @if ($tahun_tersedia->isNotEmpty())
-                                @foreach ($tahun_tersedia as $thn)
-                                    <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                    </option>
+        <!-- Kartu Filter -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('admin.subcpmk.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+                            <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua Prodi</option>
+                                @foreach(($prodis ?? []) as $p)
+                                  <option value="{{ $p->kode_prodi }}" {{ ($kode_prodi ?? '')==$p->kode_prodi ? 'selected' : '' }}>
+                                      {{ $p->nama_prodi }}
+                                  </option>
                                 @endforeach
-                            @endif
-                        </select>
-
-                        <div class="relative w-full sm:w-80">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
-                            </div>
-                            <input type="text" id="search" placeholder="Cari sub CPMK..." 
-                                   class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg 
-                                          focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-                                          placeholder-gray-400 text-sm transition-all duration-200">
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua</option>
+                                @foreach(($tahun_tersedia ?? []) as $t)
+                                  <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '')==$t->id_tahun ? 'selected' : '' }}>
+                                      {{ $t->tahun }}
+                                  </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="self-end flex gap-2">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>
+                                Tampilkan Data
+                            </button>
+                            <a href="{{ route('admin.export.subcpmk', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" 
+                               class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </a>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
+        </div>
 
-                <!-- Filter Info -->
-                @if ($kode_prodi || $id_tahun)
-                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                        @if ($kode_prodi)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                Prodi: {{ $prodis->where('kode_prodi', $kode_prodi)->first()->nama_prodi ?? $kode_prodi }}
-                            </span>
-                        @endif
-                        @if ($id_tahun)
-                            @php
-                                $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                            @endphp
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                            </span>
-                        @endif
-                        <a href="{{ route('admin.subcpmk.index') }}" 
-                           class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                            Reset filter
-                        </a>
+        @php $isFiltered = !empty($kode_prodi) || !empty($id_tahun); @endphp
+
+        @if(!$isFiltered)
+            <!-- Empty state sebelum filter -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
                     </div>
                 </div>
-                @endif
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data Sub CPMK.</p>
             </div>
-
-            <!-- Content -->
-            @if (empty($kode_prodi))
-                <!-- Empty State - No Prodi Selected -->
-                <div class="px-6 py-16 text-center">
-                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Program Studi</h3>
-                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Silakan pilih program studi terlebih dahulu untuk menampilkan data Sub CPMK.
-                    </p>
+        @elseif(($subcpmks ?? collect())->isNotEmpty())
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h2 class="text-lg font-semibold text-gray-800">Daftar Sub CPMK</h2>
                 </div>
-            @elseif ($subcpmks->isEmpty())
-                <!-- Empty State - No Data -->
-                <div class="px-6 py-16 text-center">
-                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data Sub CPMK</h3>
-                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Tidak ada data Sub CPMK untuk program studi yang dipilih.
-                    </p>
-                </div>
-            @else
-                <!-- Table -->
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-100">
                             <tr>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode CPMK</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Deskripsi CPMK</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Sub CPMK</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Uraian Sub CPMK</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Aksi</th>
+                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode CPMK</th>
+                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Sub CPMK</th>
+                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Uraian</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach ($subcpmks as $index => $subcpmk)
-                            <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
-                                    {{ $index + 1 }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                        {{ $subcpmk->kode_cpmk }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-4 text-sm text-gray-700">
-                                    {{ $subcpmk->deskripsi_cpmk ?? '-' }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
-                                        {{ $subcpmk->sub_cpmk }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-4 text-sm text-gray-700">
-                                    {{ $subcpmk->uraian_cpmk }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
-                                    <a href="{{ route('admin.subcpmk.detail', $subcpmk->id_sub_cpmk) }}"
-                                       class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 inline-block"
-                                       title="Detail">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tbody class="divide-y">
+                            @foreach($subcpmks as $row)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-3">{{ $row->kode_cpmk }}</td>
+                                    <td class="px-6 py-3">{{ $row->sub_cpmk }}</td>
+                                    <td class="px-6 py-3">{{ $row->uraian_cpmk }}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            @endif
+            </div>
+        @elseif(!empty($kode_prodi))
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                <div class="text-sm text-yellow-800">Data kosong untuk filter yang dipilih.</div>
+            </div>
+        @endif
 
-        </div>
     </div>
 </div>
 
 @push('scripts')
 <script>
-function updateFilter() {
-    const prodiSelect = document.getElementById('prodi');
-    const tahunSelect = document.getElementById('tahun');
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const kodeProdi = prodiSelect.value;
-    const idTahun = tahunSelect.value;
-
-    if (kodeProdi) {
-        urlParams.set('kode_prodi', kodeProdi);
-    }
-
-    if (idTahun) {
-        urlParams.set('id_tahun', idTahun);
-    }
-
-    const newUrl = `{{ route('admin.subcpmk.index') }}?${urlParams.toString()}`;
-    window.location.href = newUrl;
-}
-
-// Search functionality
-document.getElementById('search').addEventListener('input', function() {
-    const searchValue = this.value.toLowerCase();
-    const rows = document.querySelectorAll('tbody tr');
-
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchValue) ? '' : 'none';
-    });
-});
-
 // Auto-hide alerts
 setTimeout(function() {
     const el = document.getElementById('alert-success');

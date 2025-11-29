@@ -6,8 +6,17 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Ranking Mahasiswa (SAW)</h1>
-            <p class="mt-2 text-sm text-gray-600">Upload data nilai mahasiswa dan sistem akan menghitung ranking menggunakan metode Simple Additive Weighting (SAW)</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-trophy text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Ranking Mahasiswa (SAW)</h1>
+                    <p class="mt-2 text-sm text-gray-600">Upload data nilai mahasiswa dan sistem akan menghitung ranking menggunakan metode Simple Additive Weighting (SAW)</p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -43,12 +52,9 @@
 
         <!-- Form Pilih Kriteria Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-lg font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
                     Pilih Kriteria untuk Ranking SAW
                 </h2>
             </div>
@@ -58,7 +64,11 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Judul/Keterangan <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-heading text-blue-500 mr-1"></i>
+                            Judul/Keterangan <span class="text-red-500">*</span>
+                        </label>
+                        <p class="text-[11px] text-gray-500 mb-2">Berikan nama sesi ranking yang jelas, misalnya berdasarkan semester atau tahun.</p>
                         <input type="text" name="judul" required 
                                value="{{ old('judul') }}"
                                placeholder="Contoh: Ranking Semester Gasal 2024/2025"
@@ -66,8 +76,12 @@
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Akademik <span class="text-red-500">*</span></label>
-                        <select name="id_tahun" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <i class="fas fa-calendar text-green-500 mr-1"></i>
+                            Tahun Akademik <span class="text-red-500">*</span>
+                        </label>
+                        <p class="text-[11px] text-gray-500 mb-2">Pilih tahun kurikulum yang digunakan untuk perhitungan ranking.</p>
+                        <select name="id_tahun" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">- Pilih Tahun -</option>
                             @foreach($tahun_tersedia as $thn)
                                 <option value="{{ $thn->id_tahun }}" {{ old('id_tahun') == $thn->id_tahun ? 'selected' : '' }}>
@@ -150,26 +164,26 @@
 
         <!-- Daftar Session -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <div class="px-6 py-5 border-b border-gray-200">
+            <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">Riwayat Ranking</h2>
             </div>
             
             <div class="overflow-x-auto">
                 @if($sessions->count() > 0)
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Judul</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tahun</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Mahasiswa</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Diupload Oleh</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Judul</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Tahun</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Total Mahasiswa</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Diupload Oleh</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Tanggal</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($sessions as $session)
-                            <tr class="hover:bg-gray-50">
+                            @foreach($sessions as $index => $session)
+                            <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $session->judul }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
                                     {{ $session->tahun ? $session->tahun->nama_kurikulum . ' - ' . $session->tahun->tahun : '-' }}
@@ -180,7 +194,11 @@
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('kaprodi.ranking.hasil', $session->id_session) }}" 
-                                           class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 text-xs font-medium">
+                                           class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium shadow-sm transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
                                             Lihat Hasil
                                         </a>
                                         <form action="{{ route('kaprodi.ranking.destroy', $session->id_session) }}" method="POST" 

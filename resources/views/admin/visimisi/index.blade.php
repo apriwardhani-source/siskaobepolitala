@@ -1,45 +1,85 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
-    <div class="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-md mx-2 md:mx-0">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
 
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Visi Misi</h1>
-            <hr class="border-t-2 md:border-t-4 border-black my-3 md:my-4 mx-auto">
-        </div>
-
-        {{-- Visi Politala Section --}}
-        <div class="mb-8 p-6 bg-green-50 rounded-lg shadow-sm">
-            <h2 class="text-2xl font-semibold text-blue-800 text-center mb-4">Visi Politala</h2>
-            <p class="text-gray-700 text-center">{{ $visis ? $visis->visi : 'Data visi belum tersedia' }}</p>
-        </div>
-
-        {{-- Misi Politala Section --}}
-        <div class="mb-8 p-6 bg-green-50 rounded-lg shadow-sm">
-            <h2 class="text-2xl font-semibold text-green-800 text-center mb-4">Misi Politala</h2>
-            @if($misis->count() > 0)
-            <ol class="list-decimal list-inside text-gray-700 space-y-2">
-                @foreach ($misis as $misi)
-                    <li>{{ $misi->misi }}</li>
-                @endforeach
-            </ol>
-            @else
-            <p class="text-gray-700 text-center">Data misi belum tersedia</p>
-            @endif
-        </div>
-
-        {{-- Visi Keilmuan Prodi Section --}}
-        <div class="p-6 bg-yellow-50 rounded-lg shadow-sm">
-            <h2 class="text-2xl font-semibold text-yellow-800 text-center mb-6">Visi Keilmuan Prodi</h2>
-            <div class="space-y-6">
-                @foreach ($prodis as $prodi)
-                    <div class="text-center border-b border-yellow-50 pb-4 last:border-b-0">
-                        <h3 class="text-lg font-medium text-yellow-700 mb-2">{{ $prodi->nama_prodi }}</h3>
-                        <p class="text-gray-700">{{ $prodi->visi_prodi }}</p>
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-bullseye text-2xl"></i>
                     </div>
-                @endforeach
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Visi &amp; Misi Politala</h1>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Ringkasan arah dan tujuan institusi sebagai panduan seluruh program OBE.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- Content -->
+        <div class="grid gap-6 md:grid-cols-2">
+
+            {{-- Visi Politala Section --}}
+            <div class="bg-white rounded-xl shadow-lg border border-blue-50 overflow-hidden">
+                <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+                    <div class="flex items-center space-x-3">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white shadow">
+                            <i class="fas fa-eye text-sm"></i>
+                        </span>
+                        <div>
+                            <h2 class="text-lg font-semibold text-blue-900">Visi Politala</h2>
+                            <p class="text-xs text-blue-600">Gambaran besar tujuan akhir yang ingin dicapai.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-5">
+                    <p class="text-gray-700 leading-relaxed text-justify md:text-left">
+                        {{ $visis ? $visis->visi : 'Data visi belum tersedia' }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- Misi Politala Section --}}
+            <div class="bg-white rounded-xl shadow-lg border border-green-50 overflow-hidden">
+                <div class="px-6 py-4 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-green-100">
+                    <div class="flex items-center space-x-3">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white shadow">
+                            <i class="fas fa-list-ul text-sm"></i>
+                        </span>
+                        <div>
+                            <h2 class="text-lg font-semibold text-emerald-900">Misi Politala</h2>
+                            <p class="text-xs text-emerald-700">Langkah strategis untuk mewujudkan visi.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-5">
+                    @if($misis->count() > 0)
+                        <ol class="space-y-3">
+                            @foreach ($misis as $index => $misi)
+                                <li class="flex items-start space-x-3">
+                                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-500 text-white text-xs font-semibold mt-0.5 shadow">
+                                        {{ $index + 1 }}
+                                    </span>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        {{ $misi->misi }}
+                                    </p>
+                                </li>
+                            @endforeach
+                        </ol>
+                    @else
+                        <p class="text-gray-700 text-center">Data misi belum tersedia</p>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+
     </div>
+</div>
 @endsection
+

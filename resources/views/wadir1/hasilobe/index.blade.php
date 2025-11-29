@@ -180,16 +180,47 @@
 
                 <div class="divide-y divide-gray-200">
                     @foreach($mahasiswas as $mahasiswa)
+                    @php
+                        $colors = [
+                            ['bg' => '#F44336', 'text' => '#FFFFFF'],
+                            ['bg' => '#E91E63', 'text' => '#FFFFFF'],
+                            ['bg' => '#9C27B0', 'text' => '#FFFFFF'],
+                            ['bg' => '#3F51B5', 'text' => '#FFFFFF'],
+                            ['bg' => '#2196F3', 'text' => '#FFFFFF'],
+                            ['bg' => '#00BCD4', 'text' => '#FFFFFF'],
+                            ['bg' => '#4CAF50', 'text' => '#FFFFFF'],
+                            ['bg' => '#FF9800', 'text' => '#FFFFFF'],
+                            ['bg' => '#795548', 'text' => '#FFFFFF'],
+                        ];
+
+                        $hash = 0;
+                        $name = (string) $mahasiswa->nama_mahasiswa;
+                        for ($i = 0; $i < strlen($name); $i++) {
+                            $hash = ord($name[$i]) + (($hash << 5) - $hash);
+                        }
+                        // Pastikan indeks selalu berada dalam rentang 0..(count($colors)-1)
+                        $colorIndex = abs($hash) % count($colors);
+                        if (!isset($colors[$colorIndex])) {
+                            $colorIndex = 0;
+                        }
+                        $avatarColor = $colors[$colorIndex];
+
+                        $words = explode(' ', trim($name));
+                        $initials = count($words) >= 2
+                            ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1))
+                            : strtoupper(substr($name, 0, 2));
+                    @endphp
                     <div class="mahasiswa-item hover:bg-blue-50 transition-colors duration-150">
                         <div class="px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center space-x-4 flex-1">
                                 <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                        {{ strtoupper(substr($mahasiswa->nama, 0, 1)) }}
+                                    <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shadow-md"
+                                         style="background-color: {{ $avatarColor['bg'] }}; color: {{ $avatarColor['text'] }};">
+                                        {{ $initials }}
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <h3 class="text-sm font-semibold text-gray-900">{{ $mahasiswa->nama }}</h3>
+                                    <h3 class="text-sm font-semibold text-gray-900">{{ $mahasiswa->nama_mahasiswa }}</h3>
                                     <div class="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                                         <span class="flex items-center">
                                             <i class="fas fa-id-card mr-1"></i>
@@ -201,7 +232,7 @@
                                         </span>
                                         <span class="flex items-center">
                                             <i class="fas fa-calendar mr-1"></i>
-                                            Angkatan {{ $mahasiswa->tahun_kurikulum }}
+                                            Angkatan {{ $mahasiswa->tahunKurikulum->tahun ?? '-' }}
                                         </span>
                                     </div>
                                 </div>

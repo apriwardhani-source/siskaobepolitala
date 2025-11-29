@@ -179,9 +179,17 @@
                     {{ $cpl->tahun ?? '-' }}
                   </td>
                   <td class="px-4 py-3 whitespace-nowrap">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                 {{ $cpl->status_cpl === 'Kompetensi Utama Bidang' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
-                      {{ $cpl->status_cpl === 'Kompetensi Utama Bidang' ? 'Utama' : 'Tambahan' }}
+                    @php
+                      $status = $cpl->status_cpl;
+                      $statusLabel = $status === 'Kompetensi Utama Bidang'
+                          ? 'Utama'
+                          : ($status === 'Kompetensi Tambahan' ? 'Tambahan' : '-');
+                      $statusClass = $status === 'Kompetensi Utama Bidang'
+                          ? 'bg-green-100 text-green-800'
+                          : ($status === 'Kompetensi Tambahan' ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-600');
+                    @endphp
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $statusClass }}">
+                      {{ $statusLabel }}
                     </span>
                   </td>
                   <td class="px-4 py-3 whitespace-nowrap text-sm text-center">
