@@ -21,33 +21,56 @@ class TimCapaianPembelajaranLulusanController extends Controller
         }
 
         $kodeProdi = $user->kode_prodi;
+        $id_tahun = $request->get('id_tahun');
 
-        $capaianpembelajaranlulusans = DB::table('capaian_profil_lulusans')
-            ->leftJoin('prodis', 'capaian_profil_lulusans.kode_prodi', '=', 'prodis.kode_prodi')
+        // Tahun kurikulum yang tersedia (untuk dropdown)
+        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+        // Query CPL hanya untuk prodi login, opsional filter tahun
+        $query = DB::table('capaian_profil_lulusans as cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->select(
-                'capaian_profil_lulusans.id_cpl',
-                'capaian_profil_lulusans.deskripsi_cpl',
-                'capaian_profil_lulusans.kode_cpl',
+                'cpl.id_cpl',
+                'cpl.deskripsi_cpl',
+                'cpl.kode_cpl',
+                'cpl.id_tahun',
                 'prodis.nama_prodi'
             )
-            ->where('capaian_profil_lulusans.kode_prodi', $kodeProdi)
-            ->orderBy('capaian_profil_lulusans.kode_cpl', 'asc')
+            ->where('cpl.kode_prodi', $kodeProdi);
+
+        if ($id_tahun) {
+            $query->where('cpl.id_tahun', $id_tahun);
+        }
+
+        $capaianpembelajaranlulusans = $query
+            ->orderBy('cpl.kode_cpl', 'asc')
             ->get();
 
-        return view("tim.capaianpembelajaranlulusan.index", compact("capaianpembelajaranlulusans"));
+        // Nama prodi untuk header/filter
+        $prodiName = $capaianpembelajaranlulusans->first()->nama_prodi
+            ?? optional($user->prodi)->nama_prodi
+            ?? '-';
+
+        return view("tim.capaianpembelajaranlulusan.index", compact(
+            "capaianpembelajaranlulusans",
+            "tahun_tersedia",
+            "id_tahun",
+            "prodiName"
+        ));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::user();
         if (!$user || !$user->kode_prodi) {
             abort(403);
         }
 
-        $kodeProdi = $user->kode_prodi;
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        $id_tahun = $request->get('id_tahun');
+        $selectedYear = collect($tahun_tersedia)->firstWhere('id_tahun', $id_tahun);
 
-        return view('tim.capaianpembelajaranlulusan.create', compact('tahun_tersedia'));
+        return view('tim.capaianpembelajaranlulusan.create', compact('tahun_tersedia', 'selectedYear', 'id_tahun'));
     }
 
 
@@ -58,12 +81,14 @@ class TimCapaianPembelajaranLulusanController extends Controller
         $request->validate([
             'kode_cpl' => 'required',
             'deskripsi_cpl' => 'required',
+            'id_tahun' => 'required|exists:tahun,id_tahun',
         ]);
 
         $cpl = CapaianProfilLulusan::create([
             'kode_cpl' => $request->kode_cpl,
             'deskripsi_cpl' => $request->deskripsi_cpl,
             'kode_prodi' => $user->kode_prodi,
+            'id_tahun' => $request->id_tahun,
         ]);
 
         return redirect()->route('tim.capaianpembelajaranlulusan.index')->with('sukses', 'Capaian Pembelajaran Lulusan berhasil ditambahkan.');
@@ -86,30 +111,23 @@ class TimCapaianPembelajaranLulusanController extends Controller
 
     public function update(Request $request, CapaianProfilLulusan $id_cpl)
     {
+        // Struktur baru tidak lagi memakai relasi CPL-PL di tabel cpl_pl.
+        // Admin prodi hanya mengubah kode, deskripsi, dan status CPL.
         $request->validate([
-            'kode_cpl' => 'required',
+            'kode_cpl'      => 'required',
             'deskripsi_cpl' => 'required',
-            'id_pl' => 'required|array',
+            'status_cpl'    => 'nullable|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
         ]);
 
         $id_cpl->update([
-            'kode_cpl' => $request->kode_cpl,
+            'kode_cpl'      => $request->kode_cpl,
             'deskripsi_cpl' => $request->deskripsi_cpl,
-            'status_cpl' => $request->status_cpl ?? 'active',
+            'status_cpl'    => $request->status_cpl,
         ]);
 
-        DB::table('cpl_pl')->where('id_cpl', $id_cpl->id_cpl)->delete();
-
-        if ($request->has('id_pl')) {
-            foreach ($request->id_pl as $id_pl) {
-                DB::table('cpl_pl')->insert([
-                    'id_cpl' => $id_cpl->id_cpl,
-                    'id_pl' => $id_pl,
-                ]);
-            }
-        }
-
-        return redirect()->route('tim.capaianpembelajaranlulusan.index')->with('sukses', 'Capaian Pembelajaran Lulusan berhasil diperbarui.');
+        return redirect()
+            ->route('tim.capaianpembelajaranlulusan.index')
+            ->with('sukses', 'Capaian Pembelajaran Lulusan berhasil diperbarui.');
     }
 
     public function detail(CapaianProfilLulusan $id_cpl)

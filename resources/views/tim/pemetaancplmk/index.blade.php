@@ -6,8 +6,57 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan CPL - MK</h1>
-            <p class="mt-2 text-sm text-gray-600">Matriks pemetaan capaian profil lulusan terhadap mata kuliah</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-project-diagram text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan CPL - MK</h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Matriks pemetaan capaian profil lulusan terhadap mata kuliah program studi Anda.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Card ala Organisasi MK -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-filter mr-2"></i>Filter Pemetaan CPL - MK
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('tim.pemetaancplmk.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+                            <select disabled class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-sm">
+                                <option>{{ $prodi->nama_prodi ?? '-' }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua</option>
+                                @foreach(($tahun_tersedia ?? []) as $thn)
+                                    <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? '') == $thn->id_tahun ? 'selected' : '' }}>
+                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="self-end flex gap-2">
+                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i> Tampilkan Data
+                            </button>
+                            {{-- Export Excel khusus pemetaan tim belum disediakan, bisa ditambah di sini jika route tersedia --}}
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -41,42 +90,7 @@
                         <h2 class="text-lg font-semibold text-gray-900">Matriks Pemetaan</h2>
                         <p class="mt-1 text-sm text-gray-500">Centang menunjukkan CPL terpetakan ke MK</p>
                     </div>
-                    
-                    <!-- Filter -->
-                    <div class="w-64">
-                        <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                            @if (isset($tahun_tersedia))
-                                @foreach ($tahun_tersedia as $thn)
-                                    <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
                 </div>
-
-                <!-- Filter Info -->
-                @if ($id_tahun)
-                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                        @php
-                            $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                        @endphp
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                            Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                        </span>
-                        <a href="{{ route('tim.pemetaancplmk.index') }}" 
-                           class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                            Reset filter
-                        </a>
-                    </div>
-                </div>
-                @endif
             </div>
 
             <!-- Info Banner -->
@@ -153,19 +167,15 @@
                                                 }
                                             @endphp
                                             <div class="flex items-center justify-center">
-                                                <div class="relative">
-                                                    <input type="checkbox" 
-                                                           {{ $isMapped ? 'checked' : '' }} 
-                                                           disabled
-                                                           class="w-6 h-6 text-green-600 bg-white border-2 border-gray-300 rounded 
-                                                                  focus:ring-2 focus:ring-green-500 cursor-not-allowed
-                                                                  {{ $isMapped ? 'checked-custom' : '' }}">
-                                                    @if($isMapped)
-                                                    <svg class="absolute top-0.5 left-0.5 w-5 h-5 text-white pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                                                    </svg>
-                                                    @endif
-                                                </div>
+                                                @if($isMapped)
+                                                    <div class="w-6 h-6 border-2 border-gray-300 rounded bg-green-600 flex items-center justify-center">
+                                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                    </div>
+                                                @else
+                                                    <div class="w-6 h-6 border-2 border-gray-300 rounded bg-white"></div>
+                                                @endif
                                             </div>
                                         </td>
                                     @endforeach
@@ -200,12 +210,6 @@
 
 @push('styles')
 <style>
-/* Custom checkbox styling */
-input[type="checkbox"]:checked.checked-custom {
-    background-color: #10b981;
-    border-color: #10b981;
-}
-
 /* Sticky header and column styling */
 .sticky {
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -257,19 +261,6 @@ input[type="checkbox"]:checked.checked-custom {
 
 @push('scripts')
 <script>
-function updateFilter() {
-    const tahunSelect = document.getElementById('tahun');
-    const idTahun = tahunSelect.value;
-
-    let url = "{{ route('tim.pemetaancplmk.index') }}";
-    
-    if (idTahun) {
-        url += '?id_tahun=' + encodeURIComponent(idTahun);
-    }
-
-    window.location.href = url;
-}
-
 // Auto-hide alerts
 setTimeout(function() {
     const el = document.getElementById('alert-success');

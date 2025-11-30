@@ -14,36 +14,41 @@ use Maatwebsite\Excel\Facades\Excel;
 class TimCapaianPembelajaranMataKuliahController extends Controller
 {
     public function index()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if (!$user || !$user->kode_prodi) {
-        abort(403);
+        if (!$user || !$user->kode_prodi) {
+            abort(403);
+        }
+
+        $kodeProdi = $user->kode_prodi;
+        $id_tahun = request()->get('id_tahun');
+        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+
+        $query = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
+            ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+            ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+            ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->where('cpl.kode_prodi', $kodeProdi)
+            ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
+            ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
+            ->orderBy('cpmk.kode_cpmk', 'asc');
+
+        if ($id_tahun) {
+            $query->where('cpl.id_tahun', $id_tahun);
+        }
+
+        $cpmks = $query->get();
+
+        // Nama prodi untuk tampilan filter dan informasi ringkas
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
+        $prodiName = $prodi->nama_prodi ?? '-';
+
+        return view(
+            'tim.capaianpembelajaranmatakuliah.index',
+            compact('cpmks', 'id_tahun', 'tahun_tersedia', 'prodiName')
+        );
     }
-
-    $kodeProdi = $user->kode_prodi;
-    $id_tahun = request()->get('id_tahun');
-    $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-
-    $query = DB::table('capaian_pembelajaran_mata_kuliahs as cpmk')
-        ->leftJoin('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
-        ->leftJoin('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-        ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
-        ->where('cpl.kode_prodi', $kodeProdi)
-        ->select('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
-        ->groupBy('cpmk.id_cpmk', 'cpmk.kode_cpmk', 'cpmk.deskripsi_cpmk', 'prodis.nama_prodi')
-        ->orderBy('cpmk.kode_cpmk', 'asc');
-
-    if ($id_tahun) {
-        $query->where('cpl.id_tahun', $id_tahun);
-    }
-
-    // ✅ ubah variabel jadi cpmks
-    $cpmks = $query->get();
-
-    return view("tim.capaianpembelajaranmatakuliah.index", compact("cpmks", "id_tahun", "tahun_tersedia"));
-}
-
 
     public function create()
     {
@@ -249,11 +254,11 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             $failures = $e->failures();
             $errorMessages = [];
-            
+
             foreach ($failures as $failure) {
                 $errorMessages[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
             }
-            
+
             return redirect()->back()->with('error', 'Import gagal: ' . implode(' | ', array_slice($errorMessages, 0, 3)))->withInput();
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Import gagal: ' . $e->getMessage())->withInput();
@@ -278,23 +283,24 @@ class TimCapaianPembelajaranMataKuliahController extends Controller
             ['CPMK-03', 'Mahasiswa mampu menganalisis kompleksitas algoritma', 'MK03'],
         ];
 
-        $callback = function() use ($columns, $sampleData) {
+        $callback = function () use ($columns, $sampleData) {
             $file = fopen('php://output', 'w');
-            
+
             // UTF-8 BOM untuk Excel compatibility
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
             // Header
             fputcsv($file, $columns);
-            
+
             // Sample data
             foreach ($sampleData as $row) {
                 fputcsv($file, $row);
             }
-            
+
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
     }
 }
+

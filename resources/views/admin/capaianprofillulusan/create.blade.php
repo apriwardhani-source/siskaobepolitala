@@ -102,15 +102,14 @@
                                    required>
                         </div>
 
-                        <!-- Status CPL -->
+                        <!-- Status CPL (opsional) -->
                         <div class="space-y-2">
                             <label for="status_cpl" class="block text-sm font-semibold text-gray-800">
-                                Status CPL
+                                Status CPL <span class="text-xs text-gray-500 font-normal">(opsional)</span>
                             </label>
                             <select id="status_cpl" name="status_cpl"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    required>
-                                <option value="" disabled {{ old('status_cpl') ? '' : 'selected' }}>Pilih Status CPL</option>
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="" {{ old('status_cpl') ? '' : 'selected' }}>Tidak ada status</option>
                                 <option value="Kompetensi Utama Bidang" {{ old('status_cpl') === 'Kompetensi Utama Bidang' ? 'selected' : '' }}>
                                     Kompetensi Utama Bidang
                                 </option>
@@ -153,4 +152,3 @@
     </div>
 </div>
 @endsection
-

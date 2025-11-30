@@ -260,28 +260,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const mkCheckboxes = document.querySelectorAll('input[name="mata_kuliah[]"]');
     
     function filterMataKuliah() {
+        // Jika elemen tidak ditemukan, hentikan saja
+        if (!prodiSelect || mkItems.length === 0) {
+            return;
+        }
+
         const selectedProdi = prodiSelect.value;
         
         if (!selectedProdi) {
             // Jika prodi belum dipilih, sembunyikan semua MK dan tampilkan peringatan
             mkItems.forEach(item => {
                 item.style.display = 'none';
-                item.querySelector('input').checked = false;
+                const input = item.querySelector('input');
+                if (input) {
+                    input.checked = false;
+                }
             });
-            
-            // Tampilkan pesan
-            const container = document.querySelector('.mk-item').closest('.space-y-3');
-            if (container && !document.getElementById('prodi-warning')) {
-                container.innerHTML = '<div id="prodi-warning" class="text-center py-8"><p class="text-gray-500">Silakan pilih Program Studi terlebih dahulu</p></div>';
-            }
         } else {
-            // Restore container jika ada warning
-            const warning = document.getElementById('prodi-warning');
-            if (warning) {
-                location.reload(); // Reload untuk restore original content
-                return;
-            }
-            
             // Filter MK berdasarkan prodi
             let visibleCount = 0;
             mkItems.forEach(item => {
@@ -296,12 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Jika tidak ada MK untuk prodi ini
-            if (visibleCount === 0) {
-                const container = document.querySelector('.mk-item').closest('.space-y-3');
-                if (container) {
-                    container.innerHTML = '<div class="text-center py-8"><p class="text-red-500">Tidak ada mata kuliah untuk prodi yang dipilih</p></div>';
-                }
-            }
+            // (opsional) Anda bisa menambahkan pesan di sini jika diperlukan
         }
     }
     

@@ -1,157 +1,229 @@
 @extends('layouts.tim.app')
 
 @section('content')
-    <div class="ml-20 mr-20">
-        <h1 class="text-4xl font-extrabold mb-6 text-center">Tambah Capaian Pembelajaran Mata Kuliah</h1>
-        <hr class="w-full border border-black mb-4">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
 
-        @if ($errors->any())
-            <div class="text-red-600 mb-4">
-                <ul class="list-disc ml-6">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('tim.capaianpembelajaranmatakuliah.store') }}" method="POST">
-            @csrf
-
-            {{-- CPL Terkait --}}
-            <label for="id_cpl" class="text-xl font-semibold">CPL Terkait</label>
-            <select id="id_cpl" name="id_cpl"
-                class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
-                required>
-                <option value="">-- Pilih CPL --</option>
-                @foreach ($cpls as $cpl)
-                    <option value="{{ $cpl->id_cpl }}">
-                        {{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}
-                    </option>
-                @endforeach
-            </select>
-
-            {{-- MK Terkait (Dinamis) --}}
-            <div id="mkContainer" class="mt-3">
-                <label class="text-xl font-semibold">MK Terkait:</label>
-                <div id="mkList"
-                    class="mt-1 w-full p-3 border border-black rounded-lg bg-gray-50 max-h-[300px] overflow-y-auto min-h-[60px] text-sm">
-                </div>
-                <p class="italic text-blue-600 text-sm mt-1">*Centang mata kuliah yang akan dikaitkan dengan CPMK ini</p>
-            </div>
-
-            {{-- Kode CPMK --}}
-            <label for="kode_cpmk" class="text-xl font-semibold mt-4 block">Kode CPMK</label>
-            <input type="text" name="kode_cpmk" id="kode_cpmk"
-                class="border border-black p-3 w-full rounded-lg mt-1 mb-3" required>
-
-            {{-- Deskripsi CPMK --}}
-            <label for="deskripsi_cpmk" class="text-xl font-semibold">Deskripsi CPMK</label>
-            <input type="text" name="deskripsi_cpmk" id="deskripsi_cpmk"
-                class="border border-black p-3 w-full rounded-lg mt-1 mb-3" required>
-
-            {{-- Tombol --}}
-            <button type="submit"
-                class="px-5 py-2 bg-blue-600 rounded-lg hover:bg-blue-800 text-white font-bold mt-4">Simpan</button>
+        {{-- Header seperti admin CPL create --}}
+        <div class="mb-6">
             <a href="{{ route('tim.capaianpembelajaranmatakuliah.index') }}"
-                class="ml-2 bg-gray-600 hover:bg-gray-700 text-white font-bold px-5 py-2 rounded-lg">Kembali</a>
-        </form>
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <span class="mr-2 text-base leading-none">&larr;</span>
+                Kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-bullseye text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Tambah Capaian Pembelajaran Mata Kuliah (CPMK)
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Tambahkan CPMK baru dan kaitkan dengan CPL serta mata kuliah yang relevan.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {{-- Kartu Formulir --}}
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                <h2 class="text-lg font-semibold text-white flex items-center">
+                    <i class="fas fa-plus-circle mr-2 text-sm"></i>
+                    Formulir Tambah CPMK
+                </h2>
+            </div>
+
+            <div class="px-6 py-6">
+                @if ($errors->any())
+                    <div class="mb-5 rounded-lg bg-red-50 border-l-4 border-red-500 p-4 shadow-sm">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <h3 class="text-sm font-semibold text-red-800 mb-1">Terjadi kesalahan</h3>
+                                <ul class="text-sm text-red-700 list-disc list-inside space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('tim.capaianpembelajaranmatakuliah.store') }}" method="POST" class="space-y-6">
+                    @csrf
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {{-- CPL Terkait --}}
+                        <div class="space-y-2 md:col-span-2">
+                            <label for="id_cpl" class="block text-sm font-semibold text-gray-800">
+                                CPL Terkait
+                            </label>
+                            <select id="id_cpl" name="id_cpl"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required>
+                                <option value="">Pilih CPL</option>
+                                @foreach ($cpls as $cpl)
+                                    <option value="{{ $cpl->id_cpl }}" {{ old('id_cpl') == $cpl->id_cpl ? 'selected' : '' }}>
+                                        {{ $cpl->kode_cpl }} - {{ $cpl->deskripsi_cpl }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- MK Terkait (dinamis) --}}
+                        <div class="space-y-2 md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-800">
+                                MK Terkait
+                            </label>
+                            <div id="mkList"
+                                 class="mt-1 w-full p-3 border border-gray-300 rounded-lg bg-gray-50 max-h-72 overflow-y-auto min-h-[60px] text-sm">
+                            </div>
+                            <p class="italic text-blue-600 text-xs mt-1">
+                                *Centang mata kuliah yang akan dikaitkan dengan CPMK ini.
+                            </p>
+                        </div>
+
+                        {{-- Kode CPMK --}}
+                        <div class="space-y-2">
+                            <label for="kode_cpmk" class="block text-sm font-semibold text-gray-800">
+                                Kode CPMK
+                            </label>
+                            <input type="text" name="kode_cpmk" id="kode_cpmk"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="Contoh: CPMK01"
+                                   value="{{ old('kode_cpmk') }}"
+                                   required>
+                        </div>
+
+                        {{-- Deskripsi CPMK --}}
+                        <div class="space-y-2 md:col-span-2">
+                            <label for="deskripsi_cpmk" class="block text-sm font-semibold text-gray-800">
+                                Deskripsi CPMK
+                            </label>
+                            <textarea name="deskripsi_cpmk" id="deskripsi_cpmk" rows="3"
+                                      class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                      placeholder="Tuliskan deskripsi CPMK secara ringkas dan jelas..."
+                                      required>{{ old('deskripsi_cpmk') }}</textarea>
+                        </div>
+                    </div>
+
+                    {{-- Tombol Aksi --}}
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <a href="{{ route('tim.capaianpembelajaranmatakuliah.index') }}"
+                           class="inline-flex items-center px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-times mr-2 text-xs"></i>
+                            Batal
+                        </a>
+                        <button type="submit"
+                                class="inline-flex items-center px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                            <i class="fas fa-save mr-2 text-xs"></i>
+                            Simpan
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    @push('scripts')
-        <script>
-            const mkList = document.getElementById('mkList');
-            const cplSelect = document.getElementById('id_cpl');
+@push('scripts')
+<script>
+    const mkList = document.getElementById('mkList');
+    const cplSelect = document.getElementById('id_cpl');
 
-            cplSelect.addEventListener('change', function() {
-                const selectedCPL = this.value;
+    cplSelect.addEventListener('change', function () {
+        const selectedCPL = this.value;
 
-                if (!selectedCPL) {
-                    mkList.innerHTML = '<div class="text-gray-500 italic">Pilih CPL terlebih dahulu</div>';
-                    return;
-                }
-
-                mkList.innerHTML = '<div class="text-blue-500 italic">Memuat mata kuliah...</div>';
-
-                // Deteksi apakah localhost atau production
-                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ||
-                    window.location.hostname.includes('local');
-                let url;
-
-                if (isLocal) {
-                    url = "{{ route('tim.capaianpembelajaranmatakuliah.getMKByCPL') }}";
-                } else {
-                    url = window.location.protocol + '//' + window.location.host +
-                        "{{ route('tim.capaianpembelajaranmatakuliah.getMKByCPL', [], false) }}";
-                }
-
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        credentials: 'same-origin',
-                        body: JSON.stringify({
-                            id_cpls: [selectedCPL]
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        mkList.innerHTML = "";
-
-                        if (Array.isArray(data) && data.length > 0) {
-                            data.forEach((mk) => {
-                                mkList.innerHTML += `
-                        <label class="block my-1">
-                            <input type="checkbox" name="selected_mks[]" value="${mk.kode_mk}" class="mr-2">
-                            ${mk.kode_mk} - ${mk.nama_mk}
-                        </label>`;
-                            });
-
-                            mkList.innerHTML += `
-                    <div class="mt-3 pt-2 border-t">
-                        <button type="button" id="selectAllMK" class="text-sm text-blue-600 mr-3">Pilih Semua</button>
-                        <button type="button" id="deselectAllMK" class="text-sm text-red-600">Hapus Semua</button>
-                    </div>`;
-
-                            document.getElementById('selectAllMK').addEventListener('click', () => {
-                                mkList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked =
-                                    true);
-                            });
-
-                            document.getElementById('deselectAllMK').addEventListener('click', () => {
-                                mkList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked =
-                                    false);
-                            });
-                        } else {
-                            mkList.innerHTML = '<div class="text-red-500 italic">Tidak ada MK terkait</div>';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch Error:', error);
-                        mkList.innerHTML =
-                            `<div class="text-red-500 italic">Gagal memuat MK: ${error.message}</div>`;
-                    });
-            });
-
-            // Inisialisasi awal
+        if (!selectedCPL) {
             mkList.innerHTML = '<div class="text-gray-500 italic">Pilih CPL terlebih dahulu</div>';
+            return;
+        }
 
-            // Validasi sebelum submit (wajib pilih MK)
-            document.querySelector('form').addEventListener('submit', function(e) {
-                if (document.querySelectorAll('input[name="selected_mks[]"]:checked').length === 0) {
-                    e.preventDefault();
-                    alert('Pilih minimal satu MK terlebih dahulu!');
+        mkList.innerHTML = '<div class="text-blue-500 italic">Memuat mata kuliah...</div>';
+
+        // Deteksi apakah localhost atau production
+        const isLocal = window.location.hostname === 'localhost'
+            || window.location.hostname === '127.0.0.1'
+            || window.location.hostname.includes('local');
+
+        let url;
+        if (isLocal) {
+            url = "{{ route('tim.capaianpembelajaranmatakuliah.getMKByCPL') }}";
+        } else {
+            url = window.location.protocol + '//' + window.location.host +
+                "{{ route('tim.capaianpembelajaranmatakuliah.getMKByCPL', [], false) }}";
+        }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ id_cpls: [selectedCPL] })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                mkList.innerHTML = '';
+
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(mk => {
+                        mkList.innerHTML += `
+                            <label class="block my-1">
+                                <input type="checkbox" name="selected_mks[]" value="${mk.kode_mk}" class="mr-2">
+                                ${mk.kode_mk} - ${mk.nama_mk}
+                            </label>`;
+                    });
+
+                    mkList.innerHTML += `
+                        <div class="mt-3 pt-2 border-t">
+                            <button type="button" id="selectAllMK" class="text-sm text-blue-600 mr-3">Pilih Semua</button>
+                            <button type="button" id="deselectAllMK" class="text-sm text-red-600">Hapus Semua</button>
+                        </div>`;
+
+                    document.getElementById('selectAllMK').addEventListener('click', () => {
+                        mkList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+                    });
+
+                    document.getElementById('deselectAllMK').addEventListener('click', () => {
+                        mkList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    });
+                } else {
+                    mkList.innerHTML = '<div class="text-red-500 italic">Tidak ada MK terkait</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                mkList.innerHTML = `<div class="text-red-500 italic">Gagal memuat MK: ${error.message}</div>`;
             });
-        </script>
-    @endpush
+    });
+
+    // Inisialisasi awal
+    mkList.innerHTML = '<div class="text-gray-500 italic">Pilih CPL terlebih dahulu</div>';
+
+    // Validasi sebelum submit (wajib pilih MK)
+    document.querySelector('form').addEventListener('submit', function (e) {
+        if (document.querySelectorAll('input[name="selected_mks[]"]:checked').length === 0) {
+            e.preventDefault();
+            alert('Pilih minimal satu MK terlebih dahulu!');
+        }
+    });
+</script>
+@endpush
 @endsection
