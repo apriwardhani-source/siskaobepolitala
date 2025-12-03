@@ -520,5 +520,23 @@
         "updated_at": "2025-11-13 07:12:03",
         "google_id": null,
         "avatar": null
+    },
+    {
+        "id": 32,
+        "name": "septi",
+        "nip": "2345678",
+        "nohp": "6283136335731",
+        "email": "septi@gmail.com",
+        "email_verified_at": null,
+        "password": "$2y$12$2\/AlQVL6tTQgfiw4FKVg7ODItqcSSTG7kxBxsbCVUfgo1jeib8KTa",
+        "role": "dosen",
+        "kode_prodi": "TI",
+        "id_jurusan": null,
+        "status": "approved",
+        "remember_token": null,
+        "created_at": "2025-11-20 07:21:57",
+        "updated_at": "2025-11-20 07:21:57",
+        "google_id": null,
+        "avatar": null
     }
 ]
