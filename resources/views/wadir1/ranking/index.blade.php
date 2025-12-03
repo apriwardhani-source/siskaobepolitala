@@ -6,27 +6,37 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Data Ranking Mahasiswa (SAW)</h1>
-            <p class="mt-2 text-sm text-gray-600">Lihat hasil perhitungan ranking mahasiswa menggunakan metode Simple Additive Weighting (SAW)</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-trophy text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Data Ranking Mahasiswa (SAW)</h1>
+                    <p class="mt-2 text-sm text-gray-600">Lihat hasil perhitungan ranking mahasiswa menggunakan metode Simple Additive Weighting (SAW)</p>
+                </div>
+            </div>
         </div>
 
         <!-- Filter Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="px-6 py-5 border-b border-gray-200 bg-blue-50">
-                <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"/>
-                    </svg>
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-lg font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
                     Filter Data Ranking
                 </h2>
             </div>
             
             <form method="GET" action="{{ route('wadir1.ranking.index') }}" class="p-6">
-                <div class="flex items-end gap-4">
-                    <div class="flex-1">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Program Studi</label>
-                        <select name="kode_prodi" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">- Semua Prodi -</option>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-university text-blue-500 mr-1"></i>
+                            Program Studi
+                        </label>
+                        <select name="kode_prodi" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                            <option value="">Semua Prodi</option>
                             @foreach($prodis as $prodi)
                                 <option value="{{ $prodi->kode_prodi }}" {{ request('kode_prodi') == $prodi->kode_prodi ? 'selected' : '' }}>
                                     {{ $prodi->nama_prodi }}
@@ -34,9 +44,13 @@
                             @endforeach
                         </select>
                     </div>
-                    <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
-                        Filter
-                    </button>
+                    <div class="flex md:justify-end">
+                        <button type="submit"
+                                class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 w-full md:w-auto justify-center">
+                            <i class="fas fa-search mr-2"></i>
+                            Tampilkan Data
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -64,20 +78,20 @@
                     </div>
                 @else
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prodi</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tahun</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Mhs</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Judul</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Prodi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Tahun</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Total Mhs</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Tanggal</th>
+                                    <th class="px-6 py-3 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($sessions as $session)
-                                <tr class="hover:bg-gray-50">
+                                @foreach($sessions as $index => $session)
+                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">{{ $session->judul }}</div>
                                     </td>

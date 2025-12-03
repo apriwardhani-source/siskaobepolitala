@@ -1,51 +1,103 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
-<div class="mx-20">
-    <h2 class="text-4xl font-extrabold text-center mb-4">Detail Bobot CPL-MK</h2>
-    <hr class="w-full border border-black mb-4">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
 
-    <div>
-        <label class="text-xl font-semibold">CPL:</label>
-        <div class="p-3 rounded mb-4 border border-black">
-            {{ $kode_cpl }}: {{ $deskripsi_cpl }}
-        </div>
-    </div>
-
-    <div id="mkSection" class="mt-6">
-        <label class="text-xl font-semibold">Bobot Mata Kuliah</label>
-        <div id="mkList" class="mt-2 border border-black rounded-lg p-4 max-h-[300px] overflow-y-auto">
-            @foreach ($mataKuliahs as $mk)
-                <div class="mb-3 flex items-center justify-between p-3 border rounded">
-                    <div>
-                        <strong>{{ $mk->kode_mk }}</strong> - {{ $mk->nama_mk }}
-                    </div>
-                    <input type="number" disabled readonly min="0" max="100"
-                        value="{{ $existingBobots[$mk->kode_mk] ?? 0 }}"
-                        class="w-24 p-2 border rounded text-center bobot-input text-gray-700">
+        <!-- Header -->
+        <div class="mb-6">
+            <a href="{{ route('admin.bobot.index') }}" 
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-arrow-left mr-2 text-xs"></i>
+                kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-weight-hanging text-xl"></i>
                 </div>
-            @endforeach
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Detail Bobot CPL - MK</h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Informasi kontribusi mata kuliah terhadap CPL {{ $kode_cpl ?? $id_cpl }}.
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="mt-2 text-sm text-gray-600">Total Bobot: <span id="totalBobot">0%</span></div>
+
+        <div class="space-y-6">
+            <!-- Info CPL -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase">Kode CPL</p>
+                        <p class="mt-1 text-lg font-bold text-gray-900">{{ $kode_cpl ?? $id_cpl }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs font-semibold text-gray-500 mb-1 uppercase">Total Bobot</p>
+                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold
+                                     {{ ($totalBobot ?? 0) == 100 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
+                            {{ $totalBobot ?? 0 }}%
+                        </span>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-white">
+                    <p class="text-xs font-semibold text-gray-500 mb-1 uppercase">Deskripsi CPL</p>
+                    <p class="text-sm text-gray-700 leading-relaxed">
+                        {{ $deskripsi_cpl ?? '-' }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Daftar MK dan Bobot -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                    <p class="text-sm font-semibold text-gray-800">Mata Kuliah Kontributor</p>
+                    <p class="text-xs text-gray-500">
+                        Daftar mata kuliah yang berkontribusi pada CPL ini beserta bobot persentasenya.
+                    </p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
+                            <tr>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode MK</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama Mata Kuliah</th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Bobot (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse(($mataKuliahs ?? []) as $index => $mk)
+                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                    <td class="px-4 py-3 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
+                                        {{ $index + 1 }}
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            {{ $mk->kode_mk }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-gray-800">
+                                        {{ $mk->nama_mk }}
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
+                                        {{ $existingBobots[$mk->kode_mk] ?? '-' }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-6 text-center text-gray-600 text-sm">
+                                        Tidak ada mata kuliah terkait untuk CPL ini.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-    <a href="{{ route('admin.bobot.index') }}"
-       class="mt-6 inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-        Kembali
-    </a>
 </div>
-
-@push('scripts')
-<script>
-    function updateTotal() {
-        let total = 0;
-        document.querySelectorAll('.bobot-input').forEach(input => {
-            total += parseFloat(input.value) || 0;
-        });
-        document.getElementById('totalBobot').textContent = total + '%';
-    }
-
-    updateTotal();
-</script>
-@endpush
 @endsection
+

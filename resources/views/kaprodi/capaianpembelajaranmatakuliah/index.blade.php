@@ -6,7 +6,12 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-bullseye text-white text-2xl"></i>
+                    </div>
+                </div>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Capaian Pembelajaran Mata Kuliah (CPMK)</h1>
                     <p class="mt-2 text-sm text-gray-600">Lihat capaian pembelajaran untuk setiap mata kuliah di program studi Anda</p>
@@ -148,8 +153,8 @@
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('kaprodi.capaianpembelajaranmatakuliah.detail', $cpmk->id_cpmk) }}" 
-                                           class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-all duration-200"
-                                           title="Detail">
+                                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                           title="Lihat Detail">
                                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

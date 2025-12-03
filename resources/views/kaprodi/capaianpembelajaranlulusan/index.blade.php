@@ -6,7 +6,12 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-check-square text-white text-2xl"></i>
+                    </div>
+                </div>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Capaian Profil Lulusan (CPL)</h1>
                     <p class="mt-2 text-sm text-gray-600">Lihat capaian pembelajaran lulusan program studi</p>
@@ -132,17 +137,22 @@
                 </div>
             </div>
 
-            <!-- Content -->
-            @if (!$kode_prodi)
-                <!-- Empty State - No Prodi Selected -->
+            <!-- Content diselaraskan dengan tampilan Wadir1 -->
+            @php
+                $selectedYear = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun);
+                $isFiltered = !empty($kode_prodi) || !empty($id_tahun);
+            @endphp
+
+            @if(!$isFiltered)
+                <!-- Empty State - belum pilih filter -->
                 <div class="px-6 py-16 text-center">
                     <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Program Studi</h3>
+                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Filter</h3>
                     <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Silakan pilih program studi di atas untuk menampilkan data Capaian Profil Lulusan (CPL).
+                        Silakan pilih tahun kurikulum untuk menampilkan data CPL program studi Anda.
                     </p>
                 </div>
             @elseif(isset($dataKosong) && $dataKosong)
@@ -154,10 +164,68 @@
                     </svg>
                     <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data CPL</h3>
                     <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Belum ada Capaian Profil Lulusan untuk program studi ini. Hubungi Admin atau Tim untuk menambahkan data.
+                        Belum ada Capaian Profil Lulusan untuk kombinasi filter yang dipilih.
                     </p>
                 </div>
             @else
+                <!-- Filter aktif + summary cards -->
+                <div class="mb-6 space-y-4">
+                    <div class="bg-white rounded-xl shadow border border-gray-200 p-4">
+                        <div class="text-sm text-gray-600 mb-2">Filter aktif:</div>
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                Angkatan: {{ $selectedYear->tahun ?? 'Semua' }}
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+                                <i class="fas fa-university mr-2"></i>
+                                {{ $capaianpembelajaranlulusans->first()->nama_prodi ?? 'Program Studi' }}
+                            </span>
+                            <a href="{{ route('kaprodi.capaianpembelajaranlulusan.index') }}" class="text-red-600 text-sm ml-2">
+                                <i class="fas fa-times mr-1"></i>Reset
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
+                            <div class="p-6 flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 uppercase">Total CPL</p>
+                                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $capaianpembelajaranlulusans->count() }}</p>
+                                </div>
+                                <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
+                                    <i class="fas fa-check-square text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                            <div class="p-6 flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
+                                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
+                                </div>
+                                <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                                    <i class="fas fa-calendar text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
+                            <div class="p-6 flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
+                                    <p class="mt-2 text-xl font-bold text-gray-900">
+                                        {{ $capaianpembelajaranlulusans->first()->nama_prodi ?? '-' }}
+                                    </p>
+                                </div>
+                                <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white">
+                                    <i class="fas fa-graduation-cap text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Table -->
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -193,9 +261,17 @@
                                     {{ $cpl->tahun ?? '-' }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                                 {{ $cpl->status_cpl === 'Kompetensi Utama Bidang' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
-                                        {{ $cpl->status_cpl === 'Kompetensi Utama Bidang' ? 'Utama' : 'Tambahan' }}
+                                    @php
+                                        $status = $cpl->status_cpl;
+                                        $statusLabel = $status === 'Kompetensi Utama Bidang'
+                                            ? 'Utama'
+                                            : ($status === 'Kompetensi Tambahan' ? 'Tambahan' : '-');
+                                        $statusClass = $status === 'Kompetensi Utama Bidang'
+                                            ? 'bg-green-100 text-green-800'
+                                            : ($status === 'Kompetensi Tambahan' ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-600');
+                                    @endphp
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $statusClass }}">
+                                        {{ $statusLabel }}
                                     </span>
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-center">

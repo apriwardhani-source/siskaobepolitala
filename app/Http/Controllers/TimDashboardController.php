@@ -35,73 +35,73 @@ class TimDashboardController extends Controller
 
         if ($tahun_progress) {
             foreach ($prodis as $prodi) {
-                $plIds = $prodi->profillulusans->pluck('id_pl')->toArray();
+                // Hitung Profil Lulusan (tidak masuk ke rata-rata, hanya informasi tambahan)
+                $prodi->pl_count = DB::table('profil_lulusans')
+                    ->where('kode_prodi', $prodi->kode_prodi)
+                    ->when($tahun_progress, fn($q) => $q->where('id_tahun', $tahun_progress))
+                    ->count();
 
-                $prodi->pl_count = count($plIds);
-
+                // Hitung CPL per prodi & tahun (mengikuti AdminDashboardController)
                 $prodi->cpl_count = DB::table('capaian_profil_lulusans')
-                    ->where('kode_prodi', $kodeProdi)
-                    ->where('id_tahun', $tahun_progress)
-                    ->distinct()->count('id_cpl');
+                    ->where('kode_prodi', $prodi->kode_prodi)
+                    ->when($tahun_progress, fn($q) => $q->where('id_tahun', $tahun_progress))
+                    ->count();
 
-                $prodi->bk_count = DB::table('cpl_bk')
-                    ->join('capaian_profil_lulusans as cpl', 'cpl_bk.id_cpl', '=', 'cpl.id_cpl')
-                    ->where('cpl.kode_prodi', $kodeProdi)
-                    ->where('cpl.id_tahun', $tahun_progress)
-                    ->distinct()->count('cpl_bk.id_bk');
-
+                // Total SKS & jumlah MK per prodi
                 $prodi->sks_mk = DB::table('mata_kuliahs')
-                    ->whereIn('kode_mk', function ($query) use ($kodeProdi, $tahun_progress) {
-                        $query->select('cpl_mk.kode_mk')
-                            ->from('cpl_mk')
-                            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-                            ->where('cpl.kode_prodi', $kodeProdi)
-                            ->where('cpl.id_tahun', $tahun_progress)
-                            ->distinct();
-                    })->sum('sks_mk');
+                    ->where('kode_prodi', $prodi->kode_prodi)
+                    ->sum('sks_mk');
 
+                $prodi->mk_count = DB::table('mata_kuliahs')
+                    ->where('kode_prodi', $prodi->kode_prodi)
+                    ->count();
+
+                // Hitung CPMK per prodi & tahun (lewat CPL)
                 $prodi->cpmk_count = DB::table('cpl_cpmk')
                     ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                    ->where('cpl.kode_prodi', $kodeProdi)
-                    ->where('cpl.id_tahun', $tahun_progress)
-                    ->distinct()->count('cpl_cpmk.id_cpmk');
+                    ->where('cpl.kode_prodi', $prodi->kode_prodi)
+                    ->when($tahun_progress, fn($q) => $q->where('cpl.id_tahun', $tahun_progress))
+                    ->distinct()
+                    ->count('cpl_cpmk.id_cpmk');
 
+                // Hitung Sub CPMK per prodi & tahun (lewat CPMK + CPL)
                 $prodi->subcpmk_count = DB::table('sub_cpmks')
-                    ->join('cpl_cpmk', 'sub_cpmks.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+                    ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub_cpmks.id_cpmk', '=', 'cpmk.id_cpmk')
+                    ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
                     ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
-                    ->where('cpl.kode_prodi', $kodeProdi)
-                    ->where('cpl.id_tahun', $tahun_progress)
-                    ->distinct()->count('sub_cpmks.id_sub_cpmk');
+                    ->where('cpl.kode_prodi', $prodi->kode_prodi)
+                    ->when($tahun_progress, fn($q) => $q->where('cpl.id_tahun', $tahun_progress))
+                    ->distinct()
+                    ->count('sub_cpmks.id_sub_cpmk');
 
-                $target = [
-                    'pl' => 3,
-                    'cpl' => 9,
-                    'bk' => 8,
-                    'sks_mk' => 108,
-                    'cpmk' => 18,
-                    'subcpmk' => 36
-                ];
+                // Target sama seperti AdminDashboardController
+                $target_cpl = 9;
+                $target_sks_mk = 144;
+                $target_cpmk = 20;
+                $target_subcpmk = 40;
 
-                $progress = [
-                    'pl' => min(100, round(($prodi->pl_count / $target['pl']) * 100)),
-                    'cpl' => min(100, round(($prodi->cpl_count / $target['cpl']) * 100)),
-                    'bk' => min(100, round(($prodi->bk_count / $target['bk']) * 100)),
-                    'sks_mk' => min(100, round(($prodi->sks_mk / $target['sks_mk']) * 100)),
-                    'cpmk' => min(100, round(($prodi->cpmk_count / $target['cpmk']) * 100)),
-                    'subcpmk' => min(100, round(($prodi->subcpmk_count / $target['subcpmk']) * 100)),
-                ];
+                // Progress 4 komponen (CPL, SKS MK, CPMK, Sub CPMK)
+                $progress_cpl = $prodi->cpl_count > 0 ? min(100, round(($prodi->cpl_count / $target_cpl) * 100)) : 0;
+                $progress_sks_mk = $prodi->sks_mk > 0 ? min(100, round(($prodi->sks_mk / $target_sks_mk) * 100)) : 0;
+                $progress_cpmk = $prodi->cpmk_count > 0 ? min(100, round(($prodi->cpmk_count / $target_cpmk) * 100)) : 0;
+                $progress_subcpmk = $prodi->subcpmk_count > 0 ? min(100, round(($prodi->subcpmk_count / $target_subcpmk) * 100)) : 0;
 
-                $prodi->progress_pl = $progress['pl'];
-                $prodi->progress_cpl = $progress['cpl'];
-                $prodi->progress_bk = $progress['bk'];
-                $prodi->progress_sks_mk = $progress['sks_mk'];
-                $prodi->progress_cpmk = $progress['cpmk'];
-                $prodi->progress_subcpmk = $progress['subcpmk'];
-                $prodi->avg_progress = round(array_sum($progress) / count($progress));
+                // Rata-rata sama seperti admin
+                $avg = round(($progress_cpl + $progress_sks_mk + $progress_cpmk + $progress_subcpmk) / 4);
 
-                if ($prodi->avg_progress == 100) $ProdiSelesai++;
-                elseif ($prodi->avg_progress > 0) $ProdiProgress++;
-                else $ProdiBelumMulai++;
+                $prodi->progress_cpl = $progress_cpl;
+                $prodi->progress_sks_mk = $progress_sks_mk;
+                $prodi->progress_cpmk = $progress_cpmk;
+                $prodi->progress_subcpmk = $progress_subcpmk;
+                $prodi->avg_progress = $avg;
+
+                if ($avg == 100) {
+                    $ProdiSelesai++;
+                } elseif ($avg > 0) {
+                    $ProdiProgress++;
+                } else {
+                    $ProdiBelumMulai++;
+                }
             }
         }
 

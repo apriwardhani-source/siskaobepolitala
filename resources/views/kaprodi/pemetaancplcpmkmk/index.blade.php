@@ -6,8 +6,17 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan CPL - CPMK - MK</h1>
-            <p class="mt-2 text-sm text-gray-600">Pemetaan capaian profil lulusan dengan capaian pembelajaran mata kuliah dan mata kuliah</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-project-diagram text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan CPL - CPMK - MK</h1>
+                    <p class="mt-2 text-sm text-gray-600">Pemetaan capaian profil lulusan dengan capaian pembelajaran mata kuliah dan mata kuliah</p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->

@@ -6,8 +6,19 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan MK - CPMK - Sub CPMK</h1>
-            <p class="mt-2 text-sm text-gray-600">Pemetaan mata kuliah, capaian pembelajaran, dan sub capaian pembelajaran</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-sitemap text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pemetaan MK - CPMK - Sub CPMK</h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Hubungan mata kuliah terhadap CPMK dan indikator Sub CPMK untuk program studi Anda.
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -31,52 +42,49 @@
         </div>
         @endif
 
+        <!-- Filter Card ala Organisasi MK -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter Pemetaan MK - CPMK - Sub CPMK
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('tim.pemetaanmkcpmksubcpmk.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+                            <select disabled class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-sm">
+                                <option>{{ $prodi->nama_prodi ?? '-' }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua Tahun</option>
+                                @foreach(($tahun_tersedia ?? []) as $thn)
+                                    <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? '') == $thn->id_tahun ? 'selected' : '' }}>
+                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="self-end flex gap-2">
+                            <button type="submit"
+                                    class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>
+                                Tampilkan Data
+                            </button>
+                            {{-- Tempat untuk Export Excel jika nanti ada route tim export pemetaan mk-cpmk-subcpmk --}}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
-            <!-- Toolbar -->
-            <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Matriks Pemetaan</h2>
-                    
-                    <!-- Filter -->
-                    @if(isset($tahun_tersedia))
-                    <div class="w-64">
-                        <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                            class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                            @foreach ($tahun_tersedia as $thn)
-                                <option value="{{ $thn->id_tahun }}" {{ isset($id_tahun) && $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                    {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Filter Info -->
-                @if (isset($id_tahun) && $id_tahun)
-                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                        @if(isset($tahun_tersedia))
-                            @php
-                                $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                            @endphp
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                            </span>
-                        @endif
-                        <a href="{{ route('tim.pemetaanmkcpmksubcpmk.index') }}" 
-                           class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                            Reset filter
-                        </a>
-                    </div>
-                </div>
-                @endif
-            </div>
 
             <!-- Info Banner -->
             <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
@@ -264,19 +272,6 @@
 
 @push('scripts')
 <script>
-function updateFilter() {
-    const tahunSelect = document.getElementById('tahun');
-    const idTahun = tahunSelect.value;
-
-    let url = "{{ route('tim.pemetaanmkcpmksubcpmk.index') }}";
-    
-    if (idTahun) {
-        url += '?id_tahun=' + encodeURIComponent(idTahun);
-    }
-
-    window.location.href = url;
-}
-
 // Auto-hide alerts
 setTimeout(function() {
     const el = document.getElementById('alert-success');

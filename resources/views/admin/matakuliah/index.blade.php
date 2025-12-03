@@ -1,13 +1,22 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-        
-        <!-- Header -->
+
+        <!-- Header ala Wadir1 -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Mata Kuliah</h1>
-            <p class="mt-2 text-sm text-gray-600">Kelola mata kuliah dan kurikulum program studi</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Mata Kuliah</h1>
+                    <p class="mt-1 text-sm text-gray-600">Daftar mata kuliah per program studi dan tahun kurikulum</p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -51,224 +60,246 @@
         </div>
         @endif
 
-        <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
-            <!-- Toolbar -->
-            <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between space-y-4 lg:space-y-0 gap-4">
-                    
-                    <!-- Filters -->
-                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Kartu Filter -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter Mata Kuliah
+                </h2>
+                @if(isset($kode_prodi) && $kode_prodi)
+                <a href="{{ route('admin.matakuliah.create', ['kode_prodi' => $kode_prodi, 'id_tahun' => $id_tahun]) }}"
+                   class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-plus mr-2 text-xs"></i>
+                    Tambah Mata Kuliah
+                </a>
+                @endif
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('admin.matakuliah.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Prodi -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
-                            <select id="prodi" name="kode_prodi" onchange="updateFilter()"
-                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="" {{ empty($kode_prodi) ? 'selected' : '' }} disabled>Pilih Prodi</option>
-                                @foreach ($prodis as $prodi)
-                                    <option value="{{ $prodi->kode_prodi }}" {{ $kode_prodi == $prodi->kode_prodi ? 'selected' : '' }}>
-                                        {{ $prodi->nama_prodi }}
-                                    </option>
+                            <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua Prodi</option>
+                                @foreach(($prodis ?? []) as $prodi)
+                                  <option value="{{ $prodi->kode_prodi }}" {{ ($kode_prodi ?? '') == $prodi->kode_prodi ? 'selected' : '' }}>
+                                      {{ $prodi->nama_prodi }}
+                                  </option>
                                 @endforeach
                             </select>
                         </div>
-
+                        <!-- Tahun -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                            <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                                @if (isset($tahun_tersedia))
-                                    @foreach ($tahun_tersedia as $thn)
-                                        <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                            {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                        </option>
-                                    @endforeach
-                                @endif
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua</option>
+                                @foreach(($tahun_tersedia ?? []) as $t)
+                                  <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '') == $t->id_tahun ? 'selected' : '' }}>
+                                      {{ $t->tahun }}
+                                  </option>
+                                @endforeach
                             </select>
                         </div>
+                        <!-- Actions -->
+                        <div class="self-end flex gap-2">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i> Tampilkan Data
+                            </button>
+                            @if(isset($kode_prodi) && $kode_prodi)
+                            <a href="{{ route('admin.matakuliah.export', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" 
+                               class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </a>
+                            @endif
+                        </div>
                     </div>
+                </form>
+            </div>
+        </div>
 
-                    <!-- Search -->
-                    <div class="lg:w-80">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Mata Kuliah</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
-                            </div>
-                            <input type="text" id="search" placeholder="Cari mata kuliah..." 
-                                   class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg 
-                                          focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-                                          placeholder-gray-400 text-sm transition-all duration-200">
+        @php
+            $selectedYear = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun);
+            $selectedProdi = collect($prodis ?? [])->firstWhere('kode_prodi', $kode_prodi);
+            $isFiltered = !empty($kode_prodi) || !empty($id_tahun);
+        @endphp
+
+        @if(!$isFiltered)
+            <!-- Empty state sebelum filter -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data mata kuliah.</p>
+            </div>
+        @else
+            <!-- Filter Aktif -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-4 mb-6">
+                <div class="text-sm text-gray-600 mb-2">Filter aktif:</div>
+                <div class="flex flex-wrap gap-2 items-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        Angkatan: {{ $selectedYear->tahun ?? 'Semua' }}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+                        <i class="fas fa-university mr-2"></i>
+                        {{ $selectedProdi->nama_prodi ?? 'Semua Program Studi' }}
+                    </span>
+                    <a href="{{ route('admin.matakuliah.index') }}"
+                       class="text-red-600 text-sm ml-2">
+                        <i class="fas fa-times mr-1"></i>Reset
+                    </a>
+                </div>
+            </div>
+        @endif
+
+        @if(isset($kode_prodi) && $kode_prodi!=='' && ($dataKosong ?? false))
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-6">
+                <div class="text-sm text-yellow-800">Data mata kuliah belum tersedia untuk filter yang dipilih.</div>
+            </div>
+        @endif
+
+        <!-- Statistik MK, Angkatan, Program Studi -->
+        @if($isFiltered && !$dataKosong && $selectedProdi)
+            <!-- Baris Statistik: Total MK, Angkatan, Program Studi (gaya seperti Wadir1) -->
+            @php
+                $totalMk = ($mata_kuliahs ?? collect())->count();
+            @endphp
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Total MK -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
+                    <div class="p-6 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 uppercase">Total MK</p>
+                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalMk }}</p>
+                        </div>
+                        <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-book text-2xl"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- Filter Info -->
-                @if ($kode_prodi || $id_tahun)
-                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                        @if ($kode_prodi)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                Prodi: {{ $prodis->where('kode_prodi', $kode_prodi)->first()->nama_prodi ?? $kode_prodi }}
-                            </span>
-                        @endif
-                        @if ($id_tahun)
-                            @php
-                                $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                            @endphp
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                            </span>
-                        @endif
-                        <a href="{{ route('admin.matakuliah.index') }}" 
-                           class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                            Reset filter
-                        </a>
+                <!-- Angkatan / Tahun Kurikulum -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                    <div class="p-6 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
+                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
+                        </div>
+                        <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-calendar text-2xl"></i>
+                        </div>
                     </div>
                 </div>
-                @endif
-            </div>
 
-            <!-- Content -->
-            @if (empty($kode_prodi))
-                <!-- Empty State - No Prodi Selected -->
-                <div class="px-6 py-16 text-center">
-                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Program Studi</h3>
-                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Silakan pilih program studi di atas untuk menampilkan daftar mata kuliah.
-                    </p>
+                <!-- Program Studi (ringkas) -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
+                    <div class="p-6 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
+                            <p class="mt-2 text-xl font-bold text-gray-900">{{ $selectedProdi->nama_prodi ?? '-' }}</p>
+                        </div>
+                        <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-graduation-cap text-2xl"></i>
+                        </div>
+                    </div>
                 </div>
-            @elseif(isset($dataKosong) && $dataKosong)
-                <!-- Empty State - No Data -->
-                <div class="px-6 py-16 text-center">
-                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Mata Kuliah</h3>
-                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Belum ada mata kuliah untuk program studi ini.
-                    </p>
+            </div>
+        @endif
+
+        <!-- Tabel Hasil -->
+        @if(($mata_kuliahs ?? collect())->isNotEmpty())
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-800">Daftar Mata Kuliah</h2>
+                    <div class="relative">
+                        <input id="searchMk" type="text" class="pl-9 pr-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Cari MK...">
+                        <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400"></i>
+                    </div>
                 </div>
-            @else
-                <!-- Table -->
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
+                    <table id="tableMk" class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gray-100">
                             <tr>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode MK</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama Mata Kuliah</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-20">SKS</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Semester</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Jenis MK</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
+                                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-12">No</th>
+                                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-28">Kode</th>
+                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Nama</th>
+                                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-20">SKS</th>
+                                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-24">Semester</th>
+                                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-28">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach ($mata_kuliahs as $index => $mk)
-                            <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
-                                    {{ $index + 1 }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
-                                        {{ $mk->kode_mk }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-4 text-sm text-gray-900">
-                                    {{ $mk->nama_mk }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
-                                    {{ $mk->sks_mk }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700">
-                                    {{ $mk->semester_mk }}
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                                 {{ $mk->jenis_mk === 'Wajib' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
-                                        {{ $mk->jenis_mk }}
-                                    </span>
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
-                                    <div class="flex justify-center space-x-2">
-                                        <a href="{{ route('admin.matakuliah.detail', $mk->kode_mk) }}" 
-                                           class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                                           title="Detail">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            @foreach($mata_kuliahs as $index => $mk)
+                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                    <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-700 font-medium">
+                                        {{ $index + 1 }}
+                                    </td>
+                                    <td class="px-6 py-3 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            {{ $mk->kode_mk }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-3 text-sm text-gray-900">
+                                        {{ $mk->nama_mk }}
+                                    </td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
+                                        {{ $mk->sks_mk }}
+                                    </td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-center text-sm text-gray-700">
+                                        {{ $mk->semester_mk }}
+                                    </td>
+                                    <td class="px-6 py-3 whitespace-nowrap text-center text-sm">
+                                        <a href="{{ route('admin.matakuliah.detail', $mk->kode_mk) }}"
+                                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                           title="Lihat Detail">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
+                                            Detail
                                         </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            @endif
+            </div>
+        @endif
 
-        </div>
     </div>
 </div>
 
 @push('scripts')
 <script>
-function updateFilter() {
-    const prodiSelect = document.getElementById('prodi');
-    const tahunSelect = document.getElementById('tahun');
-
-    const kodeProdi = prodiSelect.value;
-    const idTahun = tahunSelect.value;
-
-    let url = "{{ route('admin.matakuliah.index') }}";
-    let params = [];
-
-    if (kodeProdi) {
-        params.push('kode_prodi=' + encodeURIComponent(kodeProdi));
-    }
-
-    if (idTahun) {
-        params.push('id_tahun=' + encodeURIComponent(idTahun));
-    }
-
-    if (params.length > 0) {
-        url += '?' + params.join('&');
-    }
-
-    window.location.href = url;
-}
-
-// Search functionality
-document.getElementById('search').addEventListener('input', function() {
-    const searchValue = this.value.toLowerCase();
-    const rows = document.querySelectorAll('tbody tr');
-
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(searchValue) ? '' : 'none';
+// Search MK
+const sMk = document.getElementById('searchMk');
+const tMk = document.getElementById('tableMk');
+if (sMk && tMk) {
+    sMk.addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        tMk.querySelectorAll('tbody tr').forEach(function(tr) {
+            const text = tr.innerText.toLowerCase();
+            tr.style.display = text.includes(q) ? '' : 'none';
+        });
     });
-});
+}
 
 // Auto-hide alerts
 setTimeout(function() {
-    ['alert-success', 'alert-sukses'].forEach(id => {
+    ['alert-success', 'alert-sukses'].forEach(function(id) {
         const el = document.getElementById(id);
         if (el) {
             el.classList.add('animate-fade-out');
-            setTimeout(() => el.remove(), 300);
+            setTimeout(function() { el.remove(); }, 300);
         }
     });
 }, 5000);

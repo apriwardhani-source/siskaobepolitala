@@ -4,10 +4,21 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
+        <!-- Header ala CPL -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pengguna Pending</h1>
-            <p class="mt-2 text-sm text-gray-600">Kelola persetujuan pendaftaran pengguna baru</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-user-clock text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Pengguna Pending</h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Kelola persetujuan pendaftaran pengguna baru yang masih menunggu konfirmasi.
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->

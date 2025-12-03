@@ -1,79 +1,163 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
 @section('content')
-<div class="mx-20 mt-6">
-    <h2 class="font-extrabold text-3xl mb-5 text-center">Edit Capaian Pembelajaran Lulusan</h2>
-    <hr class="border-t-2 md:border-t-4 border-black my-3 md:my-4 mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
 
-        @if ($errors->any())
-            <div style="color: red;">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('admin.capaianprofillulusan.update', $capaianprofillulusan->id_cpl) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <label for="kode_prodi" class="text-2xl font-semibold mb-2">Program Studi:</label>
-            <select id="kode_prodi" name="kode_prodi"
-                class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
-                required>
-                <option value="" disabled>Pilih Program Studi</option>
-                @foreach ($prodis as $prodi)
-                    <option value="{{ $prodi->kode_prodi }}" 
-                        {{ old('kode_prodi', $capaianprofillulusan->kode_prodi) == $prodi->kode_prodi ? 'selected' : '' }}>
-                        {{ $prodi->nama_prodi }}
-                    </option>
-                @endforeach
-            </select>
-
-            <label for="id_tahun" class="text-2xl font-semibold mb-2">Tahun Kurikulum:</label>
-            <select id="id_tahun" name="id_tahun"
-                class="border border-black p-3 w-full rounded-lg mt-1 mb-3 focus:outline-none focus:ring-2 focus:ring-[#5460B5] focus:bg-[#f7faff]"
-                required>
-                <option value="" disabled>Pilih Tahun Kurikulum</option>
-                @foreach ($tahuns as $tahun)
-                    <option value="{{ $tahun->id_tahun }}" 
-                        {{ old('id_tahun', $capaianprofillulusan->id_tahun) == $tahun->id_tahun ? 'selected' : '' }}>
-                        {{ $tahun->tahun }}
-                    </option>
-                @endforeach
-            </select>
-
-            <label class="text-2xl" for="kode_cpl">Kode Capaian Profil Lulusan:</label>
-            <input type="text" name="kode_cpl" id="kode_cpl" class="border border-black w-full rounded-lg p-3 mt-1 mb-3"
-                value="{{ old('kode_cpl', $capaianprofillulusan->kode_cpl) }}" placeholder="Contoh: CPL-01" required>
-            <br>
-
-            <label class="text-2xl" for="deskripsi_cpl">Deskripsi Capaian Profil Lulusan:</label>
-            <textarea name="deskripsi_cpl" id="deskripsi_cpl" class="border border-black w-full rounded-lg p-3 mb-3" rows="4"
-                required>{{ old('deskripsi_cpl', $capaianprofillulusan->deskripsi_cpl) }}</textarea>
-            <br>
-
-            <label class="text-2xl" for="status_cpl">Status CPL:</label>
-            <select name="status_cpl" id="status_cpl" class="border border-black p-3 mt-1 w-full rounded-lg mb-3" required>
-                <option value="Kompetensi Utama Bidang"
-                    {{ $capaianprofillulusan->status_cpl == 'Kompetensi Utama Bidang' ? 'selected' : '' }}>Kompetensi Utama Bidang</option>
-                <option value="Kompetensi Tambahan"
-                    {{ $capaianprofillulusan->status_cpl == 'Kompetensi Tambahan' ? 'selected' : '' }}>Kompetensi Tambahan</option>
-            </select>
-            <br>
-            
-                <div class="flex justify-end space-x-5 mt-[50px]">
-                    <a href="{{ route('admin.capaianprofillulusan.index') }}" 
-                       class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition duration-200">
-                        Kembali
-                    </a>
-                    <button type="submit" 
-                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200">
-                        Simpan
-                    </button>
+        <!-- Header -->
+        <div class="mb-6">
+            <a href="{{ route('admin.capaianprofillulusan.index') }}" 
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <span class="mr-2 text-base leading-none">&larr;</span>
+                Kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-check-square text-xl"></i>
                 </div>
-        </form>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Edit Capaian Profil Lulusan (CPL)
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Perbarui informasi CPL untuk program studi dan tahun kurikulum yang dipilih.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                <h2 class="text-lg font-semibold text-white flex items-center">
+                    <i class="fas fa-edit mr-2 text-sm"></i>
+                    Formulir Edit CPL
+                </h2>
+            </div>
+
+            <div class="px-6 py-6">
+                @if ($errors->any())
+                    <div class="mb-5 rounded-lg bg-red-50 border-l-4 border-red-500 p-4 shadow-sm">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div>
+                                <h3 class="text-sm font-semibold text-red-800 mb-1">Terjadi kesalahan</h3>
+                                <ul class="text-sm text-red-700 list-disc list-inside space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('admin.capaianprofillulusan.update', $capaianprofillulusan->id_cpl) }}" method="POST" class="space-y-6">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Program Studi -->
+                        <div class="space-y-2">
+                            <label for="kode_prodi" class="block text-sm font-semibold text-gray-800">
+                                Program Studi
+                            </label>
+                            <select id="kode_prodi" name="kode_prodi"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required>
+                                <option value="" disabled>Pilih Program Studi</option>
+                                @foreach ($prodis as $prodi)
+                                    <option value="{{ $prodi->kode_prodi }}" 
+                                        {{ old('kode_prodi', $capaianprofillulusan->kode_prodi) == $prodi->kode_prodi ? 'selected' : '' }}>
+                                        {{ $prodi->nama_prodi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Tahun Kurikulum -->
+                        <div class="space-y-2">
+                            <label for="id_tahun" class="block text-sm font-semibold text-gray-800">
+                                Tahun Kurikulum
+                            </label>
+                            <select id="id_tahun" name="id_tahun"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required>
+                                <option value="" disabled>Pilih Tahun Kurikulum</option>
+                                @foreach ($tahuns as $tahun)
+                                    <option value="{{ $tahun->id_tahun }}" 
+                                        {{ old('id_tahun', $capaianprofillulusan->id_tahun) == $tahun->id_tahun ? 'selected' : '' }}>
+                                        {{ $tahun->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Kode CPL -->
+                        <div class="space-y-2">
+                            <label for="kode_cpl" class="block text-sm font-semibold text-gray-800">
+                                Kode CPL
+                            </label>
+                            <input type="text" id="kode_cpl" name="kode_cpl"
+                                   class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   placeholder="Contoh: CPL01"
+                                   value="{{ old('kode_cpl', $capaianprofillulusan->kode_cpl) }}"
+                                   required>
+                        </div>
+
+                        <!-- Status CPL (opsional) -->
+                        <div class="space-y-2">
+                            <label for="status_cpl" class="block text-sm font-semibold text-gray-800">
+                                Status CPL <span class="text-xs text-gray-500 font-normal">(opsional)</span>
+                            </label>
+                            <select id="status_cpl" name="status_cpl"
+                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                @php
+                                    $currentStatus = old('status_cpl', $capaianprofillulusan->status_cpl);
+                                @endphp
+                                <option value="" {{ $currentStatus ? '' : 'selected' }}>Tidak ada status</option>
+                                <option value="Kompetensi Utama Bidang" {{ $currentStatus === 'Kompetensi Utama Bidang' ? 'selected' : '' }}>
+                                    Kompetensi Utama Bidang
+                                </option>
+                                <option value="Kompetensi Tambahan" {{ $currentStatus === 'Kompetensi Tambahan' ? 'selected' : '' }}>
+                                    Kompetensi Tambahan
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Deskripsi CPL -->
+                    <div class="space-y-2">
+                        <label for="deskripsi_cpl" class="block text-sm font-semibold text-gray-800">
+                            Deskripsi CPL
+                        </label>
+                        <textarea id="deskripsi_cpl" name="deskripsi_cpl" rows="4"
+                                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Tuliskan deskripsi capaian profil lulusan secara ringkas dan jelas..."
+                                  required>{{ old('deskripsi_cpl', $capaianprofillulusan->deskripsi_cpl) }}</textarea>
+                    </div>
+
+                    <!-- Tombol Aksi -->
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <a href="{{ route('admin.capaianprofillulusan.index') }}" 
+                           class="inline-flex items-center px-5 py-2.5 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-times mr-2 text-xs"></i>
+                            Batal
+                        </a>
+                        <button type="submit" 
+                                class="inline-flex items-center px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                            <i class="fas fa-save mr-2 text-xs"></i>
+                            Simpan Perubahan
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
     </div>
+</div>
 @endsection
+

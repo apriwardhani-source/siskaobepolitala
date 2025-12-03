@@ -22,6 +22,8 @@ class TimBobotController extends Controller
 
         $tahun_tersedia = DB::table('tahun')->orderBy('tahun', 'desc')->get();
 
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
+
         $query = DB::table('bobots')
             ->join('capaian_profil_lulusans as cpl', 'bobots.id_cpl', '=', 'cpl.id_cpl')
             ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
@@ -45,7 +47,7 @@ class TimBobotController extends Controller
 
         $bobots = $query->orderBy('bobots.kode_mk')->orderBy('bobots.id_cpl')->get();
 
-        return view('tim.bobot.index', compact('bobots', 'id_tahun', 'tahun_tersedia'));
+        return view('tim.bobot.index', compact('bobots', 'id_tahun', 'tahun_tersedia', 'prodi'));
     }
 
     public function create()
@@ -152,20 +154,33 @@ class TimBobotController extends Controller
         return view('tim.bobot.edit', compact('id_cpl', 'mataKuliahs', 'existingBobots'));
     }
 
-    public function update(Request $request, string $id_bobot)
+    public function update(Request $request, string $id_cpl)
     {
+        // Edit dilakukan per CPL: kirim array kode_mk[] dan bobot[kode_mk]
         $request->validate([
-            'id_cpl' => 'required',
-            'kode_mk' => 'required',
-            'bobot' => 'required|numeric|min:0|max:100',
+            'id_cpl'   => 'required',
+            'kode_mk'  => 'required|array|min:1',
+            'kode_mk.*'=> 'string',
+            'bobot'    => 'required|array',
+            'bobot.*'  => 'numeric|min:0|max:100',
         ]);
 
-        $bobot = Bobot::findOrFail($id_bobot);
-        $bobot->update([
-            'id_cpl' => $request->id_cpl,
-            'kode_mk' => $request->kode_mk,
-            'bobot' => $request->bobot,
-        ]);
+        $totalBobot = array_sum($request->bobot ?? []);
+        if ($totalBobot != 100) {
+            return redirect()
+                ->back()
+                ->withErrors(['msg' => 'Total bobot harus 100%.'])
+                ->withInput();
+        }
+
+        foreach ($request->kode_mk as $kode_mk) {
+            $nilaiBobot = $request->bobot[$kode_mk] ?? 0;
+
+            Bobot::updateOrCreate(
+                ['id_cpl' => $request->id_cpl, 'kode_mk' => $kode_mk],
+                ['bobot'  => $nilaiBobot]
+            );
+        }
 
         return redirect()->route('tim.bobot.index')->with('sukses', 'Bobot berhasil diperbarui.');
     }

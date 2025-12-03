@@ -1,27 +1,70 @@
 @extends('layouts.tim.app')
 
 @section('content')
-    <div class="mr-20 ml-20">
-        <h2 class="text-4xl font-extrabold text-center mb-4">Detail Sub CPMK</h2>
-        <hr class="w-full border border-black mb-4">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
 
-        <label for="kode_cpmk" class="block text-xl font-semibold">Kode CPMK</label>
-        <input type="text" name="kode_cpmk" id="kode_cpmk" value="{{ $subcpmk->kode_cpmk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
+        {{-- Header dengan tombol kembali + logo (mirip detail CPMK tim) --}}
+        <div class="mb-6">
+            <a href="{{ url()->previous() }}"
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-arrow-left mr-2 text-xs"></i>
+                kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-list-ul text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Detail Sub CPMK
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Informasi lengkap tentang Sub CPMK {{ $subcpmk->sub_cpmk }} pada CPMK {{ $subcpmk->kode_cpmk }}.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-        <label for="deskripsi_cpmk" class="block text-xl font-semibold">Deskripsi CPMK</label>
-        <textarea name="deskripsi_cpmk" id="deskripsi_cpmk" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">{{ $subcpmk->deskripsi_cpmk }}</textarea>
+        {{-- Kartu utama --}}
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+            <div class="px-8 py-6 space-y-6">
 
-        <label for="sub_cpmk" class="block text-xl font-semibold">Sub CPMK</label>
-        <input type="text" name="sub_cpmk" id="sub_cpmk" value="{{ $subcpmk->sub_cpmk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
+                {{-- Kode CPMK --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kode CPMK</label>
+                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-medium">
+                        {{ $subcpmk->kode_cpmk }}
+                    </div>
+                </div>
 
-        <label for="uraian_cpmk" class="block text-xl font-semibold">Uraian Sub CPMK</label>
-        <textarea name="uraian_cpmk" id="uraian_cpmk" readonly
-            class="w-full p-3 border border-black rounded-lg mb-10 bg-gray-100">{{ $subcpmk->uraian_cpmk }}</textarea>
+                {{-- Deskripsi CPMK --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi CPMK</label>
+                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 min-h-[80px]">
+                        {{ $subcpmk->deskripsi_cpmk }}
+                    </div>
+                </div>
 
-        <a href="{{ route('tim.subcpmk.index') }}"
-            class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white font-bold mt-2">Kembali</a>
+                {{-- Sub CPMK --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Sub CPMK</label>
+                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-medium">
+                        {{ $subcpmk->sub_cpmk }}
+                    </div>
+                </div>
+
+                {{-- Uraian Sub CPMK --}}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Uraian Sub CPMK</label>
+                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 min-h-[80px]">
+                        {{ $subcpmk->uraian_cpmk }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
+</div>
 @endsection

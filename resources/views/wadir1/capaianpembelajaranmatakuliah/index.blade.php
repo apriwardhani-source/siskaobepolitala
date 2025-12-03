@@ -70,20 +70,46 @@
       </div>
     @elseif($cpmkCollection->isNotEmpty())
       <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-        <div class="px-6 py-4 border-b bg-gray-50"><h2 class="text-lg font-semibold text-gray-800">Daftar CPMK</h2></div>
+        <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-gray-800">Daftar CPMK</h2>
+        </div>
         <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
+          <table class="min-w-full divide-y divide-gray-200 text-sm">
             <thead class="bg-gray-100">
               <tr>
-                <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode CPMK</th>
+                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-12">No</th>
+                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-32">Kode CPMK</th>
                 <th class="px-6 py-3 text-left font-semibold text-gray-700">Deskripsi</th>
+                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-28">Aksi</th>
               </tr>
             </thead>
-            <tbody class="divide-y">
-              @foreach($cpmkCollection as $row)
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-3">{{ $row->kode_cpmk }}</td>
-                  <td class="px-6 py-3">{{ $row->deskripsi_cpmk }}</td>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @foreach($cpmkCollection as $index => $row)
+                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                  <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    {{ $index + 1 }}
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                      {{ $row->kode_cpmk }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-3 text-sm text-gray-900">
+                    {{ $row->deskripsi_cpmk }}
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap text-center text-sm">
+                    <a href="{{ route('wadir1.capaianpembelajaranmatakuliah.detail', $row->id_cpmk) }}"
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                       title="Lihat Detail">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      </svg>
+                      Detail
+                    </a>
+                  </td>
                 </tr>
               @endforeach
             </tbody>

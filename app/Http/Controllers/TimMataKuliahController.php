@@ -44,7 +44,14 @@ class TimMataKuliahController extends Controller
 
         $dataKosong = $mata_kuliahs->isEmpty();
 
-        return view("tim.matakuliah.index", compact("mata_kuliahs", "id_tahun", "tahun_tersedia", "dataKosong"));
+        // Nama prodi untuk tampilan filter / ringkasan
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
+        $prodiName = $prodi->nama_prodi ?? '-';
+
+        return view(
+            'tim.matakuliah.index',
+            compact('mata_kuliahs', 'id_tahun', 'tahun_tersedia', 'dataKosong', 'prodiName')
+        );
     }
 
     public function getCplByBk(Request $request)
@@ -371,7 +378,13 @@ class TimMataKuliahController extends Controller
             ];
         });
 
-        return view('tim.matakuliah.organisasimk', compact('organisasiMK', 'kodeProdi', 'id_tahun', 'tahun_tersedia'));
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
+        $prodiName = $prodi->nama_prodi ?? '-';
+
+        return view(
+            'tim.matakuliah.organisasimk',
+            compact('organisasiMK', 'kodeProdi', 'id_tahun', 'tahun_tersedia', 'prodiName')
+        );
     }
 
     public function importMataKuliah(Request $request)

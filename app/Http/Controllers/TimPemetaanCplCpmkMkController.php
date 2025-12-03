@@ -21,6 +21,8 @@ class TimPemetaanCplCpmkMkController extends Controller
 
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
 
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
+
         $query = DB::table('capaian_profil_lulusans as cpl')
             ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
             ->leftJoin('cpl_cpmk', 'cpl.id_cpl', '=', 'cpl_cpmk.id_cpl')
@@ -53,7 +55,7 @@ class TimPemetaanCplCpmkMkController extends Controller
             $matrix[$row->kode_cpl]['cpmk'][$row->kode_cpmk]['deskripsi'] = $row->deskripsi_cpmk;
             $matrix[$row->kode_cpl]['cpmk'][$row->kode_cpmk]['mk'][] = $row->nama_mk;
         }
-        return view('tim.pemetaancplcpmkmk.index', compact('matrix', 'id_tahun', 'tahun_tersedia'));
+        return view('tim.pemetaancplcpmkmk.index', compact('matrix', 'id_tahun', 'tahun_tersedia', 'prodi'));
     }
 
     public function pemenuhancplcpmkmk(Request $request)
@@ -127,6 +129,7 @@ class TimPemetaanCplCpmkMkController extends Controller
         $id_tahun = $request->get('id_tahun');
 
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
 
         // Query untuk semua CPL dengan filter tahun
         $semuaCplQuery = DB::table('capaian_profil_lulusans as cpl')
@@ -199,6 +202,6 @@ class TimPemetaanCplCpmkMkController extends Controller
             ];
         }
 
-        return view('tim.pemetaancplcpmkmk.pemetaanmkcplcpmk', compact('matrix', 'semuaMk', 'semuaCpl', 'id_tahun', 'tahun_tersedia'));
+        return view('tim.pemetaancplcpmkmk.pemetaanmkcplcpmk', compact('matrix', 'semuaMk', 'semuaCpl', 'id_tahun', 'tahun_tersedia', 'prodi'));
     }
 }

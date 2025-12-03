@@ -4,24 +4,25 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
+        <!-- Header ala Wadir1 -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot MK - CPL</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola bobot mata kuliah terhadap capaian profil lulusan</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-weight-hanging text-white text-2xl"></i>
+                    </div>
                 </div>
-                
-                <a href="{{ route('admin.bobot.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                          hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah Bobot
-                </a>
+                <div class="flex-1 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot CPL - MK</h1>
+                        <p class="mt-1 text-sm text-gray-600">Pembobotan kontribusi MK terhadap CPL</p>
+                    </div>
+                    <a href="{{ route('admin.bobot.create') }}"
+                       class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                        <i class="fas fa-plus mr-2 text-xs"></i>
+                        Tambah Bobot
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -46,125 +47,115 @@
         </div>
         @endif
 
-        <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
-            <!-- Content -->
-            @if($bobots->isEmpty())
-                <!-- Empty State -->
-                <div class="px-6 py-16 text-center">
-                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                              d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data Bobot</h3>
-                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Belum ada bobot MK-CPL. Klik tombol "Tambah Bobot" untuk menambahkan data baru.
-                    </p>
-                    <div class="mt-6">
-                        <a href="{{ route('admin.bobot.create') }}" 
-                           class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 
-                                  text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                  transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Tambah Bobot Pertama
-                        </a>
+        @php $isFiltered = !empty($kode_prodi ?? null) || !empty($id_tahun ?? null); @endphp
+
+        <!-- Kartu Filter ala Wadir1 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('admin.bobot.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+                            <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua Prodi</option>
+                                @foreach(($prodis ?? []) as $p)
+                                  <option value="{{ $p->kode_prodi }}" {{ ($kode_prodi ?? '')==$p->kode_prodi ? 'selected' : '' }}>{{ $p->nama_prodi }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua</option>
+                                @foreach(($tahun_tersedia ?? []) as $t)
+                                  <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '')==$t->id_tahun ? 'selected' : '' }}>{{ $t->tahun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="self-end flex gap-2">
+                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>Tampilkan Data
+                            </button>
+                            <a href="{{ route('admin.export.bobot', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if(!$isFiltered)
+            <!-- Empty State sebelum filter -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
                     </div>
                 </div>
-            @else
-                <!-- Table -->
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data Bobot CPL-MK.</p>
+            </div>
+        @elseif(!$bobots->isEmpty())
+            <!-- Tabel Bobot ala Wadir1 -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <div class="px-6 py-4 border-b bg-gray-50">
+                    <h2 class="text-lg font-semibold text-gray-800">Daftar Bobot</h2>
+                </div>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
                         <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                             <tr>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode MK</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama MK</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">CPL</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Bobot</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Total Bobot</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode MK</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode CPL</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Bobot</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @php
-                                $grouped = $bobots->groupBy('kode_mk');
-                            @endphp
-                            @foreach ($grouped as $kode_mk => $items)
-                                @php
-                                    $first = $items->first();
-                                    $totalBobot = $items->sum('bobot');
-                                @endphp
-                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
-                                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium align-top" rowspan="{{ $items->count() }}">
-                                        {{ $loop->iteration }}
+                            @foreach(($bobots ?? []) as $index => $b)
+                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
+                                        {{ $index + 1 }}
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-center align-top" rowspan="{{ $items->count() }}">
+                                    <td class="px-4 py-4 whitespace-nowrap text-center">
                                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
-                                            {{ $first->kode_mk }}
+                                            {{ $b->kode_mk }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-4 text-sm text-gray-700 align-top" rowspan="{{ $items->count() }}">
-                                        {{ $first->nama_mk ?? '-' }}
-                                    </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ $items->first()->kode_cpl }}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                            {{ $b->capaianProfilLulusan->kode_cpl ?? '-' }}
                                         </span>
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
-                                        {{ $items->first()->bobot }}
+                                        {{ $b->bobot }}
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-center align-top" rowspan="{{ $items->count() }}">
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold
-                                                     {{ $totalBobot == 100 ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
-                                            {{ $totalBobot }}
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm align-top" rowspan="{{ $items->count() }}">
-                                        <div class="flex justify-center space-x-2">
-                                            <a href="{{ route('admin.bobot.detail', $first->id_cpl) }}" 
-                                               class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                                               title="Detail">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                                </svg>
-                                            </a>
-                                            <a href="{{ route('admin.bobot.edit', $items->first()->id_bobot) }}" 
-                                               class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                                               title="Edit">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                </svg>
-                                            </a>
-                                        </div>
+                                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
+                                        <a href="{{ route('admin.bobot.detail', $b->id_cpl) }}" 
+                                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                           title="Detail Bobot CPL-MK">
+                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                            Detail
+                                        </a>
                                     </td>
                                 </tr>
-                                @foreach ($items->skip(1) as $item)
-                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $loop->parent->even ? 'bg-gray-50' : 'bg-white' }}">
-                                    <td class="px-4 py-4 whitespace-nowrap text-center">
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                            {{ $item->kode_cpl }}
-                                        </span>
-                                    </td>
-                                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
-                                        {{ $item->bobot }}
-                                    </td>
-                                </tr>
-                                @endforeach
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            @endif
-
-        </div>
+            </div>
+        @endif
     </div>
 </div>
 

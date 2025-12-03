@@ -169,6 +169,7 @@ class TimSubCpmkController extends Controller
         $id_tahun = $request->get('id_tahun');
 
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
 
         $query = DB::table('sub_cpmks as sub')
             ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub.id_cpmk', '=', 'cpmk.id_cpmk')
@@ -197,7 +198,7 @@ class TimSubCpmkController extends Controller
 
         $data = $query->get();
 
-        return view('tim.pemetaanmkcpmksubcpmk.index', compact('data', 'id_tahun', 'tahun_tersedia'));
+        return view('tim.pemetaanmkcpmksubcpmk.index', compact('data', 'id_tahun', 'tahun_tersedia', 'prodi'));
     }
 
 

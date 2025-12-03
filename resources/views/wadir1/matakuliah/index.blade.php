@@ -144,22 +144,50 @@
           </div>
         </div>
         <div class="overflow-x-auto">
-          <table id="tableMk" class="min-w-full text-sm">
+          <table id="tableMk" class="min-w-full divide-y divide-gray-200 text-sm">
             <thead class="bg-gray-100">
               <tr>
-                <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode</th>
+                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-12">No</th>
+                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-28">Kode</th>
                 <th class="px-6 py-3 text-left font-semibold text-gray-700">Nama</th>
-                <th class="px-6 py-3 text-left font-semibold text-gray-700">SKS</th>
-                <th class="px-6 py-3 text-left font-semibold text-gray-700">Semester</th>
+                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-20">SKS</th>
+                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-24">Semester</th>
+                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-28">Aksi</th>
               </tr>
             </thead>
-            <tbody class="divide-y">
-              @foreach($mata_kuliahs as $mk)
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-3">{{ $mk->kode_mk }}</td>
-                  <td class="px-6 py-3">{{ $mk->nama_mk }}</td>
-                  <td class="px-6 py-3">{{ $mk->sks_mk }}</td>
-                  <td class="px-6 py-3">{{ $mk->semester_mk }}</td>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @foreach($mata_kuliahs as $index => $mk)
+                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                  <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-700 font-medium">
+                    {{ $index + 1 }}
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                      {{ $mk->kode_mk }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-3 text-sm text-gray-900">
+                    {{ $mk->nama_mk }}
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap text-center text-sm font-semibold text-gray-900">
+                    {{ $mk->sks_mk }}
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap text-center text-sm text-gray-700">
+                    {{ $mk->semester_mk }}
+                  </td>
+                  <td class="px-6 py-3 whitespace-nowrap text-center text-sm">
+                    <a href="{{ route('wadir1.matakuliah.detail', $mk->kode_mk) }}"
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                       title="Lihat Detail">
+                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                      </svg>
+                      Detail
+                    </a>
+                  </td>
                 </tr>
               @endforeach
             </tbody>

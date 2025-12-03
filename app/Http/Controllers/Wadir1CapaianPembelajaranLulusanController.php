@@ -24,7 +24,15 @@ class Wadir1CapaianPembelajaranLulusanController extends Controller
         // Gunakan kolom langsung pada tabel CPL (karena skema sudah punya kode_prodi & id_tahun)
         $query = DB::table('capaian_profil_lulusans as cpl')
             ->leftJoin('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
-            ->select('cpl.id_cpl', 'cpl.deskripsi_cpl', 'cpl.kode_cpl', 'cpl.status_cpl', 'prodis.nama_prodi')
+            ->leftJoin('tahun', 'cpl.id_tahun', '=', 'tahun.id_tahun')
+            ->select(
+                'cpl.id_cpl',
+                'cpl.deskripsi_cpl',
+                'cpl.kode_cpl',
+                'cpl.status_cpl',
+                'prodis.nama_prodi',
+                'tahun.tahun as tahun'
+            )
             ->when($kode_prodi, fn($q) => $q->where('cpl.kode_prodi', $kode_prodi))
             ->when($id_tahun, fn($q) => $q->where('cpl.id_tahun', $id_tahun))
             ->orderBy('cpl.kode_cpl', 'asc');

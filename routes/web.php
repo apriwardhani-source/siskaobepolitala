@@ -249,6 +249,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/matakuliah/{matakuliah}', [AdminMataKuliahController::class, 'update'])->name('matakuliah.update');
         Route::delete('/matakuliah/{matakuliah}', [AdminMataKuliahController::class, 'destroy'])->name('matakuliah.destroy');
         Route::get('/matakuliah/{matakuliah}/detail', [AdminMataKuliahController::class, 'detail'])->name('matakuliah.detail');
+        Route::get('/matakuliah/export', [Wadir1ExportController::class, 'exportMk'])->name('matakuliah.export');
         Route::get('/organisasimk', [AdminMataKuliahController::class, 'organisasi_mk'])->name('matakuliah.organisasimk');
 
         Route::get('/pemetaancplmk', [AdminPemetaanCplMkController::class, 'index'])->name('pemetaancplmk.index');
@@ -286,6 +287,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pemetaanmkcpmkcpl', [AdminPemetaanCplCpmkMkController::class, 'pemetaanmkcpmkcpl'])->name('pemetaancplcpmkmk.pemetaanmkcpmkcpl');
         Route::get('/pemetaanmkcpmksubcpmk', [AdminSubCpmkController::class, 'pemetaanmkcpmksubcpmk'])->name('pemetaanmkcpmksubcpmk.index');
         Route::get('/export/excel', [TimExportController::class, 'export'])->name('export.excel');
+        Route::get('/export/subcpmk', [Wadir1ExportController::class, 'exportSubCpmk'])->name('export.subcpmk');
+        Route::get('/export/bobot', [Wadir1ExportController::class, 'exportBobot'])->name('export.bobot');
         Route::post('/ajax/get-cpl-by-bk', [AdminMataKuliahController::class, 'getCplByBk'])->name('matakuliah.getCplByBk');
         Route::post('/ajax/get-cpmk-by-bk', [AdminSubCpmkController::class, 'getCpmkByMataKuliah'])->name('subcpmk.getCpmkByMataKuliah');
         Route::post('/ajax/get-cpl-by-mk', [AdminCapaianPembelajaranMataKuliahController::class, 'getMkByCpl'])->name('capaianpembelajaranmatakuliah.getMKByCPL');
@@ -382,6 +385,7 @@ Route::middleware(['auth'])->group(function () {
         // Hasil OBE
         Route::get('/hasilobe', [Wadir1HasilObeController::class, 'index'])->name('hasilobe.index');
         Route::get('/hasilobe/{nim}', [Wadir1HasilObeController::class, 'detail'])->name('hasilobe.detail');
+        Route::get('/hasilobe/{nim}/pdf', [Wadir1HasilObeController::class, 'exportPdf'])->name('hasilobe.pdf');
         
         // Ranking Mahasiswa (SAW Method - Read Only)
         Route::get('/ranking', [\App\Http\Controllers\Wadir1\RankingMahasiswaController::class, 'index'])->name('ranking.index');

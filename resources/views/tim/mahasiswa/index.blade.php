@@ -46,31 +46,52 @@
         </div>
         @endif
 
+        <!-- Filter Card ala Wadir1 Organisasi MK -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-filter mr-2"></i>Filter Mahasiswa
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('tim.mahasiswa.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+                            <select disabled class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-sm">
+                                @foreach(($prodis ?? []) as $p)
+                                    <option>{{ $p->nama_prodi ?? '-' }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+                            <select name="tahun_kurikulum" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua</option>
+                                @foreach(($tahun_angkatans ?? []) as $tahun)
+                                    <option value="{{ $tahun->id_tahun }}" {{ ($tahun_kurikulum ?? '') == $tahun->id_tahun ? 'selected' : '' }}>
+                                        {{ $tahun->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="self-end flex gap-2">
+                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i> Tampilkan Data
+                            </button>
+                            <!-- Export Excel khusus mahasiswa tim belum ada route, bisa ditambahkan nanti -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             
             <!-- Toolbar -->
             <div class="px-6 py-5 border-b border-gray-200 bg-white">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                    
-                    <!-- Filter -->
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3">
-                            <select id="tahun" name="id_tahun"
-                                class="px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                onchange="updateFilter()">
-                                <option value="">Semua Tahun Kurikulum</option>
-                                @if (isset($tahun_angkatans))
-                                    @foreach ($tahun_angkatans as $tahun)
-                                        <option value="{{ $tahun->id_tahun }}" {{ $tahun_kurikulum == $tahun->id_tahun ? 'selected' : '' }}>
-                                            {{ $tahun->tahun }}
-                                        </option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
-
                     <!-- Search -->
                     <div class="relative w-full sm:w-64">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -223,19 +244,6 @@
 </div>
 
 <script>
-function updateFilter() {
-    const tahunSelect = document.getElementById('tahun');
-    const idTahun = tahunSelect.value;
-
-    let url = "{{ route('tim.mahasiswa.index') }}";
-
-    if (idTahun) {
-        url += '?tahun_kurikulum=' + encodeURIComponent(idTahun);
-    }
-
-    window.location.href = url;
-}
-
 function searchTable() {
     const input = document.getElementById('search');
     const filter = input.value.toUpperCase();

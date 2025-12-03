@@ -1,78 +1,107 @@
 @extends('layouts.tim.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Tim')
 
 @section('content')
 
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-        
-        <!-- Header -->
+
+        @php
+            $singleProdi = $prodis->first();
+            $selectedYear = $availableYears->firstWhere('id_tahun', $tahun_progress);
+            $overallProgress = $singleProdi->avg_progress ?? 0;
+
+            // Hitung progress MK untuk kartu bawah
+            $targetMk = 48;
+            $mkCount = $singleProdi->mk_count ?? 0;
+            $progressMk = $mkCount > 0 ? min(100, round(($mkCount / $targetMk) * 100)) : 0;
+        @endphp
+
+        <!-- Header: Progress Penyusunan Kurikulum -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Dashboard Kurikulum OBE</h1>
-            <p class="mt-2 text-sm text-gray-600">Progress implementasi kurikulum berbasis Outcome-Based Education untuk Program Studi Anda</p>
-        </div>
+            <div class="bg-gray-900 rounded-3xl shadow-xl overflow-hidden">
+                <div class="px-8 py-6 bg-gradient-to-r from-gray-900 to-slate-800">
+                    <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Progress Penyusunan Kurikulum OBE</h1>
+                    <p class="mt-2 text-sm text-blue-100">
+                        Tahun Kurikulum:
+                        @if($selectedYear)
+                            {{ $selectedYear->nama_kurikulum }} ({{ $selectedYear->tahun }})
+                        @else
+                            <span class="italic">Belum dipilih</span>
+                        @endif
+                    </p>
+                </div>
 
-        <!-- Toolbar -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-                
-                <!-- Export Section -->
-                <form id="exportForm" action="{{ route('tim.export.excel') }}" method="GET" class="flex-1">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="lg:col-span-1">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Export</label>
-                            <select name="id_tahun" id="tahunSelect" required
-                                class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-[#1e3c72] focus:border-transparent text-sm">
-                                <option value="" disabled {{ empty($id_tahun) ? 'selected' : '' }}>Pilih Tahun</option>
-                                @foreach ($availableYears as $th)
-                                    <option value="{{ $th->id_tahun }}" {{ $id_tahun == $th->id_tahun ? 'selected' : '' }}>
-                                        {{ $th->tahun }}
-                                    </option>
-                                @endforeach
-                            </select>
+                @if($tahun_progress && $singleProdi)
+                    <div class="px-8 py-6 bg-blue-50">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-900">Progress Keseluruhan</h2>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-700 text-sm font-semibold">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    {{ $overallProgress }}%
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="lg:col-span-2 flex items-end gap-3">
-                            <button type="submit"
-                                class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 
-                                       text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                       transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
-                                <i class="fas fa-file-excel mr-2"></i>
-                                Export Excel
-                            </button>
+                        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden mb-3">
+                            <div class="h-full rounded-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-700"
+                                 style="width: {{ $overallProgress }}%"></div>
+                        </div>
 
-                            <button type="button" onclick="exportWord()"
-                                class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-[#1e3c72] to-[#2a5298] hover:from-[#2a5298] hover:to-[#4a90e2] 
-                                       text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                       transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1e3c72] hover:scale-105">
-                                <i class="fas fa-file-word mr-2"></i>
-                                Export Word
-                            </button>
+                        <div class="flex items-center text-sm text-gray-700 mt-2">
+                            <i class="fas fa-hourglass-half text-amber-500 mr-2"></i>
+                            @if($overallProgress >= 100)
+                                Kurikulum OBE sudah lengkap. Lakukan peninjauan berkala untuk menjaga kualitas.
+                            @elseif($overallProgress > 0)
+                                Kurikulum OBE dalam tahap pengembangan. Lanjutkan penyusunan komponen yang belum lengkap.
+                            @else
+                                Belum ada progress. Mulai dengan menyusun CPL, mata kuliah, dan CPMK.
+                            @endif
                         </div>
                     </div>
-                </form>
+                @else
+                    <div class="px-8 py-6 bg-blue-50 text-sm text-gray-700">
+                        Silakan pilih <strong>Tahun Progress</strong> terlebih dahulu untuk melihat progress penyusunan kurikulum OBE.
+                    </div>
+                @endif
+            </div>
+        </div>
 
-                <!-- Year Filter for Chart -->
-                <form method="GET" action="{{ route('tim.dashboard') }}" class="lg:w-80">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Grafik</label>
-                        <div class="flex gap-3">
-                            <select name="tahun_progress" required
-                                class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-[#1e3c72] focus:border-transparent text-sm">
-                                <option value="" disabled selected>Pilih Tahun</option>
+        <!-- Filter Dashboard -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter Dashboard
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('tim.dashboard') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-chart-line text-blue-500 mr-1"></i>
+                                Tahun Progress
+                            </label>
+                            <select name="tahun_progress"
+                                    class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Pilih Tahun untuk Melihat Progress</option>
                                 @foreach ($availableYears as $th)
-                                    <option value="{{ $th->id_tahun }}" {{ request('tahun_progress') == $th->id_tahun ? 'selected' : '' }}>
-                                        {{ $th->tahun }}
+                                    <option value="{{ $th->id_tahun }}" {{ ($tahun_progress ?? '') == $th->id_tahun ? 'selected' : '' }}>
+                                        {{ $th->nama_kurikulum }} - {{ $th->tahun }}
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="flex items-end">
                             <button type="submit"
-                                class="px-5 py-2.5 bg-gradient-to-r from-[#1e3c72] to-[#2a5298] hover:from-[#2a5298] hover:to-[#4a90e2] text-white font-medium 
-                                       rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105">
-                                Tampilkan
+                                    class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>
+                                Tampilkan Data
                             </button>
                         </div>
                     </div>
@@ -80,66 +109,145 @@
             </div>
         </div>
 
-        <!-- Progress Chart -->
-        @if (request()->filled('tahun_progress'))
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] px-6 py-5">
-                    <h2 class="text-xl font-bold text-white">Grafik Progress Kurikulum OBE</h2>
-                    <p class="mt-1 text-sm text-gray-300">Visualisasi progress per komponen kurikulum</p>
-                </div>
-
-                <div class="p-6">
-                    <!-- Target Info Box -->
-                    <div class="bg-gradient-to-r from-[#1e3c72]/5 to-[#4a90e2]/10 border-l-4 border-[#1e3c72] rounded-lg p-5 mb-6">
-                        <h4 class="font-semibold text-[#1e3c72] mb-3 flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                            </svg>
-                            Target Standar Kurikulum OBE
-                        </h4>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="bg-white rounded-lg p-3 shadow-sm">
-                                <div class="text-2xl font-bold text-[#1e3c72]">9</div>
-                                <div class="text-xs font-medium text-gray-600 mt-1">CPL</div>
-                                <div class="text-xs text-gray-500">Capaian Profil Lulusan</div>
-                            </div>
-                            <div class="bg-white rounded-lg p-3 shadow-sm">
-                                <div class="text-2xl font-bold text-blue-600">144</div>
-                                <div class="text-xs font-medium text-gray-600 mt-1">Total SKS</div>
-                                <div class="text-xs text-gray-500">Mata Kuliah (D4)</div>
-                            </div>
-                            <div class="bg-white rounded-lg p-3 shadow-sm">
-                                <div class="text-2xl font-bold text-blue-600">20</div>
-                                <div class="text-xs font-medium text-gray-600 mt-1">CPMK</div>
-                                <div class="text-xs text-gray-500">Capaian Pembelajaran MK</div>
-                            </div>
-                            <div class="bg-white rounded-lg p-3 shadow-sm">
-                                <div class="text-2xl font-bold text-blue-600">40</div>
-                                <div class="text-xs font-medium text-gray-600 mt-1">Sub CPMK</div>
-                                <div class="text-xs text-gray-500">Indikator Pencapaian</div>
-                            </div>
-                        </div>
+        @if($tahun_progress && $prodicount > 0 && $singleProdi)
+            <!-- Target Standar Kurikulum OBE -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+                <div class="px-6 py-4 border-b border-gray-200 bg-blue-50 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold">i</span>
+                        <h2 class="text-sm md:text-base font-semibold text-gray-900">Target Standar Kurikulum OBE (D4/S1)</h2>
                     </div>
-
-                    <!-- Chart Container -->
-                    <div class="bg-gray-50 rounded-lg p-6">
-                        <div class="w-full" style="height: 400px;">
-                            <canvas id="progressChart"></canvas>
+                    <span class="text-xs text-gray-500 hidden md:inline">Referensi target progress untuk program studi</span>
+                </div>
+                <div class="px-6 py-5 bg-blue-50">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <div class="bg-white rounded-xl shadow-sm px-5 py-4">
+                            <p class="text-2xl font-bold text-blue-700">9</p>
+                            <p class="mt-1 text-xs font-semibold text-gray-700">CPL</p>
+                            <p class="text-[11px] text-gray-500 mt-1">Capaian Profil Lulusan</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm px-5 py-4">
+                            <p class="text-2xl font-bold text-blue-700">48</p>
+                            <p class="mt-1 text-xs font-semibold text-gray-700">Mata Kuliah</p>
+                            <p class="text-[11px] text-gray-500 mt-1">Jumlah Mata Kuliah</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm px-5 py-4">
+                            <p class="text-2xl font-bold text-blue-700">144</p>
+                            <p class="mt-1 text-xs font-semibold text-gray-700">Total SKS</p>
+                            <p class="text-[11px] text-gray-500 mt-1">Total SKS Mata Kuliah (D4)</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm px-5 py-4">
+                            <p class="text-2xl font-bold text-blue-700">20</p>
+                            <p class="mt-1 text-xs font-semibold text-gray-700">CPMK</p>
+                            <p class="text-[11px] text-gray-500 mt-1">Capaian Pembelajaran MK</p>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm px-5 py-4">
+                            <p class="text-2xl font-bold text-blue-700">40</p>
+                            <p class="mt-1 text-xs font-semibold text-gray-700">Sub CPMK</p>
+                            <p class="text-[11px] text-gray-500 mt-1">Indikator Pencapaian</p>
                         </div>
                     </div>
                 </div>
             </div>
-        @else
-            <!-- Empty State -->
+
+            <!-- Progress Cards per Komponen -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- CPL -->
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-sm font-semibold text-gray-800">CPL</h4>
+                        <span class="text-xs font-semibold text-green-600">{{ $singleProdi->progress_cpl ?? 0 }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="h-2 rounded-full bg-green-500" style="width: {{ $singleProdi->progress_cpl ?? 0 }}%"></div>
+                    </div>
+                    <div class="mt-2 text-lg font-bold text-gray-900">
+                        {{ $singleProdi->cpl_count ?? 0 }} <span class="text-sm font-normal text-gray-500">/ 9</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">Capaian Pembelajaran Lulusan</p>
+                </div>
+
+                <!-- Total SKS -->
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-sm font-semibold text-gray-800">Total SKS</h4>
+                        <span class="text-xs font-semibold text-green-600">{{ $singleProdi->progress_sks_mk ?? 0 }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="h-2 rounded-full bg-green-500" style="width: {{ $singleProdi->progress_sks_mk ?? 0 }}%"></div>
+                    </div>
+                    <div class="mt-2 text-lg font-bold text-gray-900">
+                        {{ $singleProdi->sks_mk ?? 0 }} <span class="text-sm font-normal text-gray-500">/ 144</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">Total SKS Mata Kuliah</p>
+                </div>
+
+                <!-- CPMK -->
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-sm font-semibold text-gray-800">CPMK</h4>
+                        <span class="text-xs font-semibold {{ ($singleProdi->progress_cpmk ?? 0) >= 50 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $singleProdi->progress_cpmk ?? 0 }}%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="h-2 rounded-full {{ ($singleProdi->progress_cpmk ?? 0) >= 50 ? 'bg-green-500' : 'bg-red-500' }}"
+                             style="width: {{ $singleProdi->progress_cpmk ?? 0 }}%"></div>
+                    </div>
+                    <div class="mt-2 text-lg font-bold text-gray-900">
+                        {{ $singleProdi->cpmk_count ?? 0 }} <span class="text-sm font-normal text-gray-500">/ 20</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">Capaian Pembelajaran MK</p>
+                </div>
+
+                <!-- Sub CPMK -->
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-sm font-semibold text-gray-800">Sub CPMK</h4>
+                        <span class="text-xs font-semibold {{ ($singleProdi->progress_subcpmk ?? 0) >= 50 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $singleProdi->progress_subcpmk ?? 0 }}%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="h-2 rounded-full {{ ($singleProdi->progress_subcpmk ?? 0) >= 50 ? 'bg-green-500' : 'bg-red-500' }}"
+                             style="width: {{ $singleProdi->progress_subcpmk ?? 0 }}%"></div>
+                    </div>
+                    <div class="mt-2 text-lg font-bold text-gray-900">
+                        {{ $singleProdi->subcpmk_count ?? 0 }} <span class="text-sm font-normal text-gray-500">/ 40</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">Sub Capaian Pembelajaran MK</p>
+                </div>
+            </div>
+
+            <!-- Mata Kuliah -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
+                <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-sm font-semibold text-gray-800">Mata Kuliah</h4>
+                        <span class="text-xs font-semibold {{ $progressMk >= 50 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $progressMk }}%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="h-2 rounded-full {{ $progressMk >= 50 ? 'bg-green-500' : 'bg-red-500' }}"
+                             style="width: {{ $progressMk }}%"></div>
+                    </div>
+                    <div class="mt-2 text-lg font-bold text-gray-900">
+                        {{ $mkCount }} <span class="text-sm font-normal text-gray-500">/ 48</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">Jumlah Mata Kuliah</p>
+                </div>
+            </div>
+        @elseif($tahun_progress)
+            <!-- No Data State -->
             <div class="bg-white rounded-xl shadow-lg p-12 text-center">
                 <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
                 </svg>
-                <h3 class="mt-4 text-lg font-semibold text-gray-900">Pilih Tahun Grafik</h3>
+                <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data Kurikulum</h3>
                 <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                    Silakan pilih tahun kurikulum di atas untuk menampilkan visualisasi progress implementasi OBE.
+                    Belum ada data kurikulum OBE untuk tahun yang dipilih.
                 </p>
             </div>
         @endif
@@ -147,141 +255,5 @@
     </div>
 </div>
 
-@push('scripts')
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-@if (request()->filled('tahun_progress'))
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const prodis = {!! json_encode($prodis) !!};
-
-    const labels = prodis.map(prodi => prodi.nama_prodi);
-    const datasets = [
-        {
-            label: 'CPL',
-            data: prodis.map(prodi => prodi.progress_cpl || 0),
-            backgroundColor: 'rgba(30, 60, 114, 0.7)',
-            borderColor: 'rgba(30, 60, 114, 1)',
-            borderWidth: 2,
-            borderRadius: 6
-        },
-        {
-            label: 'Total SKS',
-            data: prodis.map(prodi => prodi.progress_sks_mk || 0),
-            backgroundColor: 'rgba(42, 82, 152, 0.7)',
-            borderColor: 'rgba(42, 82, 152, 1)',
-            borderWidth: 2,
-            borderRadius: 6
-        },
-        {
-            label: 'CPMK',
-            data: prodis.map(prodi => prodi.progress_cpmk || 0),
-            backgroundColor: 'rgba(74, 144, 226, 0.7)',
-            borderColor: 'rgba(74, 144, 226, 1)',
-            borderWidth: 2,
-            borderRadius: 6
-        },
-        {
-            label: 'Sub CPMK',
-            data: prodis.map(prodi => prodi.progress_subcpmk || 0),
-            backgroundColor: 'rgba(139, 92, 246, 0.7)',
-            borderColor: 'rgba(139, 92, 246, 1)',
-            borderWidth: 2,
-            borderRadius: 6
-        }
-    ];
-
-    const ctx = document.getElementById('progressChart').getContext('2d');
-    const progressChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: datasets
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    stacked: false,
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        font: {
-                            size: 11,
-                            weight: '500'
-                        }
-                    }
-                },
-                y: {
-                    stacked: false,
-                    beginAtZero: true,
-                    max: 100,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return value + '%';
-                        },
-                        font: {
-                            size: 11
-                        }
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    padding: 12,
-                    titleFont: {
-                        size: 13,
-                        weight: 'bold'
-                    },
-                    bodyFont: {
-                        size: 12
-                    },
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + context.raw + '%';
-                        }
-                    }
-                },
-                legend: {
-                    position: 'top',
-                    labels: {
-                        padding: 15,
-                        font: {
-                            size: 12,
-                            weight: '600'
-                        },
-                        usePointStyle: true,
-                        pointStyle: 'circle'
-                    }
-                }
-            }
-        }
-    });
-});
-
-function exportWord() {
-    event.preventDefault();
-    
-    const form = document.getElementById('exportForm');
-    const tahun = form.querySelector('select[name="id_tahun"]').value;
-
-    if (!tahun) {
-        alert('Harap pilih Tahun terlebih dahulu.');
-        return;
-    }
-
-    const url = `{{ url('/export/kpt') }}?id_tahun=${tahun}`;
-    window.open(url, '_blank');
-}
-</script>
-@endif
-@endpush
-
 @endsection
+

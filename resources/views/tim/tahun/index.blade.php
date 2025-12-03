@@ -4,22 +4,22 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
+        <!-- Header (dengan ikon seperti Admin) -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Tahun Kurikulum</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola tahun kurikulum program studi</p>
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-calendar-alt text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Tahun Kurikulum</h1>
+                        <p class="mt-1 text-sm text-gray-600">Kelola tahun kurikulum program studi</p>
+                    </div>
                 </div>
                 
                 <a href="{{ route('tim.tahun.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                          hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
+                   class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                    <i class="fas fa-plus mr-2 text-sm"></i>
                     Tambah Tahun
                 </a>
             </div>
@@ -66,60 +66,109 @@
         </div>
         @endif
 
-        <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <!-- Main Card (diselaraskan dengan Admin) -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+
+            <!-- Card Header -->
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg md:text-xl font-semibold text-white">Daftar Tahun Kurikulum</h2>
+                    <p class="mt-1 text-xs md:text-sm text-blue-100">
+                        Ringkasan tahun ajaran yang digunakan pada program studi.
+                    </p>
+                </div>
+                <div class="hidden sm:flex items-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-medium text-blue-50 shadow-sm">
+                        <i class="fas fa-layer-group mr-2 text-[11px]"></i>
+                        {{ $tahuns->total() }} Tahun
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card Toolbar: deskripsi + search -->
+            <div class="px-6 py-4 border-b border-gray-200 bg-white">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600">
+                            Kelola penambahan, pengeditan, dan penghapusan tahun kurikulum.
+                        </p>
+                    </div>
+                    <div class="w-full md:w-72">
+                        <div class="relative">
+                            <input
+                                type="text"
+                                id="search"
+                                placeholder="Cari tahun ajaran..."
+                                class="pl-9 pr-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 w-full"
+                            >
+                            <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Content -->
             @if ($tahuns->isEmpty())
                 <!-- Empty State -->
-                <div class="px-6 py-16 text-center">
-                    <svg class="mx-auto h-24 w-24 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="empty-state">
+                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Belum Ada Data Tahun</h3>
-                    <p class="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-                        Belum ada tahun kurikulum. Klik tombol "Tambah Tahun" untuk menambahkan data baru.
+                    <h3 class="empty-state-title">Belum Ada Tahun Kurikulum</h3>
+                    <p class="empty-state-text">
+                        Klik tombol "Tambah Tahun" untuk menambahkan tahun ajaran baru.
                     </p>
-                    <div class="mt-6">
-                        <a href="{{ route('tim.tahun.create') }}" 
-                           class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 
-                                  text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                  transition-all duration-200">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Tambah Tahun Pertama
-                        </a>
-                    </div>
                 </div>
             @else
                 <!-- Table -->
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto bg-gray-50">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
+                        <thead class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white">
                             <tr>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-40">Tahun Ajaran</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama Kurikulum</th>
-                                <th scope="col" class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-40">Aksi</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-16">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-hashtag mr-2"></i>
+                                        No
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-40">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calendar-alt mr-2"></i>
+                                        Tahun Ajaran
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-book-open mr-2"></i>
+                                        Nama Kurikulum
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider w-32">
+                                    <div class="flex items-center justify-center">
+                                        <i class="fas fa-tools mr-2"></i>
+                                        Aksi
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm">
                             @foreach ($tahuns as $index => $tahun)
-                            <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
+                            <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                <td class="px-4 py-3 whitespace-nowrap text-center font-medium text-gray-800">
                                     {{ $tahuns->firstItem() + $index }}
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center">
-                                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+                                <td class="px-4 py-3 whitespace-nowrap text-center">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm">
                                         {{ $tahun->tahun }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-4 text-sm text-gray-900 font-medium">
-                                    {{ ucfirst($tahun->nama_kurikulum) }}
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-green-500 to-green-600 text-white shadow-sm">
+                                        {{ ucfirst($tahun->nama_kurikulum) }}
+                                    </span>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
+                                <td class="px-4 py-3 whitespace-nowrap text-center">
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('tim.tahun.edit', $tahun->id_tahun) }}" 
                                            class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"
@@ -163,6 +212,17 @@
 
 @push('scripts')
 <script>
+// Search functionality (client-side)
+document.getElementById('search').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchValue) ? '' : 'none';
+    });
+});
+
 // Auto-hide alerts
 setTimeout(function() {
     ['alert-success', 'alert-sukses'].forEach(id => {
@@ -192,6 +252,36 @@ setTimeout(function() {
 
 .animate-fade-out {
     animation: fade-out 0.3s ease-out;
+}
+
+.empty-state {
+    padding: 4rem 1.5rem;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.empty-state-icon {
+    width: 6rem;
+    height: 6rem;
+    margin-left: auto;
+    margin-right: auto;
+    color: #d1d5db;
+}
+
+.empty-state-title {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.empty-state-text {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>
 @endpush

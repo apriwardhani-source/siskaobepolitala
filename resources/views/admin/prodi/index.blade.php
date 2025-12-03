@@ -4,24 +4,18 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
+        <!-- Header ala CPL -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-university text-white text-2xl"></i>
+                    </div>
+                </div>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Program Studi</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola program studi</p>
+                    <p class="mt-1 text-sm text-gray-600">Kelola daftar program studi dan informasi terkait.</p>
                 </div>
-                
-                <a href="{{ route('admin.prodi.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                          hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah Prodi
-                </a>
             </div>
         </div>
 
@@ -46,16 +40,23 @@
         </div>
         @endif
 
-        <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            
-            <!-- Toolbar -->
-            <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Daftar Program Studi</h2>
-                    
-                    <!-- Search -->
-                    <div class="w-80">
+        <!-- Kartu Filter ala CPL -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter Program Studi
+                </h2>
+                <a href="{{ route('admin.prodi.create') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-plus mr-2 text-xs"></i>
+                    Tambah Prodi
+                </a>
+            </div>
+            <div class="px-6 py-4">
+                <div class="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-3 md:space-y-0">
+                    <div class="flex-1">
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Program Studi</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-search text-gray-400"></i>
@@ -66,9 +67,19 @@
                                           placeholder-gray-400 text-sm transition-all duration-200">
                         </div>
                     </div>
+                    <div class="md:w-auto">
+                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Total Program Studi</p>
+                        <p class="text-lg font-semibold text-gray-900">
+                            {{ $prodis->count() }}
+                            <span class="text-sm font-normal text-gray-500">terdaftar</span>
+                        </p>
+                    </div>
                 </div>
             </div>
+        </div>
 
+        <!-- Kartu Data -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             <!-- Content -->
             @if ($prodis->isEmpty())
                 <!-- Empty State -->
@@ -91,7 +102,7 @@
                                 <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
                                 <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode Prodi</th>
                                 <th class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama Program Studi</th>
-                                <th class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Visi Prodi</th>
+                                <th class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Nama Kaprodi</th>
                                 <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-40">Aksi</th>
                             </tr>
                         </thead>
@@ -110,7 +121,7 @@
                                     {{ $prodi->nama_prodi }}
                                 </td>
                                 <td class="px-4 py-4 text-sm text-gray-700">
-                                    {{ Str::limit($prodi->visi_prodi, 100) }}
+                                    {{ $prodi->nama_kaprodi ?? '-' }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                     <div class="flex justify-center space-x-2">

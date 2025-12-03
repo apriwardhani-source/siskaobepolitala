@@ -58,13 +58,19 @@ class AdminCapaianProfilLulusanController extends Controller
         $request->validate([
             'kode_cpl' => 'required|string|max:10|unique:capaian_profil_lulusans,kode_cpl',
             'deskripsi_cpl' => 'required',
-            'status_cpl' => 'required|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
+            'status_cpl' => 'nullable|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
             'kode_prodi' => 'required|exists:prodis,kode_prodi',
             'id_tahun' => 'required|exists:tahun,id_tahun'
         ]);
 
         // Struktur baru: CPL langsung simpan dengan kode_prodi dan id_tahun
-        CapaianProfilLulusan::create($request->only(['kode_cpl', 'deskripsi_cpl', 'status_cpl', 'kode_prodi', 'id_tahun']));
+        CapaianProfilLulusan::create([
+            'kode_cpl'      => $request->kode_cpl,
+            'deskripsi_cpl' => $request->deskripsi_cpl,
+            'status_cpl'    => $request->status_cpl, // boleh null
+            'kode_prodi'    => $request->kode_prodi,
+            'id_tahun'      => $request->id_tahun,
+        ]);
 
         return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil Lulusan berhasil ditambahkan.');
     }
@@ -89,13 +95,19 @@ class AdminCapaianProfilLulusanController extends Controller
                 Rule::unique('capaian_profil_lulusans', 'kode_cpl')->ignore($id_cpl, 'id_cpl'),
             ],
             'deskripsi_cpl' => 'required',
-            'status_cpl' => 'required|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
+            'status_cpl' => 'nullable|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
             'kode_prodi' => 'required|exists:prodis,kode_prodi',
             'id_tahun' => 'required|exists:tahun,id_tahun'
         ]);
 
         $capaianprofillulusan = CapaianProfilLulusan::findOrFail($id_cpl);
-        $capaianprofillulusan->update($request->only(['kode_cpl', 'deskripsi_cpl', 'status_cpl', 'kode_prodi', 'id_tahun']));
+        $capaianprofillulusan->update([
+            'kode_cpl'      => $request->kode_cpl,
+            'deskripsi_cpl' => $request->deskripsi_cpl,
+            'status_cpl'    => $request->status_cpl,
+            'kode_prodi'    => $request->kode_prodi,
+            'id_tahun'      => $request->id_tahun,
+        ]);
 
         return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil Lulusan berhasil diperbarui.');
     }

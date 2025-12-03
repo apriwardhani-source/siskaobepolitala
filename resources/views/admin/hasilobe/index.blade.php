@@ -3,14 +3,14 @@
 @section('title', 'Hasil OBE - Daftar Mahasiswa')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                         <i class="fas fa-chart-line text-white text-2xl"></i>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
 
         <!-- Filter Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-filter mr-2"></i>
                     Filter Mahasiswa
@@ -72,7 +72,7 @@
                         <!-- Button -->
                         <div class="flex items-end">
                             <button type="submit" 
-                                class="w-full px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                                class="w-full px-6 py-2.5 bg-blue-600 hover:bg-blue-700 
                                        text-white font-semibold rounded-lg shadow-md hover:shadow-lg 
                                        transform hover:scale-105 transition-all duration-200">
                                 <i class="fas fa-search mr-2"></i>
@@ -180,16 +180,45 @@
 
                 <div class="divide-y divide-gray-200">
                     @foreach($mahasiswas as $mahasiswa)
+                    @php
+                        $colors = [
+                            ['bg' => '#F44336', 'text' => '#FFFFFF'], // Red
+                            ['bg' => '#E91E63', 'text' => '#FFFFFF'], // Pink
+                            ['bg' => '#9C27B0', 'text' => '#FFFFFF'], // Purple
+                            ['bg' => '#3F51B5', 'text' => '#FFFFFF'], // Indigo
+                            ['bg' => '#2196F3', 'text' => '#FFFFFF'], // Blue
+                            ['bg' => '#00BCD4', 'text' => '#FFFFFF'], // Cyan
+                            ['bg' => '#4CAF50', 'text' => '#FFFFFF'], // Green
+                            ['bg' => '#FF9800', 'text' => '#FFFFFF'], // Orange
+                            ['bg' => '#795548', 'text' => '#FFFFFF'], // Brown
+                        ];
+                        $hash = 0;
+                        $name = (string) $mahasiswa->nama_mahasiswa;
+                        for ($i = 0; $i < strlen($name); $i++) {
+                            $hash = ord($name[$i]) + (($hash << 5) - $hash);
+                        }
+                        $colorIndex = abs($hash) % count($colors);
+                        if (!isset($colors[$colorIndex])) {
+                            $colorIndex = 0;
+                        }
+                        $avatarColor = $colors[$colorIndex];
+                        
+                        $words = explode(' ', trim($name));
+                        $initials = count($words) >= 2 
+                            ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1))
+                            : strtoupper(substr($name, 0, 2));
+                    @endphp
                     <div class="mahasiswa-item hover:bg-blue-50 transition-colors duration-150">
                         <div class="px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center space-x-4 flex-1">
                                 <div class="flex-shrink-0">
-                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                        {{ strtoupper(substr($mahasiswa->nama, 0, 1)) }}
+                                    <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md"
+                                         style="background-color: {{ $avatarColor['bg'] }}; color: {{ $avatarColor['text'] }};">
+                                        {{ $initials }}
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <h3 class="text-sm font-semibold text-gray-900">{{ $mahasiswa->nama }}</h3>
+                                    <h3 class="text-sm font-semibold text-gray-900">{{ $mahasiswa->nama_mahasiswa }}</h3>
                                     <div class="mt-1 flex items-center space-x-4 text-xs text-gray-500">
                                         <span class="flex items-center">
                                             <i class="fas fa-id-card mr-1"></i>
@@ -201,14 +230,14 @@
                                         </span>
                                         <span class="flex items-center">
                                             <i class="fas fa-calendar mr-1"></i>
-                                            Angkatan {{ $mahasiswa->tahun_kurikulum }}
+                                            Angkatan {{ $mahasiswa->tahunKurikulum->tahun ?? '-' }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <a href="{{ route('admin.hasilobe.detail', $mahasiswa->nim) }}" 
-                                   class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                                   class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 
                                           text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
                                           transform hover:scale-105 transition-all duration-200">
                                     <i class="fas fa-chart-bar mr-2"></i>
@@ -239,7 +268,9 @@
         @else
             <!-- Empty State - No Filter -->
             <div class="bg-white rounded-xl shadow-lg p-12 text-center">
-                <i class="fas fa-filter text-gray-300 text-6xl mb-4"></i>
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-blue-600 shadow-lg mb-4">
+                    <i class="fas fa-filter text-white text-3xl"></i>
+                </div>
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Pilih Filter</h3>
                 <p class="text-sm text-gray-500">
                     Silakan pilih tahun angkatan dan program studi untuk menampilkan data mahasiswa.

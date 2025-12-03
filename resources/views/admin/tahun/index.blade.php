@@ -2,21 +2,24 @@
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Tahun Kurikulum</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola tahun ajaran dan kurikulum</p>
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-calendar-alt text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Tahun Kurikulum</h1>
+                        <p class="mt-1 text-sm text-gray-600">Kelola tahun ajaran dan kurikulum untuk seluruh prodi</p>
+                    </div>
                 </div>
                 
                 <a href="{{ route('admin.tahun.create') }}"
-                   class="btn-gradient-primary">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
+                   class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                    <i class="fas fa-plus mr-2 text-sm"></i>
                     Tambah Tahun
                 </a>
             </div>
@@ -64,21 +67,41 @@
         @endif
 
         <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+
+            <!-- Card Header -->
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg md:text-xl font-semibold text-white">Daftar Tahun Kurikulum</h2>
+                    <p class="mt-1 text-xs md:text-sm text-blue-100">
+                        Ringkasan seluruh tahun ajaran yang digunakan pada program studi.
+                    </p>
+                </div>
+                <div class="hidden sm:flex items-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-medium text-blue-50 shadow-sm">
+                        <i class="fas fa-layer-group mr-2 text-[11px]"></i>
+                        <span>{{ $tahuns->total() ?? 0 }} Tahun</span>
+                    </span>
+                </div>
+            </div>
             
             <!-- Toolbar -->
-            <div class="px-6 py-5 border-b border-gray-200 bg-white">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">Daftar Tahun Kurikulum</h2>
+            <div class="px-6 py-4 border-b border-gray-100 bg-white">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <p class="text-sm text-gray-600">
+                        Kelola penambahan, pengeditan, dan penghapusan tahun kurikulum.
+                    </p>
                     
                     <!-- Search -->
-                    <div class="w-80">
+                    <div class="w-full md:w-80">
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
-                            </div>
-                            <input type="text" id="search" placeholder="Cari tahun ajaran..." 
-                                   class="input-modern pl-10">
+                            <input
+                                id="search"
+                                type="text"
+                                placeholder="Cari tahun ajaran..."
+                                class="pl-9 pr-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 w-full"
+                            >
+                            <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400"></i>
                         </div>
                     </div>
                 </div>
@@ -99,29 +122,53 @@
                 </div>
             @else
                 <!-- Table -->
-                <div class="overflow-x-auto">
-                    <table class="table-modern">
-                        <thead>
+                <div class="overflow-x-auto bg-gray-50">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white">
                             <tr>
-                                <th class="w-16">No</th>
-                                <th class="w-40">Tahun Ajaran</th>
-                                <th>Nama Kurikulum</th>
-                                <th class="w-32">Aksi</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-16">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-hashtag mr-2"></i>
+                                        No
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider w-40">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calendar-alt mr-2"></i>
+                                        Tahun Ajaran
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-book-open mr-2"></i>
+                                        Nama Kurikulum
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider w-32">
+                                    <div class="flex items-center justify-center">
+                                        <i class="fas fa-tools mr-2"></i>
+                                        Aksi
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm">
                             @foreach ($tahuns as $index => $tahun)
-                            <tr>
-                                <td class="text-center font-medium">
+                            <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                <td class="px-4 py-3 whitespace-nowrap text-center font-medium text-gray-800">
                                     {{ $tahuns->firstItem() + $index }}
                                 </td>
-                                <td class="text-center">
-                                    <span class="badge-modern badge-blue">{{ $tahun->tahun }}</span>
+                                <td class="px-4 py-3 whitespace-nowrap text-center">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm">
+                                        {{ $tahun->tahun }}
+                                    </span>
                                 </td>
-                                <td class="font-medium text-gray-900">
-                                    {{ ucfirst($tahun->nama_kurikulum) }}
+                                <td class="px-4 py-3 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-green-500 to-green-600 text-white shadow-sm">
+                                        {{ ucfirst($tahun->nama_kurikulum) }}
+                                    </span>
                                 </td>
-                                <td class="text-center">
+                                <td class="px-4 py-3 whitespace-nowrap text-center">
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('admin.tahun.edit', $tahun->id_tahun) }}" 
                                            class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"

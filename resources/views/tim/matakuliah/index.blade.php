@@ -4,15 +4,21 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
-        <!-- Header -->
+        <!-- Header (ikon + judul seperti Kaprodi, dengan aksi TIM di kanan) -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Mata Kuliah</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola mata kuliah dan kurikulum program studi</p>
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-book-open text-white text-2xl"></i>
+                    </div>
                 </div>
-                
-                <div class="flex items-center space-x-3">
+                <div class="flex-1 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Mata Kuliah</h1>
+                        <p class="mt-2 text-sm text-gray-600">Kelola mata kuliah dan kurikulum program studi</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
                     <a href="{{ route('tim.matakuliah.download-template') }}"
                        class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 
                               text-white font-medium rounded-lg shadow-sm hover:shadow-md 
@@ -41,6 +47,7 @@
                         </svg>
                         Tambah MK
                     </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,30 +93,52 @@
         </div>
         @endif
 
+        <!-- Filter Card: gaya Wadir1 Organisasi MK -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-filter mr-2"></i>Filter Mata Kuliah
+                </h2>
+            </div>
+            <div class="p-6">
+                <form method="GET" action="{{ route('tim.matakuliah.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+                            <select disabled class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-100 text-sm">
+                                <option>{{ $prodiName ?? '-' }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="">Semua</option>
+                                @foreach(($tahun_tersedia ?? []) as $t)
+                                    <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '') == $t->id_tahun ? 'selected' : '' }}>
+                                        {{ $t->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="self-end flex gap-2">
+                            <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>Tampilkan Data
+                            </button>
+                            <a href="{{ route('tim.export.excel', ['id_tahun' => ($id_tahun ?? request('id_tahun'))]) }}" class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
+                                <i class="fas fa-file-excel mr-2"></i> Export Excel
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             
             <!-- Toolbar -->
             <div class="px-6 py-5 border-b border-gray-200 bg-white">
                 <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between space-y-4 lg:space-y-0 gap-4">
-                    
-                    <!-- Filter -->
-                    <div class="flex-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                        <select id="tahun" name="id_tahun" onchange="updateFilter()"
-                            class="block w-full max-w-xs px-4 py-2.5 border border-gray-300 rounded-lg 
-                                   focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                            <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                            @if (isset($tahun_tersedia))
-                                @foreach ($tahun_tersedia as $thn)
-                                    <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                    </option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
                     <!-- Search -->
                     <div class="lg:w-80">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Mata Kuliah</label>
@@ -125,23 +154,76 @@
                     </div>
                 </div>
 
-                <!-- Filter Info -->
-                @if ($id_tahun)
-                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                        @php
-                            $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                        @endphp
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                            Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                        </span>
-                        <a href="{{ route('tim.matakuliah.index') }}" 
-                           class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                            Reset filter
-                        </a>
+                @php
+                    $selected_tahun = ($tahun_tersedia ?? collect())->firstWhere('id_tahun', $id_tahun);
+                    $isFiltered = !empty($id_tahun);
+                @endphp
+
+                <!-- Filter Info + ringkasan -->
+                @if ($isFiltered)
+                    <div class="mt-4 space-y-4">
+                        <div class="bg-white rounded-xl shadow border border-gray-200 p-4">
+                            <div class="text-sm text-gray-600 mb-2">Filter aktif:</div>
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
+                                    <i class="fas fa-calendar-alt mr-2"></i>
+                                    Angkatan: {{ $selected_tahun->tahun ?? 'Semua' }}
+                                </span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
+                                    <i class="fas fa-university mr-2"></i>
+                                    {{ $prodiName ?? '-' }}
+                                </span>
+                                <a href="{{ route('tim.matakuliah.index') }}" 
+                                   class="text-red-600 text-sm ml-2">
+                                    <i class="fas fa-times mr-1"></i>Reset
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-600 uppercase">Total MK</p>
+                                        <p class="mt-2 text-3xl font-bold text-gray-900">
+                                            {{ ($mata_kuliahs ?? collect())->count() }}
+                                        </p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
+                                        <i class="fas fa-book-open text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
+                                        <p class="mt-2 text-3xl font-bold text-gray-900">
+                                            {{ $selected_tahun->tahun ?? '-' }}
+                                        </p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                                        <i class="fas fa-calendar text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
+                                <div class="p-6 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
+                                        <p class="mt-2 text-xl font-bold text-gray-900">
+                                            {{ $prodiName ?? '-' }}
+                                        </p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white">
+                                        <i class="fas fa-graduation-cap text-2xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 @endif
             </div>
 
@@ -295,19 +377,6 @@
 
 @push('scripts')
 <script>
-function updateFilter() {
-    const tahunSelect = document.getElementById('tahun');
-    const idTahun = tahunSelect.value;
-
-    let url = "{{ route('tim.matakuliah.index') }}";
-    
-    if (idTahun) {
-        url += '?id_tahun=' + encodeURIComponent(idTahun);
-    }
-
-    window.location.href = url;
-}
-
 // Search functionality
 document.getElementById('search').addEventListener('input', function() {
     const searchValue = this.value.toLowerCase();

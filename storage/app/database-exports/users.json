@@ -433,7 +433,7 @@
     },
     {
         "id": 27,
-        "name": "apri wardhani",
+        "name": "APRI WARDHANI",
         "nip": "123456543345",
         "nohp": "0987899876",
         "email": "apri.wardhani@mhs.politala.ac.id",
@@ -445,7 +445,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-31 01:50:56",
-        "updated_at": "2025-11-13 08:15:12",
+        "updated_at": "2025-11-06 13:28:29",
         "google_id": "102046001027556912491",
         "avatar": "https:\/\/lh3.googleusercontent.com\/a-\/ALV-UjXt0fZDPbTwP-6z6mtt-g10QstfPun6mdinzEDsGWjqwElQb6ygrTXExEL0urNJZLJ3gAEpMqB3AQPCg2gE2s5SiDEI5dlXZRKwCt6cjz8EBkCaJ-yWIbFFfaEaYkqDS83F-_J9nUZ1Gu3Cm690_HkI0Cx5u_d0imTVZMYgxmFQ_NPViv83k_1UDrQTTY2XY0T2nMSyT6TRnWqIz3HC9-4dRauujGSR82SmaSijBzwHzqHtf-U3FNn3ZmTRLg7FhDNfRA4-HjKXJ6_uese9D9lrDI9-pstnWSozYjmrd8jvcTXBD4SZv0HJpAzb4V-d4Q0YDedHAXmro93ahBqcIRIp0FMtqE_hij3TBauqOe9M1SLnJV4fjfMzHLjsctbglGM5pj5tCbG-Xxz9x4Y_t5kUBLJWkZYPY3hHbToskIoTXXET3D8KZskaIsiHHPJJyUdygurplxJ2YGRZm4ilu3vktknCjvOS4Ou6upuMePHmmF04jCrwYrTaIjl2e1Bm0VpG-8r6XqvzhArzzzKDYbKE5BdykrVsQAGReAC8XzRGpc8ClviTPmiWDIRNGkJdUmz-niJHnrqks-QvpgdvokaTvZ4VDAbF3ybwE5pd7gbYSZ5NkUqG9hsQRXFb_rwTnrh2DrTIOgCqsJsDSYUDcmY1u3w9sOcChTw3nFtfd8KxRgeOugKgZt_uolSyaxLZuBQSgY_KguQtLqOtjICMk74y5oSnREmbQYb5jjQL4Ygx4PINP9Sed37FQZyHTdIzmHS_VVjf2hIoPplNrBiSUNdgyWLihkaCeN0j45JmCXpJQ_hqPHT1Vp7Hw7QqwiNJkMAQPZhUjpoea_B_DiMPV96lvuUrAPoo_iOXy4CNt6hSnzNIDc2koLqGtE1yIdUYH4M3CzyL6oQP9qnWr33QcIC3wJN52mMBwZ-8L-y2-86nht6t2Gh1JZjXBSkn08gv37hvxCwETo7qJY6sxFE3j3TJ8G0yFjUvPBNmsLgjHKHXBgIdkv0tKxt_YahgUPFK_AMZiLeV3xzyo3JueSoZNmxr8NEz3RO9NuqXnEz4pqJ_pDIVT-0q=s96-c"
     },
@@ -504,18 +504,19 @@
         "avatar": null
     },
     {
-        "id": 31,
-        "name": "zein",
-        "nip": "2401301043",
-        "nohp": "0895414819763",
-        "email": "zein@gmail.com",
+        "id": 32,
+        "name": "dhihya z",
+        "nip": "61971725",
+        "nohp": "087238616321",
+        "email": "dhihyaz@gmail.com",
         "email_verified_at": null,
-        "password": "$2y$12$MaA33lzn22siuVWuBowzGuDqv1tJyBpCnj\/Lh0RceRCtefHg3wwm6",
-        "role": "dosen",
+        "password": "$2y$12$tMqzggAl1aPbXLDaQn6OPur627dN2iK2xsK5fk4sOdA80gRP\/r36e",
+        "role": "tim",
         "kode_prodi": "TI",
         "id_jurusan": null,
-        "status": "approved",
+        "status": "pending",
         "remember_token": null,
+<<<<<<< HEAD
         "created_at": "2025-11-13 07:12:03",
         "updated_at": "2025-11-13 07:12:03",
         "google_id": null,
@@ -538,5 +539,11 @@
         "updated_at": "2025-11-20 07:21:57",
         "google_id": null,
         "avatar": null
+=======
+        "created_at": "2025-11-29 02:30:19",
+        "updated_at": "2025-11-29 02:30:19",
+        "google_id": "108442160191688418961",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocKRtPM87T3k9ZR0fH8JfQMaqCfS_0U5PLKUOrYnjgXqriKuvjyU=s96-c"
+>>>>>>> 55a9415a113fb99c900b183de14751527d4a7678
     }
 ]

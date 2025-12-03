@@ -51,29 +51,36 @@ class Wadir1BobotController extends Controller
 
     public function detail(string $id_cpl)
     {
-        // Ambil CPL
+        // Ambil CPL utama
         $cpl = CapaianProfilLulusan::findOrFail($id_cpl);
-        $kode_cpl = $cpl->kode_cpl;
 
-        // Ambil data bobot untuk CPL ini, termasuk data MK-nya via relasi
-        $bobots = Bobot::with('mataKuliah')->where('id_cpl', $id_cpl)->get();
+        // Ambil semua mata kuliah yang terpetakan ke CPL ini dari tabel cpl_mk
+        $mk_terkait = DB::table('cpl_mk')
+            ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->where('cpl_mk.id_cpl', $id_cpl)
+            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
+            ->get();
 
-        // Ambil daftar mata kuliah dari relasi Bobot -> MataKuliah
-        $mataKuliahs = $bobots->map(function ($bobot) {
-            return (object)[
-                'kode_mk' => $bobot->kode_mk,
-                'nama_mk' => $bobot->mataKuliah->nama_mk ?? '-',
-            ];
-        });
+        // Ambil data bobot untuk CPL ini
+        $bobots = Bobot::where('id_cpl', $id_cpl)->get();
 
         // Array kode_mk => bobot
         $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
+        $totalBobot = array_sum($existingBobots);
 
-        return view('wadir1.bobot.detail', compact(
-            'id_cpl',
-            'kode_cpl',
-            'mataKuliahs',
-            'existingBobots'
-        ));
+        // Informasi CPL untuk header
+        $first = $mk_terkait->first();
+        $kode_cpl = $first->kode_cpl ?? $cpl->kode_cpl;
+        $deskripsi_cpl = $first->deskripsi_cpl ?? $cpl->deskripsi_cpl;
+
+        return view('wadir1.bobot.detail', [
+            'id_cpl'        => $id_cpl,
+            'kode_cpl'      => $kode_cpl,
+            'deskripsi_cpl' => $deskripsi_cpl,
+            'mataKuliahs'   => $mk_terkait,
+            'existingBobots'=> $existingBobots,
+            'totalBobot'    => $totalBobot,
+        ]);
     }
 }

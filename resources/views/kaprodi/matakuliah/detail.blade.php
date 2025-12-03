@@ -26,9 +26,6 @@
         <label for="nama_mk" class="text-xl font-semibold">Nama MK</label>
         <input type="text" name="nama_mk" id="nama_mk" value="{{ $matakuliah->nama_mk }}" readonly
             class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
-        <label for="jenis_mk" class="text-xl font-semibold">Jenis MK</label>
-        <input type="jenis_mk" name="jenis_mk" id="jenis_mk" value="{{ $matakuliah->jenis_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
         <label for="sks_mk" class="text-xl font-semibold">Sks MK</label>
         <input type="text" name="sks_mk" id="sks_mk" value="{{ $matakuliah->sks_mk }}" readonly
             class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">

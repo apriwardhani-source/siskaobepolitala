@@ -13,25 +13,44 @@ class AdminBobotController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bobots = DB::table('bobots')
-            ->join('capaian_profil_lulusans as cpl', 'bobots.id_cpl', '=', 'cpl.id_cpl')
-            ->join('mata_kuliahs as mk', 'bobots.kode_mk', '=', 'mk.kode_mk')
-            ->select(
-                'bobots.id_bobot',
-                'bobots.id_cpl',
-                'bobots.kode_mk',
-                'bobots.bobot',
-                'cpl.kode_cpl',
-                'cpl.deskripsi_cpl',
-                'mk.nama_mk'
-            )
-            ->orderBy('bobots.kode_mk')
-            ->orderBy('bobots.id_cpl')
+        $kode_prodi = $request->get('kode_prodi');
+        $id_tahun = $request->get('id_tahun');
+
+        // Data dropdown
+        $prodis = DB::table('prodis')->get();
+        $tahun_tersedia = DB::table('tahun')->orderByDesc('tahun')->get();
+
+        // Jika belum pilih prodi, hanya tampilkan filter (seperti di Wadir1)
+        if (!$kode_prodi) {
+            return view('admin.bobot.index', [
+                'bobots' => collect(),
+                'kode_prodi' => '',
+                'id_tahun' => $id_tahun,
+                'prodis' => $prodis,
+                'tahun_tersedia' => $tahun_tersedia,
+            ]);
+        }
+
+        // Query mengikuti logika Wadir1: filter berdasarkan CPL (skema baru)
+        $bobots = Bobot::with(['capaianProfilLulusan', 'mataKuliah'])
+            ->whereHas('capaianProfilLulusan', function ($q) use ($kode_prodi, $id_tahun) {
+                $q->where('kode_prodi', $kode_prodi);
+                if ($id_tahun) {
+                    $q->where('id_tahun', $id_tahun);
+                }
+            })
+            ->orderBy('id_cpl')
             ->get();
 
-        return view('admin.bobot.index', compact('bobots'));
+        return view('admin.bobot.index', compact(
+            'bobots',
+            'kode_prodi',
+            'id_tahun',
+            'prodis',
+            'tahun_tersedia'
+        ));
     }
 
     public function getcplbymk(Request $request)
@@ -64,7 +83,10 @@ class AdminBobotController extends Controller
     public function create()
     {
         $capaianProfilLulusans = CapaianProfilLulusan::all();
-        $mataKuliahs = MataKuliah::all();
+        // Hanya ambil mata kuliah dengan kode yang diawali "MK"
+        $mataKuliahs = MataKuliah::where('kode_mk', 'like', 'MK%')
+            ->orderBy('kode_mk')
+            ->get();
 
         return view('admin.bobot.create', compact('capaianProfilLulusans', 'mataKuliahs'));
     }
@@ -122,6 +144,7 @@ class AdminBobotController extends Controller
 
         $bobots = Bobot::where('id_cpl', $id_cpl)->get();
         $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
+        $totalBobot = $bobots->sum('bobot');
         $kode_cpl = $mk_terkait->first()->kode_cpl ?? '-';
         $deskripsi_cpl = $mk_terkait->first()->deskripsi_cpl ?? '-';
 
@@ -130,7 +153,8 @@ class AdminBobotController extends Controller
             'kode_cpl' => $kode_cpl,
             'deskripsi_cpl' => $deskripsi_cpl,
             'mataKuliahs' => $mk_terkait,
-            'existingBobots' => $existingBobots
+            'existingBobots' => $existingBobots,
+            'totalBobot' => $totalBobot,
         ]);
     }
 
@@ -144,6 +168,16 @@ class AdminBobotController extends Controller
             ->where('cpl_mk.id_cpl', $id_cpl)
             ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
             ->get();
+
+        // Jika relasi di tabel cpl_mk kosong, ambil dari tabel bobots
+        if ($mk_terkait->isEmpty()) {
+            $mk_terkait = DB::table('bobots')
+                ->join('mata_kuliahs', 'bobots.kode_mk', '=', 'mata_kuliahs.kode_mk')
+                ->where('bobots.id_cpl', $id_cpl)
+                ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
+                ->distinct()
+                ->get();
+        }
 
         $bobots = Bobot::where('id_cpl', $id_cpl)->get();
         $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
