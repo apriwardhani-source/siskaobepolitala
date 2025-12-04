@@ -165,7 +165,7 @@
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                         <div class="flex justify-center space-x-2">
-                                            <a href="{{ route('tim.bobot.detail', $b->id_cpl) }}"
+                                            <a href="{{ route('tim.bobot.detail', $b->kode_mk) }}"
                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all duration-200"
                                                title="Detail Bobot CPL-MK">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@
                                                 </svg>
                                                 Detail
                                             </a>
-                                            <a href="{{ route('tim.bobot.edit', $b->id_bobot) }}"
+                                            <a href="{{ route('tim.bobot.edit', $b->kode_mk) }}"
                                                class="inline-flex items-center px-3 py-1.5 bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-xs font-medium rounded-lg transition-all duration-200"
                                                title="Edit Bobot">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

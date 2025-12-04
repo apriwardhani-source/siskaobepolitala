@@ -82,13 +82,7 @@ class AdminBobotController extends Controller
      */
     public function create()
     {
-        $capaianProfilLulusans = CapaianProfilLulusan::all();
-        // Hanya ambil mata kuliah dengan kode yang diawali "MK"
-        $mataKuliahs = MataKuliah::where('kode_mk', 'like', 'MK%')
-            ->orderBy('kode_mk')
-            ->get();
-
-        return view('admin.bobot.create', compact('capaianProfilLulusans', 'mataKuliahs'));
+        abort(403);
     }
 
     /**
@@ -96,119 +90,98 @@ class AdminBobotController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'kode_mk' => 'required|exists:mata_kuliahs,kode_mk',
-            'id_cpl' => 'required|array|min:1',
-            'id_cpl.*' => 'exists:capaian_profil_lulusans,id_cpl',
-            'bobot' => 'required|array',
-            'bobot.*' => 'integer|min:0|max:100',
-        ]);
-
-        // Validasi total bobot harus 100
-        $totalBobot = array_sum($request->bobot);
-        if ($totalBobot != 100) {
-            return redirect()->back()->withErrors(['msg' => 'Total bobot harus 100%.'])->withInput();
-        }
-
-        foreach ($request->id_cpl as $id_cpl) {
-            // Cek apakah bobot untuk kode_mk dan id_cpl ini sudah ada
-            $existing = Bobot::where('kode_mk', $request->kode_mk)
-                ->where('id_cpl', $id_cpl)
-                ->exists();
-
-            if ($existing) {
-                return redirect()->back()->withErrors(['msg' => 'Bobot untuk MK dan CPL tersebut sudah ada.'])->withInput();
-            }
-
-            Bobot::create([
-                'kode_mk' => $request->kode_mk,
-                'id_cpl' => $id_cpl,
-                'bobot' => $request->bobot[$id_cpl] ?? 0,
-            ]);
-        }
-
-        return redirect()->route('admin.bobot.index')->with('success', 'Bobot berhasil ditambahkan.');
+        abort(403);
     }
 
     /**
      * Display the specified resource.
+     * Detail per MK: tampilkan CPL yang dipetakan ke MK tersebut beserta bobotnya.
      */
-    public function detail(string $id_cpl)
+    public function detail(string $kode_mk)
     {
-        $mk_terkait = DB::table('cpl_mk')
-            ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
-            ->join('capaian_profil_lulusans', 'cpl_mk.id_cpl', '=', 'capaian_profil_lulusans.id_cpl')
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk', 'capaian_profil_lulusans.kode_cpl', 'capaian_profil_lulusans.deskripsi_cpl')
+        // Ambil data mata kuliah
+        $mk = DB::table('mata_kuliahs')
+            ->where('kode_mk', $kode_mk)
+            ->first();
+
+        if (!$mk) {
+            abort(404);
+        }
+
+        // Ambil CPL yang dipetakan ke MK ini beserta bobotnya (jika ada)
+        $cpls = DB::table('cpl_mk')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->leftJoin('bobots', function ($join) use ($kode_mk) {
+                $join->on('bobots.id_cpl', '=', 'cpl_mk.id_cpl')
+                     ->on('bobots.kode_mk', '=', 'cpl_mk.kode_mk');
+            })
+            ->where('cpl_mk.kode_mk', $kode_mk)
+            ->select(
+                'cpl.id_cpl',
+                'cpl.kode_cpl',
+                'cpl.deskripsi_cpl',
+                'bobots.bobot'
+            )
+            ->orderBy('cpl.kode_cpl')
             ->get();
 
-        $bobots = Bobot::where('id_cpl', $id_cpl)->get();
-        $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
-        $totalBobot = $bobots->sum('bobot');
-        $kode_cpl = $mk_terkait->first()->kode_cpl ?? '-';
-        $deskripsi_cpl = $mk_terkait->first()->deskripsi_cpl ?? '-';
+        $totalBobot = $cpls->sum(function ($row) {
+            return (int)($row->bobot ?? 0);
+        });
 
         return view('admin.bobot.detail', [
-            'id_cpl' => $id_cpl,
-            'kode_cpl' => $kode_cpl,
-            'deskripsi_cpl' => $deskripsi_cpl,
-            'mataKuliahs' => $mk_terkait,
-            'existingBobots' => $existingBobots,
+            'mk'         => $mk,
+            'cpls'       => $cpls,
             'totalBobot' => $totalBobot,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
+     * Edit per MK: tampilkan CPL yang dipetakan ke MK tersebut.
      */
-    public function edit(string $id_cpl)
+    public function edit(string $kode_mk)
     {
-        $mk_terkait = DB::table('cpl_mk')
-            ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
-            ->get();
+        // Ambil mata kuliah (read-only)
+        $mk = DB::table('mata_kuliahs')
+            ->where('kode_mk', $kode_mk)
+            ->first();
 
-        // Jika relasi di tabel cpl_mk kosong, ambil dari tabel bobots
-        if ($mk_terkait->isEmpty()) {
-            $mk_terkait = DB::table('bobots')
-                ->join('mata_kuliahs', 'bobots.kode_mk', '=', 'mata_kuliahs.kode_mk')
-                ->where('bobots.id_cpl', $id_cpl)
-                ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
-                ->distinct()
-                ->get();
+        if (!$mk) {
+            abort(404);
         }
 
-        $bobots = Bobot::where('id_cpl', $id_cpl)->get();
-        $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
+        // Ambil CPL yang dipetakan ke MK ini
+        $cpls = DB::table('cpl_mk')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->where('cpl_mk.kode_mk', $kode_mk)
+            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
+            ->orderBy('cpl.kode_cpl')
+            ->get();
+
+        // Bobot existing untuk MK ini
+        $existingBobots = DB::table('bobots')
+            ->where('kode_mk', $kode_mk)
+            ->pluck('bobot', 'id_cpl')
+            ->toArray();
+
+        $totalBobot = array_sum($existingBobots);
 
         return view('admin.bobot.edit', [
-            'id_cpl' => $id_cpl,
-            'mataKuliahs' => $mk_terkait,
-            'existingBobots' => $existingBobots
+            'mk'            => $mk,
+            'cpls'          => $cpls,
+            'existingBobots'=> $existingBobots,
+            'totalBobot'    => $totalBobot,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
+     * Update bobot per MK untuk semua CPL yang terpilih.
      */
-    public function update(Request $request, string $id_cpl)
+    public function update(Request $request, string $kode_mk)
     {
-        $request->validate([
-            'kode_mk' => 'required|array',
-            'kode_mk.*' => 'exists:mata_kuliahs,kode_mk',
-            'bobot' => 'required|array',
-            'bobot.*' => 'integer|min:0|max:100',
-        ]);
-
-        foreach ($request->kode_mk as $kode_mk) {
-            DB::table('bobots')->updateOrInsert(
-                ['id_cpl' => $id_cpl, 'kode_mk' => $kode_mk],
-                ['bobot' => $request->bobot[$kode_mk] ?? 0]
-            );
-        }
-
-        return redirect()->route('admin.bobot.index')->with('success', 'Bobot berhasil diperbarui.');
+        abort(403);
     }
 
     /**
@@ -216,8 +189,6 @@ class AdminBobotController extends Controller
      */
     public function destroy(string $id_cpl)
     {
-        Bobot::where('id_cpl', $id_cpl)->delete();
-
-        return redirect()->route('admin.bobot.index')->with('success', 'Semua bobot untuk CPL ini berhasil dihapus.');
+        abort(403);
     }
 }

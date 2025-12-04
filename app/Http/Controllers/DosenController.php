@@ -146,34 +146,72 @@ class DosenController extends Controller
         // Jika form sudah disubmit (ada filter)
         $mahasiswas = null;
         $selectedMK = null;
-        $selectedTahun = null;
+        $selectedTahun = $request->id_tahun;
 
-        if ($request->filled('kode_mk') && $request->filled('id_tahun')) {
+        // Selalu pilih MK jika ada kode_mk (misal datang dari tombol "Input Nilai" detail)
+        if ($request->filled('kode_mk')) {
             $selectedMK = MataKuliah::where('kode_mk', $request->kode_mk)->first();
-            $selectedTahun = $request->id_tahun;
+        }
 
-            // Hanya load mahasiswa jika mata kuliah ditemukan
-            if ($selectedMK) {
-                // Get mahasiswa berdasarkan prodi dan tahun kurikulum
-                $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
-                    ->where('id_tahun_kurikulum', $request->id_tahun)
-                    ->where('status', 'aktif')
-                    ->with(['tahunKurikulum'])
-                    ->orderBy('nim')
-                    ->get();
+        // Data mahasiswa hanya diload jika MK dan Tahun sudah dipilih
+        if ($selectedMK && $request->filled('id_tahun')) {
+            // Get mahasiswa berdasarkan prodi dan tahun kurikulum
+            $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
+                ->where('id_tahun_kurikulum', $request->id_tahun)
+                ->where('status', 'aktif')
+                ->with(['tahunKurikulum'])
+                ->orderBy('nim')
+                ->get();
 
-                // Get nilai yang sudah ada
-                foreach ($mahasiswas as $mhs) {
-                    $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
-                        ->where('kode_mk', $request->kode_mk)
-                        ->where('id_tahun', $request->id_tahun)
-                        ->first();
-                    $mhs->nilai_akhir = $nilai ? $nilai->nilai_akhir : null;
-                }
+            // Get nilai yang sudah ada
+            foreach ($mahasiswas as $mhs) {
+                $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
+                    ->where('kode_mk', $request->kode_mk)
+                    ->where('id_tahun', $request->id_tahun)
+                    ->first();
+                $mhs->nilai_akhir = $nilai ? $nilai->nilai_akhir : null;
             }
         }
 
         return view('dosen.penilaian.index', compact('mataKuliahs', 'tahunKurikulums', 'mahasiswas', 'selectedMK', 'selectedTahun'));
+    }
+
+    public function penilaianDetail(string $kode_mk)
+    {
+        $user = Auth::user();
+
+        if (!$user || !$user->kode_prodi) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        // Pastikan mata kuliah yang diakses benar-benar diajar oleh dosen ini
+        $mataKuliah = MataKuliah::with(['prodi'])
+            ->where('kode_mk', $kode_mk)
+            ->where('kode_prodi', $user->kode_prodi)
+            ->firstOrFail();
+
+        // Ambil daftar tahun kurikulum dosen ini mengampu MK ini (jika ada)
+        $tahunKurikulums = \DB::table('dosen_mata_kuliah as dm')
+            ->join('tahun', 'dm.id_tahun', '=', 'tahun.id_tahun')
+            ->where('dm.kode_mk', $kode_mk)
+            ->where('dm.user_id', $user->id)
+            ->select('tahun.id_tahun', 'tahun.tahun', 'tahun.nama_kurikulum')
+            ->orderByDesc('tahun.tahun')
+            ->get();
+
+        // Dosen pengampu mata kuliah (semua dosen yang mengampu MK ini)
+        $dosenPengampu = \DB::table('dosen_mata_kuliah as dm')
+            ->join('users', 'dm.user_id', '=', 'users.id')
+            ->where('dm.kode_mk', $kode_mk)
+            ->select('users.name', 'users.nip')
+            ->orderBy('users.name')
+            ->get();
+
+        return view('dosen.penilaian.detail', [
+            'mataKuliah' => $mataKuliah,
+            'tahunKurikulums' => $tahunKurikulums,
+            'dosenPengampu' => $dosenPengampu,
+        ]);
     }
 
     public function storeNilai(Request $request)

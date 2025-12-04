@@ -13,7 +13,7 @@
                 </div>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Sub CPMK</h1>
-                    <p class="mt-1 text-sm text-gray-600">Daftar indikator pencapaian per CPMK</p>
+                    <p class="mt-1 text-sm text-gray-600">Daftar indikator pencapaian per CPMK (mode baca saja)</p>
                 </div>
             </div>
         </div>
@@ -41,10 +41,10 @@
 
         <!-- Kartu Filter -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-blue-600 px-6 py-4">
-                <h2 class="text-xl font-bold text-white flex items-center">
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between text-white">
+                <h2 class="text-xl font-bold flex items-center">
                     <i class="fas fa-filter mr-2"></i>
-                    Filter
+                    Filter Sub CPMK
                 </h2>
             </div>
             <div class="p-6">
@@ -103,24 +103,55 @@
             </div>
         @elseif(($subcpmks ?? collect())->isNotEmpty())
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-                <div class="px-6 py-4 border-b bg-gray-50">
-                    <h2 class="text-lg font-semibold text-gray-800">Daftar Sub CPMK</h2>
+                <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Daftar Sub CPMK</h2>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Program Studi: <span class="font-semibold">{{ $prodiName ?? '-' }}</span>
+                            @if(!empty($id_tahun))
+                                &middot; Tahun Kurikulum: <span class="font-semibold">{{ optional($tahun_tersedia->firstWhere('id_tahun', $id_tahun))->tahun ?? '-' }}</span>
+                            @endif
+                        </p>
+                    </div>
+                    <div class="relative w-64">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" id="searchSubCpmk" placeholder="Cari Sub CPMK..."
+                               class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg
+                                      focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                      placeholder-gray-400 text-sm transition-all duration-200">
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full text-sm">
-                        <thead class="bg-gray-100">
+                    <table id="tableSubCpmk" class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                             <tr>
-                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Kode CPMK</th>
-                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Sub CPMK</th>
-                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Uraian</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-16">No</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode CPMK</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Sub CPMK</th>
+                                <th class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Deskripsi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y">
-                            @foreach($subcpmks as $row)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-3">{{ $row->kode_cpmk }}</td>
-                                    <td class="px-6 py-3">{{ $row->sub_cpmk }}</td>
-                                    <td class="px-6 py-3">{{ $row->uraian_cpmk }}</td>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach($subcpmks as $index => $row)
+                                <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }}">
+                                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-700 font-medium">
+                                        {{ $index + 1 }}
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            {{ $row->kode_cpmk }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                            {{ $row->sub_cpmk }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-700">
+                                        {{ \Illuminate\Support\Str::limit($row->uraian_cpmk, 150) }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -146,6 +177,19 @@ setTimeout(function() {
         setTimeout(() => el.remove(), 300);
     }
 }, 5000);
+
+// Search Sub CPMK
+const sSub = document.getElementById('searchSubCpmk');
+const tSub = document.getElementById('tableSubCpmk');
+if (sSub && tSub) {
+    sSub.addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        tSub.querySelectorAll('tbody tr').forEach(function(tr) {
+            const text = tr.innerText.toLowerCase();
+            tr.style.display = text.includes(q) ? '' : 'none';
+        });
+    });
+}
 </script>
 @endpush
 @endsection

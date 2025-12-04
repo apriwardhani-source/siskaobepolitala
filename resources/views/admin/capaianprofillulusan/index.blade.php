@@ -15,7 +15,7 @@
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Capaian Profil Lulusan (CPL)</h1>
                     <p class="mt-1 text-sm text-gray-600">
-                        Kelola dan pantau daftar CPL per program studi dan tahun kurikulum.
+                        Pantau daftar CPL per program studi dan tahun kurikulum (mode baca saja).
                     </p>
                 </div>
             </div>
@@ -69,20 +69,7 @@
                     <i class="fas fa-filter mr-2"></i>
                     Filter CPL
                 </h2>
-                @if($kode_prodi)
-                <div class="flex gap-2">
-                    <a href="{{ route('admin.capaianprofillulusan.import') }}"
-                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                        <i class="fas fa-file-excel mr-2 text-xs"></i>
-                        Import Excel
-                    </a>
-                    <a href="{{ route('admin.capaianprofillulusan.create') }}"
-                       class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                        <i class="fas fa-plus mr-2 text-xs"></i>
-                        Tambah CPL
-                    </a>
-                </div>
-                @endif
+                {{-- Mode read-only: tidak ada tombol tambah / import --}}
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('admin.capaianprofillulusan.index') }}" class="space-y-4">
@@ -306,39 +293,18 @@
                                             {{ $statusLabel }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm">
-                                        <div class="flex items-center space-x-2">
-                                            <a href="{{ route('admin.capaianprofillulusan.detail', $cpl->id_cpl) }}" 
-                                               class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                                               title="Detail">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                                </svg>
-                                            </a>
-                                            <a href="{{ route('admin.capaianprofillulusan.edit', $cpl->id_cpl) }}" 
-                                               class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                                               title="Edit">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                                </svg>
-                                            </a>
-                                            <form action="{{ route('admin.capaianprofillulusan.destroy', $cpl->id_cpl) }}" method="POST" class="inline">
-                                                @csrf @method('DELETE')
-                                                <button type="submit" 
-                                                        onclick="return confirm('Yakin ingin menghapus CPL ini?')"
-                                                        class="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-lg transition-all duration-200"
-                                                        title="Hapus">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center">
+                                        <a href="{{ route('admin.capaianprofillulusan.detail', $cpl->id_cpl) }}" 
+                                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                           title="Lihat Detail">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                            Detail
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

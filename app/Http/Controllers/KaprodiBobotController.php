@@ -47,36 +47,50 @@ class KaprodiBobotController extends Controller
         return view('kaprodi.bobot.index', compact('bobots', 'id_tahun', 'tahun_tersedia'));
     }
 
-    public function detail(string $id_cpl)
+    public function detail(string $kode_mk)
     {
         $user = Auth::user();
-        if (!$user || !$user->kode_prodi) abort(404);
+        if (!$user || !$user->kode_prodi) {
+            abort(404);
+        }
 
         $kodeProdi = $user->kode_prodi;
 
-        $mk_terkait = DB::table('cpl_mk')
-            ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
+        // Ambil data mata kuliah yang dimaksud dan pastikan milik prodi ini
+        $mk = DB::table('mata_kuliahs')
+            ->where('kode_mk', $kode_mk)
+            ->where('kode_prodi', $kodeProdi)
+            ->first();
+
+        if (!$mk) {
+            abort(404);
+        }
+
+        // Ambil CPL yang dipetakan ke MK ini beserta bobotnya (jika ada)
+        $cpls = DB::table('cpl_mk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
+            ->leftJoin('bobots', function ($join) use ($kode_mk) {
+                $join->on('bobots.id_cpl', '=', 'cpl_mk.id_cpl')
+                     ->on('bobots.kode_mk', '=', 'cpl_mk.kode_mk');
+            })
+            ->where('cpl_mk.kode_mk', $kode_mk)
             ->where('cpl.kode_prodi', $kodeProdi)
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
+            ->select(
+                'cpl.id_cpl',
+                'cpl.kode_cpl',
+                'cpl.deskripsi_cpl',
+                'bobots.bobot'
+            )
+            ->orderBy('cpl.kode_cpl')
             ->get();
 
-        $bobots = Bobot::where('id_cpl', $id_cpl)->get();
-        $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
-        $totalBobot = array_sum($existingBobots);
-
-        $first = $mk_terkait->first();
-        $kode_cpl = $first->kode_cpl ?? $id_cpl;
-        $deskripsi_cpl = $first->deskripsi_cpl ?? '-';
+        $totalBobot = $cpls->sum(function ($row) {
+            return (int)($row->bobot ?? 0);
+        });
 
         return view('kaprodi.bobot.detail', [
-            'id_cpl' => $id_cpl,
-            'mataKuliahs' => $mk_terkait,
-            'existingBobots' => $existingBobots,
-            'kode_cpl' => $kode_cpl,
-            'deskripsi_cpl' => $deskripsi_cpl,
+            'mk'         => $mk,
+            'cpls'       => $cpls,
             'totalBobot' => $totalBobot,
         ]);
     }

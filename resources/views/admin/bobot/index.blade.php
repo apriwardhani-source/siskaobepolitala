@@ -17,11 +17,6 @@
                         <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot CPL - MK</h1>
                         <p class="mt-1 text-sm text-gray-600">Pembobotan kontribusi MK terhadap CPL</p>
                     </div>
-                    <a href="{{ route('admin.bobot.create') }}"
-                       class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                        <i class="fas fa-plus mr-2 text-xs"></i>
-                        Tambah Bobot
-                    </a>
                 </div>
             </div>
         </div>
@@ -116,7 +111,7 @@
                                 <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode MK</th>
                                 <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-28">Kode CPL</th>
                                 <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Bobot</th>
-                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-24">Detail</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -139,10 +134,10 @@
                                         {{ $b->bobot }}
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
-                                        <a href="{{ route('admin.bobot.detail', $b->id_cpl) }}" 
-                                           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                        <a href="{{ route('admin.bobot.detail', $b->kode_mk) }}" 
+                                           class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all duration-200"
                                            title="Detail Bobot CPL-MK">
-                                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>

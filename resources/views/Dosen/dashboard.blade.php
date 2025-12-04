@@ -56,14 +56,18 @@
                             @foreach($mataKuliahs as $index => $mk)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-3 text-center">{{ $index + 1 }}</td>
-                                    <td class="px-4 py-3">{{ $mk->kode_mk }}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                            {{ $mk->kode_mk }}
+                                        </span>
+                                    </td>
                                     <td class="px-4 py-3">{{ $mk->nama_mk }}</td>
                                     <td class="px-4 py-3 text-center">{{ $mk->sks_mk }}</td>
                                     <td class="px-4 py-3 text-center">{{ $mk->semester_mk }}</td>
                                     <td class="px-4 py-3 text-center">
-                                        <a href="{{ route('dosen.penilaian.index', ['kode_mk' => $mk->kode_mk]) }}"
+                                        <a href="{{ route('dosen.penilaian.detail', ['kode_mk' => $mk->kode_mk]) }}"
                                            class="bg-blue-600 hover:bg-blue-800 text-white px-4 py-2 rounded-md text-xs font-semibold inline-flex items-center">
-                                            <i class="bi bi-pencil-square mr-1"></i>Input Nilai
+                                            <i class="bi bi-eye mr-1"></i>Detail
                                         </a>
                                     </td>
                                 </tr>

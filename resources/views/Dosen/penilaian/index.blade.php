@@ -135,10 +135,20 @@
                                 @foreach($mahasiswas as $index => $mhs)
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-4 py-4 text-center text-sm">{{ $index + 1 }}</td>
-                                        <td class="px-4 py-4 text-sm font-medium">{{ $mhs->nim }}</td>
+                                        <td class="px-4 py-4 text-sm font-medium">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                                {{ $mhs->nim }}
+                                            </span>
+                                        </td>
                                         <td class="px-4 py-4 text-sm">{{ $mhs->nama_mahasiswa }}</td>
                                         <td class="px-4 py-4 text-center text-sm">
-                                            {{ $mhs->tahunKurikulum ? $mhs->tahunKurikulum->tahun : '-' }}
+                                            @if($mhs->tahunKurikulum)
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                                    {{ $mhs->tahunKurikulum->tahun }}
+                                                </span>
+                                            @else
+                                                -
+                                            @endif
                                         </td>
                                         <td class="px-4 py-4 text-center">
                                             <input type="number" 

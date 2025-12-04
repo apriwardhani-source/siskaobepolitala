@@ -540,6 +540,7 @@ Route::middleware(['auth'])->group(function () {
     // Grup Route Dosen
     Route::prefix('dosen')->name('dosen.')->middleware(['auth.dosen'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\DosenController::class, 'dashboard'])->name('dashboard');
+        Route::get('/penilaian/{kode_mk}/detail', [\App\Http\Controllers\DosenController::class, 'penilaianDetail'])->name('penilaian.detail');
         Route::get('/penilaian', [\App\Http\Controllers\DosenController::class, 'penilaian'])->name('penilaian.index');
         Route::post('/penilaian/store', [\App\Http\Controllers\DosenController::class, 'storeNilai'])->name('penilaian.store');
         
