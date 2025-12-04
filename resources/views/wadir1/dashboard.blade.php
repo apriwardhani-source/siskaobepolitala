@@ -131,11 +131,16 @@
                             </svg>
                             Target Standar Kurikulum OBE
                         </h4>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                             <div class="bg-white rounded-lg p-3 shadow-sm">
                                 <div class="text-2xl font-bold text-blue-600">9</div>
                                 <div class="text-xs font-medium text-gray-600 mt-1">CPL</div>
                                 <div class="text-xs text-gray-500">Capaian Profil Lulusan</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm">
+                                <div class="text-2xl font-bold text-blue-600">48</div>
+                                <div class="text-xs font-medium text-gray-600 mt-1">Mata Kuliah</div>
+                                <div class="text-xs text-gray-500">Jumlah Mata Kuliah</div>
                             </div>
                             <div class="bg-white rounded-lg p-3 shadow-sm">
                                 <div class="text-2xl font-bold text-blue-600">144</div>
@@ -191,7 +196,7 @@
                             </div>
 
                             <!-- Detail Progress -->
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                                 <div class="bg-white rounded-lg p-3 border border-blue-200">
                                     <div class="flex items-center justify-between mb-2">
                                         <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
@@ -199,6 +204,15 @@
                                     </div>
                                     <div class="text-sm font-semibold text-gray-900">{{ $prodi->cpl_count }}/9</div>
                                     <div class="text-xs text-gray-600">CPL</div>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-3 border border-green-200">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                                        <span class="text-xs font-semibold text-green-600">{{ $prodi->progress_mk }}%</span>
+                                    </div>
+                                    <div class="text-sm font-semibold text-gray-900">{{ $prodi->mk_count }}/48</div>
+                                    <div class="text-xs text-gray-600">Mata Kuliah</div>
                                 </div>
 
                                 <div class="bg-white rounded-lg p-3 border border-amber-200">

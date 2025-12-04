@@ -3,16 +3,39 @@
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto">
-        
+
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Detail Sub CPMK</h1>
-            <p class="mt-2 text-sm text-gray-600">Informasi lengkap tentang Sub CPMK {{ $subcpmk->sub_cpmk }}</p>
+        <div class="mb-6">
+            <a href="{{ url()->previous() }}"
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-arrow-left mr-2 text-xs"></i>
+                kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-stream text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Detail Sub CPMK
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Informasi lengkap mengenai Sub CPMK {{ $subcpmk->sub_cpmk ?? '-' }} beserta CPMK terkait.
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Main Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <div class="px-8 py-6 space-y-6">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                <h2 class="text-lg font-semibold text-white flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-sm"></i>
+                    Informasi Sub CPMK
+                </h2>
+            </div>
+
+            <div class="px-6 py-6 space-y-6">
 
                 <!-- Kode CPMK -->
                 <div>
@@ -52,18 +75,6 @@
 
             </div>
 
-            <!-- Footer Actions -->
-            <div class="px-8 py-4 bg-gray-50 border-t border-gray-200">
-                <div class="flex justify-between items-center">
-                    <a href="{{ route('kaprodi.subcpmk.index') }}"
-                        class="inline-flex items-center px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                        </svg>
-                        Kembali
-                    </a>
-                </div>
-            </div>
         </div>
 
     </div>

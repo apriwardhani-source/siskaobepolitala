@@ -1,45 +1,140 @@
 @extends('layouts.tim.app')
 
 @section('content')
-    <div class="mr-20 ml-20">
-        <h1 class="text-2xl font-semibold text-gray-700 mb-4 text-center">Detail Mata Kuliah</h1>
-        <hr class="w-full border border-black mb-4">
-        @if ($selectedCPL)
-            <div class="mt-4 mb-4">
-                <h3 class="text-xl font-semibold mb-2">CPL Terkait:</h3>
-                <div class="w-full bg-gray-100 border border-black rounded-lg px-4 py-3 space-y-2">
-                    @foreach ($selectedCPL as $id_cpl)
-                        @php
-                            $cplDetail = $cplList->firstWhere('id_cpl', $id_cpl);
-                        @endphp
-                        @if ($cplDetail)
-                            <div>{{ $cplDetail->kode_cpl }}: {{ $cplDetail->deskripsi_cpl }}</div>
-                        @endif
-                    @endforeach
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+
+        <!-- Header -->
+        <div class="mb-6">
+            <a href="{{ url()->previous() }}"
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-arrow-left mr-2 text-xs"></i>
+                kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-book-open text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Detail Mata Kuliah
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Informasi lengkap mengenai mata kuliah {{ $matakuliah->kode_mk ?? '-' }} beserta CPL terkait.
+                    </p>
                 </div>
             </div>
-        @endif
+        </div>
 
-        <label for="kode_mk" class="text-xl font-semibold">Kode MK</label>
-        <input type="text" name="kode_mk" id="kode_mk" value="{{ $matakuliah->kode_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
-        <label for="nama_mk" class="text-xl font-semibold">Nama MK</label>
-        <input type="text" name="nama_mk" id="nama_mk" value="{{ $matakuliah->nama_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
-        <label for="jenis_mk" class="text-xl font-semibold">Jenis MK</label>
-        <input type="jenis_mk" name="jenis_mk" id="jenis_mk" value="{{ $matakuliah->jenis_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
-        <label for="sks_mk" class="text-xl font-semibold">Sks MK</label>
-        <input type="text" name="sks_mk" id="sks_mk" value="{{ $matakuliah->sks_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
-        <label for="semester_mk" class="text-xl font-semibold">Semester MK</label>
-        <input type="text" name="semester_mk" id="semester_mk" value="{{ $matakuliah->semester_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-4 bg-gray-100">
-        <label for="kompetensi_mk" class="text-xl font-semibold">Kompetensi MK</label>
-        <input type="text" name="kompetensi_mk" id="kompetensi_mk" value="{{ $matakuliah->kompetensi_mk }}" readonly
-            class="w-full p-3 border border-black rounded-lg mb-8 bg-gray-100">
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                <h2 class="text-lg font-semibold text-white flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-sm"></i>
+                    Informasi Mata Kuliah
+                </h2>
+            </div>
 
-        <a href="{{ route('tim.matakuliah.index') }}"
-            class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg text-white font-semibold">Kembali</a>
+            <div class="px-6 py-6 space-y-6">
+                <!-- CPL terkait (dengan badge warna) -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">
+                        CPL Terkait
+                        @if(!empty($selectedCPL))
+                            <span class="ml-2 text-xs font-normal text-gray-500">({{ count($selectedCPL) }} CPL)</span>
+                        @endif
+                    </label>
+                    <div class="w-full bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+                        @php
+                            $selectedList = $selectedCPL ?? [];
+                        @endphp
+                        @if (!empty($selectedList))
+                            @foreach ($selectedList as $id_cpl)
+                                @php
+                                    $cplDetail = $cplList->firstWhere('id_cpl', $id_cpl);
+                                @endphp
+                                @if ($cplDetail)
+                                    <div class="flex items-start mb-3 last:mb-0">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-100 text-blue-800 mr-3 flex-shrink-0">
+                                            {{ $cplDetail->kode_cpl }}
+                                        </span>
+                                        <span class="text-sm text-gray-700">{{ $cplDetail->deskripsi_cpl }}</span>
+                                    </div>
+                                @endif
+                            @endforeach
+                        @else
+                            <div class="text-gray-500 italic text-sm flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Tidak ada CPL terkait dengan mata kuliah ini.
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Info MK utama dalam urutan yang diminta -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-100">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">Kode MK</label>
+                        <div class="flex items-center">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mr-3">
+                                {{ $matakuliah->kode_mk }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">Nama MK</label>
+                        <input type="text" value="{{ $matakuliah->nama_mk }}" readonly
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">SKS MK</label>
+                        <input type="text" value="{{ $matakuliah->sks_mk }}" readonly
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">Kompetensi MK</label>
+                        <input type="text" value="{{ $matakuliah->kompetensi_mk }}" readonly
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-800">Tahun Kurikulum</label>
+                        <input type="text"
+                               value="{{ $tahunKurikulum ? ($tahunKurikulum->nama_kurikulum . ' - ' . $tahunKurikulum->tahun) : '-' }}"
+                               readonly
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800">
+                    </div>
+
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-800">Dosen Pengampu</label>
+                        @if(isset($dosenPengampu) && $dosenPengampu->isNotEmpty())
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-2">
+                                @foreach($dosenPengampu as $dosen)
+                                    <div class="flex items-center text-sm text-gray-800">
+                                        <i class="fas fa-user-graduate mr-2 text-blue-500"></i>
+                                        <span class="font-medium">{{ $dosen->name }}</span>
+                                        @if($dosen->nip)
+                                            <span class="ml-2 text-xs text-gray-500">({{ $dosen->nip }})</span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-500 italic">
+                                Belum ada dosen pengampu yang terdata untuk mata kuliah ini.
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
+</div>
 @endsection

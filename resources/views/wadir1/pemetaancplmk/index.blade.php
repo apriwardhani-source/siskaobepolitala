@@ -45,8 +45,8 @@
                 <i class="fas fa-university text-blue-500 mr-1"></i>
                 Program Studi
               </label>
-              <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                <option value="" {{ empty($kode_prodi ?? '') ? 'selected' : '' }}>Semua Prodi</option>
+              <select name="kode_prodi" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="" disabled {{ empty($kode_prodi ?? '') ? 'selected' : '' }}>Pilih Program Studi</option>
                 @foreach(($prodis ?? []) as $prodi)
                   <option value="{{ $prodi->kode_prodi }}" {{ ($kode_prodi ?? '') == $prodi->kode_prodi ? 'selected' : '' }}>{{ $prodi->nama_prodi }}</option>
                 @endforeach
@@ -57,8 +57,8 @@
                 <i class="fas fa-calendar text-green-500 mr-1"></i>
                 Tahun Kurikulum
               </label>
-              <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                <option value="" {{ empty($id_tahun ?? '') ? 'selected' : '' }}>Semua Tahun</option>
+              <select name="id_tahun" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="" disabled {{ empty($id_tahun ?? '') ? 'selected' : '' }}>Pilih Tahun Kurikulum</option>
                 @foreach(($tahun_tersedia ?? []) as $thn)
                   <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? '') == $thn->id_tahun ? 'selected' : '' }}>{{ $thn->nama_kurikulum }} - {{ $thn->tahun }}</option>
                 @endforeach
@@ -71,7 +71,7 @@
             </div>
           </form>
         </div>
-        @php $hasFilter = !empty($kode_prodi ?? null) || !empty($id_tahun ?? null); @endphp
+        @php $hasFilter = !empty($kode_prodi ?? null) && !empty($id_tahun ?? null); @endphp
         @if ($hasFilter)
         <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
           <div class="flex flex-wrap gap-2 items-center">
@@ -110,7 +110,7 @@
             </div>
           </div>
           <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
-          <p class="text-gray-600 mt-1">Silakan pilih program studi dan/atau tahun untuk menampilkan matriks pemetaan.</p>
+          <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun kurikulum untuk menampilkan matriks pemetaan.</p>
         </div>
       @else
         <div class="overflow-auto border">

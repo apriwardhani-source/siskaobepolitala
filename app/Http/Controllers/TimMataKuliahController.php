@@ -315,7 +315,38 @@ class TimMataKuliahController extends Controller
         $selectedBK = $selectedBksIds;
         $bkList = $bahanKajians;
 
-        return view('tim.matakuliah.detail', compact('matakuliah', 'selectedCplIds', 'selectedBksIds', 'capaianprofillulusans', 'bahanKajians', 'selectedCPL', 'cplList', 'selectedBK', 'bkList'));
+        // Tahun kurikulum (diambil dari relasi dosen_mata_kuliah jika ada)
+        $tahunKurikulum = DB::table('dosen_mata_kuliah as dm')
+            ->join('tahun', 'dm.id_tahun', '=', 'tahun.id_tahun')
+            ->where('dm.kode_mk', $matakuliah->kode_mk)
+            ->select('tahun.id_tahun', 'tahun.tahun', 'tahun.nama_kurikulum')
+            ->orderByDesc('tahun.tahun')
+            ->first();
+
+        // Dosen pengampu mata kuliah
+        $dosenPengampu = DB::table('dosen_mata_kuliah as dm')
+            ->join('users', 'dm.user_id', '=', 'users.id')
+            ->where('dm.kode_mk', $matakuliah->kode_mk)
+            ->select('users.name', 'users.nip')
+            ->orderBy('users.name')
+            ->get();
+
+        return view(
+            'tim.matakuliah.detail',
+            compact(
+                'matakuliah',
+                'selectedCplIds',
+                'selectedBksIds',
+                'capaianprofillulusans',
+                'bahanKajians',
+                'selectedCPL',
+                'cplList',
+                'selectedBK',
+                'bkList',
+                'tahunKurikulum',
+                'dosenPengampu'
+            )
+        );
     }
 
     public function destroy(MataKuliah $matakuliah)

@@ -12,43 +12,11 @@
                         <i class="fas fa-book-open text-white text-2xl"></i>
                     </div>
                 </div>
-                <div class="flex-1 flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Mata Kuliah</h1>
-                        <p class="mt-2 text-sm text-gray-600">Kelola mata kuliah dan kurikulum program studi</p>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                    <a href="{{ route('tim.matakuliah.download-template') }}"
-                       class="inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 
-                              text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                              transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                        </svg>
-                        Template
-                    </a>
-                    <button onclick="document.getElementById('importModal').classList.remove('hidden')"
-                            class="inline-flex items-center px-5 py-2.5 bg-purple-600 hover:bg-purple-700 
-                                   text-white font-medium rounded-lg shadow-sm hover:shadow-md 
-                                   transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                        </svg>
-                        Import
-                    </button>
-                    <a href="{{ route('tim.matakuliah.create') }}"
-                       class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                              hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
-                              shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                              focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        Tambah MK
-                    </a>
-                    </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Mata Kuliah</h1>
+                    <p class="mt-2 text-sm text-gray-600">Kelola mata kuliah dan kurikulum program studi</p>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -95,10 +63,41 @@
 
         <!-- Filter Card: gaya Wadir1 Organisasi MK -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-blue-600 px-6 py-4">
-                <h2 class="text-xl font-bold text-white">
-                    <i class="fas fa-filter mr-2"></i>Filter Mata Kuliah
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filter Mata Kuliah
                 </h2>
+                <div class="flex items-center space-x-2">
+                    <a href="{{ route('tim.matakuliah.download-template') }}"
+                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 
+                              text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
+                              transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        Template
+                    </a>
+                    <button type="button"
+                            onclick="document.getElementById('importModal').classList.remove('hidden')"
+                            class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 
+                                   text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
+                                   transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        Import
+                    </button>
+                    @if(!empty($id_tahun ?? null))
+                        <a href="{{ route('tim.matakuliah.create') }}"
+                           class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Tambah MK
+                        </a>
+                    @endif
+                </div>
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('tim.matakuliah.index') }}" class="space-y-4">
@@ -111,8 +110,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="">Semua</option>
+                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" required>
+                                <option value="" {{ empty($id_tahun ?? '') ? 'selected disabled' : 'disabled' }}>Pilih Tahun Kurikulum</option>
                                 @foreach(($tahun_tersedia ?? []) as $t)
                                     <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '') == $t->id_tahun ? 'selected' : '' }}>
                                         {{ $t->tahun }}
@@ -133,6 +132,24 @@
             </div>
         </div>
 
+        @php
+            $isFiltered = !empty($id_tahun);
+        @endphp
+
+        @if(!$isFiltered)
+            {{-- Empty state sebelum memilih tahun --}}
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">
+                    Silakan pilih tahun kurikulum untuk menampilkan data mata kuliah program studi Anda.
+                </p>
+            </div>
+        @else
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             
@@ -156,7 +173,6 @@
 
                 @php
                     $selected_tahun = ($tahun_tersedia ?? collect())->firstWhere('id_tahun', $id_tahun);
-                    $isFiltered = !empty($id_tahun);
                 @endphp
 
                 <!-- Filter Info + ringkasan -->
@@ -327,6 +343,7 @@
             @endif
 
         </div>
+        @endif
     </div>
 </div>
 

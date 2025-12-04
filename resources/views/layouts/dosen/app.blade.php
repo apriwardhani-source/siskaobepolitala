@@ -56,7 +56,7 @@
 <body class="bg-gray-100">
 
     <!-- Navbar -->
-    <nav class="bg-gray-900 text-white fixed top-0 left-0 w-full z-50 shadow-md">
+    <nav class="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white fixed top-0 left-0 w-full z-50 shadow-lg">
         <!-- Top Bar -->
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Logo -->
@@ -104,38 +104,38 @@
         </div>
 
         <!-- Menu Bar (Desktop) -->
-        <div class="hidden md:flex bg-gray-800 px-6 py-2 space-x-1">
+        <div class="hidden md:flex bg-[#1a2f5c] px-6 py-2 space-x-1">
             <!-- Dashboard -->
-            <a href="{{ route('dosen.dashboard') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('dosen.dashboard') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                 <i class="bi bi-house-door mr-2"></i>Beranda
             </a>
 
             <!-- Penilaian -->
-            <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                 <i class="bi bi-pencil-square mr-2"></i>Penilaian
             </a>
             
             <!-- Ranking Mahasiswa -->
-            <a href="{{ route('dosen.ranking.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+            <a href="{{ route('dosen.ranking.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                 <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
             </a>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="mobile-menu md:hidden bg-gray-800">
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-[#1a2f5c]">
             <div class="px-6 py-2 space-y-2">
-                <a href="{{ route('dosen.dashboard') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <a href="{{ route('dosen.dashboard') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                     <i class="bi bi-house-door mr-2"></i>Beranda
                 </a>
-                <div class="border-t border-gray-700"></div>
-                <a href="{{ route('dosen.penilaian.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <div class="border-t border-[#243b73]"></div>
+                <a href="{{ route('dosen.penilaian.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                     <i class="bi bi-pencil-square mr-2"></i>Penilaian
                 </a>
-                <div class="border-t border-gray-700"></div>
-                <a href="{{ route('dosen.ranking.index') }}" class="block px-4 py-2 hover:bg-gray-700 rounded">
+                <div class="border-t border-[#243b73]"></div>
+                <a href="{{ route('dosen.ranking.index') }}" class="block px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
                     <i class="bi bi-trophy mr-2"></i>Ranking Mahasiswa
                 </a>
-                <div class="border-t border-gray-700"></div>
+                <div class="border-t border-[#243b73]"></div>
                 <form action="{{ route('logout') }}" method="POST" class="mt-2">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-700 rounded text-red-400">

@@ -18,8 +18,8 @@ class Wadir1PemetaanCplMkController extends Controller
             ->orderBy('tahun', 'desc')
             ->get();
 
-        // Izinkan tampil jika salah satu filter terisi (prodi atau tahun)
-        $hasFilter = !empty($kode_prodi) || !empty($id_tahun);
+        // Tampilkan data hanya jika kedua filter terisi (prodi dan tahun)
+        $hasFilter = !empty($kode_prodi) && !empty($id_tahun);
         if (!$hasFilter) {
             return view('wadir1.pemetaancplmk.index', [
                 'cpls' => collect(),

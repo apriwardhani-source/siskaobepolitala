@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Prodi;
 use App\Models\MataKuliah;
 use App\Models\Mahasiswa;
 use App\Models\Tahun;
@@ -12,17 +14,104 @@ use App\Services\WhatsAppService;
 
 class DosenController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
+
+        if (!$user || !$user->kode_prodi) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $kodeProdi = $user->kode_prodi;
+
+        // Parameter filter progress (mengikuti KaprodiDashboardController)
+        $tahun_progress = $request->get('tahun_progress');
+        $id_tahun = $request->get('id_tahun');
+        $availableYears = Tahun::orderBy('tahun', 'desc')->get();
+
+        // Jika tidak ada filter, gunakan tahun kurikulum terbaru sebagai default
+        if (!$tahun_progress && $availableYears->isNotEmpty()) {
+            $tahun_progress = $availableYears->first()->id_tahun;
+        }
+
+        // Informasi prodi dosen
+        $prodi = Prodi::where('kode_prodi', $kodeProdi)->first();
+        if (!$prodi) {
+            abort(403, 'Program studi tidak ditemukan.');
+        }
+
+        // Hitung statistik kurikulum OBE (reuse rumus Kaprodi)
+        $stats = null;
+        if ($tahun_progress) {
+            $cpl_count = DB::table('capaian_profil_lulusans')
+                ->where('kode_prodi', $kodeProdi)
+                ->where('id_tahun', $tahun_progress)
+                ->count();
+
+            $sks_mk = DB::table('mata_kuliahs')
+                ->where('kode_prodi', $kodeProdi)
+                ->sum('sks_mk');
+
+            $mk_count = DB::table('mata_kuliahs')
+                ->where('kode_prodi', $kodeProdi)
+                ->count();
+
+            $cpmk_count = DB::table('cpl_cpmk')
+                ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+                ->where('cpl.kode_prodi', $kodeProdi)
+                ->where('cpl.id_tahun', $tahun_progress)
+                ->distinct()
+                ->count('cpl_cpmk.id_cpmk');
+
+            $subcpmk_count = DB::table('sub_cpmks')
+                ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub_cpmks.id_cpmk', '=', 'cpmk.id_cpmk')
+                ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+                ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+                ->where('cpl.kode_prodi', $kodeProdi)
+                ->where('cpl.id_tahun', $tahun_progress)
+                ->distinct()
+                ->count('sub_cpmks.id_sub_cpmk');
+
+            $target = [
+                'cpl' => 9,
+                'sks_mk' => 144,
+                'mk' => 48,
+                'cpmk' => 20,
+                'subcpmk' => 40,
+            ];
+
+            $progress = [
+                'cpl' => min(100, $cpl_count > 0 ? round(($cpl_count / $target['cpl']) * 100) : 0),
+                'sks_mk' => min(100, $sks_mk > 0 ? round(($sks_mk / $target['sks_mk']) * 100) : 0),
+                'mk' => min(100, $mk_count > 0 ? round(($mk_count / $target['mk']) * 100) : 0),
+                'cpmk' => min(100, $cpmk_count > 0 ? round(($cpmk_count / $target['cpmk']) * 100) : 0),
+                'subcpmk' => min(100, $subcpmk_count > 0 ? round(($subcpmk_count / $target['subcpmk']) * 100) : 0),
+            ];
+
+            $avg_progress = round(array_sum($progress) / count($progress));
+
+            if ($cpl_count > 0 || $sks_mk > 0 || $cpmk_count > 0 || $subcpmk_count > 0) {
+                $stats = [
+                    'cpl_count' => $cpl_count,
+                    'sks_mk' => $sks_mk,
+                    'mk_count' => $mk_count,
+                    'cpmk_count' => $cpmk_count,
+                    'subcpmk_count' => $subcpmk_count,
+                    'progress_cpl' => $progress['cpl'],
+                    'progress_sks_mk' => $progress['sks_mk'],
+                    'progress_mk' => $progress['mk'],
+                    'progress_cpmk' => $progress['cpmk'],
+                    'progress_subcpmk' => $progress['subcpmk'],
+                    'avg_progress' => $avg_progress,
+                    'target' => $target,
+                ];
+            }
+        }
 
         // Get mata kuliah yang diampu oleh dosen ini
         $mataKuliahs = $user->mataKuliahDiajar()
             ->with(['prodi', 'dosen'])
             ->get();
-
-        // Get tahun kurikulum
-        $tahunKurikulums = Tahun::all();
 
         // Statistik
         $totalMK = $mataKuliahs->count();
@@ -30,7 +119,16 @@ class DosenController extends Controller
             ->where('status', 'aktif')
             ->count();
 
-        return view('dosen.dashboard', compact('mataKuliahs', 'tahunKurikulums', 'totalMK', 'totalMahasiswa'));
+        return view('dosen.dashboard', compact(
+            'prodi',
+            'stats',
+            'id_tahun',
+            'availableYears',
+            'tahun_progress',
+            'mataKuliahs',
+            'totalMK',
+            'totalMahasiswa'
+        ));
     }
 
     public function penilaian(Request $request)

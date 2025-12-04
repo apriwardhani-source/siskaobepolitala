@@ -7,21 +7,17 @@
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Data Mahasiswa</h1>
-                    <p class="mt-2 text-sm text-gray-600">Kelola data mahasiswa program studi</p>
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-user-graduate text-white text-2xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Data Mahasiswa</h1>
+                        <p class="mt-2 text-sm text-gray-600">Kelola data mahasiswa program studi</p>
+                    </div>
                 </div>
-                
-                <a href="{{ route('tim.mahasiswa.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 
-                          hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg 
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah Mahasiswa
-                </a>
             </div>
         </div>
 
@@ -48,10 +44,17 @@
 
         <!-- Filter Card ala Wadir1 Organisasi MK -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-blue-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
                 <h2 class="text-xl font-bold text-white">
                     <i class="fas fa-filter mr-2"></i>Filter Mahasiswa
                 </h2>
+                @if(!empty($tahun_kurikulum ?? null))
+                <a href="{{ route('tim.mahasiswa.create') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-plus mr-2 text-xs"></i>
+                    Tambah Mahasiswa
+                </a>
+                @endif
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('tim.mahasiswa.index') }}" class="space-y-4">
@@ -66,8 +69,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                            <select name="tahun_kurikulum" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="">Semua</option>
+                            <select name="tahun_kurikulum" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" required>
+                                <option value="" {{ empty($tahun_kurikulum ?? '') ? 'selected disabled' : 'disabled' }}>Pilih Tahun Kurikulum</option>
                                 @foreach(($tahun_angkatans ?? []) as $tahun)
                                     <option value="{{ $tahun->id_tahun }}" {{ ($tahun_kurikulum ?? '') == $tahun->id_tahun ? 'selected' : '' }}>
                                         {{ $tahun->tahun }}
@@ -86,6 +89,24 @@
             </div>
         </div>
 
+        @php
+            $isFiltered = !empty($tahun_kurikulum);
+        @endphp
+
+        @if(!$isFiltered)
+            {{-- Empty state sebelum memilih tahun (mirip halaman Mata Kuliah) --}}
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">
+                    Silakan pilih tahun kurikulum untuk menampilkan data mahasiswa program studi Anda.
+                </p>
+            </div>
+        @else
         <!-- Main Card -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             
@@ -210,6 +231,16 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex justify-center space-x-2">
+                                            <a href="{{ route('tim.mahasiswa.show', $mhs->id) }}"
+                                               class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
+                                               title="Detail">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                </svg>
+                                            </a>
                                             <a href="{{ route('tim.mahasiswa.edit', $mhs->id) }}"
                                                 class="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-lg transition-all duration-200"
                                                 title="Edit">
@@ -240,6 +271,7 @@
             @endif
 
         </div>
+        @endif
     </div>
 </div>
 
