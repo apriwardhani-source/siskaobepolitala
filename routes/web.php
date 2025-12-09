@@ -551,3 +551,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ranking/{id_session}/export', [\App\Http\Controllers\Dosen\RankingMahasiswaController::class, 'exportExcel'])->name('ranking.export');
     });
 });
+
+// API Routes for Dashboard Analytics
+Route::middleware(['auth'])->prefix('api')->name('api.')->group(function () {
+    Route::get('/dashboard/analytics', [\App\Http\Controllers\DashboardAnalyticsController::class, 'getStatistics'])->name('dashboard.analytics');
+});
+
+// Include organized route files
+require __DIR__.'/auth.php';
+require __DIR__.'/export.php';
