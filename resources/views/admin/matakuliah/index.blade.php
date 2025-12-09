@@ -14,7 +14,7 @@
                 </div>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Mata Kuliah</h1>
-                    <p class="mt-1 text-sm text-gray-600">Daftar mata kuliah per program studi dan tahun kurikulum</p>
+                    <p class="mt-1 text-sm text-gray-600">Daftar mata kuliah per program studi dan tahun kurikulum (mode baca saja)</p>
                 </div>
             </div>
         </div>
@@ -67,13 +67,7 @@
                     <i class="fas fa-filter mr-2"></i>
                     Filter Mata Kuliah
                 </h2>
-                @if(isset($kode_prodi) && $kode_prodi)
-                <a href="{{ route('admin.matakuliah.create', ['kode_prodi' => $kode_prodi, 'id_tahun' => $id_tahun]) }}"
-                   class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                    <i class="fas fa-plus mr-2 text-xs"></i>
-                    Tambah Mata Kuliah
-                </a>
-                @endif
+                {{-- mode read-only: tidak ada tombol tambah --}}
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('admin.matakuliah.index') }}" class="space-y-4">

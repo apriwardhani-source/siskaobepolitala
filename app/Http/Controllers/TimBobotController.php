@@ -128,7 +128,7 @@ class TimBobotController extends Controller
         return redirect()->route('tim.bobot.index')->with('sukses', 'Bobot berhasil ditambahkan.');
     }
 
-    public function edit(string $id_bobot)
+    public function edit(string $kode_mk)
     {
         $user = Auth::user();
         if (!$user || !$user->kode_prodi) {
@@ -136,33 +136,51 @@ class TimBobotController extends Controller
         }
 
         $kodeProdi = $user->kode_prodi;
-        $bobot = Bobot::findOrFail($id_bobot);
-        $id_cpl = $bobot->id_cpl;
 
-        $mataKuliahs = DB::table('cpl_mk')
-            ->join('mata_kuliahs as mk', 'cpl_mk.kode_mk', '=', 'mk.kode_mk')
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->select('mk.kode_mk', 'mk.nama_mk')
+        // Pastikan MK milik prodi ini
+        $mk = DB::table('mata_kuliahs')
+            ->where('kode_mk', $kode_mk)
+            ->where('kode_prodi', $kodeProdi)
+            ->first();
+
+        if (!$mk) {
+            abort(404);
+        }
+
+        // Ambil CPL yang dipetakan ke MK ini
+        $cpls = DB::table('cpl_mk')
+            ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
+            ->where('cpl_mk.kode_mk', $kode_mk)
+            ->where('cpl.kode_prodi', $kodeProdi)
+            ->select('cpl.id_cpl', 'cpl.kode_cpl', 'cpl.deskripsi_cpl')
+            ->orderBy('cpl.kode_cpl')
             ->get();
 
-        // Get existing bobots for this CPL
+        // Bobot existing untuk MK ini
         $existingBobots = DB::table('bobots')
-            ->where('id_cpl', $id_cpl)
-            ->pluck('bobot', 'kode_mk')
+            ->where('kode_mk', $kode_mk)
+            ->pluck('bobot', 'id_cpl')
             ->toArray();
 
-        return view('tim.bobot.edit', compact('id_cpl', 'mataKuliahs', 'existingBobots'));
+        $totalBobot = array_sum($existingBobots);
+
+        return view('tim.bobot.edit', [
+            'mk'            => $mk,
+            'cpls'          => $cpls,
+            'existingBobots'=> $existingBobots,
+            'totalBobot'    => $totalBobot,
+        ]);
     }
 
-    public function update(Request $request, string $id_cpl)
+    public function update(Request $request, string $kode_mk)
     {
-        // Edit dilakukan per CPL: kirim array kode_mk[] dan bobot[kode_mk]
+        // Edit dilakukan per MK: kirim array id_cpl[] dan bobot[id_cpl]
         $request->validate([
-            'id_cpl'   => 'required',
-            'kode_mk'  => 'required|array|min:1',
-            'kode_mk.*'=> 'string',
-            'bobot'    => 'required|array',
-            'bobot.*'  => 'numeric|min:0|max:100',
+            'kode_mk'   => 'required|exists:mata_kuliahs,kode_mk',
+            'id_cpl'    => 'required|array|min:1',
+            'id_cpl.*'  => 'exists:capaian_profil_lulusans,id_cpl',
+            'bobot'     => 'required|array',
+            'bobot.*'   => 'numeric|min:0|max:100',
         ]);
 
         $totalBobot = array_sum($request->bobot ?? []);
@@ -173,40 +191,65 @@ class TimBobotController extends Controller
                 ->withInput();
         }
 
-        foreach ($request->kode_mk as $kode_mk) {
-            $nilaiBobot = $request->bobot[$kode_mk] ?? 0;
+        $kode_mk = $request->kode_mk;
+
+        foreach ($request->id_cpl as $id_cpl) {
+            $nilaiBobot = $request->bobot[$id_cpl] ?? 0;
 
             Bobot::updateOrCreate(
-                ['id_cpl' => $request->id_cpl, 'kode_mk' => $kode_mk],
-                ['bobot'  => $nilaiBobot]
+                ['kode_mk' => $kode_mk, 'id_cpl' => $id_cpl],
+                ['bobot'   => $nilaiBobot]
             );
         }
 
         return redirect()->route('tim.bobot.index')->with('sukses', 'Bobot berhasil diperbarui.');
     }
 
-    public function detail(string $id_cpl)
+    public function detail(string $kode_mk)
     {
         $user = Auth::user();
-        if (!$user || !$user->kode_prodi) abort(404);
+        if (!$user || !$user->kode_prodi) {
+            abort(404);
+        }
 
         $kodeProdi = $user->kode_prodi;
 
-        $mk_terkait = DB::table('cpl_mk')
-            ->join('mata_kuliahs', 'cpl_mk.kode_mk', '=', 'mata_kuliahs.kode_mk')
+        // Ambil data mata kuliah yang dimaksud dan pastikan milik prodi ini
+        $mk = DB::table('mata_kuliahs')
+            ->where('kode_mk', $kode_mk)
+            ->where('kode_prodi', $kodeProdi)
+            ->first();
+
+        if (!$mk) {
+            abort(404);
+        }
+
+        // Ambil CPL yang dipetakan ke MK ini beserta bobotnya (jika ada)
+        $cpls = DB::table('cpl_mk')
             ->join('capaian_profil_lulusans as cpl', 'cpl_mk.id_cpl', '=', 'cpl.id_cpl')
-            ->where('mata_kuliahs.kode_prodi', $kodeProdi)
-            ->where('cpl_mk.id_cpl', $id_cpl)
-            ->select('mata_kuliahs.kode_mk', 'mata_kuliahs.nama_mk')
+            ->leftJoin('bobots', function ($join) use ($kode_mk) {
+                $join->on('bobots.id_cpl', '=', 'cpl_mk.id_cpl')
+                     ->on('bobots.kode_mk', '=', 'cpl_mk.kode_mk');
+            })
+            ->where('cpl_mk.kode_mk', $kode_mk)
+            ->where('cpl.kode_prodi', $kodeProdi)
+            ->select(
+                'cpl.id_cpl',
+                'cpl.kode_cpl',
+                'cpl.deskripsi_cpl',
+                'bobots.bobot'
+            )
+            ->orderBy('cpl.kode_cpl')
             ->get();
 
-        $bobots = Bobot::where('id_cpl', $id_cpl)->get();
-        $existingBobots = $bobots->pluck('bobot', 'kode_mk')->toArray();
+        $totalBobot = $cpls->sum(function ($row) {
+            return (int)($row->bobot ?? 0);
+        });
 
         return view('tim.bobot.detail', [
-            'id_cpl' => $id_cpl,
-            'mataKuliahs' => $mk_terkait,
-            'existingBobots' => $existingBobots
+            'mk'         => $mk,
+            'cpls'       => $cpls,
+            'totalBobot' => $totalBobot,
         ]);
     }
 

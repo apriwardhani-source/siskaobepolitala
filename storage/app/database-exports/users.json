@@ -514,7 +514,7 @@
         "role": "tim",
         "kode_prodi": "TI",
         "id_jurusan": null,
-        "status": "pending",
+        "status": "approved",
         "remember_token": null,
 <<<<<<< HEAD
         "created_at": "2025-11-13 07:12:03",
@@ -541,7 +541,7 @@
         "avatar": null
 =======
         "created_at": "2025-11-29 02:30:19",
-        "updated_at": "2025-11-29 02:30:19",
+        "updated_at": "2025-11-29 22:32:47",
         "google_id": "108442160191688418961",
         "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocKRtPM87T3k9ZR0fH8JfQMaqCfS_0U5PLKUOrYnjgXqriKuvjyU=s96-c"
 >>>>>>> 55a9415a113fb99c900b183de14751527d4a7678

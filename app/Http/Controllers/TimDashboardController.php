@@ -77,20 +77,23 @@ class TimDashboardController extends Controller
                 // Target sama seperti AdminDashboardController
                 $target_cpl = 9;
                 $target_sks_mk = 144;
+                $target_mk = 48;
                 $target_cpmk = 20;
                 $target_subcpmk = 40;
 
                 // Progress 4 komponen (CPL, SKS MK, CPMK, Sub CPMK)
                 $progress_cpl = $prodi->cpl_count > 0 ? min(100, round(($prodi->cpl_count / $target_cpl) * 100)) : 0;
                 $progress_sks_mk = $prodi->sks_mk > 0 ? min(100, round(($prodi->sks_mk / $target_sks_mk) * 100)) : 0;
+                $progress_mk = $prodi->mk_count > 0 ? min(100, round(($prodi->mk_count / $target_mk) * 100)) : 0;
                 $progress_cpmk = $prodi->cpmk_count > 0 ? min(100, round(($prodi->cpmk_count / $target_cpmk) * 100)) : 0;
                 $progress_subcpmk = $prodi->subcpmk_count > 0 ? min(100, round(($prodi->subcpmk_count / $target_subcpmk) * 100)) : 0;
 
-                // Rata-rata sama seperti admin
-                $avg = round(($progress_cpl + $progress_sks_mk + $progress_cpmk + $progress_subcpmk) / 4);
+                // Rata-rata sama seperti KaprodiDashboardController (5 komponen)
+                $avg = round(($progress_cpl + $progress_sks_mk + $progress_mk + $progress_cpmk + $progress_subcpmk) / 5);
 
                 $prodi->progress_cpl = $progress_cpl;
                 $prodi->progress_sks_mk = $progress_sks_mk;
+                $prodi->progress_mk = $progress_mk;
                 $prodi->progress_cpmk = $progress_cpmk;
                 $prodi->progress_subcpmk = $progress_subcpmk;
                 $prodi->avg_progress = $avg;

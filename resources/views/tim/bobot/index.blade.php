@@ -11,17 +11,6 @@
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Bobot MK - CPL</h1>
                     <p class="mt-2 text-sm text-gray-600">Kelola bobot mata kuliah terhadap capaian profil lulusan</p>
                 </div>
-
-                <a href="{{ route('tim.bobot.create') }}"
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700
-                          hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg
-                          shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200
-                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Tambah Bobot
-                </a>
             </div>
         </div>
 
@@ -48,11 +37,18 @@
 
         <!-- Filter Card ala Wadir1 -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
-            <div class="bg-blue-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-filter mr-2"></i>
                     Filter Bobot MK - CPL
                 </h2>
+                @if(!empty($id_tahun ?? null))
+                <a href="{{ route('tim.bobot.create') }}"
+                   class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                    <i class="fas fa-plus mr-2 text-xs"></i>
+                    Tambah Bobot
+                </a>
+                @endif
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('tim.bobot.index') }}" class="space-y-4">
@@ -67,8 +63,9 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
                             <select name="id_tahun"
-                                    class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="">Semua Tahun</option>
+                                    class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                    required>
+                                <option value="" {{ empty($id_tahun ?? '') ? 'selected disabled' : 'disabled' }}>Pilih Tahun Kurikulum</option>
                                 @foreach(($tahun_tersedia ?? []) as $thn)
                                     <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? '') == $thn->id_tahun ? 'selected' : '' }}>
                                         {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
@@ -89,6 +86,24 @@
             </div>
         </div>
 
+        @php
+            $isFiltered = !empty($id_tahun);
+        @endphp
+
+        @if(!$isFiltered)
+            {{-- Empty state sebelum memilih tahun (mirip halaman Mata Kuliah) --}}
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">
+                    Silakan pilih tahun kurikulum untuk menampilkan data bobot MK-CPL program studi Anda.
+                </p>
+            </div>
+        @else
         <!-- Main Card: Tabel Bobot -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             @if($bobots->isEmpty())
@@ -150,7 +165,7 @@
                                     </td>
                                     <td class="px-4 py-4 whitespace-nowrap text-center text-sm">
                                         <div class="flex justify-center space-x-2">
-                                            <a href="{{ route('tim.bobot.detail', $b->id_cpl) }}"
+                                            <a href="{{ route('tim.bobot.detail', $b->kode_mk) }}"
                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all duration-200"
                                                title="Detail Bobot CPL-MK">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +174,7 @@
                                                 </svg>
                                                 Detail
                                             </a>
-                                            <a href="{{ route('tim.bobot.edit', $b->id_bobot) }}"
+                                            <a href="{{ route('tim.bobot.edit', $b->kode_mk) }}"
                                                class="inline-flex items-center px-3 py-1.5 bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-xs font-medium rounded-lg transition-all duration-200"
                                                title="Edit Bobot">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,6 +204,7 @@
                 </div>
             @endif
         </div>
+        @endif
 
     </div>
 </div>

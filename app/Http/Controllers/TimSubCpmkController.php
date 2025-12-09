@@ -37,7 +37,11 @@ class TimSubCpmkController extends Controller
 
         $subcpmks = $query->get();
 
-        return view('tim.subcpmk.index', compact('subcpmks', 'id_tahun', 'tahun_tersedia'));
+        // Nama prodi untuk tampilan (seperti di CPMK)
+        $prodi = DB::table('prodis')->where('kode_prodi', $kodeProdi)->first();
+        $prodiName = $prodi->nama_prodi ?? '-';
+
+        return view('tim.subcpmk.index', compact('subcpmks', 'id_tahun', 'tahun_tersedia', 'prodiName'));
     }
 
     // Tambahkan method ini ke dalam TimSubCpmkController

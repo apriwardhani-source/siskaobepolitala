@@ -47,69 +47,23 @@ class AdminCapaianProfilLulusanController extends Controller
 
     public function create()
     {
-        // Struktur baru: Tidak perlu PL lagi, langsung pilih prodi dan tahun
-        $prodis = DB::table('prodis')->orderBy('nama_prodi')->get();
-        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-        return view("admin.capaianprofillulusan.create", compact('prodis', 'tahuns'));
+        abort(403);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'kode_cpl' => 'required|string|max:10|unique:capaian_profil_lulusans,kode_cpl',
-            'deskripsi_cpl' => 'required',
-            'status_cpl' => 'nullable|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
-            'kode_prodi' => 'required|exists:prodis,kode_prodi',
-            'id_tahun' => 'required|exists:tahun,id_tahun'
-        ]);
-
-        // Struktur baru: CPL langsung simpan dengan kode_prodi dan id_tahun
-        CapaianProfilLulusan::create([
-            'kode_cpl'      => $request->kode_cpl,
-            'deskripsi_cpl' => $request->deskripsi_cpl,
-            'status_cpl'    => $request->status_cpl, // boleh null
-            'kode_prodi'    => $request->kode_prodi,
-            'id_tahun'      => $request->id_tahun,
-        ]);
-
-        return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil Lulusan berhasil ditambahkan.');
+        abort(403);
     }
 
 
     public function edit($id_cpl)
     {
-        $capaianprofillulusan = CapaianProfilLulusan::findOrFail($id_cpl);
-        $prodis = DB::table('prodis')->orderBy('nama_prodi')->get();
-        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-        
-        return view('admin.capaianprofillulusan.edit', compact('capaianprofillulusan', 'prodis', 'tahuns'));
+        abort(403);
     }
 
     public function update(Request $request, $id_cpl)
     {
-        $request->validate([
-            'kode_cpl' => [
-                'required',
-                'string',
-                'max:10',
-                Rule::unique('capaian_profil_lulusans', 'kode_cpl')->ignore($id_cpl, 'id_cpl'),
-            ],
-            'deskripsi_cpl' => 'required',
-            'status_cpl' => 'nullable|in:Kompetensi Utama Bidang,Kompetensi Tambahan',
-            'kode_prodi' => 'required|exists:prodis,kode_prodi',
-            'id_tahun' => 'required|exists:tahun,id_tahun'
-        ]);
-
-        $capaianprofillulusan = CapaianProfilLulusan::findOrFail($id_cpl);
-        $capaianprofillulusan->update([
-            'kode_cpl'      => $request->kode_cpl,
-            'deskripsi_cpl' => $request->deskripsi_cpl,
-            'status_cpl'    => $request->status_cpl,
-            'kode_prodi'    => $request->kode_prodi,
-            'id_tahun'      => $request->id_tahun,
-        ]);
-
-        return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Capaian Profil Lulusan berhasil diperbarui.');
+        abort(403);
     }
 
     public function detail($id_cpl)
@@ -126,68 +80,22 @@ class AdminCapaianProfilLulusanController extends Controller
 
     public function destroy(CapaianProfilLulusan $id_cpl)
     {
-        $id_cpl->delete();
-        return redirect()->route('admin.capaianprofillulusan.index')->with('sukses', 'Capaian Profil Lulusan Ini Berhasil Di Hapus');
+        abort(403);
     }
 
     public function import()
     {
-        return view('admin.capaianprofillulusan.import');
+        abort(403);
     }
 
     public function importStore(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls|max:2048'
-        ]);
-
-        try {
-            Excel::import(new CplImport, $request->file('file'));
-            return redirect()->route('admin.capaianprofillulusan.index')->with('success', 'Data CPL berhasil diimport dari Excel');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            return redirect()->back()->with('error', 'Import gagal. Silakan cek format Excel Anda.')->withInput();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Import gagal: ' . $e->getMessage())->withInput();
-        }
+        abort(403);
     }
 
     public function downloadTemplate()
     {
-        $filename = 'template_import_cpl.csv';
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires' => '0'
-        ];
-
-        $columns = ['kode_cpl', 'deskripsi_cpl'];
-        $sampleData = [
-            ['CPL-01', 'Mampu menerapkan pemikiran logis, kritis, inovatif dalam konteks pengembangan atau implementasi ilmu pengetahuan dan teknologi'],
-            ['CPL-02', 'Mampu menunjukkan kinerja mandiri, bermutu dan terukur'],
-            ['CPL-03', 'Mampu mengkaji implikasi pengembangan atau implementasi ilmu pengetahuan dan teknologi'],
-        ];
-
-        $callback = function() use ($columns, $sampleData) {
-            $file = fopen('php://output', 'w');
-            
-            // UTF-8 BOM untuk Excel compatibility
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
-            // Header
-            fputcsv($file, $columns);
-            
-            // Sample data
-            foreach ($sampleData as $row) {
-                fputcsv($file, $row);
-            }
-            
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
+        abort(403);
     }
 
     public function peta_pemenuhan_cpl(Request $request)

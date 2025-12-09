@@ -256,8 +256,8 @@
         @endif
 
         @if($role === 'dosen')
-        <!-- Menu untuk Dosen -->
-        <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-gray-700 rounded">
+        <!-- Menu tambahan untuk Dosen -->
+        <a href="{{ route('dosen.penilaian.index') }}" class="px-4 py-2 hover:bg-[#2a5298] rounded transition-colors duration-200">
             <i class="bi bi-clipboard-check mr-2"></i>Penilaian Mahasiswa
         </a>
         @endif

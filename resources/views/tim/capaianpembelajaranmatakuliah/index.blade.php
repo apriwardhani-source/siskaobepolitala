@@ -83,11 +83,13 @@
                         <i class="fas fa-file-excel mr-2"></i>
                         Import Excel
                     </a>
-                    <a href="{{ route('tim.capaianpembelajaranmatakuliah.create') }}"
-                       class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                        <i class="fas fa-plus mr-2"></i>
-                        Tambah CPMK
-                    </a>
+                    @if(!empty($id_tahun ?? null))
+                        <a href="{{ route('tim.capaianpembelajaranmatakuliah.create', ['id_tahun' => $id_tahun ?? null]) }}"
+                           class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                            <i class="fas fa-plus mr-2 text-xs"></i>
+                            Tambah CPMK
+                        </a>
+                    @endif
                 </div>
             </div>
             <div class="p-6">
@@ -103,8 +105,9 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
                             <select name="id_tahun"
-                                    class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="">Semua</option>
+                                    class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                    required>
+                                <option value="" {{ empty($id_tahun ?? '') ? 'selected disabled' : 'disabled' }}>Pilih Tahun Kurikulum</option>
                                 @foreach(($tahun_tersedia ?? []) as $t)
                                     <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '') == $t->id_tahun ? 'selected' : '' }}>
                                         {{ $t->tahun }}
@@ -146,7 +149,20 @@
             {{-- Tabel Hasil --}}
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-800">Daftar CPMK</h2>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">Daftar CPMK Program Studi</h2>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Program Studi: <span class="font-semibold">{{ $prodiName ?? '-' }}</span>
+                            @if($isFiltered)
+                                @php
+                                    $selectedYear = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun ?? null);
+                                @endphp
+                                @if($selectedYear)
+                                    &middot; Tahun Kurikulum: <span class="font-semibold">{{ $selectedYear->tahun }}</span>
+                                @endif
+                            @endif
+                        </p>
+                    </div>
                     <div class="relative w-64">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
@@ -159,12 +175,12 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 text-sm">
-                        <thead class="bg-gray-100">
+                        <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
                             <tr>
-                                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-12">No</th>
-                                <th class="px-6 py-3 text-left font-semibold text-gray-700 w-32">Kode CPMK</th>
-                                <th class="px-6 py-3 text-left font-semibold text-gray-700">Deskripsi</th>
-                                <th class="px-6 py-3 text-center font-semibold text-gray-700 w-32">Aksi</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-12">No</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Kode CPMK</th>
+                                <th class="px-4 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Deskripsi CPMK</th>
+                                <th class="px-4 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -264,4 +280,3 @@ document.addEventListener('DOMContentLoaded', function () {
 </style>
 @endpush
 @endsection
-

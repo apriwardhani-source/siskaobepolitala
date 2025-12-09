@@ -24,8 +24,8 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
-              <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                <option value="">Semua Prodi</option>
+              <select name="kode_prodi" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="" disabled {{ empty($kode_prodi ?? '') ? 'selected' : '' }}>Pilih Program Studi</option>
                 @foreach(($prodis ?? []) as $p)
                   <option value="{{ $p->kode_prodi }}" {{ ($kode_prodi ?? '')==$p->kode_prodi ? 'selected' : '' }}>{{ $p->nama_prodi }}</option>
                 @endforeach
@@ -33,8 +33,8 @@
             </div>
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-              <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                <option value="">Semua</option>
+              <select name="id_tahun" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="" disabled {{ empty($id_tahun ?? '') ? 'selected' : '' }}>Pilih Tahun Kurikulum</option>
                 @foreach(($tahun_tersedia ?? []) as $t)
                   <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '')==$t->id_tahun ? 'selected' : '' }}>{{ $t->tahun }}</option>
                 @endforeach
@@ -51,7 +51,7 @@
       </div>
     </div>
 
-    @php $isFiltered = !empty($kode_prodi) || !empty($id_tahun); @endphp
+    @php $isFiltered = !empty($kode_prodi) && !empty($id_tahun); @endphp
     @if(!$isFiltered)
       <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
         <div class="flex justify-center mb-4">

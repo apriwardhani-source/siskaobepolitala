@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Prodi;
 use App\Models\MataKuliah;
 use App\Models\Mahasiswa;
 use App\Models\Tahun;
@@ -12,17 +14,104 @@ use App\Services\WhatsAppService;
 
 class DosenController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
+
+        if (!$user || !$user->kode_prodi) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $kodeProdi = $user->kode_prodi;
+
+        // Parameter filter progress (mengikuti KaprodiDashboardController)
+        $tahun_progress = $request->get('tahun_progress');
+        $id_tahun = $request->get('id_tahun');
+        $availableYears = Tahun::orderBy('tahun', 'desc')->get();
+
+        // Jika tidak ada filter, gunakan tahun kurikulum terbaru sebagai default
+        if (!$tahun_progress && $availableYears->isNotEmpty()) {
+            $tahun_progress = $availableYears->first()->id_tahun;
+        }
+
+        // Informasi prodi dosen
+        $prodi = Prodi::where('kode_prodi', $kodeProdi)->first();
+        if (!$prodi) {
+            abort(403, 'Program studi tidak ditemukan.');
+        }
+
+        // Hitung statistik kurikulum OBE (reuse rumus Kaprodi)
+        $stats = null;
+        if ($tahun_progress) {
+            $cpl_count = DB::table('capaian_profil_lulusans')
+                ->where('kode_prodi', $kodeProdi)
+                ->where('id_tahun', $tahun_progress)
+                ->count();
+
+            $sks_mk = DB::table('mata_kuliahs')
+                ->where('kode_prodi', $kodeProdi)
+                ->sum('sks_mk');
+
+            $mk_count = DB::table('mata_kuliahs')
+                ->where('kode_prodi', $kodeProdi)
+                ->count();
+
+            $cpmk_count = DB::table('cpl_cpmk')
+                ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+                ->where('cpl.kode_prodi', $kodeProdi)
+                ->where('cpl.id_tahun', $tahun_progress)
+                ->distinct()
+                ->count('cpl_cpmk.id_cpmk');
+
+            $subcpmk_count = DB::table('sub_cpmks')
+                ->join('capaian_pembelajaran_mata_kuliahs as cpmk', 'sub_cpmks.id_cpmk', '=', 'cpmk.id_cpmk')
+                ->join('cpl_cpmk', 'cpmk.id_cpmk', '=', 'cpl_cpmk.id_cpmk')
+                ->join('capaian_profil_lulusans as cpl', 'cpl_cpmk.id_cpl', '=', 'cpl.id_cpl')
+                ->where('cpl.kode_prodi', $kodeProdi)
+                ->where('cpl.id_tahun', $tahun_progress)
+                ->distinct()
+                ->count('sub_cpmks.id_sub_cpmk');
+
+            $target = [
+                'cpl' => 9,
+                'sks_mk' => 144,
+                'mk' => 48,
+                'cpmk' => 20,
+                'subcpmk' => 40,
+            ];
+
+            $progress = [
+                'cpl' => min(100, $cpl_count > 0 ? round(($cpl_count / $target['cpl']) * 100) : 0),
+                'sks_mk' => min(100, $sks_mk > 0 ? round(($sks_mk / $target['sks_mk']) * 100) : 0),
+                'mk' => min(100, $mk_count > 0 ? round(($mk_count / $target['mk']) * 100) : 0),
+                'cpmk' => min(100, $cpmk_count > 0 ? round(($cpmk_count / $target['cpmk']) * 100) : 0),
+                'subcpmk' => min(100, $subcpmk_count > 0 ? round(($subcpmk_count / $target['subcpmk']) * 100) : 0),
+            ];
+
+            $avg_progress = round(array_sum($progress) / count($progress));
+
+            if ($cpl_count > 0 || $sks_mk > 0 || $cpmk_count > 0 || $subcpmk_count > 0) {
+                $stats = [
+                    'cpl_count' => $cpl_count,
+                    'sks_mk' => $sks_mk,
+                    'mk_count' => $mk_count,
+                    'cpmk_count' => $cpmk_count,
+                    'subcpmk_count' => $subcpmk_count,
+                    'progress_cpl' => $progress['cpl'],
+                    'progress_sks_mk' => $progress['sks_mk'],
+                    'progress_mk' => $progress['mk'],
+                    'progress_cpmk' => $progress['cpmk'],
+                    'progress_subcpmk' => $progress['subcpmk'],
+                    'avg_progress' => $avg_progress,
+                    'target' => $target,
+                ];
+            }
+        }
 
         // Get mata kuliah yang diampu oleh dosen ini
         $mataKuliahs = $user->mataKuliahDiajar()
             ->with(['prodi', 'dosen'])
             ->get();
-
-        // Get tahun kurikulum
-        $tahunKurikulums = Tahun::all();
 
         // Statistik
         $totalMK = $mataKuliahs->count();
@@ -30,7 +119,16 @@ class DosenController extends Controller
             ->where('status', 'aktif')
             ->count();
 
-        return view('dosen.dashboard', compact('mataKuliahs', 'tahunKurikulums', 'totalMK', 'totalMahasiswa'));
+        return view('dosen.dashboard', compact(
+            'prodi',
+            'stats',
+            'id_tahun',
+            'availableYears',
+            'tahun_progress',
+            'mataKuliahs',
+            'totalMK',
+            'totalMahasiswa'
+        ));
     }
 
     public function penilaian(Request $request)
@@ -48,34 +146,72 @@ class DosenController extends Controller
         // Jika form sudah disubmit (ada filter)
         $mahasiswas = null;
         $selectedMK = null;
-        $selectedTahun = null;
+        $selectedTahun = $request->id_tahun;
 
-        if ($request->filled('kode_mk') && $request->filled('id_tahun')) {
+        // Selalu pilih MK jika ada kode_mk (misal datang dari tombol "Input Nilai" detail)
+        if ($request->filled('kode_mk')) {
             $selectedMK = MataKuliah::where('kode_mk', $request->kode_mk)->first();
-            $selectedTahun = $request->id_tahun;
+        }
 
-            // Hanya load mahasiswa jika mata kuliah ditemukan
-            if ($selectedMK) {
-                // Get mahasiswa berdasarkan prodi dan tahun kurikulum
-                $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
-                    ->where('id_tahun_kurikulum', $request->id_tahun)
-                    ->where('status', 'aktif')
-                    ->with(['tahunKurikulum'])
-                    ->orderBy('nim')
-                    ->get();
+        // Data mahasiswa hanya diload jika MK dan Tahun sudah dipilih
+        if ($selectedMK && $request->filled('id_tahun')) {
+            // Get mahasiswa berdasarkan prodi dan tahun kurikulum
+            $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
+                ->where('id_tahun_kurikulum', $request->id_tahun)
+                ->where('status', 'aktif')
+                ->with(['tahunKurikulum'])
+                ->orderBy('nim')
+                ->get();
 
-                // Get nilai yang sudah ada
-                foreach ($mahasiswas as $mhs) {
-                    $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
-                        ->where('kode_mk', $request->kode_mk)
-                        ->where('id_tahun', $request->id_tahun)
-                        ->first();
-                    $mhs->nilai_akhir = $nilai ? $nilai->nilai_akhir : null;
-                }
+            // Get nilai yang sudah ada
+            foreach ($mahasiswas as $mhs) {
+                $nilai = NilaiMahasiswa::where('nim', $mhs->nim)
+                    ->where('kode_mk', $request->kode_mk)
+                    ->where('id_tahun', $request->id_tahun)
+                    ->first();
+                $mhs->nilai_akhir = $nilai ? $nilai->nilai_akhir : null;
             }
         }
 
         return view('dosen.penilaian.index', compact('mataKuliahs', 'tahunKurikulums', 'mahasiswas', 'selectedMK', 'selectedTahun'));
+    }
+
+    public function penilaianDetail(string $kode_mk)
+    {
+        $user = Auth::user();
+
+        if (!$user || !$user->kode_prodi) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        // Pastikan mata kuliah yang diakses benar-benar diajar oleh dosen ini
+        $mataKuliah = MataKuliah::with(['prodi'])
+            ->where('kode_mk', $kode_mk)
+            ->where('kode_prodi', $user->kode_prodi)
+            ->firstOrFail();
+
+        // Ambil daftar tahun kurikulum dosen ini mengampu MK ini (jika ada)
+        $tahunKurikulums = \DB::table('dosen_mata_kuliah as dm')
+            ->join('tahun', 'dm.id_tahun', '=', 'tahun.id_tahun')
+            ->where('dm.kode_mk', $kode_mk)
+            ->where('dm.user_id', $user->id)
+            ->select('tahun.id_tahun', 'tahun.tahun', 'tahun.nama_kurikulum')
+            ->orderByDesc('tahun.tahun')
+            ->get();
+
+        // Dosen pengampu mata kuliah (semua dosen yang mengampu MK ini)
+        $dosenPengampu = \DB::table('dosen_mata_kuliah as dm')
+            ->join('users', 'dm.user_id', '=', 'users.id')
+            ->where('dm.kode_mk', $kode_mk)
+            ->select('users.name', 'users.nip')
+            ->orderBy('users.name')
+            ->get();
+
+        return view('dosen.penilaian.detail', [
+            'mataKuliah' => $mataKuliah,
+            'tahunKurikulums' => $tahunKurikulums,
+            'dosenPengampu' => $dosenPengampu,
+        ]);
     }
 
     public function storeNilai(Request $request)

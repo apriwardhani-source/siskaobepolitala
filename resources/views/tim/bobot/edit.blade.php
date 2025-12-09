@@ -6,7 +6,7 @@
 
         <!-- Header ala form CPL admin -->
         <div class="mb-6">
-            <a href="{{ route('tim.bobot.index') }}"
+            <a href="{{ route('tim.bobot.index', ['id_tahun' => request('id_tahun', 1)]) }}"
                class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                 <span class="mr-2 text-base leading-none">&larr;</span>
                 Kembali
@@ -18,7 +18,7 @@
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">Edit Bobot MK - CPL</h1>
                     <p class="mt-1 text-sm text-gray-600">
-                        Perbarui distribusi bobot mata kuliah terhadap CPL. Total bobot harus tetap 100%.
+                        Perbarui bobot CPL yang berkontribusi pada mata kuliah ini. Total bobot harus 100%.
                     </p>
                 </div>
             </div>
@@ -58,48 +58,53 @@
                     </div>
                 @endif
 
-                <form action="{{ route('tim.bobot.update', ['bobot' => $id_cpl]) }}" method="POST" id="bobotForm" class="space-y-6">
+                <form action="{{ route('tim.bobot.update', ['bobot' => $mk->kode_mk]) }}" method="POST" id="bobotForm" class="space-y-6">
                     @csrf
                     @method('PUT')
 
-                    <input type="hidden" name="id_cpl" value="{{ $id_cpl }}">
+                    <input type="hidden" name="kode_mk" value="{{ $mk->kode_mk }}">
 
-                    <!-- CPL Info -->
+                    <!-- MK Info -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-gray-800">CPL</label>
+                        <label class="block text-sm font-semibold text-gray-800">Mata Kuliah</label>
                         <div class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-900">
-                            {{ $id_cpl }}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                {{ $mk->kode_mk }}
+                            </span>
+                            <span class="ml-2">
+                                {{ $mk->nama_mk }}
+                            </span>
                         </div>
                     </div>
 
-                    <!-- Distribusi Bobot MK -->
+                    <!-- Distribusi Bobot CPL -->
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <label class="block text-sm font-semibold text-gray-800">
-                                Atur Bobot Mata Kuliah (Total harus 100%)
+                                Atur Bobot CPL (Total harus 100%)
                             </label>
                         </div>
-                        <div id="mkList"
+                        <div id="cplList"
                              class="border border-gray-200 rounded-lg p-4 bg-gray-50 max-h-[320px] overflow-y-auto divide-y divide-gray-200">
-                            @foreach ($mataKuliahs as $mk)
+                            @foreach ($cpls as $cpl)
                                 <div class="flex items-center justify-between bg-white px-4 py-3">
                                     <div class="flex-1 pr-4">
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold bg-purple-100 text-purple-800">
-                                            {{ $mk->kode_mk }}
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold bg-blue-100 text-blue-800">
+                                            {{ $cpl->kode_cpl }}
                                         </span>
                                         <span class="ml-2 text-sm text-gray-900">
-                                            {{ $mk->nama_mk }}
+                                            {{ $cpl->deskripsi_cpl }}
                                         </span>
                                     </div>
                                     <div class="flex items-center space-x-2">
                                         <span class="text-xs text-gray-500">Bobot</span>
                                         <input type="number"
-                                               name="bobot[{{ $mk->kode_mk }}]" min="0" max="100"
-                                               value="{{ $existingBobots[$mk->kode_mk] ?? 0 }}"
+                                               name="bobot[{{ $cpl->id_cpl }}]" min="0" max="100"
+                                               value="{{ $existingBobots[$cpl->id_cpl] ?? 0 }}"
                                                class="w-20 px-3 py-1.5 border border-gray-300 rounded-lg text-center text-sm bobot-input">
                                         <span class="text-xs text-gray-500">%</span>
                                     </div>
-                                    <input type="hidden" name="kode_mk[]" value="{{ $mk->kode_mk }}">
+                                    <input type="hidden" name="id_cpl[]" value="{{ $cpl->id_cpl }}">
                                 </div>
                             @endforeach
                         </div>

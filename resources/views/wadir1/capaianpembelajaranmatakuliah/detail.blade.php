@@ -3,17 +3,36 @@
 @section('title', 'Detail CPMK - Wadir 1')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
   <div class="max-w-5xl mx-auto">
 
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Detail Capaian Pembelajaran Mata Kuliah</h1>
-      <p class="mt-2 text-sm text-gray-600">Informasi lengkap tentang CPMK {{ $cpmk->kode_cpmk ?? '-' }}</p>
+    <!-- Header dengan tombol kembali + ikon, mengikuti TIM -->
+    <div class="mb-6">
+      <a href="{{ url()->previous() }}"
+         class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+        <i class="fas fa-arrow-left mr-2 text-xs"></i>
+        kembali
+      </a>
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+          <i class="fas fa-bullseye text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+            Detail Capaian Pembelajaran Mata Kuliah
+          </h1>
+          <p class="mt-1 text-sm text-gray-600">
+            Informasi lengkap tentang CPMK {{ $cpmk->kode_cpmk ?? '-' }}.
+          </p>
+        </div>
+      </div>
     </div>
 
+    <!-- Kartu utama -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
       <div class="px-8 py-6 space-y-6">
 
+        <!-- Kode CPMK -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Kode CPMK</label>
           <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-medium">
@@ -21,6 +40,7 @@
           </div>
         </div>
 
+        <!-- Deskripsi CPMK -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi CPMK</label>
           <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-700 min-h-[100px]">
@@ -28,6 +48,7 @@
           </div>
         </div>
 
+        <!-- CPL Terkait -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">
             CPL Terkait
@@ -46,12 +67,13 @@
                 <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Tidak ada CPL terkait dengan CPMK ini
+                Tidak ada CPL terkait dengan CPMK ini.
               </div>
             @endforelse
           </div>
         </div>
 
+        <!-- Mata Kuliah Terkait -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">
             Mata Kuliah Terkait
@@ -70,28 +92,15 @@
                 <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Tidak ada mata kuliah terkait dengan CPMK ini
+                Tidak ada mata kuliah terkait dengan CPMK ini.
               </div>
             @endforelse
           </div>
         </div>
 
       </div>
-
-      <div class="px-8 py-4 bg-gray-50 border-t border-gray-200">
-        <div class="flex justify-between items-center">
-          <a href="{{ route('wadir1.capaianpembelajaranmatakuliah.index') }}"
-             class="inline-flex items-center px-5 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            Kembali
-          </a>
-        </div>
-      </div>
     </div>
 
   </div>
 </div>
 @endsection
-

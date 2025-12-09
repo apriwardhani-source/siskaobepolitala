@@ -44,6 +44,17 @@ class MahasiswaController extends Controller
         return view('tim.mahasiswa.create', compact('tahun_angkatans', 'prodis'));
     }
 
+    public function show($id)
+    {
+        $user = Auth::user();
+        $mahasiswa = Mahasiswa::where('id', $id)
+                    ->where('kode_prodi', $user->kode_prodi)
+                    ->with(['prodi', 'tahunKurikulum'])
+                    ->firstOrFail();
+
+        return view('tim.mahasiswa.detail', compact('mahasiswa'));
+    }
+
     public function store(Request $request)
     {
         $user = Auth::user();
