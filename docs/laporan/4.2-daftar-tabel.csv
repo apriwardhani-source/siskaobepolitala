@@ -1,0 +1,16 @@
+No,Nama Tabel,Keterangan
+1,users,Menyimpan data pengguna sistem (admin; wadir1; kaprodi; tim; dosen)
+2,prodis,Menyimpan data program studi
+3,mahasiswas,Menyimpan data mahasiswa
+4,tahun,Menyimpan data tahun kurikulum
+5,capaian_profil_lulusans,Menyimpan data Capaian Pembelajaran Lulusan (CPL)
+6,mata_kuliahs,Menyimpan data mata kuliah
+7,capaian_pembelajaran_mata_kuliahs,Menyimpan data CPMK (Capaian Pembelajaran Mata Kuliah)
+8,cpl_mk,Tabel relasi pemetaan CPL dengan Mata Kuliah
+9,cpmk_mk,Tabel relasi pemetaan CPMK dengan Mata Kuliah
+10,cpl_cpmk,Tabel relasi pemetaan CPL dengan CPMK
+11,bobots,Menyimpan bobot penilaian CPL per Mata Kuliah
+12,teknik_penilaian,Menyimpan teknik/komponen penilaian per Mata Kuliah
+13,nilai_mahasiswa,Menyimpan nilai mahasiswa per teknik penilaian
+14,skor_cpl_mahasiswa,Menyimpan hasil perhitungan skor CPL mahasiswa
+15,dosen_mata_kuliah,Tabel relasi dosen pengampu mata kuliah

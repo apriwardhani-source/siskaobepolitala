@@ -1,0 +1,9 @@
+No,Nama Objek,Kelas,Nilai Atribut
+1,u : User,User,id = 4; name = "Veri Julianto"; email = "veri@politala.ac.id"; role = "dosen"
+2,p : Prodi,Prodi,kode_prodi = "TI"; nama_prodi = "Teknologi Informasi"; nama_kaprodi = "Joni Riadi"
+3,m : Mahasiswa,Mahasiswa,id = 3; nim = "2301301001"; nama_mahasiswa = "Rizqia Febrianoor"; status = "aktif"
+4,t : Tahun,Tahun,id_tahun = 1; nama_kurikulum = "Kurikulum OBE 2023"; tahun = "2023"
+5,c : CPL,CPL,id_cpl = 10; kode_cpl = "CPL-01"; deskripsi_cpl = "Mampu menerapkan pemikiran logis..."
+6,mk : MataKuliah,MataKuliah,kode_mk = "MK02"; nama_mk = "Pemrograman Web"; sks_mk = 3; semester_mk = "3"
+7,cpmk : CPMK,CPMK,id_cpmk = 3; kode_cpmk = "CPMK-01"; deskripsi_cpmk = "Mampu membuat aplikasi web..."
+8,n : NilaiMahasiswa,NilaiMahasiswa,id_nilai = 6; nim = "2301301001"; nilai = 85; nilai_akhir = 80.78
