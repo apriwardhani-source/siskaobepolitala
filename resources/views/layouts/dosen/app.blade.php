@@ -61,6 +61,7 @@
         <div class="px-6 py-4 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center space-x-4">
+                <img src="{{ asset('images/logo-politala.png') }}" alt="Logo Politala" class="h-12 w-auto">
                 <span class="font-bold text-xl uppercase">Politala OBE - Dosen</span>
             </div>
 
