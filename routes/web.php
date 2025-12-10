@@ -306,6 +306,7 @@ Route::middleware(['auth'])->group(function () {
         // Contact messages from homepage
         Route::get('/contacts', [\App\Http\Controllers\AdminContactController::class, 'index'])->name('contacts.index');
         Route::get('/contacts/{id}', [\App\Http\Controllers\AdminContactController::class, 'show'])->name('contacts.show');
+        Route::post('/contacts/{id}/reply', [\App\Http\Controllers\AdminContactController::class, 'reply'])->name('contacts.reply');
         Route::delete('/contacts/{id}', [\App\Http\Controllers\AdminContactController::class, 'destroy'])->name('contacts.destroy');
         Route::get('/visi/create', [VisiController::class, 'create'])->name('visi.create');
         Route::post('/visi', [VisiController::class, 'store'])->name('visi.store');

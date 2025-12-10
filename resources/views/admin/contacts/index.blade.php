@@ -62,13 +62,13 @@
                                         {{ $contact->email ?? '-' }}
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-center">
-                                        @if($contact->is_read)
+                                        @if($contact->is_replied)
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                                                <i class="fas fa-check mr-1"></i> Dibaca
+                                                <i class="fas fa-check mr-1"></i> Sudah Dibalas
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
-                                                <i class="fas fa-envelope mr-1"></i> Belum Dibaca
+                                                <i class="fas fa-envelope mr-1"></i> Belum Dibalas
                                             </span>
                                         @endif
                                     </td>
