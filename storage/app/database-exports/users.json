@@ -5,6 +5,8 @@
         "nip": null,
         "nohp": null,
         "email": "admin@gmail.com",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": "2025-10-21 04:19:41",
         "password": "$2y$12$olcu3w8ie2k5lCfVUFYNme5qbhUejDV8T6KkJfQeF53jqe\/DiF3Ki",
         "role": "admin",
@@ -13,9 +15,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 04:19:42",
-        "updated_at": "2025-10-21 04:19:42",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 04:19:42"
     },
     {
         "id": 4,
@@ -23,6 +23,8 @@
         "nip": "1001",
         "nohp": "0811518669",
         "email": "veri@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$JU.ushp4Q1IiiZyKv7RmdunfrOLUf6uzSKPDzTUCl8rtBrI5YIamK",
         "role": "dosen",
@@ -31,9 +33,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:08",
-        "updated_at": "2025-10-21 14:50:08",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:08"
     },
     {
         "id": 5,
@@ -41,6 +41,8 @@
         "nip": "1002",
         "nohp": "087861247778",
         "email": "khairul@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$3tl9Om3kNBeffqVBQjo40uMsh47esRcnEIgbR.C\/A6Sii5IbRrfYG",
         "role": "dosen",
@@ -49,9 +51,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:08",
-        "updated_at": "2025-10-21 14:50:08",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:08"
     },
     {
         "id": 6,
@@ -59,6 +59,8 @@
         "nip": "1003",
         "nohp": "08115475777",
         "email": "winda@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$kv3n8gouMfl9eLFkibvCRefA\/D0jZTZkoKj4\/VhvD1ezdB7ZijHLO",
         "role": "dosen",
@@ -67,9 +69,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:09",
-        "updated_at": "2025-10-21 14:50:09",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:09"
     },
     {
         "id": 7,
@@ -77,6 +77,8 @@
         "nip": "1004",
         "nohp": "08125901909",
         "email": "rabini@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$0e2ffopcn3wYa8iDGB2Gg.I.V8dAWR6zmE37TzcHh976OxSy98DAu",
         "role": "dosen",
@@ -85,9 +87,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:09",
-        "updated_at": "2025-10-21 14:50:09",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:09"
     },
     {
         "id": 8,
@@ -95,6 +95,8 @@
         "nip": "1005",
         "nohp": "085349587113",
         "email": "muhammad@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$A4zf3Xbh8ndiVfM9o2drrucW43Aii7jqF3r.Ldu6etZ.jQ9emU.gK",
         "role": "dosen",
@@ -103,9 +105,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:09",
-        "updated_at": "2025-10-21 14:50:09",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:09"
     },
     {
         "id": 9,
@@ -113,6 +113,8 @@
         "nip": "1006",
         "nohp": "08115053333",
         "email": "agustian@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$RZHv43qvTNPe87JixnZ6MuzDdtCnOMbi5ZL4NkenlgALgkiKC1anW",
         "role": "dosen",
@@ -121,9 +123,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:10",
-        "updated_at": "2025-10-21 14:50:10",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:10"
     },
     {
         "id": 10,
@@ -131,6 +131,8 @@
         "nip": "1007",
         "nohp": "085346503338",
         "email": "wiwik@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$SB47AmWAJcqAglihk\/IyM..NK7BBZVkiYeAktzWB2ZUzskBLDVEWu",
         "role": "dosen",
@@ -139,9 +141,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:10",
-        "updated_at": "2025-10-21 14:50:10",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:10"
     },
     {
         "id": 11,
@@ -149,6 +149,8 @@
         "nip": "1008",
         "nohp": "087842071117",
         "email": "yunita@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$FUVTvJ3\/4LXyz3I3E6C.huB3r9xNQJEhkoigFTIR85lQpAkb2.F6G",
         "role": "dosen",
@@ -157,9 +159,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:10",
-        "updated_at": "2025-10-21 14:50:10",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:10"
     },
     {
         "id": 12,
@@ -167,6 +167,8 @@
         "nip": "1009",
         "nohp": "08151119219",
         "email": "fathurrahmani@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$2eCH77c1ra2sGXLDmPXQae1aixwrX9X3bnUz9EL7uuvg4LoCfBOJi",
         "role": "dosen",
@@ -175,9 +177,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:10",
-        "updated_at": "2025-10-21 14:50:10",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:10"
     },
     {
         "id": 13,
@@ -185,6 +185,8 @@
         "nip": "1010",
         "nohp": "08524914221",
         "email": "jaka@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$dg3I7c\/Jk9K5ehcvcak\/he\/.8GawtletTd\/hgCnaunhW.sR589vP6",
         "role": "dosen",
@@ -193,9 +195,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:11",
-        "updated_at": "2025-10-21 14:50:11",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:11"
     },
     {
         "id": 14,
@@ -203,6 +203,8 @@
         "nip": "1011",
         "nohp": "085234276100",
         "email": "herfia@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$05OraYTjx8qXWGhDCNB7I.uFXlc0IHzSF3dcfrlezK4DcFH01QBfi",
         "role": "dosen",
@@ -211,9 +213,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:11",
-        "updated_at": "2025-10-21 14:50:11",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:11"
     },
     {
         "id": 15,
@@ -221,6 +221,8 @@
         "nip": "1012",
         "nohp": "08971135671",
         "email": "billy@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$9KT8urGIK.gtHgqExl20Lu4kZLNDKnOVEsS96Gyv7OiMuctwBQ.QG",
         "role": "dosen",
@@ -229,9 +231,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:11",
-        "updated_at": "2025-10-21 14:50:11",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:11"
     },
     {
         "id": 16,
@@ -239,6 +239,8 @@
         "nip": "1013",
         "nohp": "085250808455",
         "email": "oky@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$lFsus.39YvKmv310y8dnVeCoiuRVNmM3vGykikipoOPseHier.tBe",
         "role": "dosen",
@@ -247,9 +249,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:12",
-        "updated_at": "2025-10-21 14:50:12",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:12"
     },
     {
         "id": 17,
@@ -257,6 +257,8 @@
         "nip": "1014",
         "nohp": "08124493571",
         "email": "najamudin@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$KogmFTfzG29Z2XZXXHZl1O0csezQui9Ib8sNwk8Ng.VtEt1UKBW5i",
         "role": "dosen",
@@ -265,9 +267,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:12",
-        "updated_at": "2025-10-21 14:50:12",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:12"
     },
     {
         "id": 18,
@@ -275,6 +275,8 @@
         "nip": "1015",
         "nohp": "08124699893",
         "email": "aidil@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$dPFpQITQaCbXrq8A47EwwuOn1NIoK6uof0bzvuLoGVbpNEBKavE7u",
         "role": "dosen",
@@ -283,9 +285,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:12",
-        "updated_at": "2025-10-21 14:50:12",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:12"
     },
     {
         "id": 19,
@@ -293,6 +293,8 @@
         "nip": "1016",
         "nohp": "081256079833",
         "email": "nina@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$sxfjO2pD322r\/5gl81J4meWEp4yQtbN1RqDrWMuHSDMM4\/YKtOzlO",
         "role": "dosen",
@@ -301,9 +303,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:13",
-        "updated_at": "2025-10-21 14:50:13",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:13"
     },
     {
         "id": 20,
@@ -311,6 +311,8 @@
         "nip": "1017",
         "nohp": "08125082443",
         "email": "dwi@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$0MsDG4ONzWej3D2pkGL9t.RQSUsWIPbG7xuWpu6tqH9TzIV.WZnK2",
         "role": "dosen",
@@ -319,9 +321,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:13",
-        "updated_at": "2025-10-21 14:50:13",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:13"
     },
     {
         "id": 21,
@@ -329,6 +329,8 @@
         "nip": "1018",
         "nohp": "081335225166",
         "email": "afian@politala.ac.id",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$XRy3ZPlVTGXvPCYFMLBrb.16Cuct8cTcORDj6UDZzx5jtNh2tQoZa",
         "role": "dosen",
@@ -337,9 +339,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:50:13",
-        "updated_at": "2025-10-21 14:50:13",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-21 14:50:13"
     },
     {
         "id": 22,
@@ -347,6 +347,8 @@
         "nip": "2401301054",
         "nohp": "085754631899",
         "email": "apriw2005@gmail.com",
+        "google_id": "117857718466267099007",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocKO-OqnpHc5gYQp2nI8hHoWJ9P18Swif5cMN0IpfCe17HnCqgiGAA=s96-c",
         "email_verified_at": null,
         "password": "$2y$12$YHSXT1\/ErZNRMs2dhJA55uSV7vTwXX8ccC37Hm1QvcJtg.T5QIaYS",
         "role": "tim",
@@ -355,9 +357,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-21 14:51:19",
-        "updated_at": "2025-11-07 01:34:35",
-        "google_id": "117857718466267099007",
-        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocKO-OqnpHc5gYQp2nI8hHoWJ9P18Swif5cMN0IpfCe17HnCqgiGAA=s96-c"
+        "updated_at": "2025-11-07 01:34:35"
     },
     {
         "id": 23,
@@ -365,6 +365,8 @@
         "nip": "1324567",
         "nohp": "04385746",
         "email": "dhani@gmail.com",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$L..WTLCED20gX9fOZEhETezgS5HS59ddA0DZLcHxvoFTPL92Uk4wK",
         "role": "wadir1",
@@ -373,9 +375,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-22 07:15:11",
-        "updated_at": "2025-11-06 13:34:09",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-11-06 13:34:09"
     },
     {
         "id": 24,
@@ -383,6 +383,8 @@
         "nip": "35297357",
         "nohp": "4325463764",
         "email": "jaka@gmail.com",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$PXZka4IYqOpFe4Yv4fNdBOp\/PPOG0i6GLdXtCfZHrREtCUutcWBr.",
         "role": "kaprodi",
@@ -391,9 +393,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-22 07:16:46",
-        "updated_at": "2025-10-22 07:16:46",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-22 07:16:46"
     },
     {
         "id": 25,
@@ -401,6 +401,8 @@
         "nip": "2435678365",
         "nohp": "7564541265",
         "email": "maulida@gmail.com",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$XURzguw4SE0EcKDm2ScnV.kAdQOW2bSgG1VgrI0O06Nq4jB8nGggO",
         "role": "dosen",
@@ -409,9 +411,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-22 21:43:37",
-        "updated_at": "2025-10-30 06:56:59",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-10-30 06:56:59"
     },
     {
         "id": 26,
@@ -419,6 +419,8 @@
         "nip": "2401301052",
         "nohp": "085754631890",
         "email": "lidaniw710@gmail.com",
+        "google_id": "116463416811821010503",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocIKN6_T46NhD9haJtl5WknabV4gV9kF_WE2QgPM3UQhoW62YL7a=s96-c",
         "email_verified_at": null,
         "password": "$2y$12$0uVOWKGb\/uApwT9T3f4EcOb1KnTRBipm71mp6ZLhDLKpWANszyi1u",
         "role": "tim",
@@ -427,9 +429,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-30 06:55:14",
-        "updated_at": "2025-10-31 01:17:54",
-        "google_id": "116463416811821010503",
-        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocIKN6_T46NhD9haJtl5WknabV4gV9kF_WE2QgPM3UQhoW62YL7a=s96-c"
+        "updated_at": "2025-10-31 01:17:54"
     },
     {
         "id": 27,
@@ -437,6 +437,8 @@
         "nip": "123456543345",
         "nohp": "0987899876",
         "email": "apri.wardhani@mhs.politala.ac.id",
+        "google_id": "102046001027556912491",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a-\/ALV-UjXt0fZDPbTwP-6z6mtt-g10QstfPun6mdinzEDsGWjqwElQb6ygrTXExEL0urNJZLJ3gAEpMqB3AQPCg2gE2s5SiDEI5dlXZRKwCt6cjz8EBkCaJ-yWIbFFfaEaYkqDS83F-_J9nUZ1Gu3Cm690_HkI0Cx5u_d0imTVZMYgxmFQ_NPViv83k_1UDrQTTY2XY0T2nMSyT6TRnWqIz3HC9-4dRauujGSR82SmaSijBzwHzqHtf-U3FNn3ZmTRLg7FhDNfRA4-HjKXJ6_uese9D9lrDI9-pstnWSozYjmrd8jvcTXBD4SZv0HJpAzb4V-d4Q0YDedHAXmro93ahBqcIRIp0FMtqE_hij3TBauqOe9M1SLnJV4fjfMzHLjsctbglGM5pj5tCbG-Xxz9x4Y_t5kUBLJWkZYPY3hHbToskIoTXXET3D8KZskaIsiHHPJJyUdygurplxJ2YGRZm4ilu3vktknCjvOS4Ou6upuMePHmmF04jCrwYrTaIjl2e1Bm0VpG-8r6XqvzhArzzzKDYbKE5BdykrVsQAGReAC8XzRGpc8ClviTPmiWDIRNGkJdUmz-niJHnrqks-QvpgdvokaTvZ4VDAbF3ybwE5pd7gbYSZ5NkUqG9hsQRXFb_rwTnrh2DrTIOgCqsJsDSYUDcmY1u3w9sOcChTw3nFtfd8KxRgeOugKgZt_uolSyaxLZuBQSgY_KguQtLqOtjICMk74y5oSnREmbQYb5jjQL4Ygx4PINP9Sed37FQZyHTdIzmHS_VVjf2hIoPplNrBiSUNdgyWLihkaCeN0j45JmCXpJQ_hqPHT1Vp7Hw7QqwiNJkMAQPZhUjpoea_B_DiMPV96lvuUrAPoo_iOXy4CNt6hSnzNIDc2koLqGtE1yIdUYH4M3CzyL6oQP9qnWr33QcIC3wJN52mMBwZ-8L-y2-86nht6t2Gh1JZjXBSkn08gv37hvxCwETo7qJY6sxFE3j3TJ8G0yFjUvPBNmsLgjHKHXBgIdkv0tKxt_YahgUPFK_AMZiLeV3xzyo3JueSoZNmxr8NEz3RO9NuqXnEz4pqJ_pDIVT-0q=s96-c",
         "email_verified_at": null,
         "password": "$2y$12$GowmKR78W.T857tYqXDybexjT92z5J\/bcqDpABROJ\/0RQGG2qz5qi",
         "role": "kaprodi",
@@ -445,9 +447,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-10-31 01:50:56",
-        "updated_at": "2025-11-06 13:28:29",
-        "google_id": "102046001027556912491",
-        "avatar": "https:\/\/lh3.googleusercontent.com\/a-\/ALV-UjXt0fZDPbTwP-6z6mtt-g10QstfPun6mdinzEDsGWjqwElQb6ygrTXExEL0urNJZLJ3gAEpMqB3AQPCg2gE2s5SiDEI5dlXZRKwCt6cjz8EBkCaJ-yWIbFFfaEaYkqDS83F-_J9nUZ1Gu3Cm690_HkI0Cx5u_d0imTVZMYgxmFQ_NPViv83k_1UDrQTTY2XY0T2nMSyT6TRnWqIz3HC9-4dRauujGSR82SmaSijBzwHzqHtf-U3FNn3ZmTRLg7FhDNfRA4-HjKXJ6_uese9D9lrDI9-pstnWSozYjmrd8jvcTXBD4SZv0HJpAzb4V-d4Q0YDedHAXmro93ahBqcIRIp0FMtqE_hij3TBauqOe9M1SLnJV4fjfMzHLjsctbglGM5pj5tCbG-Xxz9x4Y_t5kUBLJWkZYPY3hHbToskIoTXXET3D8KZskaIsiHHPJJyUdygurplxJ2YGRZm4ilu3vktknCjvOS4Ou6upuMePHmmF04jCrwYrTaIjl2e1Bm0VpG-8r6XqvzhArzzzKDYbKE5BdykrVsQAGReAC8XzRGpc8ClviTPmiWDIRNGkJdUmz-niJHnrqks-QvpgdvokaTvZ4VDAbF3ybwE5pd7gbYSZ5NkUqG9hsQRXFb_rwTnrh2DrTIOgCqsJsDSYUDcmY1u3w9sOcChTw3nFtfd8KxRgeOugKgZt_uolSyaxLZuBQSgY_KguQtLqOtjICMk74y5oSnREmbQYb5jjQL4Ygx4PINP9Sed37FQZyHTdIzmHS_VVjf2hIoPplNrBiSUNdgyWLihkaCeN0j45JmCXpJQ_hqPHT1Vp7Hw7QqwiNJkMAQPZhUjpoea_B_DiMPV96lvuUrAPoo_iOXy4CNt6hSnzNIDc2koLqGtE1yIdUYH4M3CzyL6oQP9qnWr33QcIC3wJN52mMBwZ-8L-y2-86nht6t2Gh1JZjXBSkn08gv37hvxCwETo7qJY6sxFE3j3TJ8G0yFjUvPBNmsLgjHKHXBgIdkv0tKxt_YahgUPFK_AMZiLeV3xzyo3JueSoZNmxr8NEz3RO9NuqXnEz4pqJ_pDIVT-0q=s96-c"
+        "updated_at": "2025-11-06 13:28:29"
     },
     {
         "id": 28,
@@ -455,6 +455,8 @@
         "nip": "1234567890987654321",
         "nohp": "0987654323456789",
         "email": "xraprdhnii@gmail.com",
+        "google_id": "101886186222643746483",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocI3uRJoiczyi8YVDG7YTtooO_UUeOHwyTPBweOTu7l2zs7Mm_QD=s96-c",
         "email_verified_at": null,
         "password": "$2y$12$K\/WRJXqG8LOs8UrcCh6bUe1WivfvaH8\/GopmuGztebQfcKAeBnTmW",
         "role": "admin",
@@ -463,9 +465,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-11-05 00:26:22",
-        "updated_at": "2025-11-05 00:52:28",
-        "google_id": "101886186222643746483",
-        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocI3uRJoiczyi8YVDG7YTtooO_UUeOHwyTPBweOTu7l2zs7Mm_QD=s96-c"
+        "updated_at": "2025-11-05 00:52:28"
     },
     {
         "id": 29,
@@ -473,6 +473,8 @@
         "nip": "12345676543234",
         "nohp": "089876545323",
         "email": "dhan12005s@gmail.com",
+        "google_id": "106589096777009681838",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocLgvMBANhPzfK9Z7BeKTIO1oE2xafeaR_f8D4PPjRlYP1hmQw=s96-c",
         "email_verified_at": null,
         "password": "$2y$12$yM9x6\/Iiv.9v7.HO6\/0JdufJbhckoUG9aJTpAXjKQo5qmA1fTCUi2",
         "role": "admin",
@@ -481,9 +483,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-11-06 07:26:42",
-        "updated_at": "2025-11-06 13:07:10",
-        "google_id": "106589096777009681838",
-        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocLgvMBANhPzfK9Z7BeKTIO1oE2xafeaR_f8D4PPjRlYP1hmQw=s96-c"
+        "updated_at": "2025-11-06 13:07:10"
     },
     {
         "id": 30,
@@ -491,6 +491,8 @@
         "nip": "24022327832",
         "nohp": "082738402000",
         "email": "zen@gmail.com",
+        "google_id": null,
+        "avatar": null,
         "email_verified_at": null,
         "password": "$2y$12$Hm.UycbiXqNihGLih8xUyOfRplgHArzRG4LCOhyiciYgFfIGXoNxy",
         "role": "wadir1",
@@ -499,9 +501,7 @@
         "status": "approved",
         "remember_token": null,
         "created_at": "2025-11-13 00:18:37",
-        "updated_at": "2025-11-13 00:18:37",
-        "google_id": null,
-        "avatar": null
+        "updated_at": "2025-11-13 00:18:37"
     },
     {
         "id": 32,
@@ -509,6 +509,8 @@
         "nip": "61971725",
         "nohp": "087238616321",
         "email": "dhihyaz@gmail.com",
+        "google_id": "108442160191688418961",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocKRtPM87T3k9ZR0fH8JfQMaqCfS_0U5PLKUOrYnjgXqriKuvjyU=s96-c",
         "email_verified_at": null,
         "password": "$2y$12$tMqzggAl1aPbXLDaQn6OPur627dN2iK2xsK5fk4sOdA80gRP\/r36e",
         "role": "tim",
@@ -516,34 +518,25 @@
         "id_jurusan": null,
         "status": "approved",
         "remember_token": null,
-<<<<<<< HEAD
-        "created_at": "2025-11-13 07:12:03",
-        "updated_at": "2025-11-13 07:12:03",
-        "google_id": null,
-        "avatar": null
+        "created_at": "2025-11-29 02:30:19",
+        "updated_at": "2025-11-29 22:32:47"
     },
     {
-        "id": 32,
-        "name": "septi",
-        "nip": "2345678",
-        "nohp": "6283136335731",
-        "email": "septi@gmail.com",
+        "id": 33,
+        "name": "2401301034 M. NANDANK INDRA PURWANTO",
+        "nip": "2401301034",
+        "nohp": "087830614075",
+        "email": "m.nandank@mhs.politala.ac.id",
+        "google_id": "104925688685236972517",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocIkhGGPQI2XC9hNVn1AM1rq2Uguft9eRkVJmZBdLgbAM8CBCw=s96-c",
         "email_verified_at": null,
-        "password": "$2y$12$2\/AlQVL6tTQgfiw4FKVg7ODItqcSSTG7kxBxsbCVUfgo1jeib8KTa",
+        "password": "$2y$12$gX.G0x5m9voI5dVqsbHxK.VKgSGxHr291YyFjTYQ4LjBdqBkep.52",
         "role": "dosen",
         "kode_prodi": "TI",
         "id_jurusan": null,
         "status": "approved",
         "remember_token": null,
-        "created_at": "2025-11-20 07:21:57",
-        "updated_at": "2025-11-20 07:21:57",
-        "google_id": null,
-        "avatar": null
-=======
-        "created_at": "2025-11-29 02:30:19",
-        "updated_at": "2025-11-29 22:32:47",
-        "google_id": "108442160191688418961",
-        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocKRtPM87T3k9ZR0fH8JfQMaqCfS_0U5PLKUOrYnjgXqriKuvjyU=s96-c"
->>>>>>> 55a9415a113fb99c900b183de14751527d4a7678
+        "created_at": "2025-12-03 03:41:38",
+        "updated_at": "2025-12-03 03:42:06"
     }
 ]
