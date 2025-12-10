@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class NilaiMahasiswa extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
     
     protected $table = 'nilai_mahasiswa';
     protected $primaryKey = 'id_nilai';
@@ -57,5 +59,17 @@ class NilaiMahasiswa extends Model
     public function dosen()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * Activity Log Configuration
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['nim', 'kode_mk', 'nilai', 'nilai_akhir', 'user_id'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Nilai {$eventName} for NIM {$this->nim}");
     }
 }
