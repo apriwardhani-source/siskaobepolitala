@@ -1,0 +1,12 @@
+No,Nama Field,Tipe Data,Keterangan
+1,id,INTEGER,Primary Key; Auto Increment
+2,name,VARCHAR,Nama pengguna
+3,nip,VARCHAR,Nomor Induk Pegawai (Unique)
+4,nohp,VARCHAR,Nomor HP (Unique)
+5,email,VARCHAR,Email pengguna (Unique)
+6,password,VARCHAR,Password terenkripsi
+7,role,VARCHAR,Role pengguna (admin/wadir1/kaprodi/tim/dosen)
+8,kode_prodi,VARCHAR,Foreign Key ke tabel prodis
+9,status,VARCHAR,Status akun (pending/approved)
+10,created_at,DATETIME,Tanggal dibuat
+11,updated_at,DATETIME,Tanggal diupdate

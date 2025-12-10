@@ -1,0 +1,19 @@
+Nama Use Case,Kelola User
+Aktor,Admin
+Deskripsi,Proses mengelola data pengguna sistem (tambah; ubah; hapus)
+Pre-Condition,Admin sudah login ke sistem
+Post-Condition,Data user berhasil ditambah/diubah/dihapus
+
+Skenario Normal (Tambah User)
+No,Aksi Aktor,Reaksi Sistem
+1,Admin memilih menu Kelola User,Sistem menampilkan daftar user
+2,Admin menekan tombol Tambah User,Sistem menampilkan form tambah user
+3,Admin mengisi data user (nama; email; role; dll),Sistem menerima input data
+4,Admin menekan tombol Simpan,Sistem memvalidasi data
+5,-,Sistem menyimpan data ke database
+6,-,Sistem menampilkan pesan "Data berhasil disimpan"
+
+Skenario Alternatif
+No,Aksi Aktor,Reaksi Sistem
+4a,-,Jika email sudah terdaftar; sistem menampilkan pesan "Email sudah digunakan"
+4b,-,Jika ada field kosong; sistem menampilkan pesan "Field wajib diisi"

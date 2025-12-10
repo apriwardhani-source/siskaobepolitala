@@ -1,0 +1,197 @@
+<mxfile host="65bd71144e">
+    <diagram id="ObjectDiagram-SISKAOBE" name="Object Diagram">
+        <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <!-- ROW 1: Entity Objects -->
+                <!-- User -->
+                <mxCell id="user_obj" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="40" width="220" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="user_attr" value="-id: &quot;4&quot;&#xa;-name: &quot;Veri Julianto, M.Si&quot;&#xa;-nip: &quot;1001&quot;&#xa;-nohp: &quot;0811518669&quot;&#xa;-email: &quot;veri@politala.ac.id&quot;&#xa;-role: &quot;dosen&quot;&#xa;-kode_prodi: &quot;TI&quot;&#xa;-status: &quot;approved&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="user_obj">
+                    <mxGeometry y="26" width="220" height="154" as="geometry"/>
+                </mxCell>
+                <!-- Prodi -->
+                <mxCell id="prodi_obj" value="Prodi" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="40" width="220" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="prodi_attr" value="-kode_prodi: &quot;TI&quot;&#xa;-nama_prodi: &quot;Teknologi Informasi&quot;&#xa;-nama_kaprodi: &quot;pak jaka&quot;&#xa;-jenjang_pendidikan: &quot;D3&quot;&#xa;-visi_prodi: null" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="prodi_obj">
+                    <mxGeometry y="26" width="220" height="114" as="geometry"/>
+                </mxCell>
+                <!-- Mahasiswa -->
+                <mxCell id="mhs_obj" value="Mahasiswa" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="560" y="40" width="220" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="mhs_attr" value="-id: &quot;3&quot;&#xa;-nim: &quot;2301301001&quot;&#xa;-nama_mahasiswa: &quot;Rizqia Febrianoor&quot;&#xa;-kode_prodi: &quot;TI&quot;&#xa;-id_tahun_kurikulum: &quot;1&quot;&#xa;-status: &quot;aktif&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="mhs_obj">
+                    <mxGeometry y="26" width="220" height="134" as="geometry"/>
+                </mxCell>
+                <!-- Tahun -->
+                <mxCell id="tahun_obj" value="Tahun" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="820" y="40" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="tahun_attr" value="-id_tahun: &quot;1&quot;&#xa;-nama_kurikulum: &quot;Kurikulum 2025&quot;&#xa;-tahun: &quot;2025&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="tahun_obj">
+                    <mxGeometry y="26" width="200" height="94" as="geometry"/>
+                </mxCell>
+                <!-- ROW 2: Boundary Objects -->
+                <!-- KelolaUser -->
+                <mxCell id="kelola_user" value="KelolaUser" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="280" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_user_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_user">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaProdi -->
+                <mxCell id="kelola_prodi" value="KelolaProdi" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="280" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_prodi_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_prodi">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaMahasiswa -->
+                <mxCell id="kelola_mhs" value="KelolaMahasiswa" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="580" y="280" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_mhs_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_mhs">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaTahun -->
+                <mxCell id="kelola_tahun" value="KelolaTahun" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="830" y="280" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_tahun_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_tahun">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- ROW 3: More Boundary Objects -->
+                <!-- Login -->
+                <mxCell id="login_obj" value="Login" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="400" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="login_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="login_obj">
+                    <mxGeometry y="26" width="120" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaCPL -->
+                <mxCell id="kelola_cpl" value="KelolaCPL" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="400" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_cpl_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_cpl">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaMataKuliah -->
+                <mxCell id="kelola_mk" value="KelolaMataKuliah" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="400" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_mk_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_mk">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaNilai -->
+                <mxCell id="kelola_nilai" value="KelolaNilai" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="640" y="400" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_nilai_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_nilai">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- KelolaCPMK -->
+                <mxCell id="kelola_cpmk" value="KelolaCPMK" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="860" y="400" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kelola_cpmk_attr" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;dashed=1;" vertex="1" parent="kelola_cpmk">
+                    <mxGeometry y="26" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <!-- ROW 4: Entity Objects -->
+                <!-- CPL -->
+                <mxCell id="cpl_obj" value="CPL" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="180" y="520" width="220" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="cpl_attr" value="-id_cpl: &quot;10&quot;&#xa;-kode_cpl: &quot;CPL-10&quot;&#xa;-deskripsi_cpl: &quot;Mampu menerapkan...&quot;&#xa;-status_cpl: &quot;aktif&quot;&#xa;-kode_prodi: &quot;TI&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="cpl_obj">
+                    <mxGeometry y="26" width="220" height="114" as="geometry"/>
+                </mxCell>
+                <!-- MataKuliah -->
+                <mxCell id="mk_obj" value="MataKuliah" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="520" width="220" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="mk_attr" value="-kode_mk: &quot;MK02&quot;&#xa;-nama_mk: &quot;Algoritma dan Pemrograman&quot;&#xa;-sks_mk: &quot;3&quot;&#xa;-semester_mk: &quot;1&quot;&#xa;-kompetensi_mk: &quot;utama&quot;&#xa;-kode_prodi: &quot;TI&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="mk_obj">
+                    <mxGeometry y="26" width="220" height="134" as="geometry"/>
+                </mxCell>
+                <!-- NilaiMahasiswa -->
+                <mxCell id="nilai_obj" value="NilaiMahasiswa" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="660" y="520" width="200" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="nilai_attr" value="-id_nilai: &quot;6&quot;&#xa;-nim: &quot;2301301001&quot;&#xa;-kode_mk: &quot;MK02&quot;&#xa;-id_cpl: &quot;10&quot;&#xa;-id_cpmk: &quot;3&quot;&#xa;-id_tahun: &quot;1&quot;&#xa;-nilai_akhir: &quot;80.78&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="nilai_obj">
+                    <mxGeometry y="26" width="200" height="154" as="geometry"/>
+                </mxCell>
+                <!-- CPMK -->
+                <mxCell id="cpmk_obj" value="CPMK" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="880" y="520" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="cpmk_attr" value="-id_cpmk: &quot;3&quot;&#xa;-kode_cpmk: &quot;CPMK-03&quot;&#xa;-deskripsi_cpmk: &quot;Mampu membuat...&quot;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=10;" vertex="1" parent="cpmk_obj">
+                    <mxGeometry y="26" width="200" height="94" as="geometry"/>
+                </mxCell>
+                <!-- RELATIONSHIP LINES: Boundary -> Entity -->
+                <!-- KelolaUser -> User -->
+                <mxCell id="rel1" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="150" y="280" as="sourcePoint"/>
+                        <mxPoint x="150" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaProdi -> Prodi -->
+                <mxCell id="rel2" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="410" y="280" as="sourcePoint"/>
+                        <mxPoint x="410" y="180" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaMahasiswa -> Mahasiswa -->
+                <mxCell id="rel3" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="670" y="280" as="sourcePoint"/>
+                        <mxPoint x="670" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaTahun -> Tahun -->
+                <mxCell id="rel4" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="920" y="280" as="sourcePoint"/>
+                        <mxPoint x="920" y="160" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- Login -> User -->
+                <mxCell id="rel5" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="100" y="400" as="sourcePoint"/>
+                        <mxPoint x="100" y="330" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaCPL -> CPL -->
+                <mxCell id="rel6" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="290" y="450" as="sourcePoint"/>
+                        <mxPoint x="290" y="520" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaMataKuliah -> MataKuliah -->
+                <mxCell id="rel7" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="510" y="450" as="sourcePoint"/>
+                        <mxPoint x="510" y="520" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaNilai -> NilaiMahasiswa -->
+                <mxCell id="rel8" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="730" y="450" as="sourcePoint"/>
+                        <mxPoint x="730" y="520" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- KelolaCPMK -> CPMK -->
+                <mxCell id="rel9" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="950" y="450" as="sourcePoint"/>
+                        <mxPoint x="950" y="520" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

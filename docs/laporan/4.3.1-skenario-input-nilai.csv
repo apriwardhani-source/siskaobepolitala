@@ -1,0 +1,20 @@
+Nama Use Case,Input Nilai
+Aktor,Dosen
+Deskripsi,Proses menginput nilai mahasiswa berdasarkan teknik penilaian
+Pre-Condition,Dosen sudah login dan sudah ada data mahasiswa serta teknik penilaian
+Post-Condition,Nilai mahasiswa berhasil disimpan
+
+Skenario Normal
+No,Aksi Aktor,Reaksi Sistem
+1,Dosen memilih menu Input Nilai,Sistem menampilkan daftar mata kuliah yang diampu
+2,Dosen memilih mata kuliah,Sistem menampilkan daftar mahasiswa dan teknik penilaian
+3,Dosen mengisi nilai untuk setiap mahasiswa,Sistem menerima input nilai
+4,Dosen menekan tombol Simpan,Sistem memvalidasi nilai
+5,-,Sistem menghitung nilai akhir berdasarkan bobot
+6,-,Sistem menyimpan nilai ke database
+7,-,Sistem menampilkan pesan "Nilai berhasil disimpan"
+
+Skenario Alternatif
+No,Aksi Aktor,Reaksi Sistem
+4a,-,Jika nilai tidak valid (kurang dari 0 atau lebih dari 100); sistem menampilkan pesan error
+4b,-,Jika belum ada teknik penilaian; sistem menampilkan pesan "Teknik penilaian belum diatur"

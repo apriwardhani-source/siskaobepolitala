@@ -1,0 +1,19 @@
+Nama Use Case,Kelola CPL
+Aktor,Tim Kurikulum
+Deskripsi,Proses mengelola data Capaian Pembelajaran Lulusan
+Pre-Condition,Tim Kurikulum sudah login ke sistem
+Post-Condition,Data CPL berhasil ditambah/diubah/dihapus
+
+Skenario Normal (Tambah CPL)
+No,Aksi Aktor,Reaksi Sistem
+1,Aktor memilih menu Kelola CPL,Sistem menampilkan daftar CPL
+2,Aktor menekan tombol Tambah CPL,Sistem menampilkan form tambah CPL
+3,Aktor mengisi data CPL (kode; deskripsi; status),Sistem menerima input data
+4,Aktor menekan tombol Simpan,Sistem memvalidasi data
+5,-,Sistem menyimpan data ke database
+6,-,Sistem menampilkan pesan "Data berhasil disimpan"
+
+Skenario Alternatif
+No,Aksi Aktor,Reaksi Sistem
+4a,-,Jika kode CPL sudah ada; sistem menampilkan pesan "Kode CPL sudah digunakan"
+4b,-,Jika ada field kosong; sistem menampilkan pesan "Field wajib diisi"

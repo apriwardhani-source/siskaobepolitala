@@ -1,0 +1,6 @@
+No,Aktor,Deskripsi
+1,Admin,Pengguna yang bertugas mengelola data master sistem meliputi data user; prodi; mahasiswa; dan tahun kurikulum
+2,Tim Kurikulum,Pengguna yang bertugas mengelola data CPL; mata kuliah; CPMK; dan pemetaan CPL-MK
+3,Dosen,Pengguna yang bertugas menginput nilai mahasiswa berdasarkan teknik penilaian yang telah ditentukan
+4,Kaprodi,Kepala Program Studi yang dapat melihat dashboard dan laporan pencapaian CPL mahasiswa di prodinya
+5,Wadir 1,Wakil Direktur 1 yang dapat melihat dashboard dan laporan pencapaian CPL seluruh program studi

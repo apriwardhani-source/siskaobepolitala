@@ -1,0 +1,9 @@
+No,Nama Field,Tipe Data,Keterangan
+1,id_cpl,INTEGER,Primary Key; Auto Increment
+2,kode_cpl,VARCHAR,Kode CPL (misal: CPL-01)
+3,deskripsi_cpl,TEXT,Deskripsi capaian pembelajaran
+4,status_cpl,VARCHAR,Status CPL
+5,kode_prodi,VARCHAR,Foreign Key ke tabel prodis
+6,id_tahun,INTEGER,Foreign Key ke tabel tahun
+7,created_at,DATETIME,Tanggal dibuat
+8,updated_at,DATETIME,Tanggal diupdate

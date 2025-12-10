@@ -1,0 +1,13 @@
+No,Nama Field,Tipe Data,Keterangan
+1,id_nilai,INTEGER,Primary Key; Auto Increment
+2,nim,VARCHAR,Foreign Key ke tabel mahasiswas
+3,kode_mk,VARCHAR,Foreign Key ke tabel mata_kuliahs
+4,id_teknik,INTEGER,Foreign Key ke tabel teknik_penilaian
+5,id_cpl,INTEGER,Foreign Key ke tabel CPL
+6,id_cpmk,INTEGER,Foreign Key ke tabel CPMK
+7,nilai,DOUBLE,Nilai yang diperoleh
+8,nilai_akhir,DOUBLE,Nilai akhir (setelah dikalikan bobot)
+9,id_tahun,INTEGER,Foreign Key ke tabel tahun
+10,user_id,INTEGER,Foreign Key ke tabel users (dosen penginput)
+11,created_at,DATETIME,Tanggal dibuat
+12,updated_at,DATETIME,Tanggal diupdate

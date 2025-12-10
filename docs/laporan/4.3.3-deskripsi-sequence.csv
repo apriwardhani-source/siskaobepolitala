@@ -1,0 +1,16 @@
+No,Nama Diagram,Aktor,Boundary,Entity,Deskripsi Alur
+1,Sequence Login,User,Login,u : User,User memanggil login() -> Login membuat object User -> cekLogin() ke database -> hasil dikembalikan ke User
+2,Sequence Logout,User,Logout,s : Session,User memanggil logout() -> Logout menghapus session -> redirect ke halaman login
+3,Sequence Kelola User,Admin,KelolaUser,u : User,Admin membuka form -> mengisi data -> sistem membuat object User -> insert ke database -> hasil ditampilkan
+4,Sequence Kelola Prodi,Admin,KelolaProdi,p : Prodi,Admin membuka form -> mengisi data -> sistem membuat object Prodi -> insert ke database -> hasil ditampilkan
+5,Sequence Kelola Mahasiswa,Admin,KelolaMhs,m : Mahasiswa,Admin membuka form -> mengisi data -> sistem membuat object Mahasiswa -> insert ke database -> hasil ditampilkan
+6,Sequence Kelola Tahun,Admin,KelolaTahun,t : Tahun,Admin membuka form -> mengisi data -> sistem membuat object Tahun -> insert ke database -> hasil ditampilkan
+7,Sequence Kelola CPL,Tim,KelolaCPL,c : CPL,Tim membuka form -> mengisi data -> sistem membuat object CPL -> insert ke database -> hasil ditampilkan
+8,Sequence Kelola MK,Tim,KelolaMK,m : MataKuliah,Tim membuka form -> mengisi data -> sistem membuat object MataKuliah -> insert ke database -> hasil ditampilkan
+9,Sequence Kelola CPMK,Tim,KelolaCPMK,c : CPMK,Tim membuka form -> mengisi data -> sistem membuat object CPMK -> insert ke database -> hasil ditampilkan
+10,Sequence Pemetaan CPL-MK,Tim,PemetaanCPL,p : CPL_MK,Tim membuka form pemetaan -> memilih CPL dan MK -> sistem menyimpan relasi -> hasil ditampilkan
+11,Sequence Input Nilai,Dosen,KelolaNilai,n : Nilai,Dosen memilih MK -> melihat daftar mahasiswa -> input nilai -> sistem menghitung nilai akhir -> simpan ke database
+12,Sequence Lihat Nilai,Dosen,LihatNilai,n : Nilai,Dosen memilih menu lihat nilai -> sistem mengambil data dari database -> menampilkan daftar nilai
+13,Sequence Lihat Dashboard,Kaprodi,Dashboard,s : Statistik,Kaprodi membuka dashboard -> sistem menghitung statistik CPL -> menampilkan grafik pencapaian
+14,Sequence Lihat Laporan,Kaprodi,LihatLaporan,l : Laporan,Kaprodi membuka laporan -> sistem mengambil data -> menampilkan laporan pencapaian CPL
+15,Sequence Export Laporan,Kaprodi,ExportLaporan,f : File,Kaprodi memilih format export -> sistem generate file -> file diunduh

@@ -1,0 +1,10 @@
+No,Nama Field,Tipe Data,Keterangan
+1,kode_prodi,VARCHAR,Primary Key
+2,nama_prodi,VARCHAR,Nama program studi
+3,visi_prodi,TEXT,Visi program studi
+4,nama_kaprodi,VARCHAR,Nama ketua program studi
+5,jenjang_pendidikan,VARCHAR,Jenjang pendidikan (D3/D4/S1)
+6,gelar_lulusan,VARCHAR,Gelar yang diberikan
+7,peringkat_akreditasi,VARCHAR,Peringkat akreditasi
+8,created_at,DATETIME,Tanggal dibuat
+9,updated_at,DATETIME,Tanggal diupdate
