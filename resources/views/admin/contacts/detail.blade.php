@@ -32,11 +32,11 @@
                     Informasi Pesan
                 </h2>
                 <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold
-                             {{ $contact->is_read ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
-                    @if($contact->is_read)
-                        <i class="fas fa-check mr-1"></i> Dibaca
+                             {{ $contact->is_replied ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800' }}">
+                    @if($contact->is_replied)
+                        <i class="fas fa-check mr-1"></i> Sudah Dibalas
                     @else
-                        <i class="fas fa-envelope mr-1"></i> Belum Dibaca
+                        <i class="fas fa-envelope mr-1"></i> Belum Dibalas
                     @endif
                 </span>
             </div>
@@ -45,6 +45,12 @@
                 @if(session('success'))
                     <div class="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800">
                         {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
+                        {{ session('error') }}
                     </div>
                 @endif
 
@@ -97,7 +103,7 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-xs text-gray-500">
-                                Balasan akan dikirim menggunakan pengaturan email di aplikasi (MAIL_FROM_ADDRESS).
+                                Perkiraan batas kirim balasan email: ±500 pesan per hari (batas standar Gmail).
                             </p>
                             <button type="submit"
                                     class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">

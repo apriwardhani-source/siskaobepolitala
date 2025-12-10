@@ -38,16 +38,47 @@ class AdminContactController extends Controller
 
         $toEmail = $contact->email;
 
-        Mail::raw($request->reply_message, function ($message) use ($toEmail, $contact) {
-            $message->to($toEmail)
-                ->subject('Balasan Pesan dari POLITALA OBE')
-                ->replyTo(config('mail.from.address'), config('mail.from.name'))
-                ->from(config('mail.from.address'), config('mail.from.name') ?: 'Admin POLITALA OBE');
-        });
+        $originalDate = $contact->created_at
+            ? $contact->created_at->format('d M Y H:i')
+            : '-';
 
-        return redirect()
-            ->route('admin.contacts.show', $contact->id)
-            ->with('success', 'Balasan berhasil dikirim ke ' . $toEmail);
+        $replyDate = now()->format('d M Y H:i');
+
+        $body  = "Halo {$contact->name},\n\n";
+        $body .= "Berikut balasan dari admin untuk pesan Anda di sistem POLITALA OBE.\n\n";
+        $body .= "---- Pesan Anda (dikirim pada {$originalDate}) ----\n";
+        $body .= ($contact->message ?? '-') . "\n\n";
+        $body .= "---- Balasan Admin ({$replyDate}) ----\n";
+        $body .= $request->reply_message . "\n\n";
+        $body .= "Salam,\nAdmin POLITALA OBE";
+
+        try {
+            Mail::raw($body, function ($message) use ($toEmail, $contact) {
+                $message->to($toEmail)
+                    ->subject('Balasan atas Pesan Anda di POLITALA OBE')
+                    ->replyTo(config('mail.from.address'), config('mail.from.name'))
+                    ->from(config('mail.from.address'), config('mail.from.name') ?: 'Admin POLITALA OBE');
+            });
+
+            $contact->update([
+                'is_replied' => true,
+                'is_read' => true,
+            ]);
+
+            return redirect()
+                ->route('admin.contacts.show', $contact->id)
+                ->with('success', 'Balasan berhasil dikirim ke ' . $toEmail);
+        } catch (\Throwable $e) {
+            \Log::error('Gagal mengirim balasan kontak', [
+                'contact_id' => $contact->id,
+                'email' => $toEmail,
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()
+                ->route('admin.contacts.show', $contact->id)
+                ->with('error', 'Kirim email gagal. Kemungkinan limit harian Gmail sudah tercapai atau konfigurasi email sedang bermasalah.');
+        }
     }
 
     public function destroy($id)
