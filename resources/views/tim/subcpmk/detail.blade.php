@@ -33,8 +33,10 @@
                 {{-- Kode CPMK --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Kode CPMK</label>
-                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-medium">
-                        {{ $subcpmk->kode_cpmk }}
+                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                            {{ $subcpmk->kode_cpmk }}
+                        </span>
                     </div>
                 </div>
 
@@ -49,8 +51,10 @@
                 {{-- Sub CPMK --}}
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Sub CPMK</label>
-                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 font-medium">
-                        {{ $subcpmk->sub_cpmk }}
+                    <div class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                            {{ $subcpmk->sub_cpmk }}
+                        </span>
                     </div>
                 </div>
 

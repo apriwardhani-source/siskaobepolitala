@@ -2,12 +2,28 @@
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
-        
+    <div class="max-w-5xl mx-auto">
+
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Tambah Mahasiswa</h1>
-            <p class="mt-2 text-sm text-gray-600">Tambahkan data mahasiswa baru</p>
+        <div class="mb-6">
+            <a href="{{ route('tim.mahasiswa.index', ['tahun_kurikulum' => request('tahun_kurikulum', 1)]) }}"
+               class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-arrow-left mr-2 text-xs"></i>
+                kembali
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                    <i class="fas fa-user-graduate text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Tambah Mahasiswa
+                    </h1>
+                    <p class="mt-1 text-sm text-gray-600">
+                        Tambahkan data mahasiswa baru untuk program studi ini.
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -30,9 +46,12 @@
         @endif
 
         <!-- Form Card -->
-        <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-700 to-gray-800">
-                <h2 class="text-lg font-semibold text-white">Informasi Mahasiswa</h2>
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600">
+                <h2 class="text-lg font-semibold text-white flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-sm"></i>
+                    Informasi Mahasiswa
+                </h2>
             </div>
 
             <form action="{{ route('tim.mahasiswa.store') }}" method="POST" class="p-6">

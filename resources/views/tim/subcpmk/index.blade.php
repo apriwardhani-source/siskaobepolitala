@@ -78,68 +78,67 @@
                 @endif
             </div>
             <div class="p-6 border-b border-gray-200 bg-white">
-                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between space-y-4 lg:space-y-0 gap-4">
-                    {{-- Program studi (readonly) --}}
-                    <div class="flex-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-university text-blue-500 mr-1"></i>
-                            Program Studi
-                        </label>
-                        <input type="text"
-                               value="{{ $prodiName ?? '-' }}"
-                               class="block w-full max-w-xs px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800"
-                               readonly>
-                    </div>
+                <form method="GET" action="{{ route('tim.subcpmk.index') }}" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {{-- Program studi (readonly) --}}
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-university text-blue-500 mr-1"></i>
+                                Program Studi
+                            </label>
+                            <input type="text"
+                                   value="{{ $prodiName ?? '-' }}"
+                                   class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800"
+                                   readonly>
+                        </div>
 
-                    {{-- Tahun kurikulum --}}
-                    <div class="flex-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-calendar text-green-500 mr-1"></i>
-                            Tahun Kurikulum
-                        </label>
-                        <select id="tahun" name="id_tahun"
-                                class="block w-full max-w-xs px-4 py-2.5 border border-gray-300 rounded-lg 
-                                       focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                                required>
-                            <option value="" {{ empty($id_tahun ?? '') ? 'selected disabled' : 'disabled' }}>Pilih Tahun Kurikulum</option>
-                            @foreach($tahun_tersedia ?? [] as $thn)
-                                <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? null) == $thn->id_tahun ? 'selected' : '' }}>
-                                    {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                        {{-- Tahun kurikulum --}}
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-calendar text-green-500 mr-1"></i>
+                                Tahun Kurikulum
+                            </label>
+                            <select id="tahun" name="id_tahun"
+                                    class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                                    required>
+                                <option value="" {{ empty($id_tahun ?? '') ? 'selected disabled' : 'disabled' }}>Pilih Tahun Kurikulum</option>
+                                @foreach($tahun_tersedia ?? [] as $thn)
+                                    <option value="{{ $thn->id_tahun }}" {{ ($id_tahun ?? null) == $thn->id_tahun ? 'selected' : '' }}>
+                                        {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    {{-- Actions --}}
-                    <div class="flex gap-3">
-                        <button type="button" onclick="updateFilter()"
-                                class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 
-                                       text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
-                                       transform hover:scale-105 transition-all duration-200">
-                            <i class="fas fa-search mr-2"></i>
-                            Tampilkan Data
-                        </button>
-                    </div>
-                </div>
-
-                {{-- Info filter aktif --}}
-                @if(!empty($id_tahun))
-                    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <div class="flex flex-wrap gap-2 items-center">
-                            <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                            @php
-                                $selected_tahun = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun);
-                            @endphp
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                            </span>
-                            <a href="{{ route('tim.subcpmk.index') }}"
-                               class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
-                                Reset filter
-                            </a>
+                        {{-- Actions --}}
+                        <div class="self-end flex gap-3">
+                            <button type="submit"
+                                    class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <i class="fas fa-search mr-2"></i>
+                                Tampilkan Data
+                            </button>
                         </div>
                     </div>
-                @endif
+
+                    {{-- Info filter aktif --}}
+                    @if(!empty($id_tahun))
+                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
+                                @php
+                                    $selected_tahun = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun);
+                                @endphp
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                                    Tahun: {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
+                                </span>
+                                <a href="{{ route('tim.subcpmk.index') }}"
+                                   class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                                    Reset filter
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                </form>
             </div>
         </div>
 

@@ -6,7 +6,7 @@
 
         {{-- Header seperti halaman create Sub CPMK --}}
         <div class="mb-6">
-            <a href="{{ route('tim.subcpmk.index') }}"
+            <a href="{{ route('tim.subcpmk.index', ['id_tahun' => request('id_tahun', 1)]) }}"
                class="inline-flex items-center px-4 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                 <span class="mr-2 text-base leading-none">&larr;</span>
                 kembali

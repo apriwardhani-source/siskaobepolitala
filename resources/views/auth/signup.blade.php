@@ -91,7 +91,7 @@
             </div>
           @endif
 
-          <form action="{{ route('signup.store') }}" method="POST" novalidate>
+          <form action="{{ route('signup.post') }}" method="POST" novalidate>
             @csrf
 
             <!-- Name -->
@@ -217,4 +217,3 @@
   </script>
 </body>
 </html>
-

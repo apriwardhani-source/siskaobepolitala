@@ -34,12 +34,8 @@
 
       <!-- Toolbar -->
       <div class="px-6 py-5 border-b border-gray-200 bg-white">
-        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-          <div>
-            <h2 class="text-lg font-semibold text-gray-900">Matriks Pemetaan</h2>
-            <p class="text-xs text-gray-500">Sesuaikan program studi dan tahun sebelum melihat matriks.</p>
-          </div>
-          <form action="{{ route('wadir1.pemetaancplmk.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <form action="{{ route('wadir1.pemetaancplmk.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end w-full">
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">
                 <i class="fas fa-university text-blue-500 mr-1"></i>
@@ -64,8 +60,8 @@
                 @endforeach
               </select>
             </div>
-            <div class="flex sm:justify-end">
-              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 w-full sm:w-auto justify-center">
+            <div class="self-end flex justify-end">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 w-full md:w-auto justify-center">
                 <i class="fas fa-search mr-2"></i> Terapkan
               </button>
             </div>

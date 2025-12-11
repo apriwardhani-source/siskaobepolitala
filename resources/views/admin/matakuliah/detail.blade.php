@@ -64,7 +64,10 @@
                                 @endphp
                                 @if ($cplDetail)
                                     <div class="text-sm text-gray-800">
-                                        <span class="font-semibold">{{ $cplDetail->kode_cpl }}</span> : {{ $cplDetail->deskripsi_cpl }}
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 mr-2">
+                                            {{ $cplDetail->kode_cpl }}
+                                        </span>
+                                        <span>{{ $cplDetail->deskripsi_cpl }}</span>
                                     </div>
                                 @endif
                             @endforeach
@@ -76,8 +79,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label for="kode_mk" class="block text-sm font-semibold text-gray-800">Kode MK</label>
-                        <input type="text" id="kode_mk" value="{{ $matakuliah->kode_mk }}" readonly
-                               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-800">
+                        <div class="flex items-center">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mr-3">
+                                {{ $matakuliah->kode_mk }}
+                            </span>
+                        </div>
                     </div>
 
                     <div class="space-y-2">

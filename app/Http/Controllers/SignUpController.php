@@ -9,12 +9,20 @@ use Illuminate\Support\Facades\Hash;
 
 class SignUpController extends Controller
 {
+    // Digunakan oleh routes/web.php
     public function create()
     {
         $prodis = Prodi::all();
         return view('auth.signup', compact('prodis'));
     }
 
+    // Digunakan oleh routes/auth.php (alias ke create)
+    public function showSignupForm()
+    {
+        return $this->create();
+    }
+
+    // Digunakan oleh routes/web.php
     public function store(Request $request)
     {
         $request->validate([
@@ -39,5 +47,11 @@ class SignUpController extends Controller
         ]);
 
         return back()->with('success', 'Pendaftaran berhasil. Menunggu persetujuan admin.');
+    }
+
+    // Digunakan oleh routes/auth.php (alias ke store)
+    public function signup(Request $request)
+    {
+        return $this->store($request);
     }
 }
