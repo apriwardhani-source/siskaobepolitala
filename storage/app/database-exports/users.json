@@ -538,5 +538,23 @@
         "remember_token": null,
         "created_at": "2025-12-03 03:41:38",
         "updated_at": "2025-12-03 03:42:06"
+    },
+    {
+        "id": 34,
+        "name": "ZAIN BOY",
+        "nip": "3392729371",
+        "nohp": "082186162671",
+        "email": "13hangit5612@gmail.com",
+        "google_id": "108315051530318881075",
+        "avatar": "https:\/\/lh3.googleusercontent.com\/a\/ACg8ocJEG1v0nuEBAoHZAIabw3T_IX64lTEDxcgQGs_g8g7KOKErYw=s96-c",
+        "email_verified_at": null,
+        "password": "$2y$12$bkXnNn7Qvy12tRKlxiq11efWkmnb20VlCZtay7C6Z0wAqKyFB6ReS",
+        "role": "wadir1",
+        "kode_prodi": null,
+        "id_jurusan": null,
+        "status": "pending",
+        "remember_token": null,
+        "created_at": "2025-12-10 21:22:57",
+        "updated_at": "2025-12-10 21:22:57"
     }
 ]

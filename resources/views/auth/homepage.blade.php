@@ -1355,7 +1355,7 @@
                             <li><a href="https://www.instagram.com/politala_official/"
                                     class="text-gray-400 hover:text-white text-xl"><i
                                         class="fab fa-instagram"></i></a></li>
-                            <li><a href="https://www.youtube.com/channel/UC5CfzvUTqEUPXhwwSLvP53Q"
+                            <li><a href="#"
                                     class="text-gray-400 hover:text-white text-xl"><i class="fab fa-youtube"></i></a>
                             </li>
                         </ul>
