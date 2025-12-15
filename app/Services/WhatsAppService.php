@@ -5,24 +5,28 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * WhatsApp Service using Fonnte API
+ * 
+ * Fonnte adalah layanan WhatsApp API berbasis cloud
+ * Tidak perlu Node.js, tidak perlu Puppeteer, bisa di shared hosting
+ * 
+ * @see https://fonnte.com
+ */
 class WhatsAppService
 {
-    protected $apiKey;
+    protected $token;
     protected $apiUrl;
-    protected $instanceName;
     protected $enabled;
 
     public function __construct()
     {
-        // Check if WhatsApp is enabled (for development/production toggle)
+        // Check if WhatsApp is enabled
         $this->enabled = env('WHATSAPP_ENABLED', true);
         
-        // WhatsApp Service Config (whatsapp-web.js)
-        $this->apiUrl = env('WHATSAPP_API_URL', 'http://localhost:3001');
-        
-        // Backward compatibility (Evolution API) - optional
-        $this->apiKey = env('EVOLUTION_API_KEY', 'your_api_key_here');
-        $this->instanceName = env('EVOLUTION_INSTANCE', 'politala-bot');
+        // Fonnte API Configuration
+        $this->token = env('FONNTE_TOKEN', '');
+        $this->apiUrl = 'https://api.fonnte.com';
     }
     
     /**
@@ -32,7 +36,7 @@ class WhatsAppService
      */
     public function isEnabled()
     {
-        return $this->enabled;
+        return $this->enabled && !empty($this->token);
     }
 
     /**
@@ -41,7 +45,6 @@ class WhatsAppService
      * - 08xxx → 628xxx
      * - +628xxx → 628xxx
      * - 628xxx → 628xxx (no change)
-     * - 62xxx → 62xxx (no change)
      * 
      * @param string|null $number Nomor telepon
      * @return string|null Nomor dalam format 628xxx atau null jika invalid
@@ -75,7 +78,7 @@ class WhatsAppService
     }
 
     /**
-     * Kirim pesan WhatsApp via WhatsApp Web.js Service
+     * Kirim pesan WhatsApp via Fonnte API
      * 
      * @param string $to Nomor tujuan (support: 08xxx, 628xxx, +628xxx)
      * @param string $message Isi pesan
@@ -95,45 +98,52 @@ class WhatsAppService
         }
 
         // Check if WhatsApp is enabled
-        if (!$this->enabled) {
-            Log::info('WhatsApp DISABLED - Message NOT sent (Development Mode)', [
+        if (!$this->isEnabled()) {
+            Log::info('WhatsApp DISABLED - Message NOT sent', [
                 'to' => $formattedNumber,
-                'message' => $message,
-                'note' => 'Set WHATSAPP_ENABLED=true in .env to enable'
+                'message' => substr($message, 0, 100) . '...',
+                'note' => 'Set WHATSAPP_ENABLED=true and FONNTE_TOKEN in .env to enable'
             ]);
 
             return [
                 'success' => true,
-                'data' => ['message' => 'WhatsApp disabled in development mode'],
+                'data' => ['message' => 'WhatsApp disabled or token not set'],
                 'status' => 200,
                 'development_mode' => true
             ];
         }
 
         try {
-            // Send via whatsapp-web.js service (port 3001)
-            $response = Http::timeout(15)->post("{$this->apiUrl}/send", [
-                'number' => $formattedNumber,
+            // Send via Fonnte API
+            $response = Http::withHeaders([
+                'Authorization' => $this->token,
+            ])->post("{$this->apiUrl}/send", [
+                'target' => $formattedNumber,
                 'message' => $message,
+                'countryCode' => '62',
             ]);
 
             $result = $response->json();
 
             // Log response
-            Log::info('WhatsApp Message Sent (WhatsApp-Web.js)', [
+            Log::info('WhatsApp Message Sent (Fonnte)', [
                 'to' => $formattedNumber,
                 'original' => $to,
-                'response' => $result
+                'status' => $result['status'] ?? 'unknown',
+                'detail' => $result['detail'] ?? $result['reason'] ?? 'no detail'
             ]);
 
+            // Fonnte returns status: true/false
+            $isSuccess = isset($result['status']) && $result['status'] === true;
+
             return [
-                'success' => $response->successful() && isset($result['success']) && $result['success'],
+                'success' => $isSuccess,
                 'data' => $result,
                 'status' => $response->status()
             ];
 
         } catch (\Exception $e) {
-            Log::error('WhatsApp Send Error', [
+            Log::error('WhatsApp Send Error (Fonnte)', [
                 'error' => $e->getMessage(),
                 'to' => $to
             ]);
@@ -155,6 +165,11 @@ class WhatsAppService
     {
         $adminNumber = env('WHATSAPP_ADMIN_NUMBER');
         
+        if (!$adminNumber) {
+            Log::warning('WHATSAPP_ADMIN_NUMBER not set in .env');
+            return ['success' => false, 'error' => 'Admin number not configured'];
+        }
+        
         $message = "*🔔 PESAN BARU DARI WEBSITE POLITALA OBE*\n\n";
         $message .= "📝 *Nama:* {$contactData['name']}\n";
         $message .= "📧 *Email:* {$contactData['email']}\n";
@@ -174,7 +189,6 @@ class WhatsAppService
      */
     public function sendNilaiNotification($nilaiData)
     {
-        // Kirim notifikasi ke nomor WhatsApp dosen
         $dosenNumber = $nilaiData['dosen_phone'] ?? null;
         
         if (!$dosenNumber) {
@@ -206,14 +220,13 @@ class WhatsAppService
     }
 
     /**
-     * Kirim notifikasi bulk input nilai ke dosen (untuk storeMultiple)
+     * Kirim notifikasi bulk input nilai ke dosen
      * 
      * @param array $bulkData Data multiple nilai
      * @return array Response
      */
     public function sendBulkNilaiNotification($bulkData)
     {
-        // Kirim notifikasi ke nomor WhatsApp dosen
         $dosenNumber = $bulkData['dosen_phone'] ?? null;
         
         if (!$dosenNumber) {
@@ -253,24 +266,36 @@ class WhatsAppService
     }
 
     /**
-     * Check device status (opsional)
+     * Check device/connection status via Fonnte
      * 
      * @return array Status device
      */
     public function checkDeviceStatus()
     {
+        if (!$this->isEnabled()) {
+            return [
+                'success' => false,
+                'status' => 'disabled',
+                'error' => 'WhatsApp not configured'
+            ];
+        }
+
         try {
             $response = Http::withHeaders([
                 'Authorization' => $this->token,
-            ])->post('https://api.fonnte.com/status');
+            ])->post("{$this->apiUrl}/device");
+
+            $result = $response->json();
 
             return [
                 'success' => $response->successful(),
-                'data' => $response->json()
+                'status' => $result['status'] ?? 'unknown',
+                'data' => $result
             ];
         } catch (\Exception $e) {
             return [
                 'success' => false,
+                'status' => 'error',
                 'error' => $e->getMessage()
             ];
         }

@@ -2,223 +2,101 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Admin WhatsApp Controller
+ * 
+ * Menggunakan Fonnte API - tidak perlu QR code atau Node.js
+ * Cukup setup token di .env
+ */
 class AdminWhatsAppController extends Controller
 {
+    protected $whatsapp;
+
+    public function __construct(WhatsAppService $whatsapp)
+    {
+        $this->whatsapp = $whatsapp;
+    }
+
     /**
-     * Show WhatsApp connection page with QR code
+     * Show WhatsApp settings page
      */
     public function connect()
     {
-        try {
-            // Check WhatsApp service status
-            $response = Http::timeout(5)->get('http://localhost:3001/status');
-            
-            $status = $response->successful() ? $response->json() : ['status' => 'offline', 'hasQR' => false];
-            
-            return view('admin.whatsapp.connect', [
-                'status' => $status['status'] ?? 'offline',
-                'hasQR' => $status['hasQR'] ?? false
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Failed to check WhatsApp status', [
-                'error' => $e->getMessage()
-            ]);
-            
-            return view('admin.whatsapp.connect', [
-                'status' => 'offline',
-                'hasQR' => false,
-                'error' => 'WhatsApp service tidak berjalan. Jalankan: node whatsapp-service.cjs'
-            ]);
-        }
+        // Check status via Fonnte API
+        $status = $this->whatsapp->checkDeviceStatus();
+        
+        $isConnected = $status['success'] && isset($status['data']['device']) && $status['data']['device'] === 'connected';
+        
+        return view('admin.whatsapp.connect', [
+            'status' => $isConnected ? 'connected' : 'disconnected',
+            'deviceInfo' => $status['data'] ?? null,
+            'isEnabled' => $this->whatsapp->isEnabled(),
+            'error' => $status['error'] ?? null,
+            // Fonnte tidak perlu QR code
+            'hasQR' => false,
+            'isFonnte' => true
+        ]);
     }
     
     /**
-     * Get QR code data
-     */
-    public function getQR()
-    {
-        try {
-            $response = Http::timeout(10)->get('http://localhost:3001/qr');
-            
-            if ($response->successful()) {
-                return response()->json([
-                    'success' => true,
-                    'html' => $response->body()
-                ]);
-            }
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to fetch QR code'
-            ], 500);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
-    
-    /**
-     * Check connection status
+     * Get connection status
      */
     public function status()
     {
-        try {
-            $response = Http::timeout(5)->get('http://localhost:3001/status');
-            
-            if ($response->successful()) {
-                return response()->json($response->json());
-            }
-            
-            return response()->json([
-                'status' => 'offline',
-                'hasQR' => false
-            ], 500);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'offline',
-                'hasQR' => false,
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $status = $this->whatsapp->checkDeviceStatus();
+        
+        return response()->json([
+            'status' => $status['status'] ?? 'unknown',
+            'isEnabled' => $this->whatsapp->isEnabled(),
+            'hasQR' => false, // Fonnte tidak pakai QR
+            'data' => $status['data'] ?? null,
+            'error' => $status['error'] ?? null
+        ]);
     }
     
     /**
-     * Start WhatsApp Service (via PM2)
+     * Get QR code - Tidak diperlukan untuk Fonnte
+     */
+    public function getQR()
+    {
+        return response()->json([
+            'success' => false,
+            'message' => 'Fonnte tidak memerlukan QR code. Silakan hubungkan di dashboard Fonnte.',
+            'fonnte_url' => 'https://fonnte.com'
+        ]);
+    }
+    
+    /**
+     * Start service - Tidak diperlukan untuk Fonnte
      */
     public function startService()
     {
-        try {
-            // Check if PM2 service already running
-            $statusCheck = shell_exec('npx pm2 list 2>&1');
-            
-            if (strpos($statusCheck, 'whatsapp-service') !== false && strpos($statusCheck, 'online') !== false) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Service sudah running! Refresh halaman untuk lihat status.',
-                ]);
-            }
-            
-            // Start service
-            $configPath = base_path('ecosystem.config.cjs');
-            $result = shell_exec("npx pm2 start \"{$configPath}\" 2>&1");
-            
-            // Check if service started successfully
-            if (strpos($result, 'online') !== false || 
-                strpos($result, 'already') !== false || 
-                strpos($result, 'launched') !== false ||
-                strpos($result, 'whatsapp-service') !== false) {
-                
-                // Wait a bit for service to fully start
-                sleep(2);
-                
-                return response()->json([
-                    'success' => true,
-                    'message' => 'WhatsApp Service berhasil dijalankan! Refresh halaman untuk scan QR code.',
-                ]);
-            }
-            
-            // If we get here, something went wrong
-            return response()->json([
-                'success' => false,
-                'message' => 'Service mungkin sudah running. Coba klik "Refresh Status" untuk cek.',
-                'details' => 'Jika masih bermasalah, hubungi developer untuk start PM2 service di server.'
-            ], 500);
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage(),
-                'details' => 'Pastikan PM2 sudah terinstall di server.'
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Fonnte adalah layanan cloud, tidak perlu start service manual. Pastikan token sudah dikonfigurasi di .env',
+            'instructions' => [
+                '1. Daftar di https://fonnte.com',
+                '2. Hubungkan nomor WhatsApp di dashboard Fonnte',
+                '3. Copy token API',
+                '4. Set FONNTE_TOKEN=xxx di file .env',
+                '5. Set WHATSAPP_ENABLED=true di file .env'
+            ]
+        ]);
     }
     
     /**
-     * Restart WhatsApp Service
+     * Restart service - Tidak diperlukan untuk Fonnte
      */
     public function restartService()
     {
-        try {
-            // Delete service completely
-            shell_exec('npx pm2 delete whatsapp-service 2>&1');
-            
-            // Wait for process to fully stop
-            sleep(3);
-            
-            // Try to delete session folders
-            $sessionPaths = [
-                base_path('whatsapp-auth'),
-                base_path('.wwebjs_auth'),
-                base_path('.wwebjs_cache')
-            ];
-            
-            $deletedFolders = [];
-            foreach ($sessionPaths as $path) {
-                if (file_exists($path)) {
-                    try {
-                        $this->deleteDirectory($path);
-                        $deletedFolders[] = basename($path);
-                    } catch (\Exception $e) {
-                        // Ignore permission errors, continue anyway
-                        \Log::warning('Could not delete session folder', ['path' => $path, 'error' => $e->getMessage()]);
-                    }
-                }
-            }
-            
-            // Start service fresh
-            $configPath = base_path('ecosystem.config.cjs');
-            $result = shell_exec("npx pm2 start \"{$configPath}\" 2>&1");
-            
-            $message = 'Service berhasil direstart! ';
-            if (count($deletedFolders) > 0) {
-                $message .= 'Session di-clear (' . implode(', ', $deletedFolders) . '). ';
-            }
-            $message .= 'Refresh halaman untuk scan QR code baru.';
-            
-            return response()->json([
-                'success' => true,
-                'message' => $message,
-                'output' => $result
-            ]);
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-    
-    /**
-     * Helper: Delete directory recursively
-     */
-    private function deleteDirectory($dir)
-    {
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-
-        foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..') {
-                continue;
-            }
-
-            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-
-        return rmdir($dir);
+        return response()->json([
+            'success' => true,
+            'message' => 'Untuk restart koneksi WhatsApp, silakan lakukan di dashboard Fonnte: https://fonnte.com',
+        ]);
     }
     
     /**
@@ -232,25 +110,30 @@ class AdminWhatsAppController extends Controller
         ]);
         
         try {
-            $response = Http::timeout(15)->post('http://localhost:3001/send', [
-                'number' => $request->number,
-                'message' => $request->message
-            ]);
+            $result = $this->whatsapp->sendMessage(
+                $request->number,
+                $request->message
+            );
             
-            if ($response->successful()) {
+            if ($result['success']) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Pesan berhasil dikirim!',
-                    'data' => $response->json()
+                    'message' => 'Pesan berhasil dikirim via Fonnte!',
+                    'data' => $result['data']
                 ]);
             }
             
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengirim pesan',
-                'error' => $response->body()
+                'error' => $result['error'] ?? $result['data']['reason'] ?? 'Unknown error'
             ], 500);
+            
         } catch (\Exception $e) {
+            Log::error('WhatsApp Test Send Error', [
+                'error' => $e->getMessage()
+            ]);
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage()

@@ -31,6 +31,26 @@
         </div>
     @endif
 
+    @if (session('warning'))
+        <div class="bg-yellow-500 text-white px-4 py-3 rounded-md mb-6 relative">
+            <span class="font-bold">{{ session('warning') }}</span>
+            <button onclick="this.parentElement.style.display='none'"
+                class="absolute top-2 right-3 text-white font-bold text-lg">
+                &times;
+            </button>
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="bg-red-500 text-white px-4 py-3 rounded-md mb-6 relative">
+            <span class="font-bold">{{ session('error') }}</span>
+            <button onclick="this.parentElement.style.display='none'"
+                class="absolute top-2 right-3 text-white font-bold text-lg">
+                &times;
+            </button>
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="bg-red-500 text-white px-4 py-3 rounded-md mb-6">
             <ul class="list-disc list-inside">
@@ -91,13 +111,28 @@
                         </select>
                     </div>
 
-                    <div class="flex items-end">
+                    <div class="flex items-end gap-2">
                         <button type="submit"
-                                class="w-full inline-flex items-center justify-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                            <i class="bi bi-search mr-2"></i>Tampilkan Mahasiswa
+                                class="inline-flex items-center justify-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                            <i class="bi bi-search mr-2"></i>Tampilkan
                         </button>
                     </div>
                 </form>
+                
+                <!-- Tombol Import - Selalu muncul untuk mendukung multi-MK -->
+                <div class="flex gap-2 mt-4 pt-4 border-t border-gray-200">
+                    <a href="{{ route('dosen.penilaian.download-template') }}"
+                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        <i class="bi bi-download mr-2"></i>
+                        Download Template
+                    </a>
+                    <button type="button" 
+                            onclick="document.getElementById('importModal').classList.remove('hidden')"
+                            class="inline-flex items-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        <i class="bi bi-upload mr-2"></i>
+                        Import Nilai (Multi MK)
+                    </button>
+                </div>
             </div>
 
             <!-- Konten Penilaian -->
@@ -211,4 +246,71 @@
 
     </div>
 </div>
+
+<!-- Import Modal - Mendukung Multi MK -->
+<div id="importModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-8 border w-full max-w-lg shadow-2xl rounded-xl bg-white">
+        <!-- Header -->
+        <div class="mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900">
+                    <i class="bi bi-upload mr-2 text-purple-600"></i>Import Nilai (Multi MK)
+                </h3>
+                <button onclick="document.getElementById('importModal').classList.add('hidden')" 
+                        class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-sm text-gray-600">Upload file Excel/CSV untuk import nilai mahasiswa. Bisa untuk banyak mata kuliah sekaligus!</p>
+        </div>
+
+        <!-- Info -->
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <p class="text-sm text-green-800">
+                <i class="bi bi-check-circle mr-1"></i>
+                <strong>Fitur Multi-MK:</strong> Cukup sertakan kolom <code class="bg-green-100 px-1 rounded">kode_mk</code> dan <code class="bg-green-100 px-1 rounded">tahun</code> di file Excel untuk import banyak mata kuliah sekaligus.
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form action="{{ route('dosen.penilaian.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">File Excel/CSV</label>
+                <input type="file" name="file" accept=".xlsx,.xls,.csv" required
+                       class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer 
+                              bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 p-2.5">
+                <p class="mt-2 text-xs text-gray-500">Format: .xlsx, .xls, atau .csv (max 2MB)</p>
+            </div>
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded">
+                <p class="text-sm text-yellow-800">
+                    <strong>Format kolom file:</strong><br>
+                    <code class="text-xs bg-yellow-100 px-1 rounded">nim, nama_mahasiswa, kode_mk, nama_mk, tahun, nilai</code>
+                </p>
+                <p class="text-xs text-yellow-700 mt-2">
+                    * Kolom <code>nama_mahasiswa</code> dan <code>nama_mk</code> opsional (hanya untuk referensi)
+                </p>
+            </div>
+
+            <div class="flex items-center justify-end space-x-3">
+                <button type="button" 
+                        onclick="document.getElementById('importModal').classList.add('hidden')"
+                        class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 
+                               rounded-lg transition-colors duration-200">
+                    Batal
+                </button>
+                <button type="submit"
+                        class="px-5 py-2.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 
+                               rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                    <i class="bi bi-upload mr-2"></i>Import
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection

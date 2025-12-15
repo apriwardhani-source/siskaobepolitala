@@ -88,15 +88,13 @@
                         </svg>
                         Import
                     </button>
-                    @if(!empty($id_tahun ?? null))
-                        <a href="{{ route('tim.matakuliah.create') }}"
-                           class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Tambah MK
-                        </a>
-                    @endif
+                    <a href="{{ route('tim.matakuliah.create') }}"
+                       class="inline-flex items-center px-4 py-2 bg-white text-blue-700 hover:text-blue-800 hover:bg-blue-50 text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Tambah MK
+                    </a>
                 </div>
             </div>
             <div class="p-6">
@@ -134,23 +132,10 @@
 
         @php
             $isFiltered = !empty($id_tahun);
+            $selected_tahun = ($tahun_tersedia ?? collect())->firstWhere('id_tahun', $id_tahun);
         @endphp
 
-        @if(!$isFiltered)
-            {{-- Empty state sebelum memilih tahun --}}
-            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
-                <div class="flex justify-center mb-4">
-                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
-                        <i class="fas fa-filter text-3xl"></i>
-                    </div>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
-                <p class="text-gray-600 mt-1">
-                    Silakan pilih tahun kurikulum untuk menampilkan data mata kuliah program studi Anda.
-                </p>
-            </div>
-        @else
-        <!-- Main Card -->
+        <!-- Main Card - Langsung ditampilkan tanpa harus filter -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
             
             <!-- Toolbar -->
@@ -170,10 +155,6 @@
                         </div>
                     </div>
                 </div>
-
-                @php
-                    $selected_tahun = ($tahun_tersedia ?? collect())->firstWhere('id_tahun', $id_tahun);
-                @endphp
 
                 <!-- Filter Info + ringkasan -->
                 @if ($isFiltered)
@@ -343,7 +324,6 @@
             @endif
 
         </div>
-        @endif
     </div>
 </div>
 

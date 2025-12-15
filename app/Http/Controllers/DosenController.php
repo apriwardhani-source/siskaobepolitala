@@ -338,4 +338,132 @@ class DosenController extends Controller
             'id_tahun' => $request->id_tahun
         ])->with('success', $message);
     }
+
+    /**
+     * Import nilai dari file Excel (bisa banyak MK sekaligus)
+     */
+    public function importNilai(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'kode_mk' => 'nullable|exists:mata_kuliahs,kode_mk',
+            'id_tahun' => 'nullable|exists:tahun,id_tahun',
+        ]);
+
+        try {
+            $import = new \App\Imports\NilaiMahasiswaImport(
+                $request->kode_mk,  // Opsional, bisa null jika ada di file
+                $request->id_tahun  // Opsional, bisa null jika ada di file
+            );
+            
+            \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('file'));
+
+            $successCount = $import->getSuccessCount();
+            $errorCount = $import->getErrorCount();
+            $errors = $import->getErrors();
+
+            $redirectParams = [];
+            if ($request->kode_mk) {
+                $redirectParams['kode_mk'] = $request->kode_mk;
+            }
+            if ($request->id_tahun) {
+                $redirectParams['id_tahun'] = $request->id_tahun;
+            }
+
+            if ($errorCount > 0) {
+                $errorSummary = count($errors) > 3 
+                    ? implode(', ', array_slice($errors, 0, 3)) . '...' 
+                    : implode(', ', $errors);
+                return redirect()->route('dosen.penilaian.index', $redirectParams)
+                    ->with('warning', "Import selesai: {$successCount} berhasil, {$errorCount} gagal. Error: {$errorSummary}");
+            }
+
+            return redirect()->route('dosen.penilaian.index', $redirectParams)
+                ->with('success', "Berhasil import {$successCount} data nilai!");
+
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            
+            return redirect()->route('dosen.penilaian.index')
+                ->with('error', 'Gagal import: ' . implode(' | ', array_slice($errorMessages, 0, 3)));
+
+        } catch (\Exception $e) {
+            \Log::error('Import Nilai Error', ['error' => $e->getMessage()]);
+            return redirect()->route('dosen.penilaian.index')
+                ->with('error', 'Gagal import data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Download template import nilai (mendukung multi MK)
+     */
+    public function downloadTemplateNilai(Request $request)
+    {
+        $user = Auth::user();
+        
+        $filename = 'template_import_nilai.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        // Ambil mahasiswa berdasarkan prodi
+        $mahasiswas = Mahasiswa::where('kode_prodi', $user->kode_prodi)
+            ->where('status', 'aktif')
+            ->orderBy('nim')
+            ->take(10) // Limit contoh
+            ->get();
+
+        // Ambil mata kuliah yang diajar dosen
+        $mataKuliahs = $user->mataKuliahDiajar()->take(3)->get();
+        
+        // Ambil tahun kurikulum terbaru
+        $tahun = Tahun::orderBy('tahun', 'desc')->first();
+
+        $callback = function() use ($mahasiswas, $mataKuliahs, $tahun) {
+            $file = fopen('php://output', 'w');
+            
+            // UTF-8 BOM untuk Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header - DENGAN kode_mk dan tahun untuk multi-MK import
+            $columns = ['nim', 'nama_mahasiswa', 'kode_mk', 'nama_mk', 'tahun', 'nilai'];
+            fputcsv($file, $columns);
+            
+            // Sample data - kombinasi mahasiswa dan MK
+            foreach ($mataKuliahs as $mk) {
+                foreach ($mahasiswas as $mhs) {
+                    fputcsv($file, [
+                        $mhs->nim,
+                        $mhs->nama,
+                        $mk->kode_mk,
+                        $mk->nama_mk,
+                        $tahun ? $tahun->tahun : '2024',
+                        '' // Kosongkan nilai agar dosen isi sendiri
+                    ]);
+                }
+            }
+
+            // Jika tidak ada data, berikan contoh generic
+            if ($mahasiswas->isEmpty() || $mataKuliahs->isEmpty()) {
+                fputcsv($file, ['1234567890', 'Nama Mahasiswa', 'MK001', 'Contoh MK', '2024', '85']);
+                fputcsv($file, ['1234567891', 'Nama Mahasiswa 2', 'MK001', 'Contoh MK', '2024', '90']);
+                fputcsv($file, ['1234567890', 'Nama Mahasiswa', 'MK002', 'Contoh MK 2', '2024', '80']);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }

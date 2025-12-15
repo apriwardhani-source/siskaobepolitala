@@ -1,9 +1,0 @@
-No,Nama Field,Tipe Data,Keterangan
-1,id,INTEGER,Primary Key; Auto Increment
-2,nim,VARCHAR,Nomor Induk Mahasiswa (Unique)
-3,nama_mahasiswa,VARCHAR,Nama mahasiswa
-4,kode_prodi,VARCHAR,Foreign Key ke tabel prodis
-5,id_tahun_kurikulum,INTEGER,Foreign Key ke tabel tahun
-6,status,VARCHAR,Status mahasiswa (aktif/lulus/cuti/keluar)
-7,created_at,DATETIME,Tanggal dibuat
-8,updated_at,DATETIME,Tanggal diupdate

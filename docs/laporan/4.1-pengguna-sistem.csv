@@ -1,6 +1,0 @@
-No,Pengguna,Peran
-1,Admin,Mengelola data master (user; prodi; mahasiswa; tahun akademik)
-2,Tim Kurikulum,Mengelola CPL; mata kuliah; CPMK; dan pemetaan CPL-MK
-3,Dosen,Menginput nilai mahasiswa per CPMK
-4,Kaprodi,Melihat dashboard dan laporan pencapaian CPL
-5,Wadir 1,Melihat dashboard dan laporan pencapaian CPL seluruh prodi

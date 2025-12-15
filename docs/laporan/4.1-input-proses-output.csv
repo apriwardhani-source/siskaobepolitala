@@ -1,4 +1,0 @@
-Komponen,Keterangan
-Input,Data CPL; data mata kuliah; data CPMK; pemetaan CPL-MK; nilai mahasiswa per CPMK
-Proses,Pemetaan CPL ke mata kuliah; perhitungan bobot CPMK; kalkulasi pencapaian CPL berdasarkan nilai mahasiswa
-Output,Dashboard pencapaian CPL; laporan pencapaian CPL per mahasiswa; laporan pencapaian CPL per angkatan; rekap nilai CPMK

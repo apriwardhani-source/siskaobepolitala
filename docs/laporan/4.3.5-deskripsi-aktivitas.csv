@@ -1,9 +1,0 @@
-No,Nama Diagram,Aktor,Deskripsi Alur
-1,Activity Login,User,Mulai -> Buka halaman login -> Input email dan password -> Validasi -> [Valid] Redirect ke dashboard / [Tidak Valid] Tampilkan error -> Selesai
-2,Activity Kelola User,Admin,Mulai -> Pilih menu Kelola User -> Pilih aksi (Tambah/Edit/Hapus) -> Isi form data -> Validasi -> [Valid] Simpan ke database / [Tidak Valid] Tampilkan error -> Tampilkan hasil -> Selesai
-3,Activity Kelola CPL,Tim,Mulai -> Pilih menu Kelola CPL -> Pilih aksi (Tambah/Edit/Hapus) -> Isi form data -> Validasi -> [Valid] Simpan ke database / [Tidak Valid] Tampilkan error -> Tampilkan hasil -> Selesai
-4,Activity Kelola Mata Kuliah,Tim,Mulai -> Pilih menu Kelola MK -> Pilih aksi (Tambah/Edit/Hapus) -> Isi form data -> Validasi -> [Valid] Simpan ke database / [Tidak Valid] Tampilkan error -> Tampilkan hasil -> Selesai
-5,Activity Kelola CPMK,Tim,Mulai -> Pilih menu Kelola CPMK -> Pilih aksi (Tambah/Edit/Hapus) -> Isi form data -> Validasi -> [Valid] Simpan ke database / [Tidak Valid] Tampilkan error -> Tampilkan hasil -> Selesai
-6,Activity Input Nilai,Dosen,Mulai -> Pilih mata kuliah -> Lihat daftar mahasiswa -> Input nilai per mahasiswa -> Validasi nilai -> [Valid] Hitung nilai akhir -> Simpan ke database / [Tidak Valid] Tampilkan error -> Tampilkan hasil -> Selesai
-7,Activity Lihat Dashboard,Kaprodi,Mulai -> Pilih menu Dashboard -> Sistem ambil data statistik -> Hitung persentase pencapaian CPL -> Tampilkan grafik -> [Filter] Pilih tahun/angkatan -> Update tampilan -> Selesai
-8,Activity Lihat Laporan,Kaprodi,Mulai -> Pilih menu Laporan -> Pilih jenis laporan -> Sistem ambil data -> Tampilkan laporan -> [Export] Generate file -> Download -> Selesai

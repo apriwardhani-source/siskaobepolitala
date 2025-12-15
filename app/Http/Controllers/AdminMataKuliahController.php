@@ -17,12 +17,9 @@ class AdminMataKuliahController extends Controller
         $kode_prodi = $request->get('kode_prodi');
         $id_tahun = $request->get('id_tahun');
         $prodis = DB::table('prodis')->get();
+        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
 
-        if (!$kode_prodi) {
-            $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
-            return view("admin.matakuliah.index", compact("prodis", "kode_prodi", "id_tahun", "tahun_tersedia"));
-        }
-
+        // Langsung tampilkan semua data tanpa harus filter
         $query = DB::table('mata_kuliahs as mk')
             ->select(
                 'mk.kode_mk',
@@ -49,8 +46,6 @@ class AdminMataKuliahController extends Controller
         }
 
         $mata_kuliahs = $query->get();
-
-        $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
 
         $dataKosong = $mata_kuliahs->isEmpty() && $kode_prodi;
 

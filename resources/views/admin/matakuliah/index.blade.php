@@ -120,18 +120,7 @@
             $isFiltered = !empty($kode_prodi) || !empty($id_tahun);
         @endphp
 
-        @if(!$isFiltered)
-            <!-- Empty state sebelum filter -->
-            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
-                <div class="flex justify-center mb-4">
-                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
-                        <i class="fas fa-filter text-3xl"></i>
-                    </div>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
-                <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data mata kuliah.</p>
-            </div>
-        @else
+        @if($isFiltered)
             <!-- Filter Aktif -->
             <div class="bg-white rounded-xl shadow border border-gray-200 p-4 mb-6">
                 <div class="text-sm text-gray-600 mb-2">Filter aktif:</div>
@@ -158,9 +147,8 @@
             </div>
         @endif
 
-        <!-- Statistik MK, Angkatan, Program Studi -->
-        @if($isFiltered && !$dataKosong && $selectedProdi)
-            <!-- Baris Statistik: Total MK, Angkatan, Program Studi (gaya seperti Wadir1) -->
+        <!-- Statistik MK -->
+        @if(($mata_kuliahs ?? collect())->isNotEmpty())
             @php
                 $totalMk = ($mata_kuliahs ?? collect())->count();
             @endphp
@@ -169,7 +157,7 @@
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
                     <div class="p-6 flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600 uppercase">Total MK</p>
+                            <p class="text-sm font-medium text-gray-600 uppercase">Total Mata Kuliah</p>
                             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalMk }}</p>
                         </div>
                         <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
@@ -178,20 +166,8 @@
                     </div>
                 </div>
 
-                <!-- Angkatan / Tahun Kurikulum -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
-                    <div class="p-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 uppercase">Angkatan</p>
-                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
-                        </div>
-                        <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
-                            <i class="fas fa-calendar text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Program Studi (ringkas) -->
+                @if($selectedProdi)
+                <!-- Program Studi -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
                     <div class="p-6 flex items-center justify-between">
                         <div>
@@ -203,6 +179,22 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if($selectedYear)
+                <!-- Angkatan / Tahun Kurikulum -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                    <div class="p-6 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 uppercase">Tahun Kurikulum</p>
+                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
+                        </div>
+                        <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                            <i class="fas fa-calendar text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         @endif
 

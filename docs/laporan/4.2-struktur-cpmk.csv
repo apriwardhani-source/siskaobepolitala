@@ -1,6 +1,0 @@
-No,Nama Field,Tipe Data,Keterangan
-1,id_cpmk,INTEGER,Primary Key; Auto Increment
-2,kode_cpmk,VARCHAR,Kode CPMK
-3,deskripsi_cpmk,TEXT,Deskripsi CPMK
-4,created_at,DATETIME,Tanggal dibuat
-5,updated_at,DATETIME,Tanggal diupdate

@@ -544,6 +544,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/penilaian/{kode_mk}/detail', [\App\Http\Controllers\DosenController::class, 'penilaianDetail'])->name('penilaian.detail');
         Route::get('/penilaian', [\App\Http\Controllers\DosenController::class, 'penilaian'])->name('penilaian.index');
         Route::post('/penilaian/store', [\App\Http\Controllers\DosenController::class, 'storeNilai'])->name('penilaian.store');
+        Route::post('/penilaian/import', [\App\Http\Controllers\DosenController::class, 'importNilai'])->name('penilaian.import');
+        Route::get('/penilaian/download-template', [\App\Http\Controllers\DosenController::class, 'downloadTemplateNilai'])->name('penilaian.download-template');
         
         // Ranking Mahasiswa (SAW Method - Read Only)
         Route::get('/ranking', [\App\Http\Controllers\Dosen\RankingMahasiswaController::class, 'index'])->name('ranking.index');

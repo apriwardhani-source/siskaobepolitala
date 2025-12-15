@@ -236,4 +236,117 @@ class PenilaianDosenController extends Controller
 
         return redirect()->route('dosen.penilaian.index', ['kode_mk' => $kode_mk, 'tahun' => $tahun])->with('success', 'Nilai berhasil ditambahkan dan notifikasi terkirim');
     }
+
+    /**
+     * Import nilai dari file Excel
+     */
+    public function importNilai(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'kode_mk' => 'required|exists:mata_kuliahs,kode_mk',
+            'id_tahun' => 'required|exists:tahun,id_tahun',
+        ]);
+
+        try {
+            $import = new \App\Imports\NilaiMahasiswaImport(
+                $request->kode_mk,
+                $request->id_tahun
+            );
+            
+            \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('file'));
+
+            $successCount = $import->getSuccessCount();
+            $errorCount = $import->getErrorCount();
+
+            if ($errorCount > 0) {
+                return redirect()->route('dosen.penilaian.index', [
+                    'kode_mk' => $request->kode_mk,
+                    'tahun' => $request->id_tahun
+                ])->with('warning', "Import selesai: {$successCount} berhasil, {$errorCount} gagal (data tidak lengkap)");
+            }
+
+            return redirect()->route('dosen.penilaian.index', [
+                'kode_mk' => $request->kode_mk,
+                'tahun' => $request->id_tahun
+            ])->with('success', "Berhasil import {$successCount} data nilai!");
+
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Baris {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            
+            return redirect()->route('dosen.penilaian.index')
+                ->with('error', 'Gagal import: ' . implode(' | ', array_slice($errorMessages, 0, 3)));
+
+        } catch (\Exception $e) {
+            \Log::error('Import Nilai Error', ['error' => $e->getMessage()]);
+            return redirect()->route('dosen.penilaian.index')
+                ->with('error', 'Gagal import data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Download template import nilai
+     */
+    public function downloadTemplate(Request $request)
+    {
+        $kode_mk = $request->kode_mk;
+        
+        $filename = 'template_import_nilai.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        // Ambil teknik penilaian untuk mata kuliah ini
+        $teknikPenilaians = [];
+        if ($kode_mk) {
+            $teknikPenilaians = TeknikPenilaian::where('kode_mk', $kode_mk)->get();
+        }
+
+        // Ambil daftar mahasiswa
+        $mahasiswas = Mahasiswa::orderBy('nim')->take(5)->get();
+
+        $callback = function() use ($teknikPenilaians, $mahasiswas, $kode_mk) {
+            $file = fopen('php://output', 'w');
+            
+            // UTF-8 BOM untuk Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header
+            $columns = ['nim', 'nama_mahasiswa', 'id_teknik', 'nama_teknik', 'nilai'];
+            fputcsv($file, $columns);
+            
+            // Sample data
+            foreach ($mahasiswas as $mhs) {
+                foreach ($teknikPenilaians as $teknik) {
+                    fputcsv($file, [
+                        $mhs->nim,
+                        $mhs->nama,
+                        $teknik->id_teknik,
+                        $teknik->nama_teknik,
+                        rand(60, 100) // Contoh nilai random
+                    ]);
+                }
+            }
+
+            // Jika tidak ada data, berikan contoh generic
+            if ($mahasiswas->isEmpty() || $teknikPenilaians->isEmpty()) {
+                fputcsv($file, ['1234567890', 'Nama Mahasiswa', '1', 'Quiz 1', '85']);
+                fputcsv($file, ['1234567890', 'Nama Mahasiswa', '2', 'UTS', '80']);
+                fputcsv($file, ['1234567890', 'Nama Mahasiswa', '3', 'UAS', '90']);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
