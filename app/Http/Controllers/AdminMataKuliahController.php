@@ -111,7 +111,6 @@ class AdminMataKuliahController extends Controller
             ->select(
                 'mk.kode_mk',
                 'mk.nama_mk',
-                'mk.jenis_mk',
                 'mk.sks_mk',
                 'mk.semester_mk',
                 'mk.kompetensi_mk',
@@ -126,6 +125,7 @@ class AdminMataKuliahController extends Controller
             ->groupBy(
                 'mk.kode_mk',
                 'mk.nama_mk',
+                // 'mk.jenis_mk' tidak dipakai di organisasiMK sehingga tidak perlu di-select / groupBy
                 'mk.sks_mk',
                 'mk.semester_mk',
                 'mk.kompetensi_mk',

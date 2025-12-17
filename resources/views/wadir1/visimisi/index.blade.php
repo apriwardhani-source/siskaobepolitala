@@ -21,11 +21,11 @@
             </div>
         </div>
 
-        <!-- Content cards -->
-        <div class="grid gap-6 md:grid-cols-2">
+        <!-- Content cards (disamakan dengan admin) -->
+        <div class="grid gap-6 md:grid-cols-2 items-start">
 
             {{-- Visi Politala Section --}}
-            <div class="bg-white rounded-xl shadow-lg border border-blue-50 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-lg border border-blue-50 overflow-hidden flex flex-col">
                 <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
                     <div class="flex items-center space-x-3">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white shadow">
@@ -37,15 +37,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-6 py-5">
-                    <p class="text-gray-700 leading-relaxed text-justify md:text-left">
+                <div class="px-6 py-5 flex-1 flex items-start">
+                    <p class="text-gray-700 leading-relaxed text-justify md:text-left whitespace-pre-line">
                         {{ $visis ? $visis->visi : 'Data visi belum tersedia' }}
                     </p>
                 </div>
             </div>
 
             {{-- Misi Politala Section --}}
-            <div class="bg-white rounded-xl shadow-lg border border-green-50 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-lg border border-green-50 overflow-hidden flex flex-col">
                 <div class="px-6 py-4 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-green-100">
                     <div class="flex items-center space-x-3">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500 text-white shadow">
@@ -57,20 +57,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-6 py-5">
+                <div class="px-6 py-5 flex-1">
                     @if(isset($misis) && $misis->count() > 0)
-                        <ol class="space-y-3">
-                            @foreach ($misis as $index => $m)
-                                <li class="flex items-start space-x-3">
-                                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-500 text-white text-xs font-semibold mt-0.5 shadow">
-                                        {{ $index + 1 }}
-                                    </span>
-                                    <p class="text-gray-700 leading-relaxed">
-                                        {{ $m->misi }}
-                                    </p>
-                                </li>
-                            @endforeach
-                        </ol>
+                        <div class="bg-emerald-50/70 rounded-xl px-4 py-4">
+                            <ol class="space-y-3">
+                                @foreach ($misis as $index => $m)
+                                    <li class="flex items-start space-x-3">
+                                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-500 text-white text-sm font-semibold flex-shrink-0">
+                                            {{ $loop->iteration }}
+                                        </span>
+                                        <p class="text-gray-700 leading-relaxed text-justify">
+                                            {{ $m->misi }}
+                                        </p>
+                                    </li>
+                                @endforeach
+                            </ol>
+                        </div>
                     @else
                         <p class="text-gray-700 text-center">Data misi belum tersedia</p>
                     @endif

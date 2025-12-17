@@ -4,7 +4,7 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
 
-        <!-- Header ala Wadir1 -->
+        
         <div class="mb-8">
             <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -75,8 +75,8 @@
                         <!-- Prodi -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
-                            <select name="kode_prodi" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="">Semua Prodi</option>
+                            <select name="kode_prodi" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="" disabled {{ empty($kode_prodi ?? '') ? 'selected' : '' }}>Pilih Program Studi</option>
                                 @foreach(($prodis ?? []) as $prodi)
                                   <option value="{{ $prodi->kode_prodi }}" {{ ($kode_prodi ?? '') == $prodi->kode_prodi ? 'selected' : '' }}>
                                       {{ $prodi->nama_prodi }}
@@ -87,8 +87,8 @@
                         <!-- Tahun -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
-                            <select name="id_tahun" class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                                <option value="">Semua</option>
+                            <select name="id_tahun" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                <option value="" disabled {{ empty($id_tahun ?? '') ? 'selected' : '' }}>Pilih Tahun Kurikulum</option>
                                 @foreach(($tahun_tersedia ?? []) as $t)
                                   <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '') == $t->id_tahun ? 'selected' : '' }}>
                                       {{ $t->tahun }}
@@ -102,7 +102,7 @@
                                     class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                                 <i class="fas fa-search mr-2"></i> Tampilkan Data
                             </button>
-                            @if(isset($kode_prodi) && $kode_prodi)
+                            @if(!empty($kode_prodi ?? null) && !empty($id_tahun ?? null))
                             <a href="{{ route('admin.matakuliah.export', ['kode_prodi'=>($kode_prodi ?? request('kode_prodi')), 'id_tahun'=>($id_tahun ?? request('id_tahun'))]) }}" 
                                class="inline-flex items-center px-4 py-2.5 bg-green-600 text-white rounded-lg shadow hover:bg-green-700">
                                 <i class="fas fa-file-excel mr-2"></i> Export Excel
@@ -117,21 +117,32 @@
         @php
             $selectedYear = collect($tahun_tersedia ?? [])->firstWhere('id_tahun', $id_tahun);
             $selectedProdi = collect($prodis ?? [])->firstWhere('kode_prodi', $kode_prodi);
-            $isFiltered = !empty($kode_prodi) || !empty($id_tahun);
+            $isFiltered = !empty($kode_prodi) && !empty($id_tahun);
         @endphp
 
-        @if($isFiltered)
+        @if(!$isFiltered)
+            <!-- Empty state sebelum filter -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+                <div class="flex justify-center mb-4">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-filter text-3xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun untuk menampilkan data mata kuliah.</p>
+            </div>
+        @else
             <!-- Filter Aktif -->
             <div class="bg-white rounded-xl shadow border border-gray-200 p-4 mb-6">
                 <div class="text-sm text-gray-600 mb-2">Filter aktif:</div>
                 <div class="flex flex-wrap gap-2 items-center">
                     <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
                         <i class="fas fa-calendar-alt mr-2"></i>
-                        Angkatan: {{ $selectedYear->tahun ?? 'Semua' }}
+                        Angkatan: {{ $selectedYear->tahun ?? '-' }}
                     </span>
                     <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">
                         <i class="fas fa-university mr-2"></i>
-                        {{ $selectedProdi->nama_prodi ?? 'Semua Program Studi' }}
+                        {{ $selectedProdi->nama_prodi ?? '-' }}
                     </span>
                     <a href="{{ route('admin.matakuliah.index') }}"
                        class="text-red-600 text-sm ml-2">
@@ -139,63 +150,63 @@
                     </a>
                 </div>
             </div>
-        @endif
 
-        @if(isset($kode_prodi) && $kode_prodi!=='' && ($dataKosong ?? false))
-            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-6">
-                <div class="text-sm text-yellow-800">Data mata kuliah belum tersedia untuk filter yang dipilih.</div>
-            </div>
-        @endif
+            @if(isset($kode_prodi) && $kode_prodi!=='' && ($dataKosong ?? false))
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-6">
+                    <div class="text-sm text-yellow-800">Data mata kuliah belum tersedia untuk filter yang dipilih.</div>
+                </div>
+            @endif
 
-        <!-- Statistik MK -->
-        @if(($mata_kuliahs ?? collect())->isNotEmpty())
-            @php
-                $totalMk = ($mata_kuliahs ?? collect())->count();
-            @endphp
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <!-- Total MK -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
-                    <div class="p-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 uppercase">Total Mata Kuliah</p>
-                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalMk }}</p>
-                        </div>
-                        <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
-                            <i class="fas fa-book text-2xl"></i>
+            <!-- Statistik MK -->
+            @if(($mata_kuliahs ?? collect())->isNotEmpty())
+                @php
+                    $totalMk = ($mata_kuliahs ?? collect())->count();
+                @endphp
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Total MK -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-blue-500">
+                        <div class="p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 uppercase">Total Mata Kuliah</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalMk }}</p>
+                            </div>
+                            <div class="w-14 h-14 bg-blue-500 rounded-xl flex items-center justify-center text-white">
+                                <i class="fas fa-book text-2xl"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                @if($selectedProdi)
-                <!-- Program Studi -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
-                    <div class="p-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
-                            <p class="mt-2 text-xl font-bold text-gray-900">{{ $selectedProdi->nama_prodi ?? '-' }}</p>
-                        </div>
-                        <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white">
-                            <i class="fas fa-graduation-cap text-2xl"></i>
+                    @if($selectedProdi)
+                    <!-- Program Studi -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-purple-500">
+                        <div class="p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 uppercase">Program Studi</p>
+                                <p class="mt-2 text-xl font-bold text-gray-900">{{ $selectedProdi->nama_prodi ?? '-' }}</p>
+                            </div>
+                            <div class="w-14 h-14 bg-purple-500 rounded-xl flex items-center justify-center text-white">
+                                <i class="fas fa-graduation-cap text-2xl"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @endif
+                    @endif
 
-                @if($selectedYear)
-                <!-- Angkatan / Tahun Kurikulum -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
-                    <div class="p-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 uppercase">Tahun Kurikulum</p>
-                            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
-                        </div>
-                        <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
-                            <i class="fas fa-calendar text-2xl"></i>
+                    @if($selectedYear)
+                    <!-- Angkatan / Tahun Kurikulum -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border-l-4 border-green-500">
+                        <div class="p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 uppercase">Tahun Kurikulum</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900">{{ $selectedYear->tahun ?? '-' }}</p>
+                            </div>
+                            <div class="w-14 h-14 bg-green-500 rounded-xl flex items-center justify-center text-white">
+                                <i class="fas fa-calendar text-2xl"></i>
+                            </div>
                         </div>
                     </div>
+                    @endif
                 </div>
-                @endif
-            </div>
+            @endif
         @endif
 
         <!-- Tabel Hasil -->

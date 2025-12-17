@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.kaprodi.app')
 
 @section('title', 'Hasil OBE - Daftar Mahasiswa')
 

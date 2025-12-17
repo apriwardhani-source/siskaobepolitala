@@ -128,6 +128,12 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
 
         $tahun_tersedia = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
 
+        // Prodi list (untuk dropdown di view, walau kaprodi hanya punya satu prodi)
+        $prodis = DB::table('prodis')
+            ->where('kode_prodi', $kodeProdi)
+            ->get();
+        $kode_prodi = $kodeProdi;
+
         // Query untuk semua CPL dengan filter tahun
         $semuaCplQuery = DB::table('capaian_profil_lulusans as cpl')
             ->join('prodis', 'cpl.kode_prodi', '=', 'prodis.kode_prodi')
@@ -199,6 +205,14 @@ class KaprodiPemetaanCplCpmkMkController extends Controller
             ];
         }
 
-        return view('kaprodi.pemetaancplcpmkmk.pemetaanmkcplcpmk', compact('matrix', 'semuaMk', 'semuaCpl', 'id_tahun', 'tahun_tersedia'));
+        return view('kaprodi.pemetaancplcpmkmk.pemetaanmkcplcpmk', compact(
+            'matrix',
+            'semuaMk',
+            'semuaCpl',
+            'id_tahun',
+            'tahun_tersedia',
+            'prodis',
+            'kode_prodi'
+        ));
     }
 }

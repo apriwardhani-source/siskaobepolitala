@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.kaprodi.app')
 @section('content')
 
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mx-2 md:mx-0">

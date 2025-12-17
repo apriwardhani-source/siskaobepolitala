@@ -1,207 +1,198 @@
-﻿@extends('layouts.admin.app')
+@extends('layouts.admin.app')
 
+@section('title', 'Organisasi MK - Admin')
 @section('content')
-    <div class="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-md mx-2 md:mx-0">
+<div class="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
 
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-800">Organisasi Mata Kuliah</h1>
-            <hr class="border-t-4 border-black my-4 mx-auto mb-4">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-project-diagram text-white text-2xl"></i>
+          </div>
         </div>
-
-        @if (session('success'))
-            <div id="alert"
-                class="bg-green-500 text-white px-4 py-2 rounded-md mb-6 text-center relative max-w-4xl mx-auto">
-                <span class="font-bold">{{ session('success') }}</span>
-                <button onclick="document.getElementById('alert').style.display='none'"
-                    class="absolute top-1 right-3 text-white font-bold text-lg">
-                    &times;
-                </button>
-            </div>
-        @endif
-
-        @if (session('sukses'))
-            <div id="alert"
-                class="bg-red-500 text-white px-4 py-2 rounded-md mb-6 text-center relative max-w-4xl mx-auto">
-                <span class="font-bold">{{ session('sukses') }}</span>
-                <button onclick="document.getElementById('alert').style.display='none'"
-                    class="absolute top-1 right-3 text-white font-bold text-lg">
-                    &times;
-                </button>
-            </div>
-        @endif
-
-        <div class="flex flex-col md:flex-row mb-3 w-full md:w-auto">
-            <div class="flex space-x-2">
-                <!-- Add any additional buttons here if needed -->
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                    <select id="prodi" name="kode_prodi"
-                        class="w-full md:w-64 border border-black px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                        onchange="updateFilter()">
-                        <option value="" {{ empty($kode_prodi) ? 'selected' : '' }} disabled>Pilih Prodi</option>
-                        @foreach ($prodis as $prodi)
-                            <option value="{{ $prodi->kode_prodi }}"
-                                {{ $kode_prodi == $prodi->kode_prodi ? 'selected' : '' }}>
-                                {{ $prodi->nama_prodi }}
-                            </option>
-                        @endforeach
-                    </select>
-
-                    <select id="tahun" name="id_tahun"
-                        class="w-full md:w-64 border border-black px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                        onchange="updateFilter()">
-                        <option value="" {{ empty($id_tahun) ? 'selected' : '' }}>Semua Tahun</option>
-                        @if (isset($tahun_tersedia))
-                            @foreach ($tahun_tersedia as $thn)
-                                <option value="{{ $thn->id_tahun }}" {{ $id_tahun == $thn->id_tahun ? 'selected' : '' }}>
-                                    {{ $thn->nama_kurikulum }} - {{ $thn->tahun }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-            </div>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Organisasi Mata Kuliah</h1>
+          <p class="mt-1 text-sm text-gray-600">Distribusi MK per semester, total SKS, dan jumlah MK</p>
         </div>
-
-        @if ($kode_prodi || $id_tahun)
-            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                <div class="flex flex-wrap gap-2 items-center">
-                    <span class="text-sm text-blue-800 font-medium">Filter aktif:</span>
-                    @if ($kode_prodi)
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Prodi: {{ $prodis->where('kode_prodi', $kode_prodi)->first()->nama_prodi ?? $kode_prodi }}
-                        </span>
-                    @endif
-                    @if ($id_tahun)
-                        @php
-                            $selected_tahun = $tahun_tersedia->where('id_tahun', $id_tahun)->first();
-                        @endphp
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Tahun:
-                            {{ $selected_tahun ? $selected_tahun->nama_kurikulum . ' - ' . $selected_tahun->tahun : $id_tahun }}
-                        </span>
-                    @endif
-                    <a href="{{ route('admin.matakuliah.organisasimk') }}"
-                        class="text-xs text-blue-600 hover:text-blue-800 underline">
-                        Reset filter
-                    </a>
-                </div>
-            </div>
-        @endif
-
-        <!-- Table -->
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            @if (empty($kode_prodi))
-                <div class="p-8 text-center text-gray-600">
-                    Silakan pilih prodi terlebih dahulu.
-                </div>
-            @elseif(isset($dataKosong) && $dataKosong)
-                <div class="p-8 text-center text-gray-600">
-                    Data belum dibuat untuk prodi ini.
-                </div>
-            @else
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-green-800 text-white">
-                            <tr>
-                                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Semester</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">SKS</th>
-                                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Jumlah MK
-                                </th>
-                                <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider">Mata Kuliah
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @php
-                                $totalSks = 0;
-                                $totalMk = 0;
-                            @endphp
-
-                            @for ($i = 1; $i <= 8; $i++)
-                                @php
-                                    $data = isset($organisasiMK)
-                                        ? $organisasiMK->get($i, [
-                                            'semester_mk' => $i,
-                                            'sks_mk' => 0,
-                                            'jumlah_mk' => 0,
-                                            'nama_mk' => [],
-                                        ])
-                                        : [
-                                            'semester_mk' => $i,
-                                            'sks_mk' => 0,
-                                            'jumlah_mk' => 0,
-                                            'nama_mk' => [],
-                                        ];
-
-                                    $totalSks += $data['sks_mk'];
-                                    $totalMk += $data['jumlah_mk'];
-                                @endphp
-                                <tr class="{{ $i % 2 == 0 ? 'bg-gray-50' : 'bg-white' }} hover:bg-gray-100">
-                                    <td class="px-4 py-4 text-center text-sm font-medium">Semester
-                                        {{ $data['semester_mk'] }}</td>
-                                    <td class="px-4 py-4 text-center text-sm">{{ $data['sks_mk'] }}</td>
-                                    <td class="px-4 py-4 text-center text-sm">{{ $data['jumlah_mk'] }}</td>
-                                    <td class="px-4 py-4">
-                                        @if (count($data['nama_mk']) > 0)
-                                            <div class="flex flex-wrap gap-2">
-                                                @foreach ($data['nama_mk'] as $nama_mk)
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 border border-black">
-                                                        {{ $nama_mk }}
-                                                    </span>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <span class="text-gray-400 text-center block">-</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endfor
-
-                            <tr class="bg-green-800 text-white font-bold">
-                                <td class="px-4 py-4 text-center text-sm font-bold">Total</td>
-                                <td class="px-4 py-4 text-center text-sm font-bold">{{ $totalSks }}</td>
-                                <td class="px-4 py-4 text-center text-sm font-bold">{{ $totalMk }}</td>
-                                <td class="px-4 py-4"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        </div>
+      </div>
     </div>
 
-    <script>
-        function updateFilter() {
-            const prodiSelect = document.getElementById('prodi');
-            const tahunSelect = document.getElementById('tahun');
+    <!-- Filter Card -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mb-8">
+      <div class="bg-blue-600 px-6 py-4">
+        <h2 class="text-xl font-bold text-white">
+          <i class="fas fa-filter mr-2"></i>Filter Organisasi MK
+        </h2>
+      </div>
+      <div class="p-6">
+        <form method="GET" action="{{ route('admin.matakuliah.organisasimk') }}" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Program Studi</label>
+              <select name="kode_prodi" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="" disabled {{ empty($kode_prodi ?? '') ? 'selected' : '' }}>Pilih Program Studi</option>
+                @foreach(($prodis ?? []) as $p)
+                  <option value="{{ $p->kode_prodi }}" {{ ($kode_prodi ?? '') == $p->kode_prodi ? 'selected' : '' }}>
+                    {{ $p->nama_prodi }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Tahun Kurikulum</label>
+              <select name="id_tahun" required class="block w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                <option value="" disabled {{ empty($id_tahun ?? '') ? 'selected' : '' }}>Pilih Tahun Kurikulum</option>
+                @foreach(($tahun_tersedia ?? []) as $t)
+                  <option value="{{ $t->id_tahun }}" {{ ($id_tahun ?? '') == $t->id_tahun ? 'selected' : '' }}>
+                    {{ $t->tahun }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="self-end flex gap-2">
+              <button type="submit" class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                <i class="fas fa-search mr-2"></i>Tampilkan Data
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 
-            const kodeProdi = prodiSelect.value;
-            const idTahun = tahunSelect.value;
+    @php
+        $isFiltered = !empty($kode_prodi) && !empty($id_tahun);
+    @endphp
 
-            // Buat URL dengan parameter yang sesuai
-            let url = "{{ route('admin.matakuliah.organisasimk') }}";
-            let params = [];
+    @if(!$isFiltered)
+      <!-- Empty Prompt When No Filter -->
+      <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-8">
+        <div class="flex justify-center mb-4">
+          <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+            <i class="fas fa-filter text-3xl"></i>
+          </div>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+        <p class="text-gray-600 mt-1">
+          Silakan pilih program studi dan tahun untuk menampilkan organisasi mata kuliah.
+        </p>
+      </div>
+    @endif
 
-            if (kodeProdi) {
-                params.push('kode_prodi=' + encodeURIComponent(kodeProdi));
-            }
+    @if($isFiltered)
+      @php
+          $dataCollection = collect($organisasiMK ?? []);
+          $hasData = $dataCollection->isNotEmpty();
+      @endphp
 
-            if (idTahun) {
-                params.push('id_tahun=' + encodeURIComponent(idTahun));
-            }
+      @if(!$hasData)
+        <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center">
+          <div class="flex justify-center mb-4">
+            <div class="w-20 h-20 rounded-2xl bg-gray-200 text-gray-500 flex items-center justify-center">
+              <i class="far fa-folder-open text-3xl"></i>
+            </div>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-800">Tidak ada data</h3>
+          <p class="text-gray-600 mt-1">
+            Data organisasi mata kuliah untuk filter yang dipilih belum tersedia.
+          </p>
+        </div>
+      @else
+        <!-- Tabel ala Wadir1 -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+          <div class="px-6 py-4 border-b bg-gray-50 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-800">Distribusi Mata Kuliah per Semester</h2>
+          </div>
 
-            if (params.length > 0) {
-                url += '?' + params.join('&');
-            }
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gradient-to-r from-gray-700 to-gray-800">
+                <tr>
+                  <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-40">Semester</th>
+                  <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Total SKS</th>
+                  <th class="px-6 py-4 text-center text-xs font-semibold text-gray-100 uppercase tracking-wider w-32">Jumlah MK</th>
+                  <th class="px-6 py-4 text-left text-xs font-semibold text-gray-100 uppercase tracking-wider">Mata Kuliah</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                @php
+                    $bySemester = $dataCollection->keyBy('semester_mk');
+                    $totalSks = 0;
+                    $totalMk = 0;
+                @endphp
 
-            // Redirect ke URL dengan parameter yang benar
-            window.location.href = url;
-        }
-    </script>
+                @for ($i = 1; $i <= 8; $i++)
+                  @php
+                      $row = $bySemester->get($i, [
+                          'semester_mk' => $i,
+                          'sks_mk' => 0,
+                          'jumlah_mk' => 0,
+                          'nama_mk' => [],
+                      ]);
+
+                      $totalSks += $row['sks_mk'];
+                      $totalMk += $row['jumlah_mk'];
+                  @endphp
+                  <tr class="hover:bg-blue-50 transition-colors duration-150 {{ $i % 2 == 0 ? 'bg-gray-50' : 'bg-white' }}">
+                    <td class="px-6 py-4 text-center">
+                      <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
+                        Semester {{ $row['semester_mk'] }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                      <span class="text-lg font-bold text-gray-900">{{ $row['sks_mk'] }}</span>
+                      <span class="text-xs text-gray-500 ml-1">SKS</span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                      <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold
+                                   {{ $row['jumlah_mk'] > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600' }}">
+                        {{ $row['jumlah_mk'] }} MK
+                      </span>
+                    </td>
+                    <td class="px-6 py-4">
+                      @if (!empty($row['nama_mk']))
+                        <div class="flex flex-wrap gap-2">
+                          @foreach ($row['nama_mk'] as $namaMk)
+                            <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200">
+                              {{ $namaMk }}
+                            </span>
+                          @endforeach
+                        </div>
+                      @else
+                        <span class="text-gray-400 text-sm italic">Tidak ada mata kuliah</span>
+                      @endif
+                    </td>
+                  </tr>
+                @endfor
+
+                <!-- Total Row -->
+                <tr class="bg-gradient-to-r from-gray-800 to-gray-900 text-white font-bold">
+                  <td class="px-6 py-5 text-center text-base uppercase tracking-wider">
+                    <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"/>
+                    </svg>
+                    Total
+                  </td>
+                  <td class="px-6 py-5 text-center">
+                    <span class="text-xl">{{ $totalSks }}</span>
+                    <span class="text-sm ml-1">SKS</span>
+                  </td>
+                  <td class="px-6 py-5 text-center">
+                    <span class="text-xl">{{ $totalMk }}</span>
+                    <span class="text-sm ml-1">MK</span>
+                  </td>
+                  <td class="px-6 py-5"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      @endif
+    @endif
+
+  </div>
+</div>
 @endsection
+

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.kaprodi.app')
 @section('content')
     <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mx-2 md:mx-0">
         <!-- Header Filter -->
@@ -95,22 +95,28 @@
             @endif
 
             @if (empty($kode_prodi))
-                <div class="text-center bg-white rounded-lg shadow">
-                    <p class="p-8 text-center text-gray-600">Silakan pilih prodi terlebih dahulu.</p>
+                <div class="bg-white rounded-xl shadow border border-gray-200 p-10 text-center mb-4">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg">
+                            <i class="fas fa-filter text-3xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Pilih Filter</h3>
+                    <p class="text-gray-600 mt-1">Silakan pilih program studi dan tahun kurikulum untuk menampilkan matriks pemetaan.</p>
                 </div>
             @else
-                <div class="overflow-auto border">
-                    <table class="min-w-full divide-y divide-black text-sm">
+                <div class="overflow-auto border rounded-lg bg-white">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
                         <thead class="bg-green-800 text-white text-center">
                             <tr>
-                                <th class="border px-4 py-2">Kode MK</th>
-                                <th class="border px-4 py-2">Nama Mata Kuliah</th>
+                                <th class="border px-4 py-2 text-xs font-semibold uppercase tracking-wider">Kode MK</th>
+                                <th class="border px-4 py-2 text-xs font-semibold uppercase tracking-wider">Nama Mata Kuliah</th>
                                 @foreach ($semuaCpl as $cpl)
-                                    <th class="border px-4 py-2 relative group cursor-pointer">
+                                    <th class="border px-4 py-2 text-xs font-semibold uppercase tracking-wider relative group cursor-pointer">
                                         {{ $cpl->kode_cpl }}
                                         <div
-                                            class="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block w-64 bg-black text-white text-sm rounded p-2 z-50 text-center shadow-lg">
-                                            <div class="bg-gray-600"><strong>{{ $cpl->nama_prodi ?? '-' }}</strong></div>
+                                            class="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block w-64 bg-black text-white text-xs rounded p-2 z-50 text-center shadow-lg">
+                                            <div class="bg-gray-600 font-semibold">{{ $cpl->nama_prodi ?? '-' }}</div>
                                             <div class="mt-3 text-justify">{{ $cpl->deskripsi_cpl ?? '-' }}</div>
                                         </div>
                                     </th>
@@ -119,27 +125,37 @@
                         </thead>
                         <tbody class="bg-white text-gray-800">
                             @foreach ($matrix as $kodeMk => $mk)
-                                <tr>
-                                    <td class="border px-4 py-2 align-top text-center">{{ $kodeMk }}</td>
-                                    <td class="border px-4 py-2 align-top text-center">{{ $mk['nama'] }}</td>
+                                <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                    <td class="border px-4 py-3 align-top text-center">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-sm">
+                                            {{ $kodeMk }}
+                                        </span>
+                                    </td>
+                                    <td class="border px-4 py-3 align-top">
+                                        <div class="font-medium text-gray-900">{{ $mk['nama'] ?? '' }}</div>
+                                    </td>
                                     @foreach ($semuaCpl as $cpl)
-                                        <td class="border px-4 py-2 text-center relative">
+                                        <td class="border px-2 py-2 text-center align-top">
                                             @if (!empty($mk['cpl'][$cpl->kode_cpl]['cpmks']))
                                                 @foreach ($mk['cpl'][$cpl->kode_cpl]['cpmks'] as $kodeCpmk)
-                                                    <div class="group inline-block relative cursor-pointer px-1">
-                                                        <span>{{ $kodeCpmk }}</span>
+                                                    <div class="group inline-block relative cursor-pointer px-1 mb-1">
+                                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm">
+                                                            {{ $kodeCpmk }}
+                                                        </span>
                                                         <div
-                                                            class="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block w-64 bg-black text-white text-sm rounded p-2 z-50 text-center shadow-lg">
+                                                            class="absolute left-1/2 -translate-x-1/2 top-full mt-1 hidden group-hover:block w-64 bg-black text-white text-xs rounded p-2 z-50 text-center shadow-lg">
                                                             <div class="bg-gray-600 font-bold">
-                                                                <strong>{{ $mk['cpl'][$cpl->kode_cpl]['cpmk_details'][$kodeCpmk]['nama_prodi'] ?? '-' }}</strong>
+                                                                {{ $mk['cpl'][$cpl->kode_cpl]['cpmk_details'][$kodeCpmk]['nama_prodi'] ?? '-' }}
                                                             </div>
-                                                            <div class="mt-3 text-justify">
+                                                            <div class="mt-2 text-justify">
                                                                 {{ $mk['cpl'][$cpl->kode_cpl]['cpmk_details'][$kodeCpmk]['deskripsi_cpmk'] ?? '-' }}
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <br>
                                                 @endforeach
+                                            @else
+                                                <span class="text-gray-300 text-xs">-</span>
                                             @endif
                                         </td>
                                     @endforeach
