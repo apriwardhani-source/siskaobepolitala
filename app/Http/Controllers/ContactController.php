@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Mail\ContactNotification;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -41,43 +42,34 @@ class ContactController extends Controller
                 'message' => $request->message,
             ]);
 
-            // Kirim notifikasi WHATSAPP ke admin (OTOMATIS!)
+            // Kirim notifikasi WHATSAPP ke admin via Fonnte
             $whatsappSent = false;
             
-            // Kirim via WhatsApp
             try {
-                $adminNumber = env('WHATSAPP_ADMIN_NUMBER', '6285754631899');
-                $whatsappMessage = "📬 *Pesan Baru dari Website Politala OBE*\n\n";
-                $whatsappMessage .= "👤 *Nama:* {$request->name}\n";
-                $whatsappMessage .= "📧 *Email:* {$request->email}\n";
-                $whatsappMessage .= "💬 *Pesan:*\n{$request->message}\n\n";
-                $whatsappMessage .= "⏰ *Waktu:* " . now()->format('d/m/Y H:i') . "\n";
-                $whatsappMessage .= "🔗 *Dashboard:* " . url('/admin/contacts');
+                $whatsappService = new WhatsAppService();
                 
-                // Call WhatsApp Web.js service
-                $response = \Illuminate\Support\Facades\Http::timeout(15)->post('http://localhost:3001/send', [
-                    'number' => $adminNumber,
-                    'message' => $whatsappMessage
+                $result = $whatsappService->sendContactNotification([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'message' => $request->message
                 ]);
                 
-                if ($response->successful()) {
+                if ($result['success']) {
                     $whatsappSent = true;
-                    Log::info('WhatsApp notification sent successfully', [
+                    Log::info('WhatsApp notification sent successfully via Fonnte', [
                         'contact_id' => $contact->id,
-                        'admin_number' => $adminNumber,
-                        'response' => $response->json()
+                        'result' => $result
                     ]);
                 } else {
-                    Log::error('WhatsApp API returned error', [
-                        'status' => $response->status(),
-                        'body' => $response->body()
+                    Log::warning('WhatsApp notification not sent', [
+                        'contact_id' => $contact->id,
+                        'result' => $result
                     ]);
                 }
             } catch (\Exception $whatsappError) {
                 Log::error('WhatsApp notification exception', [
                     'contact_id' => $contact->id,
-                    'error' => $whatsappError->getMessage(),
-                    'trace' => $whatsappError->getTraceAsString()
+                    'error' => $whatsappError->getMessage()
                 ]);
             }
             
