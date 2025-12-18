@@ -1,0 +1,504 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Glass Button */
+.glass-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 9999px; /* kapsul */
+    background: rgb(55, 22, 163);/* putih transparan */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff; /* teks putih */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.3),
+                0 4px 20px rgba(0,0,0,0.3);
+                text-decoration: none;
+}
+
+.glass-button::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at top left, rgba(255,255,255,0.5), transparent 60%);
+    transform: rotate(25deg);
+    opacity: 0.7;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.35); /* lebih terang saat hover */
+    transform: scale(1.05);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.5),
+                0 6px 25px rgba(0,0,0,0.5);
+}
+.glass-button:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.5),
+                0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* ==== NAV MENU LIQUID GLASS ==== */
+.header-nav {
+    background: rgba(0, 0, 0, 0.6); /* optional semi transparan */
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo + Judul sejajar horizontal */
+.header-nav .flex.items-center {
+    display: flex;
+    align-items: center; /* sejajarkan vertikal */
+    gap: 8px;            /* jarak antar logo & teks */
+}
+
+.header-nav .logo-img {
+    height: 32px;   /* kecil pas di navbar */
+    width: auto;    /* proporsional */
+    display: inline-block;
+}
+
+.header-nav h2 {
+    margin: 0;
+    padding: 0;
+    line-height: 1;     /* biar rata tengah sama logo */
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* Menu Navigasi */
+.nav-menu {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    display: inline-block;
+}
+
+/* efek liquid glass + timbul */
+.nav-menu li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,0.4),
+        0 6px 12px rgba(0,0,0,0.4);
+
+    /* ✨ efek teks membesar */
+    font-size: 1.05em;
+    letter-spacing: 0.5px;
+}
+
+/* Glass Card Cavitated */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  
+
+    /* Full width */
+    width: 100%;
+    display: block;
+
+    /* Efek "mendelep" (inset) */
+    box-shadow:
+        inset 4px 4px 10px rgba(0, 0, 0, 0.4),   /* bayangan dalam gelap */
+        inset -4px -4px 10px rgba(255, 255, 255, 0.2); /* highlight dalam terang */
+}
+
+
+/* Input Cavitated */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    color: #fff;
+    width: 100%;
+    max-width: 100%;
+
+    box-shadow:
+        inset 3px 3px 6px rgba(0,0,0,0.6),
+        inset -3px -3px 6px rgba(255,255,255,0.15);
+    transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.2),
+        0 0 10px rgba(255,255,255, 0.2); /* sedikit glow */
+}
+
+/* --- Gaya Baru untuk Tabel Glassmorphism --- */
+/* Gaya Umum Tabel di dalam elemen dengan kelas glass-card */
+.glass-card table {
+    width: 100%;
+    border-collapse: separate; /* Penting untuk border-radius */
+    border-spacing: 0; /* Hilangkan jarak antar sel */
+    background: transparent; /* Warna latar belakang transparan */
+    color: rgb(13, 3, 35); /* Warna teks default untuk isi tabel */
+}
+
+/* Gaya Header Tabel (thead) */
+.glass-card thead th {
+    background: rgba(65, 63, 63, 0.279); /* Latar belakang header dengan transparansi */
+    padding: 12px 16px; /* Padding untuk header */
+    text-align: left; /* Rata kiri teks header */
+    font-weight: 600; /* Bold */
+    color: white; /* Warna teks header */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Garis bawah header */
+    /* Rounded corners untuk bagian atas tabel */
+    border-top-left-radius: 12px; /* Atas kiri */
+    border-top-right-radius: 12px; /* Atas kanan */
+}
+
+/* Gaya Body Tabel (tbody) */
+.glass-card tbody tr {
+    border-bottom: 1px solid rgba(67, 43, 43, 0.1); /* Garis antar baris */
+}
+
+/* Gaya Body Tabel (tbody) - Baris terakhir */
+.glass-card tbody tr:last-child {
+    border-bottom: 1px solid; /* Hilangkan garis bawah pada baris terakhir */
+}
+
+/* Gaya Sel Tabel (td) */
+.glass-card tbody td {
+    padding: 12px 16px; /* Padding untuk sel data */
+    vertical-align: middle; /* Sejajarkan konten ke tengah vertikal */
+}
+
+/* Gaya Hover untuk Baris Tabel */
+.glass-card table tbody tr:hover {
+    background: rgba(15, 15, 79, 0.1); /* Warna latar belakang saat hover */
+}
+
+/* Gaya Khusus untuk Tabel Bootstrap (jika digunakan) */
+.glass-card .table {
+    background: rgba(15, 15, 79, 0.1); /* Warisi warna teks dari glass-card */
+}
+
+.glass-card .table thead th {
+    /* Ganti warna header Bootstrap default */
+    background: rgba(83, 68, 68, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgb(20, 17, 17);
+}
+
+.glass-card .table tbody + tbody {
+    border-top: 2px solid rgba(255, 0, 0, 0.3); /* Ganti border atas tbody kedua */
+}
+
+/* Gaya untuk tombol/link aksi di dalam sel tabel */
+.glass-card .table .action-buttons a,
+.glass-card .table .action-buttons form button {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    /* Efek glassmorphism dasar */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.glass-card .table .action-buttons a:hover,
+.glass-card .table .action-buttons form button:hover {
+    background: rgba(255, 0, 0, 0.25);
+    color: #007bff;
+}
+
+/* Gaya untuk tombol Edit (misalnya menggunakan text-blue-400) */
+.glass-card .table .action-buttons a.text-blue-400,
+.glass-card .table .action-buttons form button.text-blue-400 {
+    background: rgba(59, 130, 246, 0.2); /* Biru transparan */
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.glass-card .table .action-buttons a.text-blue-400:hover,
+.glass-card .table .action-buttons form button.text-blue-400:hover {
+    background: rgba(59, 130, 246, 0.3);
+}
+
+/* Gaya untuk tombol Hapus (menggunakan text-red-400) - Liquid Glass Merah */
+.glass-card .table .action-buttons a.text-red-400,
+.glass-card .table .action-buttons form button.text-red-400 {
+    background: rgba(239, 68, 68, 0.2); /* Warna merah dengan transparansi */
+    border-color: rgba(239, 68, 68, 0.4); /* Border merah dengan transparansi */
+    color: #f87171; /* Warna teks merah muda untuk kontras */
+    /* Efek liquid glass aktif */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.glass-card .table .action-buttons a.text-red-400:hover,
+.glass-card .table .action-buttons form button.text-red-400:hover {
+    background: rgba(239, 68, 68, 0.3); /* Sedikit lebih gelap */
+    color: #fecaca; /* Warna teks saat hover */
+}
+
+/* ==== LIQUID GLASS BUTTON DANGER (MERAH) ==== */
+.glass-button-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+text-decoration: none;
+    background: rgb(255, 0, 0); /* merah transparan */
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff; /* merah lembut */
+    transition: all 0.3s ease;
+
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button-danger:hover {
+    background: rgba(255, 0, 0, 0.25);
+    color: #b42b2b;
+    transform: scale(1.05);
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+        0 4px 12px rgba(255, 0, 0, 0.4);
+}
+
+.glass-button-danger:active {
+    transform: scale(0.95);
+    box-shadow:
+        inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(255, 0, 0, 0.2);
+}
+
+/* ==== LIQUID GLASS BUTTON WARNING (KUNING) ==== */
+.glass-button-warning {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+text-decoration: none;
+    background: rgba(245,158,11,.6); /* kuning transparan */
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #facc15; /* kuning cerah */
+    transition: all 0.3s ease;
+
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button-warning:hover {
+    background: rgba(255, 193, 7, 0.25);
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow:
+        inset 1px 1px 2px rgba(255, 255, 255, 0.3),
+        0 4px 12px rgba(255, 193, 7, 0.4);
+}
+
+.glass-button-warning:active {
+    transform: scale(0.95);
+    box-shadow:
+        inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(255, 193, 7, 0.2);
+}
+/* ==== LIQUID GLASS INPUT ==== */
+.glass-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 0.5rem;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.1);
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.glass-input:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.1),
+        0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.glass-input.border-red-500 {
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(255,255,255,0.1),
+        0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+/* ==== FIX: Select visibility for glass-input ==== */
+select.glass-input {
+    color: #1f2937; /* gray-800 */
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+select.glass-input:focus {
+    color: #111827; /* gray-900 */
+}
+
+select.glass-input option {
+    color: #111827; /* gray-900 */
+    background: #ffffff;
+}
+/* Biar konten di tengah */
+
+/* ==== NAV DROPDOWN (klik, bukan hover) ==== */
+.nav-menu li ul {
+    display: none; /* Default hidden */
+    position: absolute;
+    left: 0;
+    margin-top: 0.5rem;
+    min-width: 12rem;
+    border-radius: 0.5rem;
+    background: rgba(31, 41, 55, 0.8); /* bg-gray-800 transparan */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    z-index: 50;
+}
+
+/* Kalau ada class show → tampil */
+.nav-menu li ul.show {
+    display: block;
+}
+
+/* Item dalam dropdown */
+.nav-menu li ul li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+/* Hover item dropdown */
+.nav-menu li ul li a:hover {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.nav-item.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;   /* supaya muncul di bawah */
+  left: 0;     /* mulai dari kiri parent */
+  z-index: 1000;
+  min-width: 180px;
+}
+/* ==== GLASS DROPDOWN STYLE ==== */
+.nav-item {
+  position: relative;
+  margin-right: 20px;
+}
+
+.nav-item button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.nav-item button:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* dropdown */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  margin-top: 8px;
+  display: none;
+  flex-direction: column;
+  background: rgba(5, 2, 64, 0.501);
+  backdrop-filter: blur(12px);
+  border-radius: 15px;
+  padding: 8px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.2s;
+  border-radius: 8px;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.show {
+  display: flex;
+}

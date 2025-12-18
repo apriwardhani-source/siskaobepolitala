@@ -1,0 +1,42 @@
+[
+    {
+        "kode_prodi": "TD",
+        "nama_prodi": "Akuntansi",
+        "visi_prodi": null,
+        "nama_kaprodi": "nandank",
+        "tgl_berdiri_prodi": null,
+        "penyelenggaraan_prodi": null,
+        "nomor_sk": null,
+        "tanggal_sk": null,
+        "peringkat_akreditasi": null,
+        "nomor_sk_banpt": null,
+        "jenjang_pendidikan": "D3",
+        "gelar_lulusan": null,
+        "telepon_prodi": null,
+        "faksimili_prodi": null,
+        "website_prodi": null,
+        "email_prodi": null,
+        "created_at": "2025-12-16 16:21:44",
+        "updated_at": "2025-12-16 16:21:44"
+    },
+    {
+        "kode_prodi": "TI",
+        "nama_prodi": "Teknologi Informasi",
+        "visi_prodi": null,
+        "nama_kaprodi": "pak jaka",
+        "tgl_berdiri_prodi": null,
+        "penyelenggaraan_prodi": null,
+        "nomor_sk": null,
+        "tanggal_sk": null,
+        "peringkat_akreditasi": null,
+        "nomor_sk_banpt": null,
+        "jenjang_pendidikan": "D3",
+        "gelar_lulusan": null,
+        "telepon_prodi": null,
+        "faksimili_prodi": null,
+        "website_prodi": null,
+        "email_prodi": null,
+        "created_at": "2025-10-21 14:48:13",
+        "updated_at": "2025-10-21 14:49:47"
+    }
+]

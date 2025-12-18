@@ -1,0 +1,102 @@
+[
+    {
+        "id": 3,
+        "nim": "2301301001",
+        "nama_mahasiswa": "Rizqia Febrianoor",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-12-16 17:25:06"
+    },
+    {
+        "id": 4,
+        "nim": "2301301002",
+        "nama_mahasiswa": "Ahmad Dwi Kurnia",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 5,
+        "nim": "2301301003",
+        "nama_mahasiswa": "Sherly Sandrina",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 6,
+        "nim": "2301301004",
+        "nama_mahasiswa": "Alma Nabila",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 7,
+        "nim": "2301301005",
+        "nama_mahasiswa": "Maulida Yanti",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 8,
+        "nim": "2301301006",
+        "nama_mahasiswa": "Zubaidah Nur Jumiah",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 9,
+        "nim": "2301301007",
+        "nama_mahasiswa": "Siti Fatimah",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 10,
+        "nim": "2301301011",
+        "nama_mahasiswa": "M.Galih Katon Bagaskara",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 11,
+        "nim": "2301301013",
+        "nama_mahasiswa": "Mahyudianoor",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    },
+    {
+        "id": 12,
+        "nim": "2301301014",
+        "nama_mahasiswa": "Muhammad Hafidl Badali",
+        "kode_prodi": "TI",
+        "id_tahun_kurikulum": 1,
+        "status": "aktif",
+        "created_at": "2025-11-12 01:54:07",
+        "updated_at": "2025-11-12 01:54:07"
+    }
+]

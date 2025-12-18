@@ -1,0 +1,74 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+# /public/build  # Uncommented untuk share built assets ke tim
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
+Thumbs.db
+
+# WhatsApp Web.js Session & Auth (JANGAN COMMIT!)
+whatsapp-auth/
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Evolution API (Docker - JANGAN COMMIT!)
+evolution-whatsapp/
+docker-compose-whatsapp.yml
+
+# ============================================
+# Added by fix-gitignore.bat - Security Fix
+# ============================================
+
+# Database files (use JSON export for sync)
+database/database.sqlite
+database/database.sqlite-journal
+*.sqlite
+*.sqlite-journal
+
+# Testing and Debug files
+read-*.php
+debug-*.php
+test-*.ps1
+test-*.js
+screenshot-*.js
+
+# Backup files
+*.bak
+*.old
+*.tmp
+*.backup
+
+# Excel data files (keep templates)
+*.xlsx
+!template-*.xlsx
+
+# Large binary files
+laravel
+laravel.local*
+
+# Additional environment files
+.env.local
+.env.*.local
+
+# IDE specific files
+*.sublime-*
+
+# OS specific files
+desktop.ini

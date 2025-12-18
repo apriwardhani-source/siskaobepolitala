@@ -1,0 +1,3 @@
+# Allow JSON exports to be committed
+!*.json
+!.gitignore

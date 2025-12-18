@@ -1,0 +1,5 @@
+# SQLite databases (disabled for team collaboration)
+# *.sqlite*
+
+# Allow database.sqlite to be committed for team sync
+# Uncomment line above if you want to ignore database again
